@@ -15,4 +15,4 @@ To learn what can be done with RADMC-3D and how to use it, please consult the ex
 Simple example models are found in the `examples/` directory. The README files in these directories explain how to run the models.
 
 ## Website
-For more information, please consult the website http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/external.html
+For more information, please consult the website http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d
