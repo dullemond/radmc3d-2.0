@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Octree AMR in radmc3dPy &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="next" title="Octree AMR models" href="tutorial_octree_models.html"/>
+        <link rel="prev" title="Line model tutorial (regular grid)" href="tutorial_reggrid_line.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Octree AMR in radmc3dPy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#grid-building">Grid building</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tutorial-octree-grid-building-radmc3d">RADMC-3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#radmc3dpy">radmc3dPy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#array-layout">Array layout</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#grid-array-layout">Grid array layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-array-layout">Data array layout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Octree AMR in radmc3dPy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="octree-amr-in-radmc3dpy">
+<span id="tutorial-octree"></span><h1>Octree AMR in radmc3dPy<a class="headerlink" href="#octree-amr-in-radmc3dpy" title="Permalink to this headline">¶</a></h1>
+<p>Apart from regular grids <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D</a>  supports two types of mesh refinements,
+octree and layered adaptive mesh refinement (AMR, see Chapter 10 in the RADMC-3D manual
+(click <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/radmc-3d_v0.35.pdf">here</a> for the manual of RADMC-3D v0.35)
+both in caresian and spherical coordinate systems. As of v0.29 radmc3dPy supports regular grid and octree AMR (no layered mesh refinement / nested grid yet).</p>
+<div class="section" id="grid-building">
+<span id="tutorial-octree-grid-building"></span><h2>Grid building<a class="headerlink" href="#grid-building" title="Permalink to this headline">¶</a></h2>
+<p>Octree AMR grid in <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D</a> starts with a uniform, regular base grid.  The base grid must
+have a fixed cell size, which means that we cannot use logarithmic grid for the radial coordinate in spherical coordinate system. For cartesian grids the cell size should
+be the same in all active dimensions (i.e. cubical cells). After the base grid has been created, each cell
+is tested for refinement based on user defined criteria. If the cell is refined, the cell is halved in each spatial dimension producing 2,4,8 sub-cells in 1,2,3 dimensions,
+respectively. Each sub-cell is then tested for refinement, then each sub-sub-cell, etc. Thus cells are refined recursively building a tree. radmc3dPy provides a new class
+<code class="xref py py-class docutils literal"><span class="pre">radmc3dOctree</span></code> for handling octree AMR grid. To understand the model setup and the building of an octree mesh with radmc3dPy let us have a look
+at the grid structure and how they are stored in <code class="xref py py-class docutils literal"><span class="pre">radmc3dOctree</span></code>.</p>
+<div class="section" id="tutorial-octree-grid-building-radmc3d">
+<span id="id2"></span><h3>RADMC-3D<a class="headerlink" href="#tutorial-octree-grid-building-radmc3d" title="Permalink to this headline">¶</a></h3>
+<p>Octree AMR mesh in <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D</a> starts from a regular base grid. For simplicity let us take a 2D grid (in which
+case the grid is called a quadtree). We loop through all cells of the base grid and check if a cell is refined. If it is, we follow the refinement of that cell to the highest
+level before moving on to the next base grid cell. If we refine the bottom left and top right cells of the 2x2 base grid, then refining again the top right and bottom left of the
+refined 2x2 cell structure, the buiding of the grid/tree in <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D</a> proceeds this way:</p>
+<a class="reference internal image-reference" href="_images/build_radmc3d_allstages_grid_struct.png"><img alt="_images/build_radmc3d_allstages_grid_struct.png" class="align-center" src="_images/build_radmc3d_allstages_grid_struct.png" style="width: 900px;" /></a>
+</div>
+<div class="section" id="radmc3dpy">
+<span id="tutorial-octree-grid-building-radmc3dpy"></span><h3>radmc3dPy<a class="headerlink" href="#radmc3dpy" title="Permalink to this headline">¶</a></h3>
+<p>Building the mesh in radmc3dPy this way can be very slow depending on the refinement criteria. If a base grid cell is resolved we need to loop over the
+child cells of that base grid cell to test whether any of them need to be further refined. If so, we need to loop over the children of that child cell, etc. Thus building
+the grid consist of looping over every parent cell at every level and loop over their children to test whether they need to be further refined.
+This involves lot of nested loops which is usually very inefficient. It is much more efficient to do fewer but larger loops and to use numPy array operations.
+radmc3dPy does just that. First all cells at the highest actual refinement level are selected and tested for refinement. During the test and refinement all cells
+processed together as arrays. Thus instead of looping over every parent as in case of RADMC-3D we loop over refinement level and process all cells simultaneously
+at a given level. This way we have only one loop, over the refinement level. The steps of refinement for the example 2x2 base grid looks like this:</p>
+<a class="reference internal image-reference" href="_images/build_radmc3dPy_allstages_grid_struct.png"><img alt="_images/build_radmc3dPy_allstages_grid_struct.png" class="align-center" src="_images/build_radmc3dPy_allstages_grid_struct.png" style="width: 900px;" /></a>
+</div>
+</div>
+<div class="section" id="array-layout">
+<span id="tutorial-octree-array-layout"></span><h2>Array layout<a class="headerlink" href="#array-layout" title="Permalink to this headline">¶</a></h2>
+<p>The grid as well as any physical variable (e.g. density, temperature, velocity, etc) is stored in linear arrays. The cell layout within the arrays of grid variables
+(e.g. cell centers) is different depending on whether the grid is built on the fly by radmc3dPy or read from file (<cite>amr_grid.inp</cite>). Physical variables (e.g. dust density,
+dust temperature, etc.) are stored in arrays of different length and layout compared to grid arrays.</p>
+<div class="section" id="grid-array-layout">
+<span id="tutorial-octree-array-layout-grid"></span><h3>Grid array layout<a class="headerlink" href="#grid-array-layout" title="Permalink to this headline">¶</a></h3>
+<p>Arrays containing information on the grid (i.e. cell centre coordinates, cell widths, boolean arrays to indicate a node is a leaf or a branch) etc, always contain the full
+tree including both branch and leaf nodes. When the grid is read from file the array layout is the same as the order of cells in <cite>amr_grid.inp</cite>. The array starts with the
+list of the regular base grid cells. In the rest of the array we loop through the base grid cells again, but we add the higher resolution sub-trees for each branch node.
+When a base grid cell is resolved, first we add all higher refinement levels before we would move on to the next base grid cell, i.e. we follow the tree immediately.
+This is the same layout as cell information is written to <cite>amr_grid.inp</cite>. The layout of such array looks like this:</p>
+<a class="reference internal image-reference" href="_images/build_radmc3d_allstages_arrayindex.png"><img alt="_images/build_radmc3d_allstages_arrayindex.png" class="align-center" src="_images/build_radmc3d_allstages_arrayindex.png" style="width: 900px;" /></a>
+<p>Blue and red numbers indicate the index of the array element in the <em>full tree</em>, blue for leaf and red for branch nodes. The green numbers show the refinement level of the
+node, starting with zero for the regular base grid. Black numbers indicate the cell/leaf indices, i.e. the index of the cell/leaf node in an array containing only leaf nodes
+(&#8220;true&#8221; cells). The arrows indicate parent/child relationships between nodes. In this layout all nodes with the same ancestor base grid cell are located next to each other.</p>
+<p>The order of the cells within an array is somewhat different if we build the grid with radmc3dPy. The reason is that the grid is built in a different way in radmc3dPy than
+in RADMC-3D. As discussed above, radmc3dPy tests the refinement criteria for all leaf nodes at the actual highest refinement level and adds one level of refinement to <em>all</em>
+desired cells. This translates to the following layout of cells within the array. Just like in RADMC-3D style layout the array starts with the list of all base grid cells, but
+it is followed by the list of <em>all</em> cells at the first level of refinement, then comes <em>all</em> cells at the second level, etc.. Thus the resulting array layout looks like this:</p>
+<a class="reference internal image-reference" href="_images/build_radmc3dPy_allstages_arrayindex.png"><img alt="_images/build_radmc3dPy_allstages_arrayindex.png" class="align-center" src="_images/build_radmc3dPy_allstages_arrayindex.png" style="width: 900px;" /></a>
+<p>In this case all grid cells at the same refinement level are packed together within the array.</p>
+</div>
+<div class="section" id="data-array-layout">
+<span id="tutorial-octree-array-layout-data"></span><h3>Data array layout<a class="headerlink" href="#data-array-layout" title="Permalink to this headline">¶</a></h3>
+<p>The layout of the data arrays of <code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> is different from that of the grid arrays, since data (i.e.
+physical variables) are only stored in leaf nodes, which are the &#8220;true&#8221; cells. Branch nodes are only used in the grid to navigate within the tree between leaf nodes.
+Therefore data arrays are smaller in size than grid arrays and they contain the leaf cells in increasing leaf/cell index order:</p>
+<a class="reference internal image-reference" href="_images/build_radmc3dPy_allstages_leafindex.png"><img alt="_images/build_radmc3dPy_allstages_leafindex.png" class="align-center" src="_images/build_radmc3dPy_allstages_leafindex.png" style="width: 900px;" /></a>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial_octree_models.html" class="btn btn-neutral float-right" title="Octree AMR models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorial_reggrid_line.html" class="btn btn-neutral" title="Line model tutorial (regular grid)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

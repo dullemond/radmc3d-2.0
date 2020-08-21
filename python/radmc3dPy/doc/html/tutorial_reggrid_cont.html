@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Continuum model tutorial (regular grid) &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="next" title="Line model tutorial (regular grid)" href="tutorial_reggrid_line.html"/>
+        <link rel="prev" title="Installation" href="install.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Continuum model tutorial (regular grid)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#model-setup">Model setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-setup">Simple setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modular-setup">Modular setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#read-the-model-structure">Read the model structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#diagnostic-plots">Diagnostic plots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dust-density-contours">Dust density contours</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dust-opacity">Dust opacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optical-depth">Optical depth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-thermal-mc">Run the thermal MC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dust-temperature-contours">Dust temperature contours</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convenient-2d-contour-plots">Convenient 2D contour plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#images">Images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#make-an-image">Make an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#display-images">Display images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#image-manipulations">Image manipulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing-images-to-fits">Writing images to fits</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Continuum model tutorial (regular grid)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="continuum-model-tutorial-regular-grid">
+<span id="tutorial-reggrid-cont"></span><h1>Continuum model tutorial (regular grid)<a class="headerlink" href="#continuum-model-tutorial-regular-grid" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="model-setup">
+<span id="tutorial-reggrid-cont-model-setup"></span><h2>Model setup<a class="headerlink" href="#model-setup" title="Permalink to this headline">¶</a></h2>
+<p>First let us create a directory for our model. Then go to this directory and start python and
+copy the <code class="docutils literal"><span class="pre">dustkappa_silicate.inp</span></code> file from the <code class="docutils literal"><span class="pre">python_examples/datafiles</span></code> directory to the
+model directory. Then go to the model directory and start a python session.</p>
+<p>Import the radmc3dPy package:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>This way we imported all core modules of the package: <a class="reference internal" href="radmc3dPy.html#module-radmc3dPy.analyze" title="radmc3dPy.analyze"><code class="xref py py-class docutils literal"><span class="pre">analyze</span></code></a>, <a class="reference internal" href="radmc3dPy.html#module-radmc3dPy.image" title="radmc3dPy.image"><code class="xref py py-class docutils literal"><span class="pre">image</span></code></a>,
+<a class="reference internal" href="radmc3dPy.html#module-radmc3dPy.setup" title="radmc3dPy.setup"><code class="xref py py-class docutils literal"><span class="pre">setup</span></code></a>, <a class="reference internal" href="radmc3dPy.html#module-radmc3dPy.natconst" title="radmc3dPy.natconst"><code class="xref py py-class docutils literal"><span class="pre">natconst</span></code></a>.</p>
+<p>The <a class="reference internal" href="radmc3dPy.models.html#module-radmc3dPy.models" title="radmc3dPy.models"><code class="xref py py-class docutils literal"><span class="pre">models</span></code></a> module contains all models (like a library). To check what models are available
+we can use the <a class="reference internal" href="radmc3dPy.models.html#radmc3dPy.models.getModelNames" title="radmc3dPy.models.getModelNames"><code class="xref py py-meth docutils literal"><span class="pre">getModelNames()</span></code></a> function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">getModelNames</span><span class="p">()</span>
+<span class="go">[&#39;lines_nlte_lvg_1d_1&#39;, &#39;ppdisk&#39;, &#39;&#39;disk_acc&#39;, &#39;ppdisk_amr&#39;, &#39;simple_1&#39;, &#39;sphere1d_1&#39;, &#39;sphere2d_1&#39;, &#39;test_scattering_1&#39;]</span>
+</pre></div>
+</div>
+<p>We can also get a brief description of any model with the  <a class="reference internal" href="radmc3dPy.models.html#radmc3dPy.models.getModelDesc" title="radmc3dPy.models.getModelDesc"><code class="xref py py-meth docutils literal"><span class="pre">getModelDesc()</span></code></a> function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">getModelDesc</span><span class="p">(</span><span class="s1">&#39;ppdisk&#39;</span><span class="p">)</span>
+<span class="go">&#39;Generic protoplanetary disk model&#39;</span>
+</pre></div>
+</div>
+<p>To create a model, we need to have a master parameter file containing all parameters of the model.
+Every model in the library has a default set of parameters which can be used to, e.g. test the model.
+We can use this default parameterset to create the parameter file with the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.writeDefaultParfile" title="radmc3dPy.analyze.writeDefaultParfile"><code class="xref py py-meth docutils literal"><span class="pre">writeDefaultParfile()</span></code></a>
+function.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">analyze</span><span class="o">.</span><span class="n">writeDefaultParfile</span><span class="p">(</span><span class="s1">&#39;ppdisk&#39;</span><span class="p">)</span>
+<span class="go">Writing problem_params.inp</span>
+</pre></div>
+</div>
+<p>Then we can read the parameters from this file...:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readParams</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>... and print them:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">printPar</span><span class="p">()</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go"># Block: Radiation sources</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">incl_cont_stellarsrc      = False  # # Switches on (True) or off (False) continuous stellar sources )</span>
+<span class="go">incl_disc_stellarsrc      = True  # # Switches on (True) or off (False) discrete stellar sources)</span>
+<span class="go">mstar                     = [1.0*ms]  # # Mass of the star(s)</span>
+<span class="go">pstar                     = [0.0, 0.0, 0.0]  # # Position of the star(s) (cartesian coordinates)</span>
+<span class="go">rstar                     = [2.0*rs]  # # Radius of the star(s)</span>
+<span class="go">staremis_type             = [&quot;blackbody&quot;]  # # Stellar emission type (&quot;blackbody&quot;, &quot;kurucz&quot;, &quot;nextgen&quot;)</span>
+<span class="go">tstar                     = [4000.0]  # # Effective temperature of the star(s) [K]</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go"># Block: Grid parameters</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">crd_sys                   = &#39;sph&#39;  # Coordinate system used (car/cyl)</span>
+<span class="go">nw                        = [19, 50, 30]  # Number of points in the wavelength grid</span>
+<span class="go">nx                        = [30,50]  # Number of grid points in the first dimension</span>
+<span class="go">ny                        = [10,30,30,10]  # Number of grid points in the second dimension</span>
+<span class="go">nz                        = 0  # Number of grid points in the third dimension</span>
+<span class="go">wbound                    = [0.1, 7.0, 25., 1e4]  # Boundraries for the wavelength grid</span>
+<span class="go">xbound                    = [1.0*au,1.05*au, 100.0*au]  # Boundaries for the x grid</span>
+<span class="go">xres_nlev                 = 3  # Number of refinement levels (spherical coordinates only</span>
+<span class="go">xres_nspan                = 3  # Number of the original grid cells to refine (spherical coordinates only)</span>
+<span class="go">xres_nstep                = 3  # Number of grid cells to create in a refinement level (spherical coordinates only)</span>
+<span class="go">ybound                    = [0., pi/3., pi/2., 2.*pi/3., pi]  # Boundaries for the y grid</span>
+<span class="go">zbound                    = [0., 2.0*pi]  # Boundraries for the z grid</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go"># Block: Dust opacity</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">dustkappa_ext             = [&#39;silicate&#39;]  #</span>
+<span class="go">gdens                     = [3.6, 1.8]  # Bulk density of the materials in g/cm^3</span>
+<span class="go">gsdist_powex              = -3.5  # Grain size distribution power exponent</span>
+<span class="go">gsmax                     = 10.0  # Maximum grain size</span>
+<span class="go">gsmin                     = 0.1  # Minimum grain size</span>
+<span class="go">lnk_fname                 = [&#39;/disk2/juhasz/Data/JPDOC/astrosil/astrosil_WD2001_new.lnk&#39;, &#39;/disk2/juhasz/Data/JPDOC/carbon/A/cel600.lnk&#39;]  #</span>
+<span class="go">mixabun                   = [0.75, 0.25]  # Mass fractions of the dust componetns to be mixed</span>
+<span class="go">ngs                       = 1  # Number of grain sizes</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go"># Block: Gas line RT</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">gasspec_colpart_abun      = [1e0]  # Abundance of the molecule</span>
+<span class="go">gasspec_colpart_name      = [&#39;h2&#39;]  # Name of the gas species - the extension of the molecule_EXT.inp file</span>
+<span class="go">gasspec_mol_abun          = [1e-4]  # Abundance of the molecule</span>
+<span class="go">gasspec_mol_dbase_type    = [&#39;leiden&#39;]  # leiden or linelist</span>
+<span class="go">gasspec_mol_name          = [&#39;co&#39;]  # Name of the gas species - the extension of the molecule_EXT.inp file</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go"># Block: Code parameters</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">istar_sphere              = 0  # 1 - take into account the finite size of the star, 0 - take the star to be point-like</span>
+<span class="go">itempdecoup               = 1  # Enable for different dust components to have different temperatures</span>
+<span class="go">lines_mode                = -1  # Line raytracing mode</span>
+<span class="go">modified_random_walk      = 0  # Switched on (1) and off (0) modified random walk</span>
+<span class="go">nphot                     = 1000000  # Nr of photons for the thermal Monte Carlo</span>
+<span class="go">nphot_scat                = long(3e4)  # Nr of photons for the scattering Monte Carlo (for images)</span>
+<span class="go">nphot_spec                = long(1e5)  # Nr of photons for the scattering Monte Carlo (for spectra)</span>
+<span class="go">rto_style                 = 3  # Format of outpuf files (1-ascii, 2-unformatted f77, 3-binary</span>
+<span class="go">scattering_mode_max       = 1  # 0 - no scattering, 1 - isotropic scattering, 2 - anizotropic scattering</span>
+<span class="go">tgas_eq_tdust             = 1  # Take the dust temperature to identical to the gas temperature</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go"># Block: Model ppdisk</span>
+<span class="go"># -------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">bgdens                    = 1e-30  # Background density (g/cm^3)</span>
+<span class="go">dusttogas                 = 0.01  # Dust-to-gas mass ratio</span>
+<span class="go">gap_drfact                = [1e-5]  # Density reduction factor in the gap</span>
+<span class="go">gap_rin                   = [10.0*au]  # Inner radius of the gap</span>
+<span class="go">gap_rout                  = [40.*au]  # Outer radius of the gap</span>
+<span class="go">gasspec_mol_dissoc_taulim = [1.0]  # Continuum optical depth limit below which all molecules dissociate</span>
+<span class="go">gasspec_mol_freezeout_dfact = [1e-3]  # Factor by which the molecular abundance should be decreased in the frezze-out zone</span>
+<span class="go">gasspec_mol_freezeout_temp = [19.0]  # Freeze-out temperature of the molecules in Kelvin</span>
+<span class="go">gasspec_vturb             = 0.2e5  # Microturbulent line width</span>
+<span class="go">hpr_prim_rout             = 0.0  # Pressure scale height at rin</span>
+<span class="go">hrdisk                    = 0.1  # Ratio of the pressure scale height over radius at hrpivot</span>
+<span class="go">hrpivot                   = 100.0*au  # Reference radius at which Hp/R is taken</span>
+<span class="go">mdisk                     = 9.9500000e+29  # Mass of the disk (either sig0 or mdisk should be set to zero or commented out)</span>
+<span class="go">plh                       = 1./7.  # Flaring index</span>
+<span class="go">plsig1                    = -1.0  # Power exponent of the surface density distribution as a function of radius</span>
+<span class="go">prim_rout                 = 0.0  # Outer boundary of the puffed-up inner rim in terms of rin</span>
+<span class="go">rdisk                     = 100.0*au  # Outer radius of the disk</span>
+<span class="go">rin                       = 1.0*au  # Inner radius of the disk</span>
+<span class="go">sig0                      = 0.0  # Surface density at rdisk</span>
+<span class="go">srim_plsig                = 0.0  # Power exponent of the density reduction inside of srim_rout*rin</span>
+<span class="go">srim_rout                 = 0.0  # Outer boundary of the smoothing in the inner rim in terms of rin</span>
+</pre></div>
+</div>
+<p>As can be seen, the parameters of the model are split into separate blocks to make it visually easy to recognise which
+parameters belong to the radiation sources, which to the grid, etc. For a detailed description of the structure and
+syntax of the master parameter file see <a class="reference internal" href="parfile.html#parfile"><span class="std std-ref">Parameter file</span></a>.</p>
+<div class="section" id="simple-setup">
+<span id="tutorial-reggrid-cont-simple-setup"></span><h3>Simple setup<a class="headerlink" href="#simple-setup" title="Permalink to this headline">¶</a></h3>
+<p>Let us now set up the model, i.e. create all necessary input files for RADMC-3D. This can be done with the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupDust" title="radmc3dPy.setup.problemSetupDust"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupDust()</span></code></a> method.
+As the single mandatory argument we need to pass the name of the model. With the <code class="docutils literal"><span class="pre">binary=True</span></code> keyword argument we can set the format of the
+input files to be formatted ASCII (<code class="docutils literal"><span class="pre">binary=False</span></code>) or C-style binary (<code class="docutils literal"><span class="pre">binary=True</span></code>). The default is binary output.
+If no other keyword argument is given the parameters in the <code class="docutils literal"><span class="pre">problem_params.inp</span></code> file will be used to set up the model.
+The following example will set the disk mass to <span class="math">\(10^{-5}{\rm M}_\odot\)</span>, introduce a gap between 10AU and 40AU where the density is reduced
+by a factor of <span class="math">\(10^5\)</span> and the azimuthal dimension will be switched off in the model, i.e. the model will be only 2D.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="o">.</span><span class="n">problemSetupDust</span><span class="p">(</span><span class="s1">&#39;ppdisk&#39;</span><span class="p">,</span> <span class="n">mdisk</span><span class="o">=</span><span class="s1">&#39;1e-5*ms&#39;</span><span class="p">,</span> <span class="n">gap_rin</span><span class="o">=</span><span class="s1">&#39;[10.0*au]&#39;</span><span class="p">,</span> <span class="n">gap_rout</span><span class="o">=</span><span class="s1">&#39;[40.*au]&#39;</span><span class="p">,</span> <span class="n">gap_drfact</span><span class="o">=</span><span class="s1">&#39;[1e-5]&#39;</span><span class="p">,</span> <span class="n">nz</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
+<span class="go">Writing problem_params.inp</span>
+<span class="go">Writing dustopac.inp</span>
+<span class="go">Writing wavelength_micron.inp</span>
+<span class="go">Writing amr_grid.inp</span>
+<span class="go">Writing stars.inp</span>
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Luminosities of radiation sources in the model :</span>
+<span class="go">As calculated from the input files :</span>
+<span class="go">Stars :</span>
+<span class="go">  Star #0 + hotspot        : 3.564346e+33</span>
+<span class="go">Continuous starlike source : 0.000000e+00</span>
+
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Writing dust_density.binp</span>
+<span class="go">Writing radmc3d.inp￼￼￼￼￼￼</span>
+</pre></div>
+</div>
+<p>If any keyword argument will be passed to <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupDust" title="radmc3dPy.setup.problemSetupDust"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupDust()</span></code></a> it will be used to override the parameters in <code class="docutils literal"><span class="pre">problem_params.inp</span></code>.
+For each setup first the parameters in the master parameter file are read. Then it will be checked whether or not keyword arguments have been passed
+to <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupDust" title="radmc3dPy.setup.problemSetupDust"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupDust()</span></code></a> and if so, the value of keyword arguments will be taken and the master opacity file will be updated
+with the new parameter value. The type of the value of the keyword argument can be int, float, list or string. int, float and list values can also
+be given as strings and in this case this string will be explicitely written into the master parameter file, while for the model setup its numerical
+value will be evaluated. E.g.::</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="o">.</span><span class="n">problemSetupDust</span><span class="p">(</span><span class="s1">&#39;ppdisk&#39;</span><span class="p">,</span> <span class="n">mdisk</span><span class="o">=</span><span class="s1">&#39;1e-4*ms&#39;</span><span class="p">)</span>
+<span class="go">Writing problem_params.inp</span>
+<span class="go">Writing dustopac.inp</span>
+<span class="go">Writing wavelength_micron.inp</span>
+<span class="go">Writing amr_grid.inp</span>
+<span class="go">Writing stars.inp</span>
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Luminosities of radiation sources in the model :</span>
+<span class="go">As calculated from the input files :</span>
+<span class="go">Stars :</span>
+<span class="go">  Star #0                  : 3.564346e+33</span>
+<span class="go">Continuous starlike source : 0.000000e+00</span>
+
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Writing dust_density.binp</span>
+<span class="go">Writing radmc3d.inp￼￼￼￼￼￼</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">printPar</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="go">mdisk                     = 1e-4*ms  # Mass of the disk (either sig0 or mdisk should be set to zero or commented out)</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>If, on the other hand, python expressions are passed by their numerical values they will be written as such to the master parameter file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="o">.</span><span class="n">problemSetupDust</span><span class="p">(</span><span class="s1">&#39;ppdisk&#39;</span><span class="p">,</span> <span class="n">mdisk</span><span class="o">=</span><span class="mf">1e-4</span><span class="o">*</span><span class="n">natconst</span><span class="o">.</span><span class="n">ms</span><span class="p">)</span>
+<span class="go">Writing problem_params.inp</span>
+<span class="go">Writing dustopac.inp</span>
+<span class="go">Writing wavelength_micron.inp</span>
+<span class="go">Writing amr_grid.inp</span>
+<span class="go">Writing stars.inp</span>
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Luminosities of radiation sources in the model :</span>
+<span class="go">As calculated from the input files :</span>
+<span class="go">Stars :</span>
+<span class="go">  Star #0                  : 3.564346e+33</span>
+<span class="go">Continuous starlike source : 0.000000e+00</span>
+
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Writing dust_density.binp</span>
+<span class="go">Writing radmc3d.inp￼￼￼￼￼￼</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readParams</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">printPar</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="go">mdisk                     = 1.9900000e+29  # Mass of the disk (either sig0 or mdisk should be set to zero or commented out)</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="modular-setup">
+<span id="tutorial-reggrid-cont-modular-setup"></span><h3>Modular setup<a class="headerlink" href="#modular-setup" title="Permalink to this headline">¶</a></h3>
+<p>As we can see the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupDust" title="radmc3dPy.setup.problemSetupDust"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupDust()</span></code></a> is a very convenient way to generate all necessary input files at once.
+However, sometimes it can be useful to generate input files separately. This can be the case for large models if we wish to e.g. change
+the wavelength grid without having to re-generate also the density structure. This can be done using the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel" title="radmc3dPy.setup.radmc3dModel"><code class="xref py py-class docutils literal"><span class="pre">radmc3dModel</span></code></a>
+class (for the data attributes please, look at the documentation of <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel" title="radmc3dPy.setup.radmc3dModel"><code class="xref py py-class docutils literal"><span class="pre">radmc3dModel</span></code></a>). First we need to create an
+instance of this model class::</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;model = radmc3dPy.setup.radmc3dModel(model=&#39;ppdisk&#39;, mdisk=&#39;1e-5*ms&#39;, gap_rin=&#39;[10.0*au]&#39;, gap_rout=&#39;[40.*au]&#39;, gap_drfact=&#39;[1e-5]&#39;, nz=&#39;0&#39;)</span>
+</pre></div>
+</div>
+<p>Similar to <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupDust" title="radmc3dPy.setup.problemSetupDust"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupDust()</span></code></a> we can pass parameters and values as keyword argument to update their values. First during
+initialization the parameter file &#8216;problem_params.inp&#8217; is read if it exists, otherwise the default parameters of the model will be loaded. Then
+the parameter values are updated if any keyword argument was set. If parameter values are updated by default the <code class="docutils literal"><span class="pre">problem_params.inp</span></code> file will
+be updated/overwritten. To prevent the update of the parameter file we pass the <code class="docutils literal"><span class="pre">parfile_update=False</span></code> keyword. Then we can use individual
+methods of <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel" title="radmc3dPy.setup.radmc3dModel"><code class="xref py py-class docutils literal"><span class="pre">radmc3dModel</span></code></a> to generate physical variables and/or various input files:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;model.writeRadmc3dInp()</span>
+</pre></div>
+</div>
+<p>This method generates the <code class="docutils literal"><span class="pre">radmc3d.inp</span></code> file for the internal code parameters. It does not have any prerequisite / dependency thus it can be called
+arbitrarily. To generate the spatial and frequency grid we need to call <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel.makeGrid" title="radmc3dPy.setup.radmc3dModel.makeGrid"><code class="xref py py-meth docutils literal"><span class="pre">makeGrid()</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;model.makeGrid(writeToFile=True)</span>
+</pre></div>
+</div>
+<p>By default it will generate both the wavelength and the spatial grids, however it also has boolean keywords to switch on/off the generation of the
+wavelength and the spatial grid as well. Note the <code class="docutils literal"><span class="pre">writeToFile=True</span></code> keyword in the calling sequence, which indicates that once the grid has been
+generated we wish to write it immediately to file. By default this keyword is set to <code class="docutils literal"><span class="pre">False</span></code>, meaning that only the
+<code class="xref py py-attr docutils literal"><span class="pre">grid</span></code> attribute of <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel" title="radmc3dPy.setup.radmc3dModel"><code class="xref py py-class docutils literal"><span class="pre">radmc3dModel</span></code></a> will be generated containing the spatial and/or wavelength
+grid but without writing them into files. Since <code class="xref py py-attr docutils literal"><span class="pre">grid</span></code> is an instance of <code class="xref py py-class docutils literal"><span class="pre">radmc3dGrid</span></code> we
+can use the <code class="xref py py-meth docutils literal"><span class="pre">writeSpatialGrid()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">writeWavelengthGrid()</span></code> methods at any time
+to write the spatial and/or wavelength grid to file.</p>
+<p>The radiation sources can be generated using the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel.makeRadSources" title="radmc3dPy.setup.radmc3dModel.makeRadSources"><code class="xref py py-meth docutils literal"><span class="pre">makeRadSources()</span></code></a> method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;model.makeRadSources(writeToFile=True)</span>
+</pre></div>
+</div>
+<p>The dust opacities and the master opacity file can be generated with</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;model.makeDustOpac()</span>
+</pre></div>
+</div>
+<p>Finally the physical variables in the models are generated with</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;model.makeVar(ddens=True, writeToFile=True)</span>
+</pre></div>
+</div>
+<p>Note, that the order in which the methods are called is not completely arbitrary. Except for <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel.writeRadmc3dInp" title="radmc3dPy.setup.radmc3dModel.writeRadmc3dInp"><code class="xref py py-meth docutils literal"><span class="pre">writeRadmc3dInp()</span></code></a>, which
+can be called arbitrarily, all other methods depend on the presence of a spatial and/or a wavelength grid. Therefore, <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel.makeGrid" title="radmc3dPy.setup.radmc3dModel.makeGrid"><code class="xref py py-meth docutils literal"><span class="pre">makeGrid()</span></code></a>
+must be called before <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel.makeRadSources" title="radmc3dPy.setup.radmc3dModel.makeRadSources"><code class="xref py py-meth docutils literal"><span class="pre">makeRadSources()</span></code></a>, <code class="xref py py-meth docutils literal"><span class="pre">makeOpac()</span></code> or <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.radmc3dModel.makeVar" title="radmc3dPy.setup.radmc3dModel.makeVar"><code class="xref py py-meth docutils literal"><span class="pre">makeVar()</span></code></a>.</p>
+</div>
+</div>
+<div class="section" id="read-the-model-structure">
+<span id="tutorial-reggrid-cont-read-structure"></span><h2>Read the model structure<a class="headerlink" href="#read-the-model-structure" title="Permalink to this headline">¶</a></h2>
+<p>After the model is set up we can read the input density distribution with the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readData" title="radmc3dPy.analyze.readData"><code class="xref py py-meth docutils literal"><span class="pre">readData()</span></code></a> method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readData</span><span class="p">(</span><span class="n">ddens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">Reading dust density</span>
+</pre></div>
+</div>
+<p>This method returns an instance of the  <code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> class. This class handles I/O of any physical variable
+(dust density, dust temperature, gas density, gas temperature, gas velocity, microturbulent velocity). Whatever the methods of
+<code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> can read they can also write, too, both in formatted ASCII and in C-style binary streams as well.
+Similar to RADMC-3D itself, it can also write Legacy VTK files (but currently only if the spherical coordinate system was used for the spatial mesh).</p>
+</div>
+<div class="section" id="diagnostic-plots">
+<span id="tutorial-reggrid-cont-diagnostic-plots"></span><h2>Diagnostic plots<a class="headerlink" href="#diagnostic-plots" title="Permalink to this headline">¶</a></h2>
+<p>First let us import the matplotlib library to be able to make any graphics.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plb</span>
+</pre></div>
+</div>
+<p>Let us also import numpy to be able to use arrays and mathematical functions.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<div class="section" id="dust-density-contours">
+<span id="tutorial-reggrid-cont-diagnostic-plots-dust-density-contours"></span><h3>Dust density contours<a class="headerlink" href="#dust-density-contours" title="Permalink to this headline">¶</a></h3>
+<p><code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> stores not only the physical variables as data attributes, but also the wavelength and spatial grids
+(<code class="xref py py-attr docutils literal"><span class="pre">radmc3dData.grid</span></code> attribute, which is an instance of the <code class="xref py py-class docutils literal"><span class="pre">radmc3dGrid</span></code> class).
+So we can make 2D density contour plot.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">natconst</span><span class="o">.</span><span class="n">au</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">rhodust</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;r [AU]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\pi/2-\theta$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Adding colorbars in <code class="docutils literal"><span class="pre">matplotlib</span></code> is really easy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\log_</span><span class="si">{10}</span><span class="s1">{\rho}$&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mf">270.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The end result should look like this:</p>
+<img alt="_images/fig1.png" class="align-center" src="_images/fig1.png" />
+</div>
+<div class="section" id="dust-opacity">
+<span id="tutorial-reggrid-cont-diagnostic-plots-dust-opacity"></span><h3>Dust opacity<a class="headerlink" href="#dust-opacity" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readOpac" title="radmc3dPy.analyze.readOpac"><code class="xref py py-func docutils literal"><span class="pre">readOpac()</span></code></a> function in the <a class="reference internal" href="radmc3dPy.html#module-radmc3dPy.analyze" title="radmc3dPy.analyze"><code class="xref py py-mod docutils literal"><span class="pre">analyze</span></code></a> module can be used to read the dust opacity.
+One can either pass the extension tag name of the dust opacity file (dustkappa_NAME.inp). We can read e.g. the <code class="docutils literal"><span class="pre">dustkappa_silicate.inp</span></code>
+as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opac</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readOpac</span><span class="p">(</span><span class="n">ext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;silicate&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>alternatively one can also pass the index of the dust component in the dust density array. The command to read the
+first dust species in the dust density distribution:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opac</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readOpac</span><span class="p">(</span><span class="n">idust</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Note, that python also starts the array/list indices from zero, hence the first dust species in the dust density array
+will have the index of zero.</p>
+<p>The <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readOpac" title="radmc3dPy.analyze.readOpac"><code class="xref py py-func docutils literal"><span class="pre">readOpac()</span></code></a> function returns an instance of the  <code class="xref py py-class docutils literal"><span class="pre">radmc3dDustOpac</span></code> class.
+The data attributes of this class are all lists, containing the opacity data of an individual dust component.
+We can plot the absorption coefficient as a function of wavelength as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">opac</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">opac</span><span class="o">.</span><span class="n">kabs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\lambda$ [$\mu$m]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\kappa_{\rm abs}$ [cm$^2$/g]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/fig2.png" class="align-center" src="_images/fig2.png" />
+<p>As mentioned, the 0-index of the <code class="docutils literal"><span class="pre">wav</span></code> and <code class="docutils literal"><span class="pre">kabs</span></code> attributes means that we want to plot the wavelength and absorption coefficient
+of the first dust species, <em>that has actually been read</em>. The indices in the data attributes mean only the sequential order as
+the data have been read. The index of this dust species in the dust density array is given by <code class="docutils literal"><span class="pre">radmc3dDustOpac.idust</span></code>, which is also
+a list.</p>
+</div>
+<div class="section" id="optical-depth">
+<span id="tutorial-reggrid-cont-diagnostic-plots-optical-depth"></span><h3>Optical depth<a class="headerlink" href="#optical-depth" title="Permalink to this headline">¶</a></h3>
+<p>It is useful to display where the radial optical depth in the continuum at the peak of the stellar radiation field is located.
+The <code class="xref py py-meth docutils literal"><span class="pre">getTau()</span></code> method of the  <code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> class calculates the
+optical depth.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">getTau</span><span class="p">(</span><span class="n">wav</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go"> Opacity at 0.50um :  19625.9938111</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-meth docutils literal"><span class="pre">getTau()</span></code> method puts the optical depth into the <code class="xref py py-attr docutils literal"><span class="pre">radmc3dData.tauy</span></code> and
+<code class="xref py py-attr docutils literal"><span class="pre">radmc3dData.tauy</span></code> attributes. So we can now also overplot the radial optical depth of unity contour:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">natconst</span><span class="o">.</span><span class="n">au</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">taux</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span>  <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/fig3.png" class="align-center" src="_images/fig3.png" />
+</div>
+<div class="section" id="run-the-thermal-mc">
+<span id="tutorial-reggrid-cont-diagnostic-plots-run-thermal-mc"></span><h3>Run the thermal MC<a class="headerlink" href="#run-the-thermal-mc" title="Permalink to this headline">¶</a></h3>
+<p>To calculate the temperature distribution in the disk we need to run RADMC-3D in thermal Monte Carlo mode.
+This can be done from within the python shell:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;radmc3d mctherm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dust-temperature-contours">
+<span id="tutorial-reggrid-cont-diagnostic-plots-temperature-contours"></span><h3>Dust temperature contours<a class="headerlink" href="#dust-temperature-contours" title="Permalink to this headline">¶</a></h3>
+<p>After the thermal Monte Carlo simulation has successfully finished we can read the calculated dust temperature:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readData</span><span class="p">(</span><span class="n">dtemp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">Reading dust temperature</span>
+</pre></div>
+</div>
+<p>Alternatively we can also use the previous instance of the <code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> we used to get the dust density,
+to read the dust temperature. The <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readData" title="radmc3dPy.analyze.readData"><code class="xref py py-func docutils literal"><span class="pre">readData()</span></code></a> function is only an interface to the methods of the
+<code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code> class.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readData</span><span class="p">(</span><span class="n">dtemp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">Reading dust density</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">readDustTemp</span><span class="p">()</span>
+<span class="go">Reading dust temperature</span>
+</pre></div>
+</div>
+<p>Then we can plot the 2D temperature contours:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">natconst</span><span class="o">.</span><span class="n">au</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dusttemp</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;r [AU]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\pi/2-\theta$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;T [K]&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mf">270.</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">natconst</span><span class="o">.</span><span class="n">au</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dusttemp</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span>  <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plb</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then the result should look like this:</p>
+<img alt="_images/fig4.png" class="align-center" src="_images/fig4.png" />
+</div>
+<div class="section" id="convenient-2d-contour-plots">
+<span id="tutorial-reggrid-cont-diagnostic-plots-sliceplot"></span><h3>Convenient 2D contour plots<a class="headerlink" href="#convenient-2d-contour-plots" title="Permalink to this headline">¶</a></h3>
+<p>From version v0.29 there is a new convenient way to do 2D contour plots using the function <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.plotSlice2D" title="radmc3dPy.analyze.plotSlice2D"><code class="xref py py-func docutils literal"><span class="pre">plotSlice2D()</span></code></a>.
+It can be used to make 2D slice plots (both contours and colorscale maps) with a single command. E.g. the dust density in a vertical slice
+can be plotted with the command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;analyze.plotSlice2D(data, var=&#39;ddens&#39;, plane=&#39;xy&#39;, log=True, linunit=&#39;au&#39;, cmap=plb.cm.jet)</span>
+<span class="go">&gt;&gt;&gt;plb.xscale(&#39;log&#39;)</span>
+</pre></div>
+</div>
+<p>which should result in the following plot</p>
+<img alt="_images/fig5.png" class="align-center" src="_images/fig5.png" />
+<p>Note, that the difference between the colorscale maps produced by <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.plotSlice2D" title="radmc3dPy.analyze.plotSlice2D"><code class="xref py py-func docutils literal"><span class="pre">plotSlice2D()</span></code></a> and the contour plot made above is that
+while previously we used a the <code class="docutils literal"><span class="pre">countourf</span></code> function of matplotlib to produce a filled contour plot <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.plotSlice2D" title="radmc3dPy.analyze.plotSlice2D"><code class="xref py py-func docutils literal"><span class="pre">plotSlice2D()</span></code></a> uses
+the <code class="docutils literal"><span class="pre">pcolormesh</span></code> function to display the colorscale map. We can also overlay contour lines to display e.g. the optical depth:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;data.getTau(wav=0.5)</span>
+<span class="go">&gt;&gt;&gt;analyze.plotSlice2D(data, var=&#39;taux&#39;, plane=&#39;xy&#39;, log=True, linunit=&#39;au&#39;, contours=True, clev=[1.0], clcol=&#39;w&#39;)</span>
+</pre></div>
+</div>
+<p>This should add a white contour line of the previously generated colorscale map</p>
+<img alt="_images/fig6.png" class="align-center" src="_images/fig6.png" />
+<p>We can also add another layer of contour line overlay by displaying dust temperature contours. Let us show the contour of the 150K region:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;analyze.plotSlice2D(data, var=&#39;dtemp&#39;, plane=&#39;xy&#39;, ispec=0, log=True, linunit=&#39;au&#39;, contours=True, clev=[150.0], clcol=&#39;k&#39;, cllabel=True)</span>
+</pre></div>
+</div>
+<p>Note, that for dust temperature plots one should always set the dust species index using the <code class="docutils literal"><span class="pre">ispec</span></code> keyword. The <code class="docutils literal"><span class="pre">clev</span></code> keyword controls
+the value of the contour line(s), <code class="docutils literal"><span class="pre">clcol</span></code> sets the contour line color and <code class="docutils literal"><span class="pre">cllabel</span></code> sets whether or not the values of the contour lines should
+also be displayed. The resulting plot should look like this</p>
+<img alt="_images/fig7.png" class="align-center" src="_images/fig7.png" />
+</div>
+</div>
+<div class="section" id="images">
+<span id="tutorial-reggrid-cont-model-images"></span><h2>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="make-an-image">
+<span id="tutorial-reggrid-cont-model-images-make-image"></span><h3>Make an image<a class="headerlink" href="#make-an-image" title="Permalink to this headline">¶</a></h3>
+<p>Images can be calculated using the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.image.makeImage" title="radmc3dPy.image.makeImage"><code class="xref py py-meth docutils literal"><span class="pre">makeImage()</span></code></a> method</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">makeImage</span><span class="p">(</span><span class="n">npix</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">wav</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">incl</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sizeau</span><span class="o">=</span><span class="mf">300.</span><span class="p">)</span>
+
+<span class="go"> ================================================================</span>
+<span class="go">      WELCOME TO RADMC-3D: A 3-D CONTINUUM AND LINE RT SOLVER</span>
+
+<span class="go">        This is the 3-D reincarnation of the 2-D RADMC code</span>
+<span class="go">                (c) 2010/2011 Cornelis Dullemond</span>
+
+<span class="go"> ************* NOTE: THIS IS STILL A BETA VERSION ***************</span>
+<span class="go"> ****** Some modes/capabilities are not yet ready/mature ********</span>
+
+<span class="go">       Please feel free to ask questions. Also please report</span>
+<span class="go">        bugs and/or suspicious behavior without hestitation.</span>
+<span class="go">      The reliability of this code depends on your vigilance!</span>
+
+<span class="go">   To keep up-to-date with bug-alarms and bugfixes, register to</span>
+<span class="go">      the RADMC-3D mailing list by sending an email to me:</span>
+<span class="go">        dullemon@mpia.de or dullemond@uni-heidelberg.de</span>
+
+<span class="go">              Please visit the RADMC-3D home page at</span>
+<span class="go">  http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/</span>
+<span class="go"> ================================================================</span>
+
+<span class="go"> Note: T_gas taken to be equal to T_dust of dust species            1</span>
+<span class="go"> Reading global frequencies/wavelengths...</span>
+<span class="go"> Reading grid file and prepare grid tree...</span>
+<span class="go">    Adjusting theta(ny+1) to exactly pi...</span>
+<span class="go">    Adjusting theta(41) to exactly pi/2...</span>
+<span class="go"> Reading star data...</span>
+<span class="go"> Note: Please be aware that you treat the star(s) as</span>
+<span class="go">       point source(s) while using spherical coordinate mode.</span>
+<span class="go">       Since R_*&lt;&lt;R_in this is probably OK, but if you want</span>
+<span class="go">       to play safe, then set istar_sphere = 1 in radmc3d.inp.</span>
+<span class="go"> Note: Star 1 is taken to be a blackbody star</span>
+<span class="go">       at a temperature T = 4000. Kelvin</span>
+<span class="go"> Grid information (current status):</span>
+<span class="go">   We have 6800 branches, of which 6800 are actual grid cells.</span>
+<span class="go">   ---&gt; 100.000% mem use for branches, and 100.000% mem use for actual cells.</span>
+<span class="go">   No grid refinement is active. The AMR tree is not allocated (this saves memory).</span>
+<span class="go"> ALWAYS SELF-CHECK FOR NOW...</span>
+<span class="go"> Starting procedure for rendering image...</span>
+<span class="go">   --&gt; Including dust</span>
+<span class="go">       No lines included...</span>
+<span class="go">       No gas continuum included...</span>
+<span class="go"> Reading dust data...</span>
+<span class="go"> Note: Opacity file dustkappa_silicate.inp does not cover the</span>
+<span class="go">       complete wavelength range of the model (i.e. the range</span>
+<span class="go">       in the file frequency.inp or wavelength_micron.inp).</span>
+<span class="go">       Range of model:     lambda = [ 0.10E+00, 0.10E+05]</span>
+<span class="go">       Range in this file: lambda = [ 0.10E+00, 0.10E+05]</span>
+<span class="go">       Simple extrapolations are used to extend this range.</span>
+<span class="go"> Reading dust densities...</span>
+<span class="go"> Dust mass total =    6.9721299190506066E-008  Msun</span>
+<span class="go"> Reading dust temperatures...</span>
+<span class="go"> Rendering image(s)...</span>
+<span class="go"> Doing scattering Monte Carlo simulation for lambda =    2.2000000000000002       micron...</span>
+<span class="go"> Using dust scattering mode            1</span>
+<span class="go"> Wavelength nr            1  corresponding to lambda=   2.2000000000000002       micron</span>
+<span class="go">    Photon nr         1000</span>
+<span class="go">    .</span>
+<span class="go">    .</span>
+<span class="go">    .</span>
+<span class="go">    Photon nr        30000</span>
+<span class="go"> Average number of scattering events per photon package =    5.9100000000000000E-002</span>
+<span class="go"> Ray-tracing image for lambda =    2.2000000000000002       micron...</span>
+<span class="go"> Writing image to file...</span>
+<span class="go"> Used scattering_mode=1, meaning: isotropic scattering approximation.</span>
+<span class="go"> Diagnostics of flux-conservation (sub-pixeling):</span>
+<span class="go">     Nr of main pixels (nx*ny)   =        90000</span>
+<span class="go">     Nr of (sub)pixels raytraced =       204616</span>
+<span class="go">     Nr of (sub)pixels used      =       175962</span>
+<span class="go">     Increase of raytracing cost =    2.2735111111111110</span>
+<span class="go"> Done...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="display-images">
+<span id="continuum-model-images-display-image"></span><h3>Display images<a class="headerlink" href="#display-images" title="Permalink to this headline">¶</a></h3>
+<p>Now we can read the image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">readImage</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To display the images calculated by RADMC-3D we can use the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.image.plotImage" title="radmc3dPy.image.plotImage"><code class="xref py py-meth docutils literal"><span class="pre">plotImage()</span></code></a> method</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">au</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxlog</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">saturate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plb</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_heat</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The results should look like this:</p>
+<img alt="_images/image_fig1.png" class="align-center" src="_images/image_fig1.png" />
+<p>We can also display the images using angular coordinates for the image axis (Note that in this case the distance in pc needs also to
+be passed):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">arcsec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxlog</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">saturate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">bunit</span><span class="o">=</span><span class="s1">&#39;snu&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plb</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_heat</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/image_fig2.png" class="align-center" src="_images/image_fig2.png" />
+</div>
+<div class="section" id="image-manipulations">
+<span id="tutorial-reggrid-cont-model-images-manipulation"></span><h3>Image manipulations<a class="headerlink" href="#image-manipulations" title="Permalink to this headline">¶</a></h3>
+<p>It is also easy to convolve the image with an arbitrary 2D gaussian beam:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cim</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">imConv</span><span class="p">(</span><span class="n">fwhm</span><span class="o">=</span><span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">],</span> <span class="n">pa</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">cim</span><span class="p">,</span> <span class="n">arcsec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxlog</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bunit</span><span class="o">=</span><span class="s1">&#39;snu&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plb</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_heat</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/image_fig3.png" class="align-center" src="_images/image_fig3.png" />
+<p>The effect of a coronographic mask can also be simulated. The <cite>cmask_rad</cite> keyword of the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.image.plotImage" title="radmc3dPy.image.plotImage"><code class="xref py py-meth docutils literal"><span class="pre">plotImage()</span></code></a> method sets the
+intensity within the given radius to zero.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">cim</span><span class="p">,</span> <span class="n">arcsec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxlog</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">bunit</span><span class="o">=</span><span class="s1">&#39;snu&#39;</span><span class="p">,</span> <span class="n">cmask_rad</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plb</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_heat</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/image_fig4.png" class="align-center" src="_images/image_fig4.png" />
+<p>Note, that one can also use the <code class="docutils literal"><span class="pre">bunit='jy/pixel</span></code> keyword to display the image in units of Jy/pixel. The <code class="docutils literal"><span class="pre">bunit='snu'</span></code> is kept
+for backward compatibility for now. To display the image in units of Jy/beam for the intensity we can use the <code class="docutils literal"><span class="pre">bunit='jy/beam'</span></code> keyword:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">cim</span><span class="p">,</span> <span class="n">arcsec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxlog</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">bunit</span><span class="o">=</span><span class="s1">&#39;jy/beam&#39;</span><span class="p">,</span> <span class="n">cmask_rad</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plb</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_heat</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which should produce the following image:</p>
+<img alt="_images/image_fig5.png" class="align-center" src="_images/image_fig5.png" />
+</div>
+<div class="section" id="writing-images-to-fits">
+<span id="tutorial-reggrid-cont-model-images-write2fits"></span><h3>Writing images to fits<a class="headerlink" href="#writing-images-to-fits" title="Permalink to this headline">¶</a></h3>
+<p>We can also write the image to a fits file with the <code class="xref py py-meth docutils literal"><span class="pre">writeFits()</span></code> method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">im</span><span class="o">.</span><span class="n">writeFits</span><span class="p">(</span><span class="s1">&#39;myimage.fits&#39;</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="s1">&#39;03h10m05s -10d05m30s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It takes at very least two arguments, the name of the file and the distance in parsec.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial_reggrid_line.html" class="btn btn-neutral float-right" title="Line model tutorial (regular grid)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

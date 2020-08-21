@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="next" title="Continuum model tutorial (regular grid)" href="tutorial_reggrid_cont.html"/>
+        <link rel="prev" title="Downloads" href="download.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#global-installation">Global installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-installation">Local installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>The first step to install radmc3dPy is to download the source of the latest version from <a class="reference internal" href="download.html#downloads"><span class="std std-ref">Downloads</span></a>.</p>
+<p>Once you obtained the source you need to extract the tarball:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$&gt;tar -xzvf radmc3dPy-0.30.2.tar.gz
+</pre></div>
+</div>
+<p>There are two ways of installing radmc3dPy using distutils, depending on the
+write access of Python&#8217;s global site-packages directory.</p>
+<div class="section" id="global-installation">
+<span id="installation-global"></span><h2>Global installation<a class="headerlink" href="#global-installation" title="Permalink to this headline">¶</a></h2>
+<p>Simplest install (write access of /usr or /opt is needed). Go to the radmc3dPy directory and execute the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$&gt;python setup.py install
+</pre></div>
+</div>
+<p>This will install radmc3dPy to Python&#8217;s global site-packages directory.</p>
+</div>
+<div class="section" id="local-installation">
+<span id="installation-local"></span><h2>Local installation<a class="headerlink" href="#local-installation" title="Permalink to this headline">¶</a></h2>
+<p>In case you do not have writing permissions to this directory it is possible to use the following alternative:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$&gt;python setup.py install --user
+</pre></div>
+</div>
+<p>This will install radmc3dPy to $HOME/.local/lib/python3.X/site-packages or  $HOME/.local/lib/python2.X/site-packages
+depending on the python version used.</p>
+<p>Alternatively it is also possible to install radmc3dPy to an arbitrary directory by using the <code class="docutils literal"><span class="pre">--prefix</span></code> option:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$&gt;python setup.py install --prefix=DIR
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">DIR</span></code> is the full path of the directory one wishes to install radmc3dPy. Note, that in this case radmc3dPy will be installed
+to DIR/lib/python2.X/site-packages/radmc3dPy or DIR/lib/python3.X/site-packages/radmc3dPy depending on the python version. Therefore,
+it is important to make sure that DIR/lib/python2.X/site-packages or DIR/lib/python3.X/site-packages is in the <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environment
+variable. This can be done by e.g. adding the following lines to the .bashrc or .cscrc files, depending on the shell type used.</p>
+<p>For bash add the following line to the .bashrc file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>export PYTHONPATH=${PYTHONPATH}:DIR/lib/python3.X/site-packages
+</pre></div>
+</div>
+<p>for c-shell add the following line to the .cshrc file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>setenv PYTHONPATH ${PYTHONPATH}:DIR/lib/python3.X/site-packages
+</pre></div>
+</div>
+<p>Again, replace the <code class="docutils literal"><span class="pre">3.x</span></code> tag with the proper python version and <code class="docutils literal"><span class="pre">DIR</span></code> with the path you used in the <code class="docutils literal"><span class="pre">--prefix</span></code> option.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial_reggrid_cont.html" class="btn btn-neutral float-right" title="Continuum model tutorial (regular grid)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="download.html" class="btn btn-neutral" title="Downloads" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

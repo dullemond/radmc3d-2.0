@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Octree AMR models &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="next" title="Parameter file" href="parfile.html"/>
+        <link rel="prev" title="Octree AMR in radmc3dPy" href="tutorial_octree_grid.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Octree AMR models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#notes-on-octree-amr-models">Notes on octree AMR models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#continuum-model-tutorial">Continuum model tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#read-the-model-structure">Read the model structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#diagnostic-plots">Diagnostic plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#line-model-tutorial">Line model tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Octree AMR models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="octree-amr-models">
+<span id="tutorial-octree-model-setup"></span><h1>Octree AMR models<a class="headerlink" href="#octree-amr-models" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="notes-on-octree-amr-models">
+<span id="tutorial-octree-model-setup-octree-notes"></span><h2>Notes on octree AMR models<a class="headerlink" href="#notes-on-octree-amr-models" title="Permalink to this headline">¶</a></h2>
+<p>Models with octree mesh refinement are set up in a more or less similar way as models with regular grid with two fundamental key differences.</p>
+<ol class="arabic simple">
+<li><strong>Model function signature</strong></li>
+</ol>
+<p>For regular grids any model function(e.g. getDustDensity(), getGasTemperature(), etc) has the generic signature:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal"><span class="pre">grid</span></code> is an instance of <code class="xref py py-class docutils literal"><span class="pre">radmc3dGrid</span></code> and <code class="docutils literal"><span class="pre">ppar</span></code> is a dictionary containing all parameters of the model. For octree AMR compatible
+models the model functions have three additional arguments:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code>, and <code class="docutils literal"><span class="pre">z</span></code> are arrays containing the cell center coordinates. The reason for the separate cell centre coordiante input is that it makes it simpler
+to call model functions during grid building if the refinement criterion depends on the physical structure of the grid (e.g. density). As of radmc3dPy v0.29 both forms of
+coordinate input is used (<code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code>, <code class="docutils literal"><span class="pre">z</span></code> and <code class="docutils literal"><span class="pre">grid</span></code>), however in future versions the <code class="docutils literal"><span class="pre">grid</span></code> argument might be removed.</p>
+<ol class="arabic simple" start="2">
+<li><strong>Decision function</strong></li>
+</ol>
+<p>Another important difference between models using regular and octree mesh is that the building of an octree grid requires a decision function to tell when cells should
+be refined. It receives the cell centre coordinates and sizes as numPy ndarrays and returns a linear array of the same length containing boolean True or False values,
+True if a cell should be refined and False if it should not. An example function based on the gas density gradient is implemented in
+<a class="reference internal" href="radmc3dPy.models.html#radmc3dPy.models.ppdisk_amr.decisionFunction" title="radmc3dPy.models.ppdisk_amr.decisionFunction"><code class="xref py py-meth docutils literal"><span class="pre">decisionFunction()</span></code></a> of the <a class="reference internal" href="radmc3dPy.models.html#module-radmc3dPy.models.ppdisk_amr" title="radmc3dPy.models.ppdisk_amr"><code class="xref py py-mod docutils literal"><span class="pre">ppdisk_amr</span></code></a> model:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">decisionFunction</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="n">ncell</span>   <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rho</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ncell</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nsample&#39;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">isample</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nsample&#39;</span><span class="p">]):</span>
+        <span class="n">xoffset</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">ncell</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="o">*</span><span class="mf">4.0</span>
+        <span class="n">yoffset</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">ncell</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">dy</span><span class="o">*</span><span class="mf">4.0</span>
+        <span class="n">zoffset</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">ncell</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span><span class="o">*</span><span class="mf">4.0</span>
+        <span class="n">rho</span><span class="p">[:,</span><span class="n">isample</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getGasDensity</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">xoffset</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="n">yoffset</span><span class="p">,</span> <span class="n">z</span><span class="o">+</span><span class="n">zoffset</span><span class="p">,</span> <span class="n">ppar</span><span class="o">=</span><span class="n">ppar</span><span class="p">)</span>
+
+    <span class="n">rho_max</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rho_min</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">jj</span>      <span class="o">=</span> <span class="p">((</span><span class="n">rho_max</span><span class="o">-</span><span class="n">rho_min</span><span class="p">)</span><span class="o">/</span><span class="n">rho_max</span><span class="o">&gt;</span><span class="n">ppar</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">])</span>
+
+    <span class="n">decision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ncell</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">jj</span><span class="p">:</span>
+        <span class="n">decision</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">decision</span>
+</pre></div>
+</div>
+<p>This function probes the gas density at a sample of random points within the cell
+<span class="math">\(\rho_{\rm i}\)</span> and if the quantity <span class="math">\((\max{\rho_{\rm i}} - \min{\rho_\rm{i}})/\max{\rho_{\rm i}}\)</span> is higher than a given threshold the cell is refined.
+The idea behind this refinement is to resolve sharp density transitions in the disk, i.e. the upper layers of the disk or the edges of possible gaps.
+Note, that the signature of a decision function is fixed to be:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">decisionFunction</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This means that any other keyword argument should be passed to the function via <code class="docutils literal"><span class="pre">**kwargs</span></code>. Any extra keyword argument passed to the setup functions
+(<a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupDust" title="radmc3dPy.setup.problemSetupDust"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupDust()</span></code></a> and <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupGas" title="radmc3dPy.setup.problemSetupGas"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupGas()</span></code></a>) will be passed on to the decision function in the <code class="docutils literal"><span class="pre">**kwargs</span></code>
+dictionary (and these keyword arguments will also be recorded in the <code class="docutils literal"><span class="pre">problem_params.inp</span></code> file).
+The decision function for a model can be set in two ways. Either a function with a name of &#8220;decisionFunction&#8221; should be present in the model module next to the
+usual model functions (just like in <a class="reference internal" href="radmc3dPy.models.html#module-radmc3dPy.models.ppdisk_amr" title="radmc3dPy.models.ppdisk_amr"><code class="xref py py-mod docutils literal"><span class="pre">ppdisk_amr</span></code></a>)  or a function can also be passed to the setup functions
+as a <code class="docutils literal"><span class="pre">dfunc</span></code> keyword argument. Finally, note that all AMR cell related arguments of a decision function (x, y, z, dx, dy, dz) can be numPy arrays.</p>
+</div>
+<div class="section" id="continuum-model-tutorial">
+<span id="tutorial-octree-model-setup-example-model-cont"></span><h2>Continuum model tutorial<a class="headerlink" href="#continuum-model-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>Let us now see setp-by-step how this works in practice in a protoplanetary disk model implemented in <a class="reference internal" href="radmc3dPy.models.html#module-radmc3dPy.models.ppdisk_amr" title="radmc3dPy.models.ppdisk_amr"><code class="xref py py-mod docutils literal"><span class="pre">ppdisk_amr</span></code></a>.
+This example can also be found in the <code class="docutils literal"><span class="pre">python_examples/run_octree_amr_example_1</span></code> directory in the form of a single python script.
+This example model is a slightly modified version of
+the protoplanetary disk model <a class="reference internal" href="radmc3dPy.models.html#module-radmc3dPy.models.ppdisk" title="radmc3dPy.models.ppdisk"><code class="xref py py-mod docutils literal"><span class="pre">ppdisk</span></code></a> to be used with octree refined grids and the gaps in the disk are represented by a radial gaussian
+instead of a step function. With the refinement decision function at hand we can generate a model where the grid is refined in the upper layers of the disk and the
+edges of the gap while the resolution of the grid in the constant background density remain low.</p>
+<p>Similar to the regular grid version we can start by creating a directory for our model and copy the <code class="docutils literal"><span class="pre">dustkappa_silicate.inp</span></code> file from the <code class="docutils literal"><span class="pre">python_examples/datafiles</span></code>
+directory and start a python session.</p>
+<p>First we import the radmc3dPy package:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>then create an input parameter file with the default parameters:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">analyze</span><span class="o">.</span><span class="n">writeDefaultParfile</span><span class="p">(</span><span class="s1">&#39;ppdisk_amr&#39;</span><span class="p">)</span>
+<span class="go">Writing problem_params.inp</span>
+</pre></div>
+</div>
+<p>Now we can create the necessary input files for a dust continuum model:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="o">.</span><span class="n">problemSetupDust</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ppdisk_amr&#39;</span><span class="p">,</span> <span class="n">nsample</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">binary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">Writing problem_params.inp</span>
+<span class="go">Writing problem_params.inp</span>
+<span class="go">Adaptive Mesh Refinement (AMR) is active</span>
+<span class="go">Active dimensions : 0 1 2</span>
+<span class="go">Resolving level 0</span>
+<span class="go">Cells to resolve at this level :  200</span>
+<span class="go">Resolving level 1</span>
+<span class="go">Cells to resolve at this level :  1170</span>
+<span class="go">Resolving level 2</span>
+<span class="go">Cells to resolve at this level :  7394</span>
+<span class="go">Resolving level 3</span>
+<span class="go">Cells to resolve at this level :  46193</span>
+<span class="go">Resolving level 4</span>
+<span class="go">Cells to resolve at this level :  266083</span>
+<span class="go">Tree building done</span>
+<span class="go">Maximum tree depth :  5</span>
+<span class="go">Nr of branches     :  321040</span>
+<span class="go">Nr of leaves       :  2247496</span>
+<span class="go">Generating leaf indices</span>
+<span class="go">Done</span>
+<span class="go">Writing dustopac.inp</span>
+<span class="go">Writing wavelength_micron.inp</span>
+<span class="go">Writing amr_grid.inp</span>
+<span class="go">Writing stars.inp</span>
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Luminosities of radiation sources in the model :</span>
+<span class="go">As calculated from the input files :</span>
+<span class="go">Stars :</span>
+<span class="go">  Star #0 + hotspot        : 3.564346e+33</span>
+<span class="go">Continuous starlike source : 0.000000e+00</span>
+
+<span class="go">-------------------------------------------------------------</span>
+<span class="go">Writing dust_density.inp</span>
+<span class="go">Writing radmc3d.inp</span>
+</pre></div>
+</div>
+<p>This is now a bit different from a model setup with regular grids. First we passed two extra keyword argument to the dust setup function, which are
+required by the cell refinement decision function. <code class="docutils literal"><span class="pre">nsample=30</span></code> sets the number of random location within the cell to be used to estimate the density
+structure of the model within a given cell while <code class="docutils literal"><span class="pre">threshold=0.9</span></code> sets the lower limit for <span class="math">\((\max{\rho_{\rm i}} - \min{\rho_\rm{i}})/\max{\rho_{\rm i}}\)</span>
+above which the cell should be refined.</p>
+<p>In the output we will see how many cells get refined at each level and the maximum level of refinement in the model. We can limit the depth of the grid, i.e.
+the highest refinement level with the <code class="docutils literal"><span class="pre">levelMaxLimit</span></code> parameter in the <code class="docutils literal"><span class="pre">problem_params.inp</span></code> file or as a keyword argument in the call of the setup function.
+We also get the information on the number of branch and leaf nodes in the grid.</p>
+<div class="section" id="read-the-model-structure">
+<span id="tutorial-octree-model-setup-example-model-cont-readmodel"></span><h3>Read the model structure<a class="headerlink" href="#read-the-model-structure" title="Permalink to this headline">¶</a></h3>
+<p>We have generated a dust model but now we should look at it whether it is really what we intended to have. Using simple 2D plotting functions in matplotlib it
+is not possible to display data defined at a random, irregularly spaced points. There are possibilities, though like the tripcolor() or tricontourf() functions,
+but they tend to show some artifacts at the edges of the grid, which can lead to confusion in interpreting these plots. Thus a better way is to regrid the data to a regular mesh
+and do the visualisation of the regridded data. radmc3dPy has a new function <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.plotSlice2D" title="radmc3dPy.analyze.plotSlice2D"><code class="xref py py-meth docutils literal"><span class="pre">plotSlice2D()</span></code></a> that makes it simple to plot any axis-aligned
+2D slices of the model. It works with models using both regular or octree AMR grids. For octree grids it uses the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.interpolateOctree" title="radmc3dPy.analyze.interpolateOctree"><code class="xref py py-meth docutils literal"><span class="pre">interpolateOctree()</span></code></a>
+function to do nearest neighbour interpolation to a regular grid. To create a plot of the vertical density structure of the model we need to read the density
+first:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;d = analyze.readData(ddens=True, octree=True, binary=False)</span>
+</pre></div>
+</div>
+<p>This tells radmc3dPy to read the dust density from a model using octree where the format of the dust density input file is formatted ascii. Apart from the dust
+density it also reads the spatial grid. The reading of the spatial grid takes more time than reading the density file or possibly even slower than creating the
+grid. The reason for this is that when the spatial grid is read from the file at each base grid cell we immediately follow the tree and add refinement to the
+nodes immediately before moving on to the next base grid cell. As discussed above in <a class="reference internal" href="tutorial_octree_grid.html#tutorial-octree-grid-building"><span class="std std-ref">Grid building</span></a> this is the slower way of building an
+octree mesh in python. During grid building therefore we use array operations to process to test and refine all cells at a given level, which is significantly
+faster.</p>
+<p>To save time on reading the grid and speed up data reading there are two options. One possibility is that we use the data reading methods of
+<code class="xref py py-class docutils literal"><span class="pre">radmc3dData</span></code>. For instance, we have read the dust density, but if we additionally want to read the dust temperature as well we can use
+<code class="xref py py-meth docutils literal"><span class="pre">readDustTemp()</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;d.readDustTemp(binary=False, octree=True)</span>
+</pre></div>
+</div>
+<p>The other possibility is if we pass the instance of the <code class="xref py py-class docutils literal"><span class="pre">radmc3dOctree</span></code> or <code class="xref py py-class docutils literal"><span class="pre">radmc3dGrid</span></code> to the
+<a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readData" title="radmc3dPy.analyze.readData"><code class="xref py py-class docutils literal"><span class="pre">readData</span></code></a> function. If we have already read the grid contained in the instance <code class="docutils literal"><span class="pre">g</span></code> then we can pass it on to the data reader
+function to use this grid instead of readin it from file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;d = analyze.readData(ddens=True, octree=True, binary=False, grid=g)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="diagnostic-plots">
+<span id="tutorial-octree-model-setup-example-model-cont-diagnostic-plots"></span><h3>Diagnostic plots<a class="headerlink" href="#diagnostic-plots" title="Permalink to this headline">¶</a></h3>
+<p>After we have read the grid and the density structure we can use <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.plotSlice2D" title="radmc3dPy.analyze.plotSlice2D"><code class="xref py py-meth docutils literal"><span class="pre">plotSlice2D()</span></code></a> to create a plot of the density structure in our model:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;analyze.plotSlice2D(data=d, plane=&#39;xz&#39;, var=&#39;ddens&#39;, showgrid=False, linunit=&#39;au&#39;,</span>
+<span class="go">       nx=100, ny=100, xlim=(5., 100.), ylim=(-50., 50.), log=True, vmin=1e-25,  nproc=3)</span>
+</pre></div>
+</div>
+<p>This command plots the density structure (<code class="docutils literal"><span class="pre">var='ddens'</span></code>) along in the vertical plane (<code class="docutils literal"><span class="pre">plane='xy'</span></code>, the order of the cooridinates matters),
+using AU as the unit of any linear axis of the plot (<code class="docutils literal"><span class="pre">linunit='au'</span></code>) using a regular grid between 5AU and 100AU in the x coordinate
+(<code class="docutils literal"><span class="pre">xlim=(5.,</span> <span class="pre">100.)</span></code>) and between -50AU and 50AU in the z coordinate (<code class="docutils literal"><span class="pre">ylim=(-50.,</span> <span class="pre">50.)</span></code>) placing 100-100 pixels to create a regular
+grid in the slice (<code class="docutils literal"><span class="pre">nx=100,</span> <span class="pre">ny=100</span></code>). The plot will use a logarithmic stretch (<code class="docutils literal"><span class="pre">log=True</span></code>) with a lower cut of 1e-25 for the density
+(<code class="docutils literal"><span class="pre">vmin=1e-25</span></code>) and using three parallel processes for the interpolation (<code class="docutils literal"><span class="pre">nproc=3</span></code>). We should get an plot like this:</p>
+<img alt="_images/octree_disk_density_slice1.png" class="align-center" src="_images/octree_disk_density_slice1.png" />
+<p>By adding the <code class="docutils literal"><span class="pre">showgrid=True</span></code> and <code class="docutils literal"><span class="pre">gridalpha=0.1</span></code> keywords to the call of <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.plotSlice2D" title="radmc3dPy.analyze.plotSlice2D"><code class="xref py py-meth docutils literal"><span class="pre">plotSlice2D()</span></code></a> we can also display
+the boundaries of the octree grid cells:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;analyze.plotSlice2D(data=d, plane=&#39;xz&#39;, var=&#39;ddens&#39;, showgrid=False, linunit=&#39;au&#39;, showgrid=True, gridalpha=0.1,</span>
+<span class="go">          nx=100, ny=100, xlim=(5., 100.), ylim=(-50., 50.), log=True, vmin=1e-25,  nproc=3)</span>
+</pre></div>
+</div>
+<p>which should result in a plot like this:</p>
+<img alt="_images/octree_disk_density_slice1_grid.png" class="align-center" src="_images/octree_disk_density_slice1_grid.png" />
+<p>IMPORTANT: Since the refinement decision function works in a stochastic way, i.e. the refinement depends on the gas density taken at random location within the
+grid cells, the resulting grid structure may change slightly from one run to another. To prevent the change of the grid in consecutive runs, one can do two things.
+First, use a fixed seed number for the random number generator in the decision function and second, increase the number of density sampling points (<code class="docutils literal"><span class="pre">nsample</span></code> parameter).
+Keep in mind, thought, that the higher the number of density sampling point, the slower the model setup will become.</p>
+<p>We can also plot a slice of the density structrue in the disk midplane, by setting <code class="docutils literal"><span class="pre">plane='xy'</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;analyze.plotSlice2D(data=d, plane=&#39;xz&#39;, var=&#39;ddens&#39;, showgrid=False, linunit=&#39;au&#39;, showgrid=True, gridalpha=0.1,</span>
+<span class="go">       nx=100, ny=100, xlim=(5., 100.), ylim=(-50., 50.), log=True, vmin=1e-25,  nproc=3)</span>
+</pre></div>
+</div>
+<p>which should result in a plot like this:</p>
+<img alt="_images/octree_disk_density_slice2.png" class="align-center" src="_images/octree_disk_density_slice2.png" />
+<p>Once we are convinced that the density structure of the model is what we expect it to be we can calculate the dust temperature:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;radmc3d mctherm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and also calculate a continuum image at <span class="math">\(\lambda=1300\,\mu m\)</span>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">makeImage</span><span class="p">(</span><span class="n">npix</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">sizeau</span><span class="o">=</span><span class="mf">250.</span><span class="p">,</span> <span class="n">incl</span><span class="o">=</span><span class="mf">45.</span><span class="p">,</span> <span class="n">wav</span><span class="o">=</span><span class="mf">1300.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can then read and display the image as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">readImage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">au</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxlog</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">inferno</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>resulting in an image like this</p>
+<img alt="_images/octree_disk_image_cont.png" class="align-center" src="_images/octree_disk_image_cont.png" />
+</div>
+</div>
+<div class="section" id="line-model-tutorial">
+<span id="tutorial-octree-model-setup-example-model-line"></span><h2>Line model tutorial<a class="headerlink" href="#line-model-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>Setting up a gas model is now really simple. Since we have already dealt with the creatin of the spatial grid we can call the gas setup
+function in the exact same way as in the case of a regular grid:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="o">.</span><span class="n">problemSetupGas</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ppdisk_amr&#39;</span><span class="p">,</span> <span class="n">binary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The molecular number density, gas velocity and microturbulent velocity fields are now created for the default molecule of carbon-monoxide.
+To calculate observables, images or spectra, we need to copy the molecular data file <code class="docutils literal"><span class="pre">molecule_co.inp</span></code> (LAMBDA format) from the <code class="docutils literal"><span class="pre">datafiles</span></code>
+directory to the current model directory. Then we are ready to calculate a channel map of the J=3-2 transition at zero velocity:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">makeImage</span><span class="p">(</span><span class="n">npix</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">sizeau</span><span class="o">=</span><span class="mf">250.</span><span class="p">,</span> <span class="n">incl</span><span class="o">=</span><span class="mf">45.</span><span class="p">,</span> <span class="n">iline</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vkms</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can then display this image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">readImage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">au</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">inferno</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We should then get an image like this:</p>
+<img alt="_images/octree_disk_image_CO.png" class="align-center" src="_images/octree_disk_image_CO.png" />
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="parfile.html" class="btn btn-neutral float-right" title="Parameter file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorial_octree_grid.html" class="btn btn-neutral" title="Octree AMR in radmc3dPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

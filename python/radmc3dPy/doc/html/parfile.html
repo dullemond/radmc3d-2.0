@@ -1,0 +1,581 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Parameter file &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="prev" title="Octree AMR models" href="tutorial_octree_models.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parameter file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-file-syntax">Parameter file syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#radiation-sources">Radiation sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grid">Grid</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#separable-mesh-refinement">Separable mesh refinement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grid-refinement-at-the-inner-boundary">Grid refinement at the inner boundary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dust-opacity">Dust opacity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gas-lines">Gas lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code">Code</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Parameter file</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="parameter-file">
+<span id="parfile"></span><h1>Parameter file<a class="headerlink" href="#parameter-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="parameter-file-syntax">
+<span id="parameters-parfile-syntax"></span><h2>Parameter file syntax<a class="headerlink" href="#parameter-file-syntax" title="Permalink to this headline">¶</a></h2>
+<p>The parameter file is split up to blocks of parameters. Each parameter block begins with a line</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Block: BLOCKNAME</span>
+</pre></div>
+</div>
+<p>Anything in the parameter file followed by a <code class="docutils literal"><span class="pre">#</span></code> sign is taken to be a comment, except for the block
+name definitions. Block name definitions begin with a <code class="docutils literal"><span class="pre">#</span></code> followed by the word <code class="docutils literal"><span class="pre">Block</span></code>, a colon and then the
+actual name of the block.</p>
+<p>Block names are followed by the lines containing the parameters and their values. Each parameter definition contains
+three parts, name of the parameter, value and some explanatory comment:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PARAMETER_NAME</span> <span class="o">=</span> <span class="n">PARAMETER_VALUE</span>  <span class="c1"># PARAMETER_DESCRIPTION</span>
+</pre></div>
+</div>
+<p>Long expressions and comments can be broken into multiple lines with a backslash (\)
+at the end of of the broken line.</p>
+<p>In reality a parameter block for the radiation sources can looks like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># Block: Radiation sources</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="n">incl_cont_stellarsrc</span>      <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># # Switches on (True) or off (False) continuous stellar sources )</span>
+<span class="n">incl_disc_stellarsrc</span>      <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># # Switches on (True) or off (False) discrete stellar sources)</span>
+<span class="n">mstar</span>                     <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="o">*</span><span class="n">ms</span><span class="p">]</span>  <span class="c1"># # Mass of the star(s)</span>
+<span class="n">pstar</span>                     <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>  <span class="c1"># # Position of the star(s) (cartesian coordinates)</span>
+<span class="n">rstar</span>                     <span class="o">=</span> <span class="p">[</span><span class="mf">2.0</span><span class="o">*</span><span class="n">rs</span><span class="p">]</span>  <span class="c1"># # Radius of the star(s)</span>
+<span class="n">tstar</span>                     <span class="o">=</span> <span class="p">[</span><span class="mf">4000.0</span><span class="p">]</span>  <span class="c1"># # Effective temperature of the star(s) [K]</span>
+</pre></div>
+</div>
+<p>List of blocknames</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">Radiation</span> <span class="pre">sources</span></code></li>
+<li><code class="docutils literal"><span class="pre">Grid</span> <span class="pre">parameters</span></code></li>
+<li><code class="docutils literal"><span class="pre">Dust</span> <span class="pre">opacity</span></code></li>
+<li><code class="docutils literal"><span class="pre">Gas</span> <span class="pre">line</span> <span class="pre">RT</span></code></li>
+<li><code class="docutils literal"><span class="pre">Code</span> <span class="pre">parameters</span></code></li>
+<li><code class="docutils literal"><span class="pre">Model</span></code></li>
+</ul>
+</div></blockquote>
+<p>These block-names should not be modified as the reader function will look for these strings.</p>
+</div>
+<div class="section" id="radiation-sources">
+<span id="parameters-radiation-sources"></span><h2>Radiation sources<a class="headerlink" href="#radiation-sources" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><div class="first line-block">
+<div class="line"><strong>incl_disc_stellarsrc :</strong> list</div>
+<div class="line">Switches on (True) or off (False) discrete stellar radiation sources.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>mstar :</strong> list</div>
+<div class="line">Mass of the star. Each element of the list contains the mass of an individual star as a float.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>pstar :</strong> list</div>
+<div class="line">Coordinates of the star. Each element of the list contains a three element vector containing the 3D cartesian coordinates of each individual star.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>rstar :</strong> list</div>
+<div class="line">Stellar radius. Each element of the list contains the radius of an individual star as a float.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>tstar :</strong> list</div>
+<div class="line">Effective temperature. Each element of the list contains the effective temperature of an individual star as a float.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>incl_cont_stellarsrc :</strong> list</div>
+<div class="line">Switches on (True) or off (False) continuous stellar radiation sources</div>
+<div class="line">NOTE, the model should have the appropriate functions (<span class="xref std std-ref">getStellarsrcDensity()</span>, <span class="xref std std-ref">getStellarsrcTemplates()</span>)</div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="grid">
+<span id="parameters-grid"></span><h2>Grid<a class="headerlink" href="#grid" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><div class="first line-block">
+<div class="line"><strong>crd_sys :</strong> {&#8216;sph&#8217;, &#8216;car&#8217;}</div>
+<div class="line">Coordinate system type</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>nw :</strong> list</div>
+<div class="line">Number of wavelength points in the wavelength grid, <code class="docutils literal"><span class="pre">nw[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[wbound[i],</span> <span class="pre">wbound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[wbound[-2],</span> <span class="pre">wbound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>nx :</strong> list</div>
+<div class="line">Number of grid cells in the first spatial coordinate, <code class="docutils literal"><span class="pre">nx[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[xbound[i],</span> <span class="pre">xbound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[xbound[-2],</span> <span class="pre">xbound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>ny :</strong> list</div>
+<div class="line">Number of grid cells in the second spatial coordinate, <code class="docutils literal"><span class="pre">ny[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[ybound[i],</span> <span class="pre">ybound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[ybound[-2],</span> <span class="pre">ybound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>nz :</strong> list</div>
+<div class="line">Number of grid cells in the third spatial coordinate, <code class="docutils literal"><span class="pre">nz[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[zbound[i],</span> <span class="pre">zbound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[zbound[-2],</span> <span class="pre">zbound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>wbound :</strong> list</div>
+<div class="line">Boundaries of the wavelength grid</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>xbound :</strong> list</div>
+<div class="line">Boundaries of the spatial grid in the first coordinate, <code class="docutils literal"><span class="pre">nx[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[xbound[i],</span> <span class="pre">xbound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[xbound[-2],</span> <span class="pre">xbound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>xres_nlev :</strong> float</div>
+<div class="line">Radial grid refinement in spherical coordinate system</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>xres_nspan :</strong> float</div>
+<div class="line">Radial grid refinement in spherical coordinate system</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>xres_nstep :</strong> int</div>
+<div class="line">Radial grid refinement in spherical coordinate system</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>ybound :</strong> list</div>
+<div class="line">Boundaries of the spatial grid in the second coordinate, <code class="docutils literal"><span class="pre">ny[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[ybound[i],</span> <span class="pre">ybound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[ybound[-2],</span> <span class="pre">ybound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>zbound :</strong> list</div>
+<div class="line">Boundaries of the spatial grid in the third coordinate, <code class="docutils literal"><span class="pre">nz[i]</span></code> sets the number of grid points in the <code class="docutils literal"><span class="pre">[zbound[i],</span> <span class="pre">zbound[i+1])</span></code> interval (or on the <code class="docutils literal"><span class="pre">[zbound[-2],</span> <span class="pre">zbound[-1]]</span></code> for the last interval)</div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="separable-mesh-refinement">
+<span id="parameters-grid-separable-refinement"></span><h3>Separable mesh refinement<a class="headerlink" href="#separable-mesh-refinement" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Spatial and wavelength grid definitions allow &#8216;separable mesh refinement&#8217;, i.e. refinement of the wavelength or the spatial mesh along individual
+axes. Let us take now the wavelength grid for an example. If we wish to cover the <span class="math">\(10^{-2}-10^4\mu{\rm m}\)</span> interval with 200 grid points
+we should set <code class="docutils literal"><span class="pre">wbound</span> <span class="pre">=</span> <span class="pre">[0.01,</span> <span class="pre">1e4]</span></code> and <code class="docutils literal"><span class="pre">nw</span> <span class="pre">=</span> <span class="pre">[200]</span></code>. This results in a logarithmic wavelength grid between <code class="docutils literal"><span class="pre">wbound[0]</span></code> and <code class="docutils literal"><span class="pre">wbound[1]</span></code>
+containing <code class="docutils literal"><span class="pre">nw[0]</span></code> grid points. This wavelenght grid might be fine enough to sample the radiation field of the sources and the thermal emission
+of the dust in the model, but too coarse to study e.g. the shape of the silicate features in the mid-infrared. If we are interested in the
+silicate feature around <span class="math">\(10\mu{\rm m}\)</span> only, we can refine this region in the wavelength grid by setting <code class="docutils literal"><span class="pre">wbound</span> <span class="pre">=</span> <span class="pre">[0.01,</span> <span class="pre">7.5,</span> <span class="pre">13.5,</span> <span class="pre">1e4]</span></code> and
+<code class="docutils literal"><span class="pre">nw</span> <span class="pre">=</span> <span class="pre">[50,100,50]</span></code>.  This grid setup will result in 50, 100, 50 grid points in the <span class="math">\([0.01\mu{\rm m},7.5\mu{\rm m})\)</span>,
+<span class="math">\([7.5\mu{\rm m},13.5\mu{\rm m})\)</span> , <span class="math">\([13.5\mu{\rm m},10^4\mu{\rm m}]\)</span> intervals, respectively.</p>
+<p><strong>Note</strong>, the number of grid points are defined always on a right-open interval, except in the last, rightmost interval, where the interval is closed.</p>
+</div></blockquote>
+</div>
+<div class="section" id="grid-refinement-at-the-inner-boundary">
+<span id="parameters-grid-xrefinement"></span><h3>Grid refinement at the inner boundary<a class="headerlink" href="#grid-refinement-at-the-inner-boundary" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>Even for logarithmic radial grids the innermost parts of the model can still be optically thick for centrally concentrated density distributions.
+With the use of the <code class="docutils literal"><span class="pre">xres_nlev</span></code>, <code class="docutils literal"><span class="pre">xres_nspan</span></code> and <code class="docutils literal"><span class="pre">xres_nstep</span></code> parameters we can introduce additional grid refinement in the radial grid of
+a spherical coordinate system. The grid refinement is done in the following way. First a logarithmic radial grid is set up on the basis of the
+<code class="docutils literal"><span class="pre">nx</span></code> and <code class="docutils literal"><span class="pre">xbound</span></code> parameters. Then the interval between the innermost cell interface and the <code class="docutils literal"><span class="pre">xres_nspan</span></code> th
+cell interface (i.e. <code class="docutils literal"><span class="pre">xres_nspan</span></code>-1 grid cell) will be taken and split into <code class="docutils literal"><span class="pre">xres_nlev</span></code> grid cells. Then the innermost grid cell will be
+split into <code class="docutils literal"><span class="pre">xres_nlev</span></code> &#8216;new&#8217; grid cells, then again the innermost, refined grid cell will be taken and split into <code class="docutils literal"><span class="pre">xres_nlev</span></code> cells.
+The splitting of the innermost cell will be done <code class="docutils literal"><span class="pre">xres_nstep</span></code> times.</div></blockquote>
+</div>
+</div>
+<div class="section" id="dust-opacity">
+<span id="parameters-dust-opacity"></span><h2>Dust opacity<a class="headerlink" href="#dust-opacity" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><div class="first line-block">
+<div class="line"><strong>dustkappa_ext :</strong> str</div>
+<div class="line">File name tag in the dust opacity file. Dust opacity files should have names like e.g., <code class="docutils literal"><span class="pre">dustkappa_EXT.inp</span></code>, where the <code class="docutils literal"><span class="pre">dustkappa_ext</span></code> parameter should contain the &#8216;EXT&#8217; tags from the file name (e.g. for <code class="docutils literal"><span class="pre">dustkappa_ext</span> <span class="pre">=</span> <span class="pre">'silicate'</span></code> the dust opacity file should be <code class="docutils literal"><span class="pre">dustkappa_silicate.inp</span></code>.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gdens :</strong> float</div>
+<div class="line">Bulk density of the material</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gsdist_powex :</strong> float</div>
+<div class="line">Grain size distribution power exponent</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gsmax :</strong> float</div>
+<div class="line">Maximum grain size in the distribution</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gsmin :</strong> float</div>
+<div class="line">Minimum grain size in the distribution</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>lnk_fname :</strong> list</div>
+<div class="line">File name list (including full path) containing optical constants (NOTE, the file should contain three columns: wavelength [micron], n, k)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>mixabun :</strong> list</div>
+<div class="line">If multiple species specified their mass absorption coefficients can be mixed according to the mixing ratios (mass fractions) in mixabun.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>ngs :</strong> float</div>
+<div class="line">Number of grain sizes in the grain size distribution</div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="gas-lines">
+<span id="parameters-gas-lines"></span><h2>Gas lines<a class="headerlink" href="#gas-lines" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><div class="first line-block">
+<div class="line"><strong>gasspec_colpart_abun :</strong> float</div>
+<div class="line">Abundance of the collisional partner</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gasspec_colpart_name :</strong> float</div>
+<div class="line">Name of the collisional partner</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gasspec_mol_abun :</strong> float</div>
+<div class="line">Molecular abundance</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gasspec_mol_dbase_type :</strong> {&#8216;leiden&#8217;, &#8216;linelist&#8217;}</div>
+<div class="line">Database type of the molecular data (see the <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D manual</a> for the definitions of various formats).</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>gasspec_mol_name :</strong> str</div>
+<div class="line">Name of the molecular species whose lines should be calculated</div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="code">
+<span id="parameters-code"></span><h2>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><div class="first line-block">
+<div class="line"><strong>istar_sphere :</strong> int</div>
+<div class="line">If 0 discrete stars are taken to be point-like, if 1 the finite extent of the star is taken into account</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>itemdecoup :</strong> int</div>
+<div class="line">Allows (0) or prevents (1) the decoupling of the temperature of different dust species</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>lines_mode :</strong> int</div>
+<div class="line">Line mode (for the definitions of the individual line modes see the <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D manual</a>):</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>1 - LTE</li>
+<li>2 - User-defined populations I</li>
+<li>3 - LVG populations</li>
+<li>4 - Optically thin NLTE level populations method</li>
+<li>5 - User-defined populations II</li>
+</ul>
+</div></blockquote>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>nphot :</strong> int</div>
+<div class="line">Number of photons in the thermal Monte Carlo simulations</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>nphot_scat :</strong> int</div>
+<div class="line">Number of photons used for the scattering Monte Carlo simulations when images are calculated</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>nphot_spec :</strong> int</div>
+<div class="line">Number of photons used for the scattering Monte Carlo simultaions when SEDs/spectra are calculated</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>rto_style :</strong> int</div>
+<div class="line">Output format: 1 - Formatted ASCII, 3 - C-style binary</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>scattering_mode_max :</strong> int</div>
+<div class="line">Scattering mode :</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>0 - Scattering is switched off</li>
+<li>1 - Isotropic scattering</li>
+<li>2 - Anysotropic scattering with Henyey-Greenstein phase function</li>
+<li>3 - Anysotropic scattering with tabulated phase function</li>
+<li>4 - Anysotropic scattering with polarization but the full scattering matrix is only used for the last scattering</li>
+<li>5 - Anysotropic scattering with scattering matrix, full treatment</li>
+</ul>
+</div></blockquote>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>tgas_eq_tdust :</strong> int</div>
+<div class="line">Dust temperature is taken to be the gas kinetic temperature</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>modified_random_walk :</strong> int</div>
+<div class="line">Switches on (1) and off (0) modified random walk</div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="tutorial_octree_models.html" class="btn btn-neutral" title="Octree AMR models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

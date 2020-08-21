@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Downloads &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="next" title="Installation" href="install.html"/>
+        <link rel="prev" title="Changes" href="changes.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Downloads</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="downloads">
+<span id="id1"></span><h1>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h1>
+<p>You can find below links to download the various versions of radmc3dPy</p>
+<p><strong>Latest stable version</strong></p>
+<ul>
+<li><p class="first"><code class="xref download docutils literal"><span class="pre">v0.30.2</span></code></p>
+<blockquote>
+<div><p><em>Important bugfixes</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>When scalarfields (e.g. dust density) was read from a data file in ascii format, the file header was read wrong,
+which may resulted in a RuntimeException due to inconsistency in data size between the mesh and the scalar
+data.</li>
+<li>When scalarfields defined on an octree AMR mesh were read from a file in ascii format the header had an indexing
+error, which may resulted in a RuntimeException due to inconsistency in data size between the mesh and the scalar
+data.</li>
+<li>Image convolution always returned positive pixel values. While images calculated in total intensity (i.e. Stokes I),
+should always be positive, this is not true for the other Stokes parameters. This might have resulted in wrong
+intensity values when images with full stokes parameters were convolved.</li>
+<li>Axis labels in the plotSpectrum() function were drawn wrong.</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Previous versions</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first"><a class="reference download internal" href="_downloads/radmc3dPy-0.30.1.tar.gz" download=""><code class="xref download docutils literal"><span class="pre">v0.30.1</span></code></a></p>
+<blockquote>
+<div><p><em>New features</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>New Fortran implementation of the Mie-code with Python interface (f2Py) replacing the pure Python implementation.</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p class="first"><a class="reference download internal" href="_downloads/radmc3dPy-0.30.tar.gz" download=""><code class="xref download docutils literal"><span class="pre">v0.30</span></code></a></p>
+<blockquote>
+<div><p><em>New features</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Python 3 compatibility</li>
+<li>Pure python implementation of a Mie-scattering code (Kees)</li>
+<li>New package (sphtool) for re-gridding 3D Smoothed Particle Hydrodynamics (SPH) simulations</li>
+<li>Modular model setup and a new model class (radmc3dModel)</li>
+<li>Functions to plot dust opacities and scattering matrix elements</li>
+<li>Function to write dust opacities to file</li>
+<li>Internal structural changes (splitting the analyze modules to smaller modules)</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p class="first"><a class="reference download internal" href="_downloads/radmc3dPy-0.29.tar.gz" download=""><code class="xref download docutils literal"><span class="pre">v0.29</span></code></a></p>
+<blockquote>
+<div><p><em>New features</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Octree AMR support (read and write grid and data fields, generate models with an octree grid)</li>
+<li>Plot 2D contour maps of data fields along axis aligned slices (show the cell boundaries for AMR models)</li>
+<li>Plot the polarisation direction for full stokes images (thanks Kees!)</li>
+<li>Read molecular data files (thanks Kees!)</li>
+<li>Plot spectrum (thanks Kees!)</li>
+<li>Functions to calculate dust and gas mass in a model</li>
+<li>Updated tutorials for models using an octree AMR grid</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p class="first"><a class="reference download internal" href="_downloads/radmc3dPy-0.28.2.tar.gz" download=""><code class="xref download docutils literal"><span class="pre">v0.28.2</span></code></a></p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="changes.html" class="btn btn-neutral" title="Changes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

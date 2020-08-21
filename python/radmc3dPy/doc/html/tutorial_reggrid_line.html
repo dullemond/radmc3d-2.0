@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Line model tutorial (regular grid) &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/>
+        <link rel="next" title="Octree AMR in radmc3dPy" href="tutorial_octree_grid.html"/>
+        <link rel="prev" title="Continuum model tutorial (regular grid)" href="tutorial_reggrid_cont.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Line model tutorial (regular grid)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#model-setup">Model setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#images">Images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Line model tutorial (regular grid)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="line-model-tutorial-regular-grid">
+<span id="tutorial-reggrid-line"></span><h1>Line model tutorial (regular grid)<a class="headerlink" href="#line-model-tutorial-regular-grid" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="model-setup">
+<span id="tutorial-reggrid-line-model-setup"></span><h2>Model setup<a class="headerlink" href="#model-setup" title="Permalink to this headline">¶</a></h2>
+<p>Similarly to the dust setup we can use the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupGas" title="radmc3dPy.setup.problemSetupGas"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupGas()</span></code></a> method to create all necessary input files for the line
+simulations. In the following we will take the protoplanetary disk model as an example. It requires the dust model setup to be complete
+and the dust temperature to be calculated (to set up a simple abundance model with photodissociation and freeze-out). To enhance the effect/visibility
+of the freeze-out of the molecules close to the midplane rise the freeze-out temperature to 40K (Note, the real freeze-out temperature of
+CO molecules is around 19K and the 40K used here is only for illustration purpose):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="o">.</span><span class="n">problemSetupGas</span><span class="p">(</span><span class="s1">&#39;ppdisk&#39;</span><span class="p">,</span> <span class="n">gasspec_mol_freezeout_temp</span><span class="o">=</span><span class="p">[</span><span class="mf">40.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="radmc3dPy.html#radmc3dPy.setup.problemSetupGas" title="radmc3dPy.setup.problemSetupGas"><code class="xref py py-meth docutils literal"><span class="pre">problemSetupGas()</span></code></a> method takes one mandatory argument, the name of the model.
+Let us now see the gas structure in the disk. First we need to read the gas density:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">analyze</span><span class="o">.</span><span class="n">readData</span><span class="p">(</span><span class="n">gdens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ispec</span><span class="o">=</span><span class="s1">&#39;co&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readData" title="radmc3dPy.analyze.readData"><code class="xref py py-meth docutils literal"><span class="pre">readData()</span></code></a> method reads the content of the <code class="docutils literal"><span class="pre">molecule_co.inp</span></code> and puts it into the
+<code class="xref py py-attr docutils literal"><span class="pre">radmc3dData.ndens_mol</span></code> attribute. When reading gas density with the <a class="reference internal" href="radmc3dPy.html#radmc3dPy.analyze.readData" title="radmc3dPy.analyze.readData"><code class="xref py py-meth docutils literal"><span class="pre">readData()</span></code></a> method
+we always need to specify the name of the species with the <code class="docutils literal"><span class="pre">ispec</span></code> keyword (i.e. the part of the filename between <code class="docutils literal"><span class="pre">molecule_</span></code> and <code class="docutils literal"><span class="pre">.inp</span></code>).
+We can now make contour plots to display a vertical slice of the disk:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">natconst</span><span class="o">.</span><span class="n">au</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ndens_mol</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">),</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splb</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;r [AU]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splb</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\pi/2-\theta$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splb</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scb</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\log_</span><span class="si">{10}</span><span class="s1">{n_{\rm CO}}$&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mf">270.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can also overplot the dust temperature to check whether freeze-out really happens at 40K as we specified:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">readDustTemp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">plb</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">natconst</span><span class="o">.</span><span class="n">au</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dusttemp</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mf">40.</span><span class="p">],</span>  <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splb</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result should look like this:</p>
+<img alt="_images/gascont_density_contour_dustemp.png" class="align-center" src="_images/gascont_density_contour_dustemp.png" />
+</div>
+<div class="section" id="images">
+<span id="tutorial-reggrid-line-model-images"></span><h2>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h2>
+<p>To calculate images/channel maps we need one additional data file with the molecular data (level energies, Einstein coefficients, etc.).
+Such files can be downloaded e.g. from the <a class="reference external" href="http://home.strw.leidenuniv.nl/~moldata/">Leiden Atomic and Molecular Database</a>.
+Note, that the files downloaded from the Leiden database need to be renamed to <code class="docutils literal"><span class="pre">molecule_MOLECULENAME.inp</span></code> (e.g. <cite>co.dat</cite> -&gt; <cite>molecule_co.inp</cite>).
+For our example we can also use the <code class="docutils literal"><span class="pre">molecule_co.inp</span></code> (12C16O data file downloaded from the Leiden database) in the <code class="docutils literal"><span class="pre">python_examples/datafiles</span></code>
+directory and copy it to the model directory. Then we are ready to make line channel maps:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">makeImage</span><span class="p">(</span><span class="n">npix</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">incl</span><span class="o">=</span><span class="mf">50.</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sizeau</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">vkms</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">iline</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This command will calculate an image with 300 pixel and 300 AU each side, at an inclination of 50 degree. The image will be calculated for the
+third line/transition int the molecular data file at a frequency/wavelength corresponding to 0.5 km/s assuming zero systemic velocity for the source.
+To calculate a full 3D image qube with multiple frequencies/velocities at once, instead of the <code class="docutils literal"><span class="pre">vkms</span></code> keyword one can use the <code class="docutils literal"><span class="pre">widthkms</span></code> and <code class="docutils literal"><span class="pre">linenlam</span></code>
+keywords. The <code class="docutils literal"><span class="pre">widthkms</span></code> keyword will set the total width of the image qube in velocity (in the unit of km/s) while the <code class="docutils literal"><span class="pre">linenlam</span></code> keyword will
+set at how many linearly spaced velocity bins should images be calculated for that interval. For the details of how to calculate line channel maps
+see the <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D manual</a>.</p>
+<p>Now we can read the calculate image (channel map):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">im</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">readImage</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>And display it</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">arcsec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpc</span><span class="o">=</span><span class="mf">140.</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plb</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_heat</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/line_channel_map_arcsec.png" class="align-center" src="_images/line_channel_map_arcsec.png" />
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial_octree_grid.html" class="btn btn-neutral float-right" title="Octree AMR in radmc3dPy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorial_reggrid_cont.html" class="btn btn-neutral" title="Continuum model tutorial (regular grid)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

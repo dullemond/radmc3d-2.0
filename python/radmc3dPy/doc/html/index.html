@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to radmc3dPy! &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="#"/>
+        <link rel="next" title="Requirements" href="requirements.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to radmc3dPy!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-radmc3dpy">
+<h1>Welcome to radmc3dPy!<a class="headerlink" href="#welcome-to-radmc3dpy" title="Permalink to this headline">¶</a></h1>
+<p>radmc3dPy is a python package/user-interface to the 3D radiative transfer code <a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/">RADMC-3D</a>.
+radmc3dPy provides functionality to</p>
+<ul class="simple">
+<li>set up continuum and gas models</li>
+<li>handle a library of models (easyily extendable with user-defined models)</li>
+<li>read and write data files in ASCII and C-style binary format</li>
+<li>provide interface to the Mie-scattering code shipped with RADMC-3D to calculate dust opacities</li>
+<li>set up spherical or cartesian spatial grids both regular and octree AMR grids</li>
+<li>write legacy VTK format (spherical grids only)</li>
+<li>set up discrete and continuous starlike radiation sources</li>
+<li>read and display images (single or multiple frequency, i.e. continuum or line channel maps, total intensity or full 4D polarization, ASCII or C-style binary)</li>
+<li>write fits files (CASA-compatible fits headers)</li>
+<li><dl class="first docutils">
+<dt>do simple image manipulations</dt>
+<dd><ul class="first last">
+<li>calculation of moment maps for line channel maps</li>
+<li>convolve image with a 2D Gaussian or an Airy-type psf</li>
+<li>add coronographic masks</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>calculate interferometric visibilities of images for given projected baselines and position angles</li>
+</ul>
+<div class="section" id="copyright">
+<h2>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h2>
+<p>radmc3dPy was developed by Attila Juhasz at the Leiden Observatory between 2011 and 2014 and from 2014 at the Institute of Astronomy in Cambridge.</p>
+</div>
+<div class="section" id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h2>
+<p>I/We reject all responsibility for the use of this package. The package is provided as-is, and we are not responsible for any damage to hardware or software,
+nor for incorrect results that may result from the software. The package is still in development and it may contain bugs. In case of any bug, please, contact
+the author of the package (Attila Juhasz &lt;<a class="reference external" href="mailto:juhasz&#37;&#52;&#48;ast&#46;cam&#46;ac&#46;uk">juhasz<span>&#64;</span>ast<span>&#46;</span>cam<span>&#46;</span>ac<span>&#46;</span>uk</a>&gt;).</p>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#global-installation">Global installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#local-installation">Local installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_reggrid_cont.html#model-setup">Model setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_reggrid_cont.html#read-the-model-structure">Read the model structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_reggrid_cont.html#diagnostic-plots">Diagnostic plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_reggrid_cont.html#images">Images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_reggrid_line.html#model-setup">Model setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_reggrid_line.html#images">Images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_octree_grid.html#grid-building">Grid building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_octree_grid.html#array-layout">Array layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_octree_models.html#notes-on-octree-amr-models">Notes on octree AMR models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_octree_models.html#continuum-model-tutorial">Continuum model tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_octree_models.html#line-model-tutorial">Line model tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parfile.html#parameter-file-syntax">Parameter file syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parfile.html#radiation-sources">Radiation sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parfile.html#grid">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parfile.html#dust-opacity">Dust opacity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parfile.html#gas-lines">Gas lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parfile.html#code">Code</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+</ul>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="requirements.html" class="btn btn-neutral float-right" title="Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

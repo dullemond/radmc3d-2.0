@@ -1,0 +1,1669 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>radmc3dPy.models package &mdash; radmc3dPy 0.30.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="radmc3dPy 0.30.2 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> radmc3dPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.30.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Downloads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_cont.html">Continuum model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_reggrid_line.html">Line model tutorial (regular grid)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_grid.html">Octree AMR in radmc3dPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_octree_models.html">Octree AMR models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parfile.html">Parameter file</a></li>
+</ul>
+
+            
+          
+    <a href="py-modindex.html">Modules</a>
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3dPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>radmc3dPy.models package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="radmc3dpy-models-package">
+<h1>radmc3dPy.models package<a class="headerlink" href="#radmc3dpy-models-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-radmc3dPy.models.lines_nlte_lvg_1d_1">
+<span id="radmc3dpy-models-lines-nlte-lvg-1d-1-module"></span><h2>radmc3dPy.models.lines_nlte_lvg_1d_1 module<a class="headerlink" href="#module-radmc3dPy.models.lines_nlte_lvg_1d_1" title="Permalink to this headline">¶</a></h2>
+<p>A 1D simple velocity gradient model to calculate lines with the LVG method</p>
+<p>Original IDL model by Kees Dullemond, Python translation by Attila Juhasz</p>
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides default parameter values</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getDustDensity">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getDustTemperature">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getDustTemperature</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getDustTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the dust temperature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust temperature in K</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getGasAbundance">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getGasAbundance</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em>, <em>ispec=''</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getGasAbundance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the molecular abundance of species ispec 
+The number density of a molecule is rhogas * abun</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+<p><strong>ispec</strong> : str</p>
+<blockquote>
+<div><p>The name of the gas species whose abundance should be calculated</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the abundance as an ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getGasDensity">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getGasDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getGasDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total gas density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getGasTemperature">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getGasTemperature</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getGasTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the gas temperature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas temperature in K</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getModelDesc">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a brief description of the model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getVTurb">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getVTurb</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getVTurb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the turbulent velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.lines_nlte_lvg_1d_1.getVelocity">
+<code class="descclassname">radmc3dPy.models.lines_nlte_lvg_1d_1.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.lines_nlte_lvg_1d_1.getVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the gas velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.ppdisk">
+<span id="radmc3dpy-models-ppdisk-module"></span><h2>radmc3dPy.models.ppdisk module<a class="headerlink" href="#module-radmc3dPy.models.ppdisk" title="Permalink to this headline">¶</a></h2>
+<p>Generic protoplanetary disk model</p>
+<p>The density is given by</p>
+<blockquote>
+<div><div class="math">
+\[\rho = \frac{\Sigma(r,\phi)}{H_p\sqrt{(2\pi)}} \exp{\left(-\frac{z^2}{2H_p^2}\right)}\]</div>
+<ul class="simple">
+<li><span class="math">\(\Sigma\)</span> - surface density</li>
+<li><span class="math">\(H_{\rm p}\)</span> - Pressure scale height</li>
+</ul>
+</div></blockquote>
+<p>There are two options for the functional form of surface density as a function of radius. For a simple
+power-law the surface density is given by</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(\Sigma(r) = \Sigma_0\left(\frac{r}{r_{\rm out}}\right)^p\)</span></li>
+</ul>
+</div></blockquote>
+<p>alternatively the surface density can also have an exponential outer tapering:</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(\Sigma(r) = \Sigma_0\left(\frac{r}{r_{\rm out}}\right)^p\exp{\left\{-\left(\frac{r}{r_{\rm out}}\right)^{2+p}\right\}}\)</span></li>
+</ul>
+</div></blockquote>
+<p>The molecular abundance function takes into account dissociation and freeze-out of the molecules
+For photodissociation only the continuum (dust) shielding is taken into account in a way that
+whenever the continuum optical depth radially drops below a threshold value the molecular abundance
+is dropped to zero. For freeze-out the molecular abundance below a threshold temperature is decreased
+by a given fractor.</p>
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to provide default parameter values of the model.</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getDustDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getGasAbundance">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getGasAbundance</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em>, <em>ispec=''</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getGasAbundance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the molecular abundance.</p>
+<p>The number density of a molecule is rhogas * abun</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+<p><strong>ispec</strong> : str</p>
+<blockquote>
+<div><p>The name of the gas species whose abundance should be calculated</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns an ndarray containing the molecular abundance at each grid point</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getGasDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getGasDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getGasDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the gas density distribution in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getModelDesc">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the brief description of the model.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getVTurb">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getVTurb</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getVTurb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the turbulent velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns an ndarray with the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk.getVelocity">
+<code class="descclassname">radmc3dPy.models.ppdisk.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk.getVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the velocity field in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.ppdisk_acc">
+<span id="radmc3dpy-models-ppdisk-acc-module"></span><h2>radmc3dPy.models.ppdisk_acc module<a class="headerlink" href="#module-radmc3dPy.models.ppdisk_acc" title="Permalink to this headline">¶</a></h2>
+<p>Generic protoplanetary disk model</p>
+<p>The density is given by</p>
+<blockquote>
+<div><div class="math">
+\[\rho = \frac{\Sigma(r,\phi)}{H_p\sqrt{(2\pi)}} \exp{\left(-\frac{z^2}{2H_p^2}\right)}\]</div>
+<ul class="simple">
+<li><span class="math">\(\Sigma\)</span> - surface density</li>
+<li><span class="math">\(H_{\rm p}\)</span> - Pressure scale height</li>
+</ul>
+</div></blockquote>
+<p>The molecular abundance function takes into account dissociation and freeze-out of the molecules
+For photodissociation only the continuum (dust) shielding is taken into account in a way that
+whenever the continuum optical depth radially drops below a threshold value the molecular abundance
+is dropped to zero. For freeze-out the molecular abundance below a threshold temperature is decreased
+by a given fractor.</p>
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to provide default parameter values of the model.</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getDustDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getGasAbundance">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getGasAbundance</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em>, <em>ispec=''</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getGasAbundance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the molecular abundance.</p>
+<p>The number density of a molecule is rhogas * abun</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+<p><strong>ispec</strong> : str</p>
+<blockquote>
+<div><p>The name of the gas species whose abundance should be calculated</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns an ndarray containing the molecular abundance at each grid point</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getGasDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getGasDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getGasDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the gas density distribution in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getModelDesc">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the brief description of the model.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getStellarsrcDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getStellarsrcDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getStellarsrcDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate the stellar density for a continuous starlike source when modeling a viscous accretion disk</p>
+<p>The stellar density is defined as:</p>
+<p>L_nu / (4*pi) = St_temp * rho_stellar * dV</p>
+<p>where</p>
+<p>L_nu is the frequency dependent luminosity of a grid cell
+St_temp is the stellar template (as given by getStellarsrcTemplates())
+rho_stellar is the stellar density 
+dV is the volume of the cell</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model
+mandatory keys for an accretion disk:
+&#8216;mstar&#8217; - stellar mass
+&#8216;rstar&#8217; - stellar radius
+&#8216;accrate&#8217; - accretion rate</p>
+</div></blockquote>
+<p><strong>NOTE, that for the calculation of the effective disk temperature only the first</strong></p>
+<p class="last"><strong>star is used if more than one values are given in mstar and rstar.</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getStellarsrcTemplates">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getStellarsrcTemplates</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getStellarsrcTemplates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate the stellar density for a continuous starlike source when modeling a viscous accretion disk</p>
+<p>The stellar template can be defined in two ways:</p>
+<ol class="arabic simple">
+<li><dl class="first docutils">
+<dt>by Tstar, Rstar, Mstar assuming it radiates as a blackbody</dt>
+<dd>In this case, similar to the definitions in the stars.inp file the temperature has to be a negative number.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>by a full frequency-dependent spectru given in erg / sec / Hz / gram-of-star . </dt>
+<dd>So multiply this by the stellar density in units of gram-of-star / cm^3, and divide by 4*pi to get the
+stellar source function in units of erg / src / Hz / cm^3 / steradian.</dd>
+</dl>
+</li>
+</ol>
+<p>The model setup functions (problemSetupDust() and problemSetupGas()) will check the sign of the first element with
+indices (0,0) of the array returned by this function to decide which way the stellar template is defined. 
+If the first element is negative, the template is defined by Tstar, Rstar, Mstar, while if it is positive
+the returned array contains frequency dependent spectra.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model
+mandatory keys for an accretion disk:
+&#8216;mstar&#8217; - stellar mass
+&#8216;rstar&#8217; - stellar radius
+&#8216;accrate&#8217; - accretion rate</p>
+</div></blockquote>
+<p><strong>NOTE, that for the calculation of the effective disk temperature only the first</strong></p>
+<p><strong>star is used if more than one values are given in mstar and rstar.</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Returns an array with the stellar templates</p>
+<p>If the stellar template is defined by the temperature, radius and mass of the stars the returned array</p>
+<p>must have a dimensions [Ntemplate, 3]. The [i,0], [i,1] and [i,2] elements of the array contain the</p>
+<p>stellar temperature, radius and mass of the ith template, respectively. NOTE, that in this case the</p>
+<p>stellar temperatures needs to be negative!</p>
+<p>If the stellar template is defined by the full frequency dependent spectra the returned array should</p>
+<p class="last">have [Ntemplate, Nwavelength] dimension.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getVTurb">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getVTurb</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getVTurb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the turbulent velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns an ndarray with the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_acc.getVelocity">
+<code class="descclassname">radmc3dPy.models.ppdisk_acc.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_acc.getVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the velocity field in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.ppdisk_amr">
+<span id="radmc3dpy-models-ppdisk-amr-module"></span><h2>radmc3dPy.models.ppdisk_amr module<a class="headerlink" href="#module-radmc3dPy.models.ppdisk_amr" title="Permalink to this headline">¶</a></h2>
+<p>Generic protoplanetary disk model with a gap - octree AMR example</p>
+<p>The density is given by</p>
+<blockquote>
+<div><div class="math">
+\[\rho = \frac{\Sigma(r,\phi)}{H_p\sqrt{(2\pi)}} \exp{\left(-\frac{z^2}{2H_p^2}\right)}\]</div>
+<ul class="simple">
+<li><span class="math">\(\Sigma\)</span> - surface density</li>
+<li><span class="math">\(H_{\rm p}\)</span> - Pressure scale height</li>
+</ul>
+</div></blockquote>
+<p>There are two options for the functional form of surface density as a function of radius. For a simple
+power-law the surface density is given by</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(\Sigma_{\rm c}(r) = \Sigma_0\left(\frac{r}{r_{\rm out}}\right)^p\)</span></li>
+</ul>
+</div></blockquote>
+<p>alternatively the surface density can also have an exponential outer tapering:</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(\Sigma_{\rm c}(r) = \Sigma_0\left(\frac{r}{r_{\rm out}}\right)^p\exp{\left\{-\left(\frac{r}{r_{\rm out}}\right)^{2+p}\right\}}\)</span></li>
+</ul>
+</div></blockquote>
+<p>The <span class="math">\({\rm c}\)</span> index refers to the continuous, unperturbed surface density as the final surface density may 
+contain perturbations due to the presence of gaps. Arbitrary number of gaps can be placed in the surface density of 
+the disk. The gap is implemented as a radial gaussian depletion in the form</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(G(r) = \frac{1}{\delta-1}\exp{(-\left((r-r_{\rm c})^2/\sigma^2\right)}\)</span></li>
+</ul>
+</div></blockquote>
+<p>where <span class="math">\(\delta\)</span> is the density recution in the center of the gap, <span class="math">\(r_{\rm c}\)</span> is the distance of the gap 
+center from the star, and <span class="math">\(\sigma\)</span> is the standard deviation of the gaussian in the radial direction. The final 
+surface density including the gaps will then be calculated as</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(\Sigma(r) =\Sigma_{\rm c}(r) / (1 + \sum_{i=1}^{N}G_{\rm i}(r))\)</span></li>
+</ul>
+</div></blockquote>
+<p>The molecular abundance function takes into account the freeze-out of the molecules
+For freeze-out the molecular abundance below a threshold temperature is decreased by a given fractor.</p>
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.decisionFunction">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">decisionFunction</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>dx=None</em>, <em>dy=None</em>, <em>dz=None</em>, <em>model=None</em>, <em>ppar=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.decisionFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example function to be used as decision function for resolving cells in tree building. It calculates the gas 
+density at a random sample of coordinates within a given cell than takes the quantity 
+<span class="math">\((\max{\rho_{\rm i}} - \min{\rho_\rm{i}})/\max{\rho_{\rm i}}\)</span>. If it is larger than a certain threshold
+value it will return True (i.e. the cell should be resolved) if the density variation is less than the threshold 
+it returns False (i.e. the cell should not be resolved)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Cell centre coordinates of the cells in the first dimension</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>Cell centre coordinates of the cells in the second dimension</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Cell centre coordinates of the cells in the third dimension</p>
+</div></blockquote>
+<p><strong>dx</strong> : ndarray</p>
+<blockquote>
+<div><p>Half size of the cells in the first dimension</p>
+</div></blockquote>
+<p><strong>dy</strong> : ndarray</p>
+<blockquote>
+<div><p>Half size of the cells in the second dimension</p>
+</div></blockquote>
+<p><strong>dz</strong> : ndarray</p>
+<blockquote>
+<div><p>Half size of the cells in the third dimension</p>
+</div></blockquote>
+<p><strong>model</strong> : object</p>
+<blockquote>
+<div><p>A radmc3dPy model (must contain a getGasDensity() function)</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>All parameters of the problem (from the problem_params.inp file). It is not used here, but must be present 
+for compatibility reasons.</p>
+</div></blockquote>
+<p><strong>**kwargs: dictionary</strong></p>
+<blockquote class="last">
+<div><p>Parameters used to decide whether the cell should be resolved. It should contain the following keywords; 
+&#8216;nsample&#8217;, which sets the number of random points the gas desity is sampled at within the cell and 
+&#8216;threshold&#8217; that sets the threshold value for max(gasdens)/min(gasdens) above which the cell should be 
+resolved.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to provide default parameter values of the model.</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getDustDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>ppar=None</em>, <em>grid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the first dimension</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the second dimension</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the third dimension</p>
+</div></blockquote>
+<p><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getGasAbundance">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getGasAbundance</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>grid=None</em>, <em>ppar=None</em>, <em>ispec=''</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getGasAbundance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the molecular abundance.</p>
+<p>The number density of a molecule is rhogas * abun</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the first dimension</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the second dimension</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the third dimension</p>
+</div></blockquote>
+<p><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+<p><strong>ispec</strong> : str</p>
+<blockquote>
+<div><p>The name of the gas species whose abundance should be calculated</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns an ndarray containing the molecular abundance at each grid point</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getGasDensity">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getGasDensity</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>ppar=None</em>, <em>grid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getGasDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the gas density distribution in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the first dimension</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the second dimension</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the third dimension</p>
+</div></blockquote>
+<p><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getModelDesc">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the brief description of the model.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getVTurb">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getVTurb</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getVTurb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the turbulent velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the first dimension</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the second dimension</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the third dimension</p>
+</div></blockquote>
+<p><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns an ndarray with the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.ppdisk_amr.getVelocity">
+<code class="descclassname">radmc3dPy.models.ppdisk_amr.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.ppdisk_amr.getVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the velocity field in a protoplanetary disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the first dimension</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the second dimension</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Coordinate of the cell centers in the third dimension</p>
+</div></blockquote>
+<p><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and frequency/wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.simple_1">
+<span id="radmc3dpy-models-simple-1-module"></span><h2>radmc3dPy.models.simple_1 module<a class="headerlink" href="#module-radmc3dPy.models.simple_1" title="Permalink to this headline">¶</a></h2>
+<p>A 3D spherical Gaussian blob in a 3D cartesian grid</p>
+<p>Original IDL model by Kees Dullemond, Python translation by Attila Juhasz</p>
+<dl class="function">
+<dt id="radmc3dPy.models.simple_1.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.simple_1.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.simple_1.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides default parameter values</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.simple_1.getDustDensity">
+<code class="descclassname">radmc3dPy.models.simple_1.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.simple_1.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.simple_1.getModelDesc">
+<code class="descclassname">radmc3dPy.models.simple_1.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.simple_1.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a brief description of the model</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.spher1d_1">
+<span id="radmc3dpy-models-spher1d-1-module"></span><h2>radmc3dPy.models.spher1d_1 module<a class="headerlink" href="#module-radmc3dPy.models.spher1d_1" title="Permalink to this headline">¶</a></h2>
+<p>A 1D spherical envelope with powerlaw radial density in spherical grid</p>
+<p>Original IDL model by Kees Dullemond, Python translation by Attila Juhasz</p>
+<dl class="function">
+<dt id="radmc3dPy.models.spher1d_1.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.spher1d_1.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.spher1d_1.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides default parameter values</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.spher1d_1.getDustDensity">
+<code class="descclassname">radmc3dPy.models.spher1d_1.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.spher1d_1.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.spher1d_1.getModelDesc">
+<code class="descclassname">radmc3dPy.models.spher1d_1.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.spher1d_1.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a brief description of the model</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.spher2d_1">
+<span id="radmc3dpy-models-spher2d-1-module"></span><h2>radmc3dPy.models.spher2d_1 module<a class="headerlink" href="#module-radmc3dPy.models.spher2d_1" title="Permalink to this headline">¶</a></h2>
+<p>A 2D envelope with density dependence on the theta coordinate in spherical grid</p>
+<p>Original IDL model by Kees Dullemond, Python translation by Attila Juhasz</p>
+<dl class="function">
+<dt id="radmc3dPy.models.spher2d_1.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.spher2d_1.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.spher2d_1.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides default parameter values</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.spher2d_1.getDustDensity">
+<code class="descclassname">radmc3dPy.models.spher2d_1.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.spher2d_1.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.spher2d_1.getModelDesc">
+<code class="descclassname">radmc3dPy.models.spher2d_1.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.spher2d_1.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a brief description of the model</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.template">
+<span id="radmc3dpy-models-template-module"></span><h2>radmc3dPy.models.template module<a class="headerlink" href="#module-radmc3dPy.models.template" title="Permalink to this headline">¶</a></h2>
+<p>This is a radmc3dPy model template</p>
+<p>This template is an empty model, i.e. all model functions return zeros in the appropriate arrays and dimensions. 
+The purpose of this model is to illustrate the names and syntax of the model functions. Hence, this file can
+be a starting point for implementing new models in the library.</p>
+<p>A radmc3dPy model file can contain any / all of the functions below</p>
+<blockquote>
+<div><ul class="simple">
+<li>getDefaultParams()</li>
+<li>getModelDesc()</li>
+<li>getDustDensity()</li>
+<li>getDustTemperature()</li>
+<li>getGasAbundance()</li>
+<li>getGasDensity()</li>
+<li>getGasTemperature()</li>
+<li>getVelocity()</li>
+<li>getVTurb()</li>
+</ul>
+</div></blockquote>
+<p>The description of the individual functions can be found in the docstrings below the function name.
+If a model does not provide a variable or the variable should be calculated by RADMC-3D 
+(e.g. dust temperature) the corresponding function (e.g. get_dust_temperature) should be removed from
+or commented out in the model file.</p>
+<p>NOTE: When using this template it is strongly advised to rename the template model (to e.g. mydisk.py)
+as the get_model_names() function in the setup module removes the name &#8216;template&#8217; from the list of available
+models.</p>
+<dl class="function">
+<dt id="radmc3dPy.models.template.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides default parameter values</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getDustDensity">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getDustTemperature">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getDustTemperature</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getDustTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the dust temperature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust temperature in K</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getGasAbundance">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getGasAbundance</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em>, <em>ispec=''</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getGasAbundance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the molecular abundance of species ispec 
+The number density of a molecule is rhogas * abun</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+<p><strong>ispec</strong> : str</p>
+<blockquote>
+<div><p>The name of the gas species whose abundance should be calculated</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the abundance as an ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getGasDensity">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getGasDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getGasDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total gas density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getGasTemperature">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getGasTemperature</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getGasTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the gas temperature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the gas temperature in K</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getModelDesc">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a brief description of the model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getVTurb">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getVTurb</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getVTurb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the turbulent velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.template.getVelocity">
+<code class="descclassname">radmc3dPy.models.template.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.template.getVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates/sets the gas velocity field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the turbulent velocity in cm/s</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models.test_scattering_1">
+<span id="radmc3dpy-models-test-scattering-1-module"></span><h2>radmc3dPy.models.test_scattering_1 module<a class="headerlink" href="#module-radmc3dPy.models.test_scattering_1" title="Permalink to this headline">¶</a></h2>
+<p>A 3D spherical Gaussian blob in a 3D cartesian grid</p>
+<p>Original IDL model by Kees Dullemond, Python translation by Attila Juhasz</p>
+<dl class="function">
+<dt id="radmc3dPy.models.test_scattering_1.getDefaultParams">
+<code class="descclassname">radmc3dPy.models.test_scattering_1.</code><code class="descname">getDefaultParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.test_scattering_1.getDefaultParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides default parameter values</p>
+<p>Returns a list whose elements are also lists with three elements:
+1) parameter name, 2) parameter value, 3) parameter description
+All three elements should be strings. The string of the parameter
+value will be directly written out to the parameter file if requested,
+and the value of the string expression will be evaluated and be put
+to radmc3dData.ppar. The third element contains the description of the
+parameter which will be written in the comment field of the line when
+a parameter file is written.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.test_scattering_1.getDustDensity">
+<code class="descclassname">radmc3dPy.models.test_scattering_1.</code><code class="descname">getDustDensity</code><span class="sig-paren">(</span><em>grid=None</em>, <em>ppar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.test_scattering_1.getDustDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dust density distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : radmc3dGrid</p>
+<blockquote>
+<div><p>An instance of the radmc3dGrid class containing the spatial and wavelength grid</p>
+</div></blockquote>
+<p><strong>ppar</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing all parameters of the model</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the dust volume density in g/cm^3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.test_scattering_1.getModelDesc">
+<code class="descclassname">radmc3dPy.models.test_scattering_1.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.test_scattering_1.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a brief description of the model</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-radmc3dPy.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-radmc3dPy.models" title="Permalink to this headline">¶</a></h2>
+<p>This module contains models and functions to manage the library/list of models</p>
+<dl class="function">
+<dt id="radmc3dPy.models.updateModelList">
+<code class="descclassname">radmc3dPy.models.</code><code class="descname">updateModelList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.updateModelList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the list of models in the library.</p>
+<p>This function gets the names of all .py files in the radmc3dPy/models directory. Then tries to import them as
+a rought check for consistency. If the content of the file can be imported, the name of the model file is added
+to the model list. The model modules are then added to the _modellist.py in the radmc3dPy/models directory and
+can be used from that point on.</p>
+<dl class="docutils">
+<dt>NOTE 1 <span class="classifier-delimiter">:</span> <span class="classifier">Write permissions is needed to update the list of models as the radmc3dPy/models/_modellist.py file</span></dt>
+<dd>has to be re-written.</dd>
+<dt>NOTE 2 <span class="classifier-delimiter">:</span> <span class="classifier">After the updateModelList has been run the module must be either reloaded or one has to exit the current</span></dt>
+<dd>python session and relaunch it to see the effect of the updated model list.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.getModelNames">
+<code class="descclassname">radmc3dPy.models.</code><code class="descname">getModelNames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.getModelNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the available models.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="radmc3dPy.models.getModelDesc">
+<code class="descclassname">radmc3dPy.models.</code><code class="descname">getModelDesc</code><span class="sig-paren">(</span><em>model=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radmc3dPy.models.getModelDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a brief description of the selected model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>model</strong> : str</p>
+<blockquote>
+<div><p>Name of the model to get the description of</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A string with the description of the model</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014-2018, Attila Juhasz.
+      Last updated on Nov 19, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.30.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
