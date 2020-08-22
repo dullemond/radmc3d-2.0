@@ -168,14 +168,12 @@ class radmc3dData(object):
     def _findDataFile(self, basename):
         hits  = 0
         exts  = ['.inp','.binp','.out','.bout','.dat','.bdat']
+        filename = ''
         for x in exts:
             fname = basename+x
             if(os.path.isfile(fname)):
                 hits    += 1
                 filename = fname
-        if hits==0:
-            print('Error: File with basename '+basename+' not found.')
-            quit()
         if hits>1:
             print('Warning: Multiple files basename '+basename+' found. Taking '+filename)
         return filename
@@ -704,27 +702,25 @@ class radmc3dData(object):
         if not old:
             if fname is None:
                 fname = self._findDataFile('dust_density')
-                
-            print('Reading '+fname)
-            self.rhodust = self._scalarfieldReader(fname=fname, ndim=4)
+            if os.path.isfile(fname):
+                print('Reading '+fname)
+                self.rhodust = self._scalarfieldReader(fname=fname, ndim=4)
         #
         # Read the output of the previous 2d version of the code
         #
         else:
             fname = 'dustdens.inp'
-            print('Reading '+fname)
+            if os.path.isfile(fname):
+                print('Reading '+fname)
+                data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+                # 4 element header: Nr of dust species, nr, ntheta, ?
+                hdr = np.array(data[:4], dtype=np.int64)
+                data = np.reshape(data[4:], [hdr[0], hdr[1], hdr[2]])
+                data = np.moveaxis(data, 0, -1)[:, :, np.newaxis, :]
 
-            data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-            # 4 element header: Nr of dust species, nr, ntheta, ?
-            hdr = np.array(data[:4], dtype=np.int64)
-            data = np.reshape(data[4:], [hdr[0], hdr[1], hdr[2]])
-            data = np.moveaxis(data, 0, -1)[:, :, np.newaxis, :]
-
-            self.rhodust = np.zeros([hdr[1], hdr[2]*2, 1, hdr[0]], dtype=np.float64)
-            self.rhodust[:, :hdr[2], 0, :] = data[:, :, 0, :]
-            self.rhodust[:, hdr[2]:, 0, :] = data[:, ::-1, 0, :]
-
-        return True
+                self.rhodust = np.zeros([hdr[1], hdr[2]*2, 1, hdr[0]], dtype=np.float64)
+                self.rhodust[:, :hdr[2], 0, :] = data[:, :, 0, :]
+                self.rhodust[:, hdr[2]:, 0, :] = data[:, ::-1, 0, :]
 
     def readDustTemp(self, fname=None, old=False):
         """Reads the dust temperature.
@@ -746,29 +742,27 @@ class radmc3dData(object):
         if not old:
             if fname is None:
                 fname = self._findDataFile('dust_temperature')
-
-            print('Reading '+fname)
-
-            self.dusttemp = self._scalarfieldReader(fname=fname, ndim=4)
+            if os.path.isfile(fname):
+                print('Reading '+fname)
+                self.dusttemp = self._scalarfieldReader(fname=fname, ndim=4)
         else:
             fname = 'dusttemp_final.dat'
-            print('Reading '+fname)
+            if os.path.isfile(fname):
+                print('Reading '+fname)
 
-            data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-            # 4 element header: Nr of dust species, nr, ntheta, ?
-            hdr = np.array(data[:4], dtype=np.int64)
-            data = data[4:]
-            self.dusttemp = np.zeros([hdr[1], hdr[2]*2, 1, hdr[0]], dtype=np.float64)
+                data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+                # 4 element header: Nr of dust species, nr, ntheta, ?
+                hdr = np.array(data[:4], dtype=np.int64)
+                data = data[4:]
+                self.dusttemp = np.zeros([hdr[1], hdr[2]*2, 1, hdr[0]], dtype=np.float64)
 
-            ncell = hdr[1] * hdr[2]
-            for idust in range(hdr[0]):
-                # We need to get rid of the dust species index that is written inbetween the
-                # temperature arrays
-                data = data[1:]
-                self.dusttemp[:, :hdr[2], 0, idust] = np.reshape(data[:ncell], [hdr[1], hdr[2]])
-            self.dusttemp[:, hdr[2]:, 0, :] = self.dusttemp[:, :hdr[2], 0, :][:, ::-1, :]
-
-        return True
+                ncell = hdr[1] * hdr[2]
+                for idust in range(hdr[0]):
+                    # We need to get rid of the dust species index that is written inbetween the
+                    # temperature arrays
+                    data = data[1:]
+                    self.dusttemp[:, :hdr[2], 0, idust] = np.reshape(data[:ncell], [hdr[1], hdr[2]])
+                self.dusttemp[:, hdr[2]:, 0, :] = self.dusttemp[:, :hdr[2], 0, :][:, ::-1, :]
 
     def readGasVel(self, fname=None):
         """Reads the gas velocity.
@@ -786,13 +780,10 @@ class radmc3dData(object):
 
         if fname is None:
             fname = self._findDataFile('gas_velocity')
-
-        binary = self._isBinary(fname)
-            
-        if binary:
-
-            print('Reading '+fname)
-            if os.path.isfile(fname):
+        if os.path.isfile(fname):
+            binary = self._isBinary(fname)
+            if binary:
+                print('Reading '+fname)
                 # If we have an octree grid
                 with open(fname, 'r') as rfile:
                     if isinstance(self.grid, radmc3dOctree):
@@ -834,12 +825,6 @@ class radmc3dData(object):
                         self.gasvel = np.reshape(self.gasvel, [self.grid.nz, self.grid.ny, self.grid.nx, 3])
                         self.gasvel = np.swapaxes(self.gasvel, 0, 2)
             else:
-                raise FileNotFoundError(fname + 'was not found')
-
-        else:
-
-            if os.path.isfile(fname):
-
                 print('Reading ' + fname)
                 with open(fname, 'r') as rfile:
                     # Two element header 1 - iformat, 2 - Nr of cells
@@ -864,11 +849,6 @@ class radmc3dData(object):
                         self.gasvel = np.reshape(data, [self.grid.nz, self.grid.ny, self.grid.nx, 3])
                         self.gasvel = np.swapaxes(self.gasvel, 0, 2)
 
-            else:
-                raise FileNotFoundError(fname + 'was not found')
-
-        return True
-
     def readVTurb(self, fname=None):
         """Reads the turbulent velocity field.
 
@@ -885,14 +865,11 @@ class radmc3dData(object):
 
         if fname is None:
             fname = self._findDataFile('microturbulence')
-
-        print('Reading microturbulence')
-
-        self.vturb = self._scalarfieldReader(fname=fname, ndim=3)
-        if octree:
-            self.vturb = np.squeeze(self.vturb)
-
-        return True
+        if os.path.isfile(fname):
+            print('Reading microturbulence')
+            self.vturb = self._scalarfieldReader(fname=fname, ndim=3)
+            if octree:
+                self.vturb = np.squeeze(self.vturb)
 
     def readGasDens(self, fname=None, ispec=''):
         """Reads the gas density.
@@ -914,13 +891,11 @@ class radmc3dData(object):
 
         if fname is None:
             fname = self._findDataFile('numberdens_' + ispec)
-
-        print('Reading gas density (' + fname + ')')
-        self.ndens_mol = self._scalarfieldReader(fname=fname, ndim=3)
-        if octree:
-            self.ndens_mol = np.squeeze(self.ndens_mol)
-
-        return True
+        if os.path.isfile(fname):
+            print('Reading gas density (' + fname + ')')
+            self.ndens_mol = self._scalarfieldReader(fname=fname, ndim=3)
+            if octree:
+                self.ndens_mol = np.squeeze(self.ndens_mol)
 
     def readGasTemp(self, fname=None):
         """Reads the gas temperature.
@@ -938,14 +913,11 @@ class radmc3dData(object):
 
         if fname is None:
             fname = self._findDataFile('gas_temperature')
-
-        print('Reading gas temperature')
-
-        self.gastemp = self._scalarfieldReader(fname=fname, ndim=3)
-        if octree:
-            self.gastemp = np.squeeze(self.gastemp)
-
-        return True
+        if os.path.isfile(fname):
+            print('Reading gas temperature')
+            self.gastemp = self._scalarfieldReader(fname=fname, ndim=3)
+            if octree:
+                self.gastemp = np.squeeze(self.gastemp)
 
     def writeDustDens(self, fname='', binary=True, old=False):
         """Writes the dust density.

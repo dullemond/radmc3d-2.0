@@ -1,5 +1,10 @@
-"""This module contains functions to read and write input/output data for RADMC-3D and
+"""
+This module contains functions to read and write input/output data for RADMC-3D and
 to do some simple analysis/diagnostics of the model.
+
+Originally from the analyze.pro IDL package by Cornelis Dullemond,
+translated into Python and subsequently improved by Attila Juhasz 
+(between 2011-2018).
 """
 from __future__ import absolute_import
 from __future__ import print_function
@@ -85,6 +90,15 @@ def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, isp
     else:
         res = radmc3dData()
 
+    # By default: read everything
+    if not(ddens or dtemp or gvel or gtemp or vturb or gdens):
+        ddens=True
+        dtemp=True
+        gvel=True
+        gtemp=True
+        vturb=True
+        gdens=True
+        
     if ddens:
         res.readDustDens(old=old)
     if dtemp:
@@ -96,12 +110,7 @@ def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, isp
     if vturb:
         res.readVTurb()
     if gdens:
-        if not ispec:
-            raise ValueError('Unknown ispec.\n'
-                             + 'No gas species is specified!\n'
-                             + 'The ispec input keyword should be set to the name of the gas species as it appears in\n'
-                             + 'numberdens_gasspecname.inp')
-        else:
+        if ispec is not None:
             res.readGasDens(ispec=ispec)
 
     return res
