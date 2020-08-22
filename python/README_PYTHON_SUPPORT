@@ -5,7 +5,7 @@ Then you will run the RADMC-3D executable (called 'radmc3d'). This will
 create a set of output files. You will use Python scripts to read these
 output files and analyze and plot the results.
 
-There are three main ways to interact with RADMC-3D through Python:
+There are two main ways to interact with RADMC-3D through Python:
 
  - In the ../examples/ directory you find basic setups for simple models.  Each
    directory contains one or more python scripts to set the model up
@@ -13,16 +13,11 @@ There are three main ways to interact with RADMC-3D through Python:
    as simple as possible, so that it becomes clear what RADMC-3D is really
    doing.
 
- - In the ./radmc3d_basic_tools/ directory you find some python tools that you
-   can use to analyze or plot the input files and output files.
-
  - In the ./radmc3dPy/ directory you find a package, developed by Dr. Attila
-   Juhasz, which includes much more than just a basic set of tools. It is
-   therefore a more sophisticated Python interface to RADMC-3D. The only
-   drawback is that it is no longer maintained or further developed, as
-   Dr. Juhasz has left science. Attempts will be made to keep this package
-   alive (i.e. making small changes necessary to keep it working, while Python
-   and RADMC-3D continue to develop). This package has its own documentation
-   and it contains copies of some of the example models internally.
+   Juhasz between 2011 and 2018, which has a large number of functions and
+   methods to read RADMC-3D data, process them, and make plots of them.
+   From 2020 onward (and starting with version 2.0 of RADMC-3D) it will
+   be maintained by Cornelis Dullemond. The radmc3dPy package has its
+   own documentation, independent of the main RADMC-3D documentation.
 
-2020.08.21
+2020.08.22
