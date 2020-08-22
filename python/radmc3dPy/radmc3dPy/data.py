@@ -1,4 +1,7 @@
-"""This module contains a class for handling variable data in radmc-3d
+"""
+This module contains a class for handling variable data in radmc-3d
+Note that since verion 0.30.2 of radmc3dPy, a lot has been changed
+to make default actions as simple and automatic as possible. 
 """
 from __future__ import absolute_import
 from __future__ import print_function
