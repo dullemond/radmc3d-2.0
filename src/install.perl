@@ -37,17 +37,16 @@ print FILE "system(\"$radmc3d \@ARGV\");" ;
 close (FILE) ;
 `chmod u+rwx $radmc3dlnk` ;
 #
-# The following is only necessary if you want to use the basic Python analysis tools for RADMC-3D.
-# You can remove or comment-out the following lines if you do not want to use these tools.
+# The following is only necessary if you want to use the auxiliary Python 
+# tools in the python/tools/ directory. You can remove or comment-out the 
+# following lines if you do not want to use these tools.
 #
-# NOTE: For the radmc3dPy package (which is a separate package, developed by Dr. Attila Juhasz,
-#       see https://bitbucket.org/at_juhasz/radmc3dpy/src/master/), you should use the installation
-#       method of that package. It will install it right into your Python distribution. The
-#       Python tools installed here are different: they are a basic set of tools belonging to
-#       the RADMC-3D distribution.
+# NOTE: For the radmc3dPy package (in the python/radmc3dPy/ directory), 
+#       you should use the installation method of that package. Read the
+#       python/radmc3dPy/README file for directions.
 #
 $python    = $home . "/bin/python" ;
-$radmc3d   = $python . "/radmc3d_basic_tools" ;
+$radmc3d   = $python . "/radmc3d_tools" ;
 if(!(-e $python)) {
     print "It is convenient for you to have a bin/python/ directory in your home directory\n" ;
     print "-----Shall I make $python for you?\n" ;
@@ -60,7 +59,7 @@ if(!(-e $python)) {
 }
 if(-e $python) {
     if(!(-e $radmc3d)) {
-        print "It is convenient for you to have a bin/python/radmc3d_basic_tools directory in your home directory\n" ;
+        print "It is convenient for you to have a bin/python/radmc3d_tools directory in your home directory\n" ;
         print "-----Shall I make $radmc3d for you?\n" ;
         $input = <STDIN> ;
         print $input ;
@@ -70,8 +69,8 @@ if(-e $python) {
         }
     }
     if(-e $radmc3d) {
-        print "Found the ~/bin/python/radmc3d_basic_tools directory. Copying current python basic tools there.\n" ;
+        print "Found the ~/bin/python/radmc3d_tools directory. Copying current python radmc3d tools there.\n" ;
         system("rm -f $radmc3d/*.pyc") ;
-        system("cp -r ../python/radmc3d_basic_tools/* $radmc3d/") ;
+        system("cp -r ../python/tools/* $radmc3d/") ;
     }
 }

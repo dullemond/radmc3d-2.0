@@ -20,4 +20,7 @@ There are two main ways to interact with RADMC-3D through Python:
    be maintained by Cornelis Dullemond. The radmc3dPy package has its
    own documentation, independent of the main RADMC-3D documentation.
 
+In addition, in the ./tools/ directory you can find some additional
+tools that might, or might not, be useful for you.
+
 2020.08.22
