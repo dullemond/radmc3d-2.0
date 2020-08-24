@@ -3019,6 +3019,19 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         iarg = iarg+1
         read(buffer,*) rt_mcparams%nphot_mono
         gotit = .true.
+     elseif(buffer(1:10).eq.'countwrite') then
+        !
+        ! Set how often RADMC-3D writes a progress line in a Monte Carlo run (default = 1000)
+        !
+        if(iarg.gt.numarg) then
+           write(stdo,*) 'ERROR while reading command line options: cannot read countwrite.'
+           write(stdo,*) '      Expecting 1 integer after countwrite.'
+           stop
+        endif
+        call ggetarg(iarg,buffer,fromstdi)
+        iarg = iarg+1
+        read(buffer,*) rt_mcparams%countwrite
+        gotit = .true.
      elseif(buffer(1:6).eq.'sizeau') then
         !
         ! Set the image size
