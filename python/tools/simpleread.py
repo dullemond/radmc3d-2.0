@@ -50,6 +50,8 @@ except ImportError:
     print('Without matplotlib you can use the python module to set up a model but you will not be able to plot things')
     print('or display images')
 
+import glob
+
 class simplereaddataobject(object):
     """
     Generic data object for the RADMC-3D simpleread.py functions.
@@ -347,7 +349,7 @@ def read_spectrum(dpc=1.):
     print('Reading '+ fname)
     with open(fname, 'r') as rfile:
         # Read the format number
-        iformat = rfile.readline()
+        iformat = int(rfile.readline())
 
         # Read the number of wavelengths
         spectrum.nwav = int(rfile.readline())
@@ -371,3 +373,75 @@ def read_spectrum(dpc=1.):
     # Return the spectrum
     return spectrum
 
+def read_dustkappa(species=None):
+    """
+    Reading a dust opacity file (but only the basic dustkappa_*.inp type,
+    not the dustkapscatmat_*.inp type).
+
+    ARGUMENTS:
+      species           The dust species: Reading dustkappa_<species>.inp
+                        If unspecified, read_dustkappa will search for such a file.
+                        If it finds a single one, it will read that. Otherwise it
+                        will request you to specify species.
+
+    RETURNS:
+      Data object containing:
+
+        .wav            Wavelength array of the spectrum in micron
+        .freq           Frequency array of the spectrum in Hertz
+        .kappa_abs      Absorption opacity in cm^2/gram-of-dust
+        .kappa_sca      Scattering opacity in cm^2/gram-of-dust
+        .kappa_g        The g-coefficient (between -1 and 1) for non-isotropic scattering
+    """
+    cc        = 2.99792458e10  # Light speed             [cm/s]
+
+    # Find which dust opacity to read
+    if species is None:
+        fnames = glob.glob('dustkappa_*.inp')
+        if len(fnames)==0:
+            msg = 'No file of type dustkappa_*.inp is found in this directory.'
+            raise RuntimeError(msg)
+        if len(fnames)>1:
+            msg = 'More than one file of type dustkappa_*.inp is found in this directory. Please specify the name of the dust species as keyword species.'
+            raise RuntimeError(msg)
+        species = fnames[0]
+    if species[0:10]=='dustkappa_': species = species[10:]
+    if species[-4:]=='.inp': species = species[:-4]
+
+    # Read that dust opacity
+    dustkappa = simplereaddataobject('dustkappa')
+    fname     = 'dustkappa_'+species+'.inp'
+    print('Reading '+ fname)
+    with open(fname, 'r') as rfile:
+        # Read the format number
+        iformat = int(rfile.readline())
+
+        # Read the number of wavelength points
+        dustkappa.nwav = int(rfile.readline())
+        dustkappa.freq = dustkappa.nwav
+
+        # Now read the rest of the data
+        data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
+
+    # Reshape the data
+    if iformat==1:
+        data = np.reshape(data, [dustkappa.nwav, 2])
+    elif iformat==2:
+        data = np.reshape(data, [dustkappa.nwav, 3])
+    elif iformat==3:
+        data = np.reshape(data, [dustkappa.nwav, 4])
+    else:
+        msg = 'Format number of kappa file not known'
+        raise RuntimeError(msg)
+
+    # Extract the information
+    dustkappa.wav        = data[:,0]
+    dustkappa.freq       = 1e4 * cc / dustkappa.wav
+    dustkappa.kappa_abs  = data[:,1]
+    if iformat>1:
+        dustkappa.kappa_sca = data[:,2]
+    if iformat>2:
+        dustkappa.kappa_g = data[:,3]
+
+    # Return dustkappa
+    return dustkappa
