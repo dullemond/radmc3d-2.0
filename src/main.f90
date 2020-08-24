@@ -623,16 +623,18 @@ program radmc3d
      !
      ! Initialize the AmrRay module, so that raytracing can be done on this grid
      !
-     if(debug_check_all.ne.0) then
-        selfcheck = .true. 
-     else 
-        selfcheck = .false.
-     endif
-!    call amrray_initialize(selfcheck)
-!###############################
-     write(stdo,*) 'ALWAYS SELF-CHECK FOR NOW...'
+     !if(debug_check_all.ne.0) then
+     !   selfcheck = .true.
+     !else
+     !   selfcheck = .false.
+     !endif
+     !call amrray_initialize(selfcheck)
+     !
+     ! NOTE: It has turned out to be safer to keep the self-checking switched
+     !       on, even though it might be a bit slower. But we use the motto:
+     !       safety first!
+     !
      call amrray_initialize(.true.)
-!###############################
      !
      ! If mirror symmetry is used, then make this known to the rest of the
      ! code
