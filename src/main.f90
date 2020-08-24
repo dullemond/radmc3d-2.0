@@ -833,9 +833,8 @@ program radmc3d
            ! Messages
            !
            write(stdo,*) 'Done with Bjorkman & Wood Monte Carlo simulation'
-           !$ write(stdo,*) '*** using the PARALLEL version of RADMC-3D *** '
-           !$ write(stdo,*) 'Number of threads used: ', setthreads
-           !$ write(stdo,*) '...'
+           !$ write(stdo,*) 'Using the PARALLEL version of RADMC-3D'
+           !$ write(stdo,*) 'Number of parallel threads used: ', setthreads
            write(stdo,*) 'Average number of abs/scat events per photon package = ', &
                       ieventcounttot/(1.d0*rt_mcparams%nphot_therm)
            write(stdo,*) 'Average nr of times a photon stays in the same cell  = ', &
