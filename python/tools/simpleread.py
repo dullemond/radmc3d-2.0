@@ -327,3 +327,45 @@ def read_image(indexorder='fortran'):
     # Return object
     return image
 
+def read_spectrum(dpc=1.):
+    """
+    Reading the spectrum.out file.
+
+    ARGUMENTS:
+      dpc               Distance of observer in parsec (default=1)
+
+    RETURNS:
+      Data object containing:
+
+        .freq           Frequency array of the spectrum
+        .flux           An array with the flux at dpc parsec in erg/(s.cm^2.Hz)
+    """
+    cc        = 2.99792458e10  # Light speed             [cm/s]
+    spectrum  = simplereaddata('spectrum')
+    fname     = 'spectrum.out'
+    print('Reading '+ fname)
+    with open(fname, 'r') as rfile:
+        # Read the format number
+        iformat = rfile.readline()
+
+        # Read the number of wavelengths
+        spectrum.nwav = int(rfile.readline())
+        spectrum.freq = spectrum.nwav
+
+        # Read a blank line
+        dum = rfile.readline()
+
+        # Read the rest of the data
+        data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
+
+    # Reshape the spectrum
+    data          = np.reshape(data, [spectrum.nwav, 2])
+    spectrum.wav  = data[:,0]
+    spectrum.freq = 1e4 * cc / spectrum.wav
+    spectrum.fnu  = data[:,1]
+
+    # Rescale spectrum to other distance
+    spectrum.fnu /= dpc**2
+
+    # Return the spectrum
+    return spectrum
