@@ -50,7 +50,7 @@ except ImportError:
     print('Without matplotlib you can use the python module to set up a model but you will not be able to plot things')
     print('or display images')
 
-class simplereaddata(object):
+class simplereaddataobject(object):
     """
     Generic data object for the RADMC-3D simpleread.py functions.
     """
@@ -76,7 +76,7 @@ def read_grid():
         .xi,.yi,.zi  The x, y and z grid cell interface locations (each array 1 longer than the x, y, z ones)
 
     """
-    grid  = simplereaddata('grid')
+    grid  = simplereaddataobject('grid')
     fname = 'amr_grid.inp'
     print('Reading '+fname)
     data  = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
@@ -141,7 +141,7 @@ def read_dustdens(indexorder='fortran'):
         .rhodust        An array with the dust density values (in g/cm^3)
     """
     grid      = read_grid()
-    dustdens  = simplereaddata('dust_density')
+    dustdens  = simplereaddataobject('dust_density')
     dustdens.grid = grid
     fname     = 'dust_density.inp'
     print('Reading '+fname)
@@ -200,7 +200,7 @@ def read_dusttemp(indexorder='fortran'):
         .dusttemp       An array with the dust tempeature values (in K)
     """
     grid      = read_grid()
-    dusttemp  = simplereaddata('dust_temperature')
+    dusttemp  = simplereaddataobject('dust_temperature')
     dusttemp.grid = grid
     fname     = 'dust_temperature.dat'
     print('Reading '+fname)
@@ -259,7 +259,7 @@ def read_image(indexorder='fortran'):
     """
     pc        = 3.08572e18     # Parsec                  [cm]
     cc        = 2.99792458e10  # Light speed             [cm/s]
-    image     = simplereaddata('image')
+    image     = simplereaddataobject('image')
     fname     = 'image.out'
     print('Reading '+ fname)
     with open(fname, 'r') as rfile:
@@ -341,7 +341,7 @@ def read_spectrum(dpc=1.):
         .flux           An array with the flux at dpc parsec in erg/(s.cm^2.Hz)
     """
     cc        = 2.99792458e10  # Light speed             [cm/s]
-    spectrum  = simplereaddata('spectrum')
+    spectrum  = simplereaddataobject('spectrum')
     fname     = 'spectrum.out'
     print('Reading '+ fname)
     with open(fname, 'r') as rfile:
