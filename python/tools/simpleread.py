@@ -1,7 +1,7 @@
 """
-SIMPLEREAD
+SIMPLEREAD: A simple Python reading tool for RADMC-3D
 
-by C.P. Dullemond and A. Juhasz (2020)
+By C.P. Dullemond and A. Juhasz (2020)
 
 This Python script contains a few very basic functions for reading the input
 and output files of RADMC-3D. They are mostly meant for pedagogical purpose: to
@@ -337,8 +337,9 @@ def read_spectrum(dpc=1.):
     RETURNS:
       Data object containing:
 
-        .freq           Frequency array of the spectrum
-        .flux           An array with the flux at dpc parsec in erg/(s.cm^2.Hz)
+        .wav            Wavelength array of the spectrum in micron
+        .freq           Frequency array of the spectrum in Hertz
+        .fnu            An array with the flux F_nu at dpc parsec in erg/(s.cm^2.Hz)
     """
     cc        = 2.99792458e10  # Light speed             [cm/s]
     spectrum  = simplereaddataobject('spectrum')
@@ -369,3 +370,4 @@ def read_spectrum(dpc=1.):
 
     # Return the spectrum
     return spectrum
+
