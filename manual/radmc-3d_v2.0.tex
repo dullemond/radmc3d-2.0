@@ -120,7 +120,7 @@
 
 
 
-%\centerline{\includegraphics[width=0.9\textwidth]{coverim_lowres.eps}}
+%\centerline{\includegraphics[width=0.9\textwidth]{Figures/coverim_lowres-eps-converted-to.pdf}}
 
 \clearpage
 \mbox{}
@@ -360,7 +360,7 @@ have to write his/her own pre- and post-processing subroutines.
 \section{Requirements}\label{sec-requirements}
 The following pre-installed software is required:
 \begin{itemize}
-\item {\small\tt Operating system: Unix-like (e.g.~Linux or MacOSX}\\
+\item {\small\tt Operating system: Unix-like (e.g.~Linux or MacOSX)}\\
   This package runs under Unix-like environment (e.g.~Linux or MacOSX), but has
   not been tested under Windows. There is no particular reason why it should not
   also run under Windows, but it would require different ways of file
@@ -976,7 +976,7 @@ is then produced (with filename ending in {\small\tt .dat} or {\small\tt
 This basic dataflow is shown in Fig.~\ref{fig-dataflow-twostage}.
 %
 \begin{figure}
-\centerline{\includegraphics[height=0.13\textwidth]{Inkscape/dataflow-basic.pdf}}
+\centerline{\includegraphics[height=0.11\textwidth]{Inkscape/dataflow-basic.pdf}}
 \caption{\label{fig-dataflow-basic}
 Pictographic representation of the basic dataflow of RADMC-3D. The user
 produces the input files; RADMC-3D reads them, performs the calculation,
@@ -986,7 +986,7 @@ and produces output files. The user can then analyze the output files.
 %
 %
 \begin{figure}
-\centerline{\includegraphics[height=0.13\textwidth]{Inkscape/dataflow-twostage.pdf}}
+\centerline{\includegraphics[height=0.11\textwidth]{Inkscape/dataflow-twostage.pdf}}
 \caption{\label{fig-dataflow-twostage}
 Pictographic representation of the dataflow of RADMC-3D for the case
 of a 2-stage procedure, such as for dust continuum transfer. An intermediate
@@ -997,7 +997,7 @@ also analyze the intermediate file itself.
 %
 %
 \begin{figure}
-\centerline{\includegraphics[height=0.28\textwidth]{Inkscape/dataflow-basic-python.pdf}}
+\centerline{\includegraphics[height=0.26\textwidth]{Inkscape/dataflow-basic-python.pdf}}
 \caption{\label{fig-dataflow-basic-python}
 Pictographic representation of how the Python programs in the example directories
 are used to create the input files of RADMC-3D. 
@@ -1006,7 +1006,7 @@ are used to create the input files of RADMC-3D.
 %
 %
 \begin{figure}
-\centerline{\includegraphics[height=0.28\textwidth]{Inkscape/dataflow-twostage-python.pdf}}
+\centerline{\includegraphics[height=0.26\textwidth]{Inkscape/dataflow-twostage-python.pdf}}
 \caption{\label{fig-dataflow-twostage-python}
 Pictographic representation of the dataflow of RADMC-3D for the case
 of a 2-stage procedure, such as for dust continuum transfer. An intermediate
@@ -2264,7 +2264,7 @@ may wish to play with:
 \end{itemize}
 
 \begin{figure}
-\centerline{\includegraphics[width=0.5\textwidth]{polscat.eps}}
+\centerline{\includegraphics[width=0.5\textwidth]{Figures/polscat-eps-converted-to.pdf}}
 \caption{\label{fig-polscat} The effect of {\small\tt nphot\_scat} on the
   image quality when the image is dominated by scattered light. The images
   show the result of model {\small\tt examples/run\_simple\_2\_scatmat} at
@@ -2631,7 +2631,7 @@ circular polarization.''
 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.9\textwidth]{stokes_and_angles_iaudef.eps}}
+\centerline{\includegraphics[width=0.9\textwidth]{Figures/stokes_and_angles_iaudef-eps-converted-to.pdf}}
 \caption{\label{fig-stokes-definition} The definition of the Stokes
   parameters used in RADMC-3D, which is consistent with the IAU 1974
   definitions (see Hamaker \& Bregman (1996) A\&AS 117, pp.161). First panel
@@ -5156,8 +5156,8 @@ So here is a list of things to check:
 \label{sec-doppler-catching}
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.45\textwidth]{line_doppjump.eps}
-  \hspace{3em}\includegraphics[width=0.45\textwidth]{line_doppcatch.eps}}
+\centerline{\includegraphics[width=0.45\textwidth]{Figures/line_doppjump-eps-converted-to.pdf}
+  \hspace{3em}\includegraphics[width=0.45\textwidth]{Figures/line_doppcatch-eps-converted-to.pdf}}
 \caption{\label{fig-doppler-catch}
 Left: Pictographic representation of the doppler jumping problem with 
 ray-tracing through a model with strong cell-to-cell velocity differences. 
@@ -5398,35 +5398,11 @@ writepop} on the command line. Example:
 radmc3d spectrum iline 1 widthkms 10 writepop
 \end{verbatim}\end{asciibox}
 This then creates (in addition to the spectrum) a file called (for our
-example of the CO molecule) {\small\tt levelpop\_co.dat}.
+example of the CO molecule) {\small\tt levelpop\_co.dat}. 
 
 
+{\bf TODO: DESCRIBE WAY TO READ THIS FILE}
 
-
-##############################################################
-##############################################################
-##############################################################
-##############################################################
-##############################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-In the
-{\small\tt radmc3dPy} package
-there is a function called {\small\tt
-  read\_levelpop()} that can read the data from {\small\tt levelpop\_co.dat}
-into IDL for visualization. You will then find that indeed only the
-necessary levels have been used.
 
 If, for some reason, you want always {\em all} levels to be stored (and you
 can afford to do so with the size of your computer's memory), you can make
@@ -5622,18 +5598,17 @@ be useful and presents many new features and more in-depth insight.
 \label{sec-images}
 %
 Images and spectra are typically made after the dust temperature has been
-determined using the thermal Monte Carlo run (see Chapter \ref{chap-dust-transfer}). An image can now be made with a simple call to
-{\small\tt radmc3d}\footnote{Please also read Section \ref{sec-idl-makeimage} for IDL routines that do all of this for you
-  conveniently. The choice is up to you: you can either do this directly as
-  described here, or use the IDL routines.}:
+determined using the thermal Monte Carlo run (see Chapter \ref{chap-dust-transfer}).
+An image can now be made with a simple call to
+{\small\tt radmc3d}:
 \begin{asciibox}\begin{verbatim}
 radmc3d image lambda 10
 \end{verbatim}\end{asciibox}
 This makes an image of the model at wavelength $\lambda=10\mu$m and writes
 this to the file {\small\tt image.out}. We refer to Section
 \ref{sec-image-out} for details of this file and how to interpret the
-content. See Chapter \ref{chap-idl-analysis-tools} for an extensive IDL tool
-set that make it easy to read and handle these files. The vantage point is
+content. See Chapter \ref{chap-python-analysis-tools} for an extensive Python tools
+that make it easy to read and handle these files. The vantage point is
 at infinity at a default inclination of 0, i.e.\ pole-on view. You can
 change the vantage point:
 \begin{asciibox}\begin{verbatim}
@@ -5647,8 +5622,8 @@ z-axis\footnote{Here clockwise is defined with the z-axis pointing toward
 counter-clockwise around the z-axis by 30 degrees). 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.45\textwidth]{camera_orient.eps}
-  \hspace{3em}\includegraphics[width=0.38\textwidth]{posang.eps}}
+\centerline{\includegraphics[width=0.45\textwidth]{Figures/camera_orient-eps-converted-to.pdf}
+  \hspace{3em}\includegraphics[width=0.38\textwidth]{Figures/posang-eps-converted-to.pdf}}
 \caption{\label{fig-cameraorient}
 %
 Figure depicting how the angles ``incl'', ``phi'' and ``posang'' orient
@@ -5757,11 +5732,11 @@ scientific use. But for a quick look you can do:
 \begin{asciibox}\begin{verbatim}
 radmc3d image lambda 10 incl 45 phi 30 nofluxcons
 \end{verbatim}\end{asciibox}
-Note: In the IDL widget interface {\small\tt viewimage.pro} the default
-is to use this `quick look' option, because you typically want to make
-images quickly if you use the {\small\tt viewimage.pro} interface. But
-there is a button (called ``preview'') that if you unclick it, it will
-do flux-conserving imaging. 
+% Note: In the IDL widget interface {\small\tt viewimage.pro} the default
+% is to use this `quick look' option, because you typically want to make
+% images quickly if you use the {\small\tt viewimage.pro} interface. But
+% there is a button (called ``preview'') that if you unclick it, it will
+% do flux-conserving imaging. 
 
 If you want to produce images with a smoother look (and which
 also are more accurate), you can ask RADMC-3D to use second order 
@@ -5812,19 +5787,19 @@ but at 10 wavelengths regularly distributed between 5 $\mu$m and 20 $\mu$m.
 All images are written into a single file, {\small\tt image.out}
 (See Section \ref{sec-image-out} for its format). 
 
-In IDL you simply type:
+In Python you simply type:
 \begin{asciibox}\begin{verbatim}
-.r readradmc
-a=readimage()
+from radmc3dPy import image
+a=image.readImage()
 \end{verbatim}\end{asciibox}
 and you will get all images at once. To plot one of them:
 \begin{asciibox}\begin{verbatim}
-plotimage,a,ilam=3
+image.plotImage(image=a,ifreq=3)
 \end{verbatim}\end{asciibox}
 which will plot image number 3 (out of images number 0 to 9). To find out
 which wavelength this image is at:
 \begin{asciibox}\begin{verbatim}
-print,a.lambda[3]
+print(a.wav[3])
 \end{verbatim}\end{asciibox}
 which will return 7.9370053 in this example.
 
@@ -5852,8 +5827,7 @@ degrees, and make a spectrum with wavelength points equal to those listed
 in the {\small\tt wavelength\_micron.inp} file. 
 
 The output will be a file called {\small\tt spectrum.out} (see Section
-\ref{sec-output-spectrum-out}). In Section \ref{sec-spectra-from-idl} it is
-discussed how to read this file into IDL.
+\ref{sec-output-spectrum-out}). 
 
 You can also make a spectrum on a set of wavelength points of your own
 choice. There are multiple ways by which you can specify the set of
@@ -5923,7 +5897,7 @@ then this is the same as if you would type
 \begin{asciibox}\begin{verbatim}
 radmc3d image incl 45 phi 30 lambdarange 5. 20. nlam 10
 \end{verbatim}\end{asciibox}
-and read in the file {\small\tt image.out} in into IDL (see Section
+and read in the file {\small\tt image.out} in into Python (see Section
 \ref{sec-multi-wavelength-images}) or your favorite other data language, and
 integrate the images to obtain fluxes. In other words: the command
 {\small\tt spectrum} is effectively the same as the command {\small\tt
@@ -5973,7 +5947,7 @@ multi-wavelength images:
 radmc3d image incl 45 phi 30 lambdarange 5. 20. nlam 10
 \end{verbatim}\end{asciibox}
 and integrate over the images in the way you think best mimics the actual
-observing procedure. You can do so, for instance, in IDL.  See Section
+observing procedure. You can do so, for instance, in Python.  See Section
 \ref{sec-multi-wavelength-images} for more information about
 multi-wavelength images.
 
@@ -6347,29 +6321,9 @@ This {\small\tt diag\_subpix} option will tell RADMC-3D to write a
 file called {\small\tt subpixeling\_diagnostics.out} which contains four
 columns: One for the x-coordinate of the (sub-)pixel, one for the 
 y-coordinate of the (sub-)pixel, one for the x-width of the (sub-)pixel
-and a final one for the y-width of the (sub-)pixel. In IDL, if you use
-for instance the astrolib library, you can use the {\small\tt readcol}
-procedure to read these columns. So {\em inside IDL} you then type
-{\small\begin{verbatim}
-.r readcol
-readcol,'subpixeling_diagnostics.out',px,py
-plot,px,py,psym=3
-\end{verbatim}}
-and you get a plot of all the pixel-centers and sub-pixel-centers used.
-As of version 0.35 you can also do:
-{\small\begin{verbatim}
-.r readradmc
-a=readsubpixels()
-plotsubpixels,a,ps=3
-\end{verbatim}}
-You can also plot a single subpixeling level:
-{\small\begin{verbatim}
-plotsubpixels,a,ps=3,level=2
-\end{verbatim}}
-or a range of them:
-{\small\begin{verbatim}
-plotsubpixels,a,ps=3,minlev=1,maxlev=2
-\end{verbatim}}
+and a final one for the y-width of the (sub-)pixel. In Python you can
+then use, for instance, the Numpy {\small\tt loadtxt} method to
+read these columns. 
 
 If this diagnostic shows that the subpixeling is excessive (which can 
 particularly happen in spherical coordinates) then you might want to
@@ -6417,8 +6371,8 @@ See Chapter \ref{chap-stars} for details.
 \label{sec-second-order}
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.45\textwidth]{cellcenter.eps}
-  \hspace{3em}\includegraphics[width=0.45\textwidth]{cellcorner.eps}}
+\centerline{\includegraphics[width=0.45\textwidth]{Figures/cellcenter-eps-converted-to.pdf}
+  \hspace{3em}\includegraphics[width=0.45\textwidth]{Figures/cellcorner-eps-converted-to.pdf}}
 \caption{\label{fig-cellcenter-cellcorner}
 %
   Pictographic representation of the integration of the transfer equation
@@ -6532,10 +6486,10 @@ way that RADMC-3D does this is:
 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.3\textwidth]{simple_60_1st.eps}
-            \includegraphics[width=0.3\textwidth]{simple_60_2nd.eps}}
-\centerline{\includegraphics[width=0.3\textwidth]{simple_4_1st.eps}
-            \includegraphics[width=0.3\textwidth]{simple_4_2nd.eps}}
+\centerline{\includegraphics[width=0.3\textwidth]{Figures/simple_60_1st-eps-converted-to.pdf}
+            \includegraphics[width=0.3\textwidth]{Figures/simple_60_2nd-eps-converted-to.pdf}}
+\centerline{\includegraphics[width=0.3\textwidth]{Figures/simple_4_1st-eps-converted-to.pdf}
+            \includegraphics[width=0.3\textwidth]{Figures/simple_4_2nd-eps-converted-to.pdf}}
 \caption{\label{fig-effect-of-second-order-integration}
 First-order integration of transfer equation in ray-tracing (left two
 panels), versus second order integration (right two panels). Upper:
@@ -6635,15 +6589,11 @@ than $\tau_s$, then the value will be -1D91.
 
 You can also get the 3-D (i.e.~$x$, $y$, $z$) positions of each of these
 points on the $\tau=\tau_s$ surface. They are stored in the file
-{\small\tt tausurface\_3d.out}. There is a special IDL routine in the
-{\small\tt readradmc.pro} file called {\small\tt read\_tausurf\_3d()}.
-Also here the values of $x$, $y$, $z$ will be -1D91 for rays that
-have total optical depth small than $\tau_s$.
-
-If you do not use IDL for data handling, you can at least see the format
-of the {\small\tt tausurface\_3d.out} file there. For most purposes, 
-however, the projected data in the {\small\tt image.out} file should
-be enough, however.
+{\small\tt tausurface\_3d.out}.
+% There is a special IDL routine in the
+% {\small\tt readradmc.pro} file called {\small\tt read\_tausurf\_3d()}.
+% Also here the values of $x$, $y$, $z$ will be -1D91 for rays that
+% have total optical depth small than $\tau_s$.
 
 Note that if you make multi-frequency images, you will also get
 multi-frequency $\tau=\tau_s$ surfaces. This can be particularly useful if
@@ -6659,46 +6609,8 @@ the local observer. The larger the value, the farther away from the observer
 Example usage:
 \begin{asciibox}\begin{verbatim}
 radmc3d tausurf 1 lambda 10 incl 45 phi 30
-idl
-.r readradmc
-a=readimage()
-surface,a.image>(-1d15)
 \end{verbatim}\end{asciibox}
-This should, if your model is optically thick, show the $\tau=\tau_s$
-surface. The {\small\tt >(-1d15)} in the last line is an IDL trick to
-truncate the values of a.image to larger or equal to -1d15 centimeters
-(which is a few AU). This is necessary because for all rays where the
-total optical depth is less than $\tau_s$ (in this case 1) the value
-would be -1D91.
 
-
-\section{Using circularly arranged pixels for spectra (special topic)}
-\label{sec-circular-pixel-arrangement}
-%
-{\bf For the moment, this mode is not yet finished}
-%
-% In the predecessor code (RADMC) the issue with flux conservation was dealt
-% with using a trick different from subpixeling: Rather than arranging the
-% pixels of the images in rows and columns, the pixels were arranged in
-% concentric circles. The radii of these circles are tuned to the radii
-% of the spherical coordinate system. In this way the huge dynamic range of
-% scales of the model could be dealt with automatically.
-% 
-% Here, in RADMC-3D, we do not really need this trick, because of the new
-% technique of recursive subpixeling (see Section
-% \ref{sec-recursive-subpixeling}). 
-% 
-% But it might sometimes nevertheless be useful to use this circular pixel
-% arrangement, because it is faster (though less reliable) than the recursive
-% subpixeling. Also, the results would be easier to compare to the results of
-% RADMC. But this mode works only when you use spherical coordinates! Also,
-% there is no recursive subpixeling done when you use this mode, so if you use
-% spherical coordinate {\em and} AMR grid refinement, then the refined regions
-% may be not well resolved and flux may not be well conserved. And it works
-% only for spectra. Images will remain rectangular pixel arrangements.
-% 
-% You can active it by the command-line option {\small\tt circ}, {\em iff} 
-% you specified {\small\tt spectrum} or {\small\tt sed} as well.
 
 
 \section{For public outreach work: local observers inside the model}
@@ -7027,7 +6939,7 @@ For the $y$-direction and $z$-direction likewise. Fig.~\ref{fig-regular-grid}
 shows an example of a 2-D regular grid of 4x3 cells.
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.6\textwidth]{base_amr_bare.eps}}
+\centerline{\includegraphics[width=0.6\textwidth]{Figures/base_amr_bare-eps-converted-to.pdf}}
 \caption{\label{fig-regular-grid}
 Example of a regular 2-D grid with {\small\tt nx}=4 and {\small\tt ny}=3.
 }
@@ -7113,8 +7025,8 @@ is possible in spherical coordinates. See Section \ref{sec-oct-tree-amr}.}
 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.28\textwidth]{spher_grid_ref_txt.eps}
-\hspace{4em}\includegraphics[width=0.6\textwidth]{spher_grid_ref_rays.eps}}
+\centerline{\includegraphics[width=0.28\textwidth]{Figures/spher_grid_ref_txt-eps-converted-to.pdf}
+\hspace{4em}\includegraphics[width=0.6\textwidth]{Figures/spher_grid_ref_rays-eps-converted-to.pdf}}
 \caption{\label{fig-spher-sep-ref} Example of a spherical 2-D grid in which
   the radial and $\theta$ grids are refined in a ``separable'' way. In
   radial direction the inner cells are refined (``B'' in the right figure)
@@ -7201,7 +7113,7 @@ we can start designing our model on a regular base grid, and then refine
 where needed. See Fig.~\ref{fig-oct-tree-amr}
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.6\textwidth]{oct_tree_amr_bare.eps}}
+\centerline{\includegraphics[width=0.6\textwidth]{Figures/oct_tree_amr_bare-eps-converted-to.pdf}}
 \caption{\label{fig-oct-tree-amr}
 Example of a 2-D grid with oct-tree refinement. The base grid has
 {\small\tt nx}=4 and {\small\tt ny}=3. Three levels of refinement are
@@ -7279,7 +7191,7 @@ with the same parent (= layer 0 = base grid), while in
 Fig.~\ref{fig-nestedlayer-amr} an example is shown of two nested layers.
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.6\textwidth]{twolayer_bare.eps}}
+\centerline{\includegraphics[width=0.6\textwidth]{Figures/twolayer_bare-eps-converted-to.pdf}}
 \caption{\label{fig-twolayer-amr} Example of a 2-D base grid with {\small\tt
     nx}=4 and {\small\tt ny}=3, with two AMR-layers added to it.  This
   example has just one level of refinement, as the two layers (brown and
@@ -7288,7 +7200,7 @@ Fig.~\ref{fig-nestedlayer-amr} an example is shown of two nested layers.
 \end{figure}
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.6\textwidth]{nestedlayer_bare.eps}}
+\centerline{\includegraphics[width=0.6\textwidth]{Figures/nestedlayer_bare-eps-converted-to.pdf}}
 \caption{\label{fig-nestedlayer-amr} Example of a 2-D base grid with
   {\small\tt nx}=4 and {\small\tt ny}=3, with two nested AMR-layers added to
   it.  This example has two levels of refinement, as layer 1 (brown) is the
@@ -7856,145 +7768,143 @@ independent of how deep inside the disk this heat is released.
 
 
 
-%----------------------------------------------------------------------------
-%               CHAPTER: USING RADMC-3D IN CHILD MODE
-%----------------------------------------------------------------------------
-\chapter{Using RADMC-3D in child mode (optional)}
-\label{chap-child-mode}
+%%----------------------------------------------------------------------------
+%%               CHAPTER: USING RADMC-3D IN CHILD MODE
+%%----------------------------------------------------------------------------
+%\chapter{Using RADMC-3D in child mode (optional)}
+%\label{chap-child-mode}
+%%
+%For large datasets it may take a considerable amount of time for RADMC-3D to
+%read the entire dataset into memory. Having to wait such a long time for
+%every action one wants to take (e.g.\ re-making an image at a different
+%vantage point or a different wavelength) quickly gets on one's nerves and
+%strongly inhibits the interactivity between RADMC-3D and the user. The
+%``child mode'' is designed to circumvent this problem. It allows RADMC-3D to
+%be started as a child process of another process, stay in memory (with all
+%the data loaded once-and-for-all) for as long as the parent process lives,
+%and have communication with its parent process via a bi-way pipe. A bi-way
+%pipe is like a file to which you can write or from which you can read. Your
+%parent process, which calls RADMC-3D as a child, can give RADMC-3D the
+%command to do something by writing to the pipe file unit, and then receiving
+%the results from RADMC-3D by reading from that same file unit.
 %
-For large datasets it may take a considerable amount of time for RADMC-3D to
-read the entire dataset into memory. Having to wait such a long time for
-every action one wants to take (e.g.\ re-making an image at a different
-vantage point or a different wavelength) quickly gets on one's nerves and
-strongly inhibits the interactivity between RADMC-3D and the user. The
-``child mode'' is designed to circumvent this problem. It allows RADMC-3D to
-be started as a child process of another process, stay in memory (with all
-the data loaded once-and-for-all) for as long as the parent process lives,
-and have communication with its parent process via a bi-way pipe. A bi-way
-pipe is like a file to which you can write or from which you can read. Your
-parent process, which calls RADMC-3D as a child, can give RADMC-3D the
-command to do something by writing to the pipe file unit, and then receiving
-the results from RADMC-3D by reading from that same file unit.
-
-The IDL program {\small\tt viewimage.pro} (see chapter
-\ref{chap-idl-analysis-tools}), which is part of the RADMC-3D package, calls
-RADMC-3D as a child process and communicates with it in precisely this
-way. 
-
-{\em NOTE: Currently there appears to be a problem when trying to use
-RADMC-3D in child mode on some systems. For instance, viewimage may freeze.
-This appears to be a problem with buffering of the standard I/O unit.
-I have been trying to figure out what causes this, and particularly, why
-it happens on some machines and not on other machines (in fact it happened
-on one Macbook but not on another, while the systems were seemingly
-identical). I will continue to work on this. When calling viewimage and
-the thing freezes, try calling viewimage,/nochild. That is slower, but
-should work.}
-
-In IDL this is done with the keyword {\small\tt unit=unit} in the
-{\small\tt spawn} command. For instance, in viewimage.pro there is a line
-
-{\small\tt spawn,'nice radmc3d child',unit=iounit}
-
-\noindent The {\small\tt nice} is simply to let RADMC-3D run at a low priority
-under Linux or Mac OS X, the {\small\tt child} command line option is a RADMC-3D
-specific command line option that tells RADMC-3D that it should not exit
-after its first action, but wait further orders. The {\small\tt unit=iounit} 
-gets the file unit through which we can communicate with RADMC-3D. 
-Of course, by virtue of the fact that RADMC-3D is called by IDL in the
-first place, it is naturally IDL's child process. But by asking RADMC-3D
-not to exit after the first action, and by getting the file unit
-from the keyword {\small\tt unit=}, RADMC-3D will wait for our commands and
-only exit when we tell it so by giving it the command {\small\tt quit}.
-
-The way we can communicate with RADMC-3D is by writing to the file
-{\small\tt iounit} commands like the ones on the command line. But contrary
-to the normal command line, they are now given one word per line. 
-For instance, to let RADMC-3D make an image at wavelength number
-{\small\tt ilambda} (from IDL):
-\begin{asciibox}\begin{verbatim}
-   printf,iounit,'image'
-   printf,iounit,'npix'
-   printf,iounit,strcompress(string(npix),/remove_all)
-   printf,iounit,'ilambda'
-   printf,iounit,strcompress(string(ilambda),/remove_all)
-   printf,iounit,'incl'
-   printf,iounit,strcompress(string(incl),/remove_all)
-   printf,iounit,'phi'
-   printf,iounit,strcompress(string(phi),/remove_all)
-   printf,iounit,'enter'
-\end{verbatim}\end{asciibox}
-The {\small\tt enter} is meant to tell RADMC-3D: now go and do your work. In
-fact, you rarely have to interact like this with RADMC-3D youself, because
-you can use the IDL subroutine {\small\tt makeimage()} in the {\small\tt
-  readradmc.pro} file that does all these things for you; just set the
-keyword {\small\tt iounit} to the value you obtained from starting 
-{\small\tt radmc3d} in child mode.
-
-In child mode the results from {\small\tt radmc3d} are not returned
-immediately to the parent. To ask {\small\tt radmc3d} for the results of its
-latest calculation (for instance an image), you do:
-\begin{asciibox}\begin{verbatim}
-   printf,iounit,'writeimage'
-\end{verbatim}\end{asciibox}
-followed by
-\begin{asciibox}\begin{verbatim}
-   iformat=0
-   nx=0
-   ny=0
-   nf=0
-   readf,iounit,iformat
-   readf,iounit,nx,ny
-   readf,iounit,nf
-   readf,iounit,sizepix_x,sizepix_y
-   lambda=dblarr(nf)
-   readf,iounit,lambda
-   image=fltarr(nx,ny,nf)
-   readf,iounit,image
-\end{verbatim}\end{asciibox}
-But again you don't have to do this complex stuff yourself. Instead this is
-done for you by the {\small\tt readimage()} IDL routine in the {\small\tt
-  readradmc.pro} file, again when {\small\tt iounit} is specified.
-
-So IDL users can simply do (in IDL):
-\begin{asciibox}\begin{verbatim}
-.r readradmc
-;
-; Start RADMC-3D
-;
-spawn,'nice radmc3d child',unit=iounit
-;
-; Make an image
-;
-makeimage,incl=45.,phi=10.,npix=200,ifreq=10,iounit=iounit
-;
-; Read the image from RADMC-3D
-;
-a=readimage(iounit=iounit)
-;
-; Plot the image on the screen
-;
-plotimage,a
-;
-; ...and here many more images or spectra...
-; ....
-; ....
-;
-; And when we are done, quit RADMC-3D and free the file number
-;
-printf,iounit,'quit'
-close,iounit
-free_lun,iounit
-\end{verbatim}\end{asciibox}
-
-{\em Tip: If you use RADMC-3D in child mode, then all the usual output that
-  normally would go to screen will now be redirected to a separate file
-  called} {\small\tt radmc3d.out}. {\em This is useful for debugging the code
-  when using it in child mode. So if RADMC-3D fails somehow when in child
-  mode, then have a look at} {\small\tt radmc3d.out} {\em to see what went
-  wrong.}
-
-
+%The IDL program {\small\tt viewimage.pro} (see chapter
+%\ref{chap-idl-analysis-tools}), which is part of the RADMC-3D package, calls
+%RADMC-3D as a child process and communicates with it in precisely this
+%way. 
+%
+%{\em NOTE: Currently there appears to be a problem when trying to use
+%RADMC-3D in child mode on some systems. For instance, viewimage may freeze.
+%This appears to be a problem with buffering of the standard I/O unit.
+%I have been trying to figure out what causes this, and particularly, why
+%it happens on some machines and not on other machines (in fact it happened
+%on one Macbook but not on another, while the systems were seemingly
+%identical). I will continue to work on this. When calling viewimage and
+%the thing freezes, try calling viewimage,/nochild. That is slower, but
+%should work.}
+%
+%In IDL this is done with the keyword {\small\tt unit=unit} in the
+%{\small\tt spawn} command. For instance, in viewimage.pro there is a line
+%
+%{\small\tt spawn,'nice radmc3d child',unit=iounit}
+%
+%\noindent The {\small\tt nice} is simply to let RADMC-3D run at a low priority
+%under Linux or Mac OS X, the {\small\tt child} command line option is a RADMC-3D
+%specific command line option that tells RADMC-3D that it should not exit
+%after its first action, but wait further orders. The {\small\tt unit=iounit} 
+%gets the file unit through which we can communicate with RADMC-3D. 
+%Of course, by virtue of the fact that RADMC-3D is called by IDL in the
+%first place, it is naturally IDL's child process. But by asking RADMC-3D
+%not to exit after the first action, and by getting the file unit
+%from the keyword {\small\tt unit=}, RADMC-3D will wait for our commands and
+%only exit when we tell it so by giving it the command {\small\tt quit}.
+%
+%The way we can communicate with RADMC-3D is by writing to the file
+%{\small\tt iounit} commands like the ones on the command line. But contrary
+%to the normal command line, they are now given one word per line. 
+%For instance, to let RADMC-3D make an image at wavelength number
+%{\small\tt ilambda} (from IDL):
+%\begin{asciibox}\begin{verbatim}
+%   printf,iounit,'image'
+%   printf,iounit,'npix'
+%   printf,iounit,strcompress(string(npix),/remove_all)
+%   printf,iounit,'ilambda'
+%   printf,iounit,strcompress(string(ilambda),/remove_all)
+%   printf,iounit,'incl'
+%   printf,iounit,strcompress(string(incl),/remove_all)
+%   printf,iounit,'phi'
+%   printf,iounit,strcompress(string(phi),/remove_all)
+%   printf,iounit,'enter'
+%\end{verbatim}\end{asciibox}
+%The {\small\tt enter} is meant to tell RADMC-3D: now go and do your work. In
+%fact, you rarely have to interact like this with RADMC-3D youself, because
+%you can use the IDL subroutine {\small\tt makeimage()} in the {\small\tt
+%  readradmc.pro} file that does all these things for you; just set the
+%keyword {\small\tt iounit} to the value you obtained from starting 
+%{\small\tt radmc3d} in child mode.
+%
+%In child mode the results from {\small\tt radmc3d} are not returned
+%immediately to the parent. To ask {\small\tt radmc3d} for the results of its
+%latest calculation (for instance an image), you do:
+%\begin{asciibox}\begin{verbatim}
+%   printf,iounit,'writeimage'
+%\end{verbatim}\end{asciibox}
+%followed by
+%\begin{asciibox}\begin{verbatim}
+%   iformat=0
+%   nx=0
+%   ny=0
+%   nf=0
+%   readf,iounit,iformat
+%   readf,iounit,nx,ny
+%   readf,iounit,nf
+%   readf,iounit,sizepix_x,sizepix_y
+%   lambda=dblarr(nf)
+%   readf,iounit,lambda
+%   image=fltarr(nx,ny,nf)
+%   readf,iounit,image
+%\end{verbatim}\end{asciibox}
+%But again you don't have to do this complex stuff yourself. Instead this is
+%done for you by the {\small\tt readimage()} IDL routine in the {\small\tt
+%  readradmc.pro} file, again when {\small\tt iounit} is specified.
+%
+%So IDL users can simply do (in IDL):
+%\begin{asciibox}\begin{verbatim}
+%.r readradmc
+%;
+%; Start RADMC-3D
+%;
+%spawn,'nice radmc3d child',unit=iounit
+%;
+%; Make an image
+%;
+%makeimage,incl=45.,phi=10.,npix=200,ifreq=10,iounit=iounit
+%;
+%; Read the image from RADMC-3D
+%;
+%a=readimage(iounit=iounit)
+%;
+%; Plot the image on the screen
+%;
+%plotimage,a
+%;
+%; ...and here many more images or spectra...
+%; ....
+%; ....
+%;
+%; And when we are done, quit RADMC-3D and free the file number
+%;
+%printf,iounit,'quit'
+%close,iounit
+%free_lun,iounit
+%\end{verbatim}\end{asciibox}
+%
+%{\em Tip: If you use RADMC-3D in child mode, then all the usual output that
+%  normally would go to screen will now be redirected to a separate file
+%  called} {\small\tt radmc3d.out}. {\em This is useful for debugging the code
+%  when using it in child mode. So if RADMC-3D fails somehow when in child
+%  mode, then have a look at} {\small\tt radmc3d.out} {\em to see what went
+%  wrong.}
 
 
 
@@ -8048,7 +7958,7 @@ set up for the model. In addition to this you can do the following as well:
 
 %
 \begin{figure}
-\centerline{\includegraphics[height=0.13\textwidth]{dataflow_basic_userdef.eps}}
+\centerline{\includegraphics[height=0.13\textwidth]{Figures/dataflow_basic_userdef-eps-converted-to.pdf}}
 \caption{\label{fig-dataflow-basic-userdef}
 Pictographic representation of the dataflow for the case when you 
 define your model {\em internally} using the {\small\tt userdef\_module.f90}. 
@@ -8179,7 +8089,7 @@ order in which they are called.
   This allows the user to dump any stuff to file that the user computed
   in this module. You can also use this routine to write out files that would
   have been used normally as input file (like {\small\tt amr\_grid.inp} or
-  {\small\tt dust\_density.inp}) so that the IDL routines can read them if
+  {\small\tt dust\_density.inp}) so that the Python routines can read them if
   they need. In particular the grid information may be needed by these
   external analysis tools. Here is a list of standard subroutines you can
   call for writing such files:
@@ -8225,13 +8135,13 @@ disadvantages compared to the standard way of feeding the models into
   the command line options (depending on how you allow the user to set these
   parameters, i.e.\ in the {\small\tt userdef\_parse\_main\_namelist()}
   routine and/or in the {\small\tt userdef\_commandline()} routine. You then
-  do not need to run IDL anymore (except for setting up the basic files; see
+  do not need to run Python anymore (except for setting up the basic files; see
   examples). Some advantages of this:
   \begin{enumerate}
   \item It allows you, for instance, to create a version of the {\small\tt
       radmc3d} code that acts as if it is a special-purpose model. You can
     specify model parameters on the command line (rather than going through
-    the cumbersome IDL stuff).
+    the cumbersome Python stuff).
     \item It is faster: even a large model is built up quickly and does not
       require a long read from large input files. 
   \end{enumerate}
@@ -8241,7 +8151,7 @@ disadvantages compared to the standard way of feeding the models into
 \end{itemize}
 Some of the disadvantages are:
 \begin{itemize}
-\item The model needs to be explicitly written out to file and read into IDL
+\item The model needs to be explicitly written out to file and read into Python
   or any other data plotting package before you can analyze the density
   structure to test if you've done it right. You can explicitly ask
   {\small\tt ./radmc3d} to call the {\small\tt userdef\_writemodel()}
@@ -8548,7 +8458,7 @@ read using {\small\tt s=analyze.readSpectrum()}.
 
 
 %----------------------------------------------------------------------------
-%               CHAPTER: USING THE IDL TOOL SET
+%               CHAPTER: USING THE INTERNAL TOOL SET
 %----------------------------------------------------------------------------
 \chapter{Model analysis (II): Tools inside of radmc3d}
 \label{chap-radmc3d-internal-analysis-tools}
@@ -8810,7 +8720,7 @@ Note: The VTK mode works for 3-D cartesian and 3-D spherical coordinates
 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.7\textwidth]{disk_rosenfeld.eps}}
+\centerline{\includegraphics[width=0.7\textwidth]{Figures/disk_rosenfeld-eps-converted-to.pdf}}
 \caption{\label{fig-disk-with-vtk}
 Example of image created with Paraview, using the VTK output of RADMC-3D.
 The model shown here is a warped disk model by Katherine Rosenfeld, 
@@ -8821,7 +8731,7 @@ in 3-D cartesian coordinates with oct-tree AMR refinement.
 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.85\textwidth]{model_juhasz_vtk_lowres.eps}}
+\centerline{\includegraphics[width=0.85\textwidth]{Figures/model_juhasz_vtk_lowres-eps-converted-to.pdf}}
 \caption{\label{fig-modeljuhasz-with-vtk}
 Example of image created with Paraview, using the VTK output of RADMC-3D.
 The model shown here is a warped disk model by Attila Juhasz, in 3-D
@@ -8830,68 +8740,6 @@ The model is kept low-resolution on purpose, to show the grid structure
 better.
 }
 \end{figure}
-%
-
-
-%----------------------------------------------------------------------------
-%                CHAPTER: PORTING MODELS FROM OLD RADMC
-%----------------------------------------------------------------------------
-\chapter{How to convert old-style RADMC models to RADMC-3D}
-\label{chap-porting-from-radmc}
-%
-Some users of RADMC-3D may have used the predecessor program RADMC before.
-The input files of RADMC are different from those used by RADMC-3D. You may
-have model setups created for RADMC which you would like to feed into
-RADMC-3D. The best way would be of course to edit your {\small\tt
-  problem\_***.pro} files and make sure that they create the RADMC-3D
-input files instead of the RADMC input files. But that costs quite some
-work, and you may make errors.
-
-We offer the IDL routine {\small\tt radmc2radmc3d.pro} in the {\small\tt
-  idl/} directory that automatically converts all the RADMC input files
-into RADMC-3D input files. In particular, it will do the following
-conversion:\vspace{1em}\\
-\centerline{\begin{tabular}{|l|l|}
-\hline
-RADMC & RADMC-3D \\
-\hline
-{\small\tt radius.inp} \& {\small\tt theta.inp} & {\small\tt amr\_grid.inp}\\
-{\small\tt starinfo.inp} \& {\small\tt starspectrum.inp} & {\small\tt stars.inp}\\
-{\small\tt dustdens.inp}  & {\small\tt dust\_density.inp}\\
--  & {\small\tt radmc3d.inp}\\
-\hline
-\end{tabular}}\vspace{1em}\\
-The file {\small\tt radmc.inp} is ignored for now, and instead a fresh
-{\small\tt radmc3d.inp} is created. While RADMC-3D would read {\small\tt
-  radmc.inp} if no {\small\tt radmc3d.inp} is present, the presence of
-{\small\tt radmc3d.inp} means that RADMC-3D will read {\small\tt radmc3d.inp}
-(and {\em not} read {\small\tt radmc.inp}).
-
-The opacity files are kept as they are. While the recommended style for
-the opacities is the {\small\tt dustkappa\_*.inp} file, RADMC-3D
-can also read the old style {\small\tt dustopac\_*.inp} files. Also
-the {\small\tt frequency.inp} file is kept as it is.
-
-NOTE: For now the quantum-heated grains are not ported to RADMC-3D. Also
-some specialties of the RADMC code may not yet work in RADMC-3D -- just 
-keep this in mind.
-
-So if you have a working model for RADMC, and you want to run it with
-RADMC-3D, then just go into the model directory, go into IDL and type:
-{\small\begin{verbatim}
-.r radmc2radmc3d.pro
-\end{verbatim}}
-and this should convert the files from RADMC-style to RADMC-3D-style,
-as described above. Note that you must now redo the thermal Monte Carlo,
-because RADMC-3D reads its own style of dust temperature file. So go
-out of IDL and type (on the shell):
-{\small\begin{verbatim}
-radmc3d mctherm
-\end{verbatim}}
-wait until it is finished, and now you can make your spectra and images.
-
-
-
 
 
 %----------------------------------------------------------------------------
@@ -9063,7 +8911,7 @@ So please remain creative yourself in coming up with good tests and checks.
   Fig.~\ref{fig-innerrim-lowres}.
   % 
   \begin{figure}
-    \centerline{\includegraphics[width=0.5\textwidth]{XFIG/innerrim.eps}}
+    \centerline{\includegraphics[width=0.5\textwidth]{XFIG/innerrim-eps-converted-to.pdf}}
     \caption{\label{fig-innerrim-lowres}Example of what can go wrong with
       radiative transfer if the inner cells of a model are optically thick
       (i.e.\ if no grid refinement is used, see Section
@@ -9144,29 +8992,6 @@ encounter a problem. Here is a list of common issues and tips how to fix them.
   dummy subroutine to your {\small\tt userdef\_module.f90} with that name
   (have a look at the {\small\tt userdef\_module.f90} in the {\small\tt
     src/} directory).  Then recompile and it should now work.
-\item {\em After switching back from the userdef\_module.f90-driven model
-    setup to the original IDL-driven setup style, suddenly lots of IDL
-    routines produce problems or do not give the right results.}\\
-  Check if an old {\small\tt radmc3d} executable is still present. If so,
-  remove it, because the way the IDL tools check which {\small\tt radmc3d}
-  executable to use (local or global) is by checking if a local 
-  {\small\tt radmc3d} executable is present.
-\item {\em The viewimage GUI aborts with message ``Aborting: RADMC-3D does
-    not respond...''}\\
-  This means that the {\small\tt radmc3d} code, which is a child process of
-  IDL, has unexpectedly quit. Since the standard IO channel of {\small\tt
-    radmc3d} is used for commincation with IDL, the usual standard output
-  is now redirected to the file {\small\tt radmc3d.out}. Have a look at that
-  file to see what caused {\small\tt radmc3d} to abort.
-\item {\em RADMC-3D stops with message ``ERROR: dust\_density.inp does not
-    have same number of cells as the grid. -32768 32768'' or similar}\\
-  This message means that the file {\small\tt dust\_density.inp} 
-  specifies the dust density in a different number of cells than which is
-  specified in the {\small\tt amr\_grid.inp} file. In the above example
-  this is in fact caused by the fact that in the IDL routines for generating
-  the setup the number of cells got an overflow over the maximum range of
-  two-byte signed integers. To avoid this, use long integers. In IDL
-  this is done like {\small\tt nx=100L} instead of {\small\tt nx=100}.
 \item {\em While reading an input file, RADMC-3D says ``Fortran runtime error: End of file''}\\
   This can of course have many reasons. Some common mistakes are:
   \begin{itemize}
@@ -9303,8 +9128,8 @@ in {\small\tt .out}) or intermediate files (ending in {\small\tt .dat})
 which need further processing. In principle the user therefore needs to
 compile the program only once, and can then use the executable from that
 point onward. In this chapter we will describe the various input/output and
-intermediate files and their formats. Just for clarity: the IDL routines in
-the {\small\tt idl/} directory are only meant to make it easier for the user
+intermediate files and their formats. Just for clarity: the Python routines in
+the {\small\tt python/} directory are only meant to make it easier for the user
 to prepare the {\small\tt .inp} files, and to make sense of the {\small\tt
   .out} and {\small\tt .dat} files. They are not part of the main code
 {\small\tt radmc3d}.
@@ -9972,7 +9797,7 @@ density[nz,ny,nz,ispec=nrspec]
 
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.9\textwidth]{base_amr.eps}}
+\centerline{\includegraphics[width=0.9\textwidth]{Figures/base_amr-eps-converted-to.pdf}}
 \caption{\label{fig-regular-grid-numbered}
 Example of a regular 2-D grid with {\small\tt nx}=4 and {\small\tt ny}=3
 (as Fig.~\ref{fig-regular-grid}), with the order of the cells shown as
@@ -10015,7 +9840,7 @@ A more complex example is shown in Fig.~\ref{fig-oct-tree-amr-numbered}.
 An unformatted version is also available, in the standard way (see above).
 %
 \begin{figure}
-\centerline{\includegraphics[width=0.9\textwidth]{oct_tree_amr.eps}}
+\centerline{\includegraphics[width=0.9\textwidth]{Figures/oct_tree_amr-eps-converted-to.pdf}}
 \caption{\label{fig-oct-tree-amr-numbered}
 Example of a 2-D grid with oct-tree refinement (as Fig.~\ref{fig-oct-tree-amr})
 with the order of the cells shown as numbers in the cells.
@@ -11443,8 +11268,7 @@ There are also some additional commands that may be useful for diagnostics:
 \begin{options}
 \item[{\bf subbox\_****}:\hfill] where **** is one of the following:
   {\small\tt dust\_density}, {\small\tt dust\_temperature}. But other
-  quantities will follow in later versions.  However, it may be better to
-  use this option from within IDL. See Section \ref{sec-subbox}.
+  quantities will follow in later versions. See Section \ref{sec-subbox}.
 \item[{\bf linelist}:\hfill] Write a list of all the lines included in
   this model.
 \end{options}
@@ -11654,29 +11478,29 @@ command-line options (though often the {\small\tt radmc3d.inp} file also allows 
 \item[{\small\tt\bf nogascont}:\hfill] Do not include the gas continuum.
 \end{options}
 
-\section{Commands for child mode}
-Here is a list of options that are only useful for when you use RADMC-3D
-in child mode (Chapter \ref{chap-child-mode}):
-\begin{options}
-\item[{\small\tt\bf child}:\hfill] This prevents RADMC-3D from exiting after each main
-  command is done. Instead, RADMC-3D will wait for further commands being
-  given on the RADMC-3D internal command line. This can be useful if
-  multiple actions are to be taken, and the user does not want to wait for
-  long file input reading. It is in fact used by the {\small\tt viewimage.pro} GUI
-  (see chapter \ref{chap-idl-analysis-tools}) for making images. Note that
-  with RADMC-3D command line each command has to be on a separate line 
-  (i.e.\ ending with a return). 
-\item[{\small\tt\bf exit} or {\small\tt\bf quit}:\hfill] In {\small\tt child} mode you can finish
-  the command-line mode by entering exit or quit.
-\item[{\small\tt\bf enter}:\hfill] In {\small\tt child} mode enter says RADMC-3D that it can start
-  executing the last set of commands. After it is done a new set of commands
-  (each on a new line) can be given, again ending with the word enter (on a
-  separate line).
-\item[{\small\tt\bf writeimage}:\hfill] In {\small\tt child} mode an image can be written to the
-  standard output (in ascii form) with this command.
-\item[{\small\tt\bf writespec}:\hfill] In {\small\tt child} mode a spectrum can be written to the
-  standard output (in ascii form) with this command.
-\end{options}
+%\section{Commands for child mode}
+%Here is a list of options that are only useful for when you use RADMC-3D
+%in child mode (Chapter \ref{chap-child-mode}):
+%\begin{options}
+%\item[{\small\tt\bf child}:\hfill] This prevents RADMC-3D from exiting after each main
+%  command is done. Instead, RADMC-3D will wait for further commands being
+%  given on the RADMC-3D internal command line. This can be useful if
+%  multiple actions are to be taken, and the user does not want to wait for
+%  long file input reading. It is in fact used by the {\small\tt viewimage.pro} GUI
+%  (see chapter \ref{chap-python-analysis-tools}) for making images. Note that
+%  with RADMC-3D command line each command has to be on a separate line 
+%  (i.e.\ ending with a return). 
+%\item[{\small\tt\bf exit} or {\small\tt\bf quit}:\hfill] In {\small\tt child} mode you can finish
+%  the command-line mode by entering exit or quit.
+%\item[{\small\tt\bf enter}:\hfill] In {\small\tt child} mode enter says RADMC-3D that it can start
+%  executing the last set of commands. After it is done a new set of commands
+%  (each on a new line) can be given, again ending with the word enter (on a
+%  separate line).
+%\item[{\small\tt\bf writeimage}:\hfill] In {\small\tt child} mode an image can be written to the
+%  standard output (in ascii form) with this command.
+%\item[{\small\tt\bf writespec}:\hfill] In {\small\tt child} mode a spectrum can be written to the
+%  standard output (in ascii form) with this command.
+%\end{options}
 
 
 %----------------------------------------------------------------------------
@@ -11758,7 +11582,7 @@ opacities and Section \ref{sec-molecule-xxx-inp} for gas line opacities).
 To make it easier for the user to create RADMC-3D-readable input files
 from opacity data downloaded from the web, we now feature a new directory
 {\small\tt opac/} in the RADMC-3D distribution in which, for several of
-the most common WWW databases, we provide IDL routines for the conversion.
+the most common WWW databases, we provide Python routines for the conversion.
 Please read the {\small\tt README\_*} files in this directory and its
 subdirectories for details.
 
@@ -11830,7 +11654,7 @@ This version overview is very rough, and has only been started as of version
       lines\_mode} modes), and to the lines that will appear in
     images/spectra. For the rest, the full set of levels are always used
     from now on.
-  \item Added a directory '{\small\tt opac/}' which contains IDL routines
+  \item Added a directory '{\small\tt opac/}' which contains programs
     for generating your own dust opacities using optical constants from the
     web, and for generating your own molecular/atomic input data files using
     data from several web pages. The data from the web are not included, but
