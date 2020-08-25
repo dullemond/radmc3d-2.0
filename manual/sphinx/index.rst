@@ -20,6 +20,16 @@ RADMC-3D Version 2.0, an astrophysics radiative transfer tool
    gridding
    stars
    internalsetup
+   pythontools
+   toolsinside
+   vtkoutput
+   tipsandtricks
+   inputoutputfiles
+   binaryio
+   clioptions
+   optionscompat
+   opacitieswww
+   versiontracker
 
 Indices and tables
 ==================
