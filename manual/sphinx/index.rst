@@ -12,7 +12,14 @@ RADMC-3D Version 2.0, an astrophysics radiative transfer tool
    introduction
    quickstart
    overview
-   
+   installation
+   basicstructure
+   dustradtrans
+   lineradtrans
+   imagesspectra
+   gridding
+   stars
+   internalsetup
 
 Indices and tables
 ==================

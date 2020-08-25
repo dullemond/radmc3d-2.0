@@ -1,3 +1,5 @@
+.. _chap-quick-start:
+
 Quickstarting with RADMC-3D
 ***************************
 
