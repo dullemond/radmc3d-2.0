@@ -199,7 +199,7 @@ def read_dusttemp(indexorder='fortran'):
       Data object containing:
 
         .grid           A grid object (see read_grid())
-        .dusttemp       An array with the dust tempeature values (in K)
+        .dusttemp       An array with the dust temperature values (in K)
     """
     grid      = read_grid()
     dusttemp  = simplereaddataobject('dust_temperature')
@@ -445,3 +445,247 @@ def read_dustkappa(species=None):
 
     # Return dustkappa
     return dustkappa
+
+def read_gastemp(indexorder='fortran'):
+    """
+    Reading the gas_temperature.inp file, but only for regular grids, and only
+    for text data format (not binary).
+
+    ARGUMENTS:
+      indexorder        If 'fortran' then converting array to fortran
+                        index order (default). Else use Python/C order.
+
+    RETURNS:
+      Data object containing:
+
+        .grid           A grid object (see read_grid())
+        .gastemp        An array with the gas temperature values (in K)
+    """
+    grid      = read_grid()
+    gastemp   = simplereaddataobject('gas_temperature')
+    gastemp.grid = grid
+    fname     = 'gas_temperature.inp'
+    print('Reading '+fname)
+    data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+
+    # Read the header
+    hdr       = np.array(data[:2], dtype=np.int)
+    data      = data[2:]
+
+    # Check the file format
+    if hdr[0] != 1:
+        msg = 'Unknown format number in gas_temperature.inp'
+        raise RuntimeError(msg)
+
+    # Get the number of cells, and check against
+    nrcells = grid.nx*grid.ny*grid.nz
+    if(hdr[1]!=nrcells):
+        msg = 'Number of grid cells in gas_temperature.inp inconsistent with amr_grid.inp'
+        raise RuntimeError(msg)
+
+    # Convert the rest of the data to the proper shape
+    data = np.reshape(data, [grid.nz, grid.ny, grid.nx])
+
+    # If indexorder is set to 'fortran', then the inner index of the array
+    # should be left (even though in Python the inner index is right). This
+    # is to assure that the index order in the Python arrays is the same as
+    # in the RADMC-3D code. But by setting indexorder to anything else, you
+    # can keep Python natural order (which is equal to C index order), in
+    # which the inner index is the rightmost index.
+    if indexorder=='fortran':
+        data = np.swapaxes(data, 0, 2)
+
+    # Now add this to the object
+    gastemp.gastemp = data
+
+    # Return the gastemp object
+    return gastemp
+
+def read_gasvelocity(indexorder='fortran'):
+    """
+    Reading the gas_velocity.inp file, but only for regular grids, and only
+    for text data format (not binary).
+
+    ARGUMENTS:
+      indexorder        If 'fortran' then converting array to fortran
+                        index order (default). Else use Python/C order.
+
+    RETURNS:
+      Data object containing:
+
+        .grid           A grid object (see read_grid())
+        .gasvelo        An array with the gas velocity values (in cm/s)
+    """
+    grid      = read_grid()
+    gasvelo   = simplereaddataobject('gas_velocity')
+    gasvelo.grid = grid
+    fname     = 'gas_velocity.inp'
+    print('Reading '+fname)
+    data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+
+    # Read the header
+    hdr       = np.array(data[:2], dtype=np.int)
+    data      = data[2:]
+
+    # Check the file format
+    if hdr[0] != 1:
+        msg = 'Unknown format number in gas_velocity.inp'
+        raise RuntimeError(msg)
+
+    # Get the number of cells, and check against
+    nrcells = grid.nx*grid.ny*grid.nz
+    if(hdr[1]!=nrcells):
+        msg = 'Number of grid cells in gas_velocity.inp inconsistent with amr_grid.inp'
+        raise RuntimeError(msg)
+
+    # Convert the rest of the data to the proper shape
+    data = np.reshape(data, [grid.nz, grid.ny, grid.nx, 3])
+
+    # If indexorder is set to 'fortran', then the inner index of the array
+    # should be left (even though in Python the inner index is right). This
+    # is to assure that the index order in the Python arrays is the same as
+    # in the RADMC-3D code. But by setting indexorder to anything else, you
+    # can keep Python natural order (which is equal to C index order), in
+    # which the inner index is the rightmost index.
+    if indexorder=='fortran':
+        data = np.swapaxes(data, 0, 3)
+        data = np.swapaxes(data, 1, 2)
+
+    # Now add this to the object
+    gasvelo.velocity = data
+
+    # Return the gasvelo object
+    return gasvelo
+
+def read_molnumdens(molecule,indexorder='fortran'):
+    """
+    Reading a numberdens_xxxx.inp file, but only for regular grids, and only
+    for text data format (not binary).
+
+    ARGUMENTS:
+      molecule          Then name of the molecule (e.g. 'co')
+      indexorder        If 'fortran' then converting array to fortran
+                        index order (default). Else use Python/C order.
+
+    RETURNS:
+      Data object containing:
+
+        .grid           A grid object (see read_grid())
+        .numdens        An array with the number density values of that molecule (in 1/cm^3)
+    """
+    grid      = read_grid()
+    molnumdens   = simplereaddataobject('molecule_number_density')
+    molnumdens.grid = grid
+    fname     = 'numberdens_'+molecule+'.inp'
+    print('Reading '+fname)
+    data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+
+    # Read the header
+    hdr       = np.array(data[:2], dtype=np.int)
+    data      = data[2:]
+
+    # Check the file format
+    if hdr[0] != 1:
+        msg = 'Unknown format number in '+fname
+        raise RuntimeError(msg)
+
+    # Get the number of cells, and check against
+    nrcells = grid.nx*grid.ny*grid.nz
+    if(hdr[1]!=nrcells):
+        msg = 'Number of grid cells in '+fname+' inconsistent with amr_grid.inp'
+        raise RuntimeError(msg)
+
+    # Convert the rest of the data to the proper shape
+    data = np.reshape(data, [grid.nz, grid.ny, grid.nx])
+
+    # If indexorder is set to 'fortran', then the inner index of the array
+    # should be left (even though in Python the inner index is right). This
+    # is to assure that the index order in the Python arrays is the same as
+    # in the RADMC-3D code. But by setting indexorder to anything else, you
+    # can keep Python natural order (which is equal to C index order), in
+    # which the inner index is the rightmost index.
+    if indexorder=='fortran':
+        data = np.swapaxes(data, 0, 2)
+
+    # Now add this to the object
+    molnumdens.numdens = data
+
+    # Return the molnumdens object
+    return molnumdens
+
+def read_mollevelpop(molecule,indexorder='fortran'):
+    """
+    Reading a levelpop_xxxx.dat file, but only for regular grids, and only
+    for text data format (not binary).
+
+    ARGUMENTS:
+      molecule          Then name of the molecule (e.g. 'co')
+      indexorder        If 'fortran' then converting array to fortran
+                        index order (default). Else use Python/C order.
+
+    RETURNS:
+      Data object containing:
+
+        .grid           A grid object (see read_grid())
+        .pop            An array with the level population values of that molecule (in units of number density 1/cm^3)
+    """
+    grid      = read_grid()
+    mollevelpop   = simplereaddataobject('molecule_level_populations')
+    mollevelpop.grid = grid
+    fname     = 'levelpop_'+molecule+'.dat'
+    print('Reading '+fname)
+    data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+
+    # Read the header
+    hdr       = np.array(data[:3], dtype=np.int)
+    data      = data[3:]
+
+    # Check the file format
+    if hdr[0] != 1:
+        msg = 'Unknown format number in '+fname
+        raise RuntimeError(msg)
+
+    # Get the number of cells, and check against
+    nrcells = grid.nx*grid.ny*grid.nz
+    if(hdr[1]!=nrcells):
+        msg = 'Number of grid cells in '+fname+' inconsistent with amr_grid.inp'
+        raise RuntimeError(msg)
+
+    # Number of levels
+    mollevelpop.nlevels = hdr[2]
+
+    # Identities of the levels (for associating them to the levels in the molecule_xxxx.inp file)
+    hdr       = np.array(data[:mollevelpop.nlevels], dtype=np.int)
+    data      = data[mollevelpop.nlevels:]
+    mollevelpop.levels = hdr
+
+    # Convert the rest of the data to the proper shape
+    data = np.reshape(data, [grid.nz, grid.ny, grid.nx, mollevelpop.nlevels])
+
+    # If indexorder is set to 'fortran', then the inner index of the array
+    # should be left (even though in Python the inner index is right). This
+    # is to assure that the index order in the Python arrays is the same as
+    # in the RADMC-3D code. But by setting indexorder to anything else, you
+    # can keep Python natural order (which is equal to C index order), in
+    # which the inner index is the rightmost index.
+    if indexorder=='fortran':
+        data = np.swapaxes(data, 0, 3)
+        data = np.swapaxes(data, 1, 2)
+
+    # Now add this to the object
+    mollevelpop.pop = data
+
+    # For convenience, also compute the relative level populations
+    # (which sum up to 1 in each cell)
+    mollevelpop.relpop = np.zeros_like(mollevelpop.pop)
+    if indexorder=='fortran':
+        dum = mollevelpop.pop.sum(axis=0)
+        for i in range(mollevelpop.nlevels):
+            mollevelpop.relpop[i,:,:,:] = mollevelpop.pop[i,:,:,:]/dum[:,:,:]
+    else:
+        dum = mollevelpop.pop.sum(axis=3)
+        for i in range(mollevelpop.nlevels):
+            mollevelpop.relpop[:,:,:,i] = mollevelpop.pop[:,:,:,i]/dum[:,:,:]
+
+    # Return the mollevelpop object
+    return mollevelpop
