@@ -710,7 +710,7 @@ subdirectories) two Python support libraries:
   main author.
 \end{enumerate}
 
-\subsection{How to install the {\tt python/tools/}}
+\subsection{How to install and use the {\tt python/tools/}}
 The installation of the {\small\tt python/tools} should be automatic when you
 type {\small\tt make install} in the {\small\tt src/} code directory (see
 above). It will copy the files to the {\small\tt bin/python/radmc3d\_tools/}
@@ -753,10 +753,25 @@ assured that Python finds the python routines belonging to the latest
 installation of RADMC-3D (note: only assured if that latest compilation was done
 with {\small\tt make install}).
 
+Now you should be ready to use the tools. The most important one would be
+the {\small\tt simpleread.py} tool, which contains a set of functions for
+reading typical RADMC-3D input and output files (though only for regular
+model grid, not for octree grids). In a Python command line interface
+you can import them by:
+{\small\begin{verbatim}
+import radmc3d_tools.simpleread
+\end{verbatim}}
+And you can then, for instance, read the dust density file with:
+{\small\begin{verbatim}
+d = simpleread.read_dustdens()
+\end{verbatim}}
+Here, {\small\tt d} is now an object containing a {\small\tt d.grid} subobject
+(which contain information about the grid) and the dust density array
+{\small\tt d.rhodust}. Have a look at the various functions in
+{\small\tt simpleread}, to see what is available. 
 
 
-
-\subsection{How to install the {\tt python/radmc3dPy/} library}
+\subsection{How to install and use the {\tt python/radmc3dPy/} library}
 The installation of the {\small\tt python/radmc3dPy} package is described in the
 {\small\tt python/radmc3dPy/README} file. In short, by going into the
 {\small\tt python/radmc3dPy/} directory and typing in the shell:
@@ -770,6 +785,23 @@ directory
 /Users/cornelisdullemond/.local/lib/python3.7/site-packages/radmc3dPy/
 \end{verbatim}}
 Python knows where to find it there.
+
+Now you should be ready to use {\small\tt radmc3dPy}, by importing it:
+{\small\begin{verbatim}
+import radmc3dPy
+\end{verbatim}}
+{\small\tt radmc3dPy} consists of
+several sub libraries such as {\small\tt radmc3dPy.analyze} and
+{\small\tt radmc3dPy.image}. For instance, to read the dust density
+distribution, you could do this:
+{\small\begin{verbatim}
+from radmc3dPy import analyze
+d = readData(ddens=True)
+\end{verbatim}}
+The {\small\tt d.rhodust} array now contains the dust density.
+
+For more information, please consult the {\small\tt radmc3dPy} documentation
+in the {\small\tt python/radmc3dPy/doc/} directory.
 
 
 
@@ -888,7 +920,7 @@ inside the {\small\tt radmc3d} executable (Except if you insert one yourself
 using the userdef module, see Chapter \ref{chap-internal-setup}).  For
 instance, if you want to model a protoplanetary disk, then you would have to
 design the grid and density structure of the disk on this grid yourself. To
-make it easier for the user, we have provided several IDL-scripts as
+make it easier for the user, we have provided several Python-scripts as
 examples. Among these examples is indeed a protoplanetary disk model. So
 this is as close as we go to 'built-in' models: we provide, for some cases,
 already well-developed example models that you, the user, can use
@@ -994,7 +1026,7 @@ directory. For these examples models the setup programs were written in Python
 (their filenames all start with {\small\tt problem\_} and end with
 {\small\tt .py}). For you as the user it is therefore the easiest to start
 from one of these examples and modify the Python code to your needs. However,
-if you have no IDL license, and/or if you prefer to use another language,
+if you prefer to use another language,
 you can use the examples to see how the input files were generated and then
 program this in another programming language.
 
@@ -1323,14 +1355,12 @@ will write out a file {\small\tt image.out} containing the image data
 (see Section \ref{sec-image-out}).
 
 As you see, RADMC-3D reads all its information from tables in various
-files. Since you don't want to make large tables by hand, you will have
-to write a little computer program that generates these tables automatically.
-You can do this in any programming language you want. But in the example
-models (see Section \ref{sec-example-models}) we use the programming 
-language IDL (see Section \ref{sec-requirements}) for this. This is a
-very simple (BASIC-like) programming language that makes it easy to
-create the above input files. It is easiest to indeed have a look at
-the example models to see how this is (or better: can be) done. 
+files. Since you don't want to make large tables by hand, you will have to write
+a little computer program that generates these tables automatically.  You can do
+this in any programming language you want. But in the example models (see
+Section \ref{sec-example-models}) we use the programming language Python (see
+Section \ref{sec-requirements}) for this. It is easiest to indeed have a look at
+the example models to see how this is (or better: can be) done.
 
 We will explain all these things in much more detail below, and we will
 discuss also many other radiative transfer problem types. The above example
@@ -1363,29 +1393,27 @@ procedure to follow is this:
   way to keep organized and we recommend it strongly.  So if we wish to make
   a new model, we make a new directory, or copy an old directory to a new
   name (if we merely want to make small changes to a prior model).
-\item In this directory we generate the input files according to their
-  required format (see Chapter \ref{chap-input-files}). You can create these
-  input files in any way you want. But since many of these input files
-  will/must contain huge lists of numbers (for instane, giving the density
-  at each location in your model), you will typically want to write some
-  script or program in some language (be it either C, C++, Fortran, IDL,
-  GDL, perl, python, you name it) that automatically creates these input
-  files. {\em We recommend using IDL, because we provide examples and
-    standard subroutines in the programming language IDL; see below for more
-    details. But IDL is not a strict requirement for using RADMC-3D.}
-  Section \ref{sec-example-models} describes how to use the example IDL
-  scripts to make these input files with IDL.
+\item In this directory we generate the input files according to their required
+  format (see Chapter \ref{chap-input-files}). You can create these input files
+  in any way you want. But since many of these input files will/must contain
+  huge lists of numbers (for instance, giving the density at each location in
+  your model), you will typically want to write some script or program in some
+  language (be it either C, C++, Fortran, IDL, GDL, perl, python, you name it)
+  that automatically creates these input files. {\em We recommend using Python,
+    because we provide examples and standard subroutines in the programming
+    language Python; see below for more details.}  Section
+  \ref{sec-example-models} describes how to use the example Python scripts to
+  make these input files with Python.
 \item When all the input files are created, and we make sure that we are
   inside the model directory, we call {\small\tt radmc3d} with the desired
   command-line options (see Chapter \ref{chap-command-line-options}). This
   will do the work for us. 
 \item Once this is done, we can analyze the results by reading the output
   files (see Chapter \ref{chap-input-files}). To help you reading and
-  analyzing these output files you can use a set of IDL routines that we
-  created for the user (see Chapter \ref{chap-idl-analysis-tools} and
-  Section \ref{sec-install-idlscripts}). But here again, you are free to use
-  any other plotting software and/or data postprocessing packages (many
-  people favor python, for instance).
+  analyzing these output files you can use a set of Python routines that we
+  created for the user (see Chapter \ref{chap-python-analysis-tools} and
+  Section \ref{sec-install-pythonscripts}). But here again, you are free to use
+  any other plotting software and/or data postprocessing packages.
 \end{enumerate}
 
 
@@ -1402,8 +1430,9 @@ throughout this manual each model has its own directory.
 
 To run an example model, go into the directory of this model, and follow the
 directions that are written in the {\small\tt README} file in each of these
-directories. {\em This is under the assumption that you have IDL installed on
-your system, and that you have a license for it.}
+directories. {\em This is under the assumption that you have a full
+  Python distribution installed on your system, including Numpy and
+  Matplotlib.}
 
 Let us do for instance {\small\tt run\_simple\_1/}:
 {\small\begin{verbatim}
@@ -1412,19 +1441,12 @@ cd examples/run_simple_1
 Now we must create all the input files for this model. These input files are
 all described in chapter \ref{chap-input-files}, but let us here just
 'blindly' follow the example. In this example most (all except one) of the
-input files are created using an IDL script called {\small\tt problem\_setup.pro}.
-To execute this script, this is what you do:
+input files are created using a Python script called {\small\tt problem\_setup.py}.
+To execute this script, this is what you do on the shell:
 {\small\begin{verbatim}
-idl
-IDL> .r problem_setup.pro 
-IDL> exit
+python problem_setup.pro 
 \end{verbatim}}
-or in words: you go into IDL and {\em within the IDL prompt} you type {\small\tt
-  .r problem\_setup.pro}, and if this is ready, you can leave IDL again (the
-latter is not required of course)\footnote{Note that this does not work in IDL demo
-  mode, which is what you get if you use IDL without a
-  license, because files will be written, which is not possible in demo
-  mode.}. This IDL script has now created a whole series
+This Python script has now created a whole series
 of input files, all ending with the extension {\small\tt .inp}. To see which
 files are created, type the following in the shell: 
 %
@@ -1440,7 +1462,7 @@ provide to the RADMC-3D code package. The file {\small\tt
 amorphous spherical silicate grain with radius 0.1 micron. But see
 Section \ref{sec-opacities} for more information about the opacities.
 
-Now that the input files are created we must run {\small\tt radmc3d}:
+Now that the input files are created, we must run {\small\tt radmc3d}:
 {\small\begin{verbatim}
 radmc3d mctherm
 \end{verbatim}}
@@ -1452,13 +1474,13 @@ ls -l *.dat
 \end{verbatim}}
 You will find the {\small\tt dust\_temperature.dat} containing the dust temperature
 everywhere in the model. See again chapter \ref{chap-input-files} for
-details of these files. To create a spectrum:
+details of these files. To create a spectral energy distribution (SED):
 {\small\begin{verbatim}
 radmc3d sed incl 45.
 \end{verbatim}}
-This will create a file {\small\tt spectrum.dat}.
-To analyze these data you can use the IDL routines delivered with the code
-(see Chapter \ref{chap-idl-analysis-tools} and Section \ref{sec-install-idlscripts}). 
+This will create a file {\small\tt spectrum.out}.
+To analyze these data you can use the Python routines delivered with the code
+(see Chapter \ref{chap-python-analysis-tools} and Section \ref{sec-install-pythonscripts}). 
 
 There is a file {\small\tt Makefile} in the directory. This is here only
 meant to make it easy to clean the directory. Type {\small\tt make
@@ -1475,8 +1497,8 @@ are set up {\em inside} {\small\tt radmc3d}, using the file
 See Chapter \ref{chap-internal-setup} for details and follow the 
 directions in the {\small\tt README} file. In short: first edit the
 variable {\small\tt SRC} in the {\small\tt Makefile}  to point to the
-{\small\tt src/} directory. Then type {\small\tt make}. Then go into
-IDL and run the {\small\tt problem\_setup.pro} script (which now only
+{\small\tt src/} directory. Then type {\small\tt make}. Then type
+{\small\tt python problem\_setup.py} on the shell command line (which now only
 sets up the frequency grid, the star and the {\small\tt radmc3d.inp}
 file and some small stuff). Now you can run the model. 
 
@@ -1506,7 +1528,7 @@ model. This is done in a two-stage procedure:
   Carlo computation (Section \ref{sec-dust-thermal-monte-carlo}).
 \item Then making the images and/or spectra (Section \ref{sec-dust-ray-tracing}).
 \end{enumerate}
-You can then view the output spectra and images with the IDL tools or use
+You can then view the output spectra and images with the Python tools or use
 your own plotting software. 
 
 Some expert users may wish to use RADMC-3D for something entirely different:
@@ -5352,7 +5374,7 @@ But you can change this to another value, say 24, by adding in the
 
 Note that if you use RADMC-3D as a child process (e.g.\ with the {\small\tt
   viewimage.pro} widget; see Chapters \ref{chap-child-mode} and
-\ref{chap-idl-analysis-tools}), then RADMC-3D will re-use the calculated
+\ref{chap-python-analysis-tools}), then RADMC-3D will re-use the calculated
 populations for further images/spectra, if those new images/spectra contain
 the same lines as the previous image/spectrum. That could save time.
 Example: You start {\small\tt viewimage.pro} and you get an image at some
@@ -5376,8 +5398,32 @@ writepop} on the command line. Example:
 radmc3d spectrum iline 1 widthkms 10 writepop
 \end{verbatim}\end{asciibox}
 This then creates (in addition to the spectrum) a file called (for our
-example of the CO molecule) {\small\tt levelpop\_co.dat}. In the IDL file
-{\small\tt readradmc.pro} there is a subroutine called {\small\tt
+example of the CO molecule) {\small\tt levelpop\_co.dat}.
+
+
+
+
+##############################################################
+##############################################################
+##############################################################
+##############################################################
+##############################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+In the
+{\small\tt radmc3dPy} package
+there is a function called {\small\tt
   read\_levelpop()} that can read the data from {\small\tt levelpop\_co.dat}
 into IDL for visualization. You will then find that indeed only the
 necessary levels have been used.
