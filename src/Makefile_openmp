@@ -1,9 +1,9 @@
 SRC = .
-#SRC = /Users/cornelisdullemond/science/prog/radmc-3d/version_0.39/src
+#SRC = /Users/cornelisdullemond/science/prog/radmc-3d/version_2.0/src
 
 # Optimize
-# OPTIM = -O2
 OPTIM = -O2 -fopenmp
+# OPTIM = -O2 
 
 # The system defines used in executing make
 # FF = /Users/dullemon/libraries/g95-install/bin/powerpc-apple-darwin6.8-g95
@@ -11,7 +11,6 @@ OPTIM = -O2 -fopenmp
 # For using the OpenMP parallel version of RADMC-3D one has to add '-fopenmp' in
 # the next command line (see also the RADMC-3D manual).
 FF = gfortran
-#FF = g95
 
 # Boundary check
 # BCHECK   = -fbounds-check
@@ -43,7 +42,6 @@ SRCLINES       = $(SRC)/lines_module.f90
 SRCGASCONT     = $(SRC)/gascontinuum_module.f90
 SRCNAMELIST    = $(SRC)/namelist_module.f90
 SRCSOURCES     = $(SRC)/sources_module.f90
-SRCOMP_LIB     = $(SRC)/omp_lib.f90
 SRCUSERDEF     = ./userdef_module.f90
 
 
@@ -52,9 +50,9 @@ OBJ            = main.o rtglobal_module.o montecarlo_module.o dust_module.o \
                  stars_module.o amr_module.o amrray_module.o                \
 	         constants_module.o camera_module.o lines_module.o          \
 	         namelist_module.o userdef_module.o gascontinuum_module.o   \
-	         polarization_module.o sources_module.o omp_lib.o
+	         polarization_module.o sources_module.o
 GMODULES       = rtglobal_module.o mathroutines_module.o amr_module.o       \
-	         namelist_module.o constants_module.o omp_lib.o
+	         namelist_module.o constants_module.o
 HMODULES       = $(GMODULES) polarization_module.o
 HIMODULES      = $(HMODULES) amrray_module.o dust_module.o 
 IMODULES       = $(HIMODULES) stars_module.o
@@ -128,9 +126,6 @@ namelist_module.o:  $(SRCNAMELIST) Makefile
 
 userdef_module.o:   $(SRCUSERDEF) $(UMODULES) Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCUSERDEF) -o $@
-
-omp_lib.o:          $(SRCOMP_LIB) Makefile
-	            $(FF) -c $(FFLAGS)  $(SRCOMP_LIB) -o $@
 
 
 install:	    radmc3d

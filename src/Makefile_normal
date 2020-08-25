@@ -1,5 +1,5 @@
 SRC = .
-#SRC = /Users/cornelisdullemond/science/prog/radmc-3d/version_0.39/src
+#SRC = /Users/cornelisdullemond/science/prog/radmc-3d/version_2.0/src
 
 # Optimize
 # OPTIM = -O2
@@ -11,7 +11,6 @@ OPTIM = -O2
 # For using the OpenMP parallel version of RADMC-3D one has to add '-fopenmp' in
 # the next command line (see also the RADMC-3D manual).
 FF = gfortran
-#FF = g95
 
 # Boundary check
 # BCHECK   = -fbounds-check
