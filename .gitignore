@@ -45,3 +45,6 @@ selftest
 OLDSTUFF/
 src_*
 README_PRIVATE
+build/
+__pycache__/
+python/radmc3dPy/build/
