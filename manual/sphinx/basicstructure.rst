@@ -241,11 +241,11 @@ systems:
 
   .. math::
 
-     \begin{eqnarray}
-     x &=& r \sin\theta \cos\phi \\
-     y &=& r \sin\theta \sin\phi \\
-     z &=& r \cos\theta
-     \end{eqnarray}
+     \begin{split}
+     x &= r \sin\theta \cos\phi \\
+     y &= r \sin\theta \sin\phi \\
+     z &= r \cos\theta
+     \end{split}
 
   This means that the spatial variables (density, temperature etc) are all
   specified as a function of :math:`(r,\theta,\phi)`. However, the location of the

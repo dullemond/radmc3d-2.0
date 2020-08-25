@@ -527,11 +527,11 @@ scattering opacity :math:`\kappa_\nu^{\mathrm{scat}}`. We then have
 
 .. math::
 
-   \begin{eqnarray}
-   \alpha_\nu^{\mathrm{abs}} &\equiv& \rho\kappa_\nu^{\mathrm{abs}}\\
-   \alpha_\nu^{\mathrm{scat}} &\equiv& \rho\kappa_\nu^{\mathrm{scat}}\\
-   j_\nu^{\mathrm{therm}} &=& \alpha_\nu^{\mathrm{abs}} B_\nu(T)
-   \end{eqnarray}
+   \begin{split}
+   \alpha_\nu^{\mathrm{abs}} &\equiv \rho\kappa_\nu^{\mathrm{abs}}\\
+   \alpha_\nu^{\mathrm{scat}} &\equiv \rho\kappa_\nu^{\mathrm{scat}}\\
+   j_\nu^{\mathrm{therm}} &= \alpha_\nu^{\mathrm{abs}} B_\nu(T)
+   \end{split}
    
 where :math:`B_\nu(T)` is the Planck function. The last equation is an
 expression of Kirchhoff's law.
@@ -567,11 +567,11 @@ Then the scattering source function becomes:
 
 .. math::
 
-   \begin{eqnarray}
+   \begin{split}
    j_\nu^{\mathrm{scat}}({\bf n}_{\mathrm{out}}) = 
    \alpha_\nu^{\mathrm{scat}} \frac{1}{4\pi}\oint I_\nu({\bf n}_{\mathrm{in}})
    \Phi({\bf n}_{\mathrm{in}},{\bf n}_{\mathrm{out}}) d\Omega_{\mathrm{in}}
-   \end{eqnarray}
+   \end{split}
    
 which is angle-dependent. The angular dependence means: a photon package has not
 completely forgotten from which direction it came before hitting the dust grain.
@@ -1167,11 +1167,11 @@ We can put these definitions into the standard formulae:
 
 .. math::
    
-   \begin{eqnarray}
-   Q &=& I\cos(2\beta)\cos(2\chi)\\
-   U &=& I\cos(2\beta)\sin(2\chi)\\
-   V &=& I\sin(2\beta)
-   \end{eqnarray}
+   \begin{split}
+   Q &= I\cos(2\beta)\cos(2\chi)\\
+   U &= I\cos(2\beta)\sin(2\chi)\\
+   V &= I\sin(2\beta)
+   \end{split}
 
 The angle :math:`\chi` is the angle of the E-field in the :math:`(x',y')`
 coordinates, measured counter-clockwise from :math:`x'` (consistent with our
@@ -1197,10 +1197,10 @@ In terms of the *real* electric fields of a plane monochromatic wave:
 
 .. math::
    
-   \begin{eqnarray}
-   E_x'(t) &=& E_h \cos(\omega t-\Delta_h)\\
-   E_y'(t) &=& E_v \cos(\omega t-\Delta_v)
-   \end{eqnarray}
+   \begin{split}
+   E_x'(t) &= E_h \cos(\omega t-\Delta_h)\\
+   E_y'(t) &= E_v \cos(\omega t-\Delta_v)
+   \end{split}
    
 (with :math:`E_h>0` and :math:`E_v>0` and :math:`\Delta_{h,v}` are the phase
 lags of the components with respect to some arbitrary phase) we can write the
@@ -1208,12 +1208,12 @@ Stokes components as:
 
 .. math::
    
-   \begin{eqnarray}
-   I &=& E_h^2 + E_v^2 \\
-   Q &=& E_h^2 - E_v^2\\
-   U &=& 2 E_h E_v \cos(\Delta) \\
-   V &=& 2 E_h E_v \sin(\Delta)
-   \end{eqnarray}
+   \begin{split}
+   I &= E_h^2 + E_v^2 \\
+   Q &= E_h^2 - E_v^2\\
+   U &= 2 E_h E_v \cos(\Delta) \\
+   V &= 2 E_h E_v \sin(\Delta)
+   \end{split}
 
 with :math:`\Delta = \Delta_v - \Delta_h = 2\beta`.
 
@@ -1222,10 +1222,10 @@ In terms of the {\em complex} electric fields of a plane monochromatic wave
 
 .. math::
    
-   \begin{eqnarray}
-   E_x'(t) &=& E_h e^{i(\Delta_h-\omega t)}\\
-   E_y'(t) &=& E_v e^{i(\Delta_v-\omega t)}
-   \end{eqnarray}
+   \begin{split}
+   E_x'(t) &= E_h e^{i(\Delta_h-\omega t)}\\
+   E_y'(t) &= E_v e^{i(\Delta_v-\omega t)}
+   \end{split}
   
 (with :math:`E_h>0` and :math:`E_v>0` real numbers and :math:`\Delta_{h,v}` are
 the phase lags of the components with respect to some arbitrary phase) we can
@@ -1233,12 +1233,12 @@ write the Stokes components as:
 
 .. math::
 
-   \begin{eqnarray}
-   I &=& \langle E_{x'}E_{x'}^{*} + E_{y'}E_{y'}^{*}   \rangle\\
-   Q &=& \langle E_{x'}E_{x'}^{*} - E_{y'}E_{y'}^{*}   \rangle\\
-   U &=& \langle E_{x'}E_{y'}^{*} + E_{y'}E_{x'}^{*}   \rangle\\
-   V &=& i\langle E_{x'}E_{y'}^{*} - E_{y'}E_{x'}^{*}  \rangle
-   \end{eqnarray}
+   \begin{split}
+   I &= \langle E_{x'}E_{x'}^{*} + E_{y'}E_{y'}^{*}   \rangle\\
+   Q &= \langle E_{x'}E_{x'}^{*} - E_{y'}E_{y'}^{*}   \rangle\\
+   U &= \langle E_{x'}E_{y'}^{*} + E_{y'}E_{x'}^{*}   \rangle\\
+   V &= i\langle E_{x'}E_{y'}^{*} - E_{y'}E_{x'}^{*}  \rangle
+   \end{split}
 
 
 .. _sec-stokes-convent-differences:
@@ -1257,12 +1257,12 @@ definitions are:
 
 .. math::
    
-   \begin{eqnarray}
-   I_{\mathrm{ours}} &=  I_{\mathrm{mishch}}  &= I_{\mathrm{bohrenhuffman}} \\
-   Q_{\mathrm{ours}} &=  Q_{\mathrm{mishch}}  &= Q_{\mathrm{bohrenhuffman}} \\
-   U_{\mathrm{ours}} &=  -U_{\mathrm{mishch}} &= -U_{\mathrm{bohrenhuffman}} \\
-   V_{\mathrm{ours}} &=  -V_{\mathrm{mishch}} &= -V_{\mathrm{bohrenhuffman}}
-   \end{eqnarray}
+   \begin{split}
+   I_{\mathrm{ours}} &=  I_{\mathrm{mishch}}  = I_{\mathrm{bohrenhuffman}} \\
+   Q_{\mathrm{ours}} &=  Q_{\mathrm{mishch}}  = Q_{\mathrm{bohrenhuffman}} \\
+   U_{\mathrm{ours}} &=  -U_{\mathrm{mishch}} = -U_{\mathrm{bohrenhuffman}} \\
+   V_{\mathrm{ours}} &=  -V_{\mathrm{mishch}} = -V_{\mathrm{bohrenhuffman}}
+   \end{split}
    
 As you see: only the :math:`U` and :math:`V` change sign. For a 4:math:`\times`4
 Müller matrix :math:`M` this means that the :math:`M_{II}`, :math:`M_{IQ}`,
@@ -1345,9 +1345,9 @@ definitions of the :math:`x'` and :math:`y'` directions. The definitions are:
 .. math::
    
    \begin{split}
-   x' & \quad\hbox{points in the direction}\quad {\bf S}\times {\bf n}\\
-   y' & \quad\hbox{points in the direction}\quad {\bf S}\\
-   z' & \quad\hbox{points in the direction}\quad {\bf n}
+   x' &= \quad\hbox{points in the direction}\quad {\bf S}\times {\bf n}\\
+   y' &= \quad\hbox{points in the direction}\quad {\bf S}\\
+   z' &= \quad\hbox{points in the direction}\quad {\bf n}
    \end{split}
 
 So for :math:`Q=-I`, :math:`U=V=0` the electric field points in the direction of
@@ -1790,10 +1790,10 @@ coefficients for the horizontal and vertical axis. Let us call these:
 
 .. math::
    
-   \begin{eqnarray}
-   \alpha_{\mathrm{abs},\nu,\mathrm{h}} &\equiv& \rho_d\kappa_{\mathrm{abs},\nu,\mathrm{h}}\\
-   \alpha_{\mathrm{abs},\nu,\mathrm{v}} &\equiv& \rho_d\kappa_{\mathrm{abs},\nu,\mathrm{v}}
-   \end{eqnarray}
+   \begin{split}
+   \alpha_{\mathrm{abs},\nu,\mathrm{h}} &\equiv \rho_d\kappa_{\mathrm{abs},\nu,\mathrm{h}}\\
+   \alpha_{\mathrm{abs},\nu,\mathrm{v}} &\equiv \rho_d\kappa_{\mathrm{abs},\nu,\mathrm{v}}
+   \end{split}
 
 We can define :math:`I`, :math:`Q`, :math:`U` and :math:`V` in terms of the electric field
 components :math:`E_x` and :math:`E_y`. The electric field components for a perfectly
@@ -1801,10 +1801,10 @@ coherent wave can be written as
 
 .. math::
    
-   \begin{eqnarray}
-   E_x&=&E_{x,0}\cos(\omega t-\Delta_x)\\
-   E_y&=&E_{y,0}\cos(\omega t-\Delta_y)
-   \end{eqnarray}
+   \begin{split}
+   E_x&=E_{x,0}\cos(\omega t-\Delta_x)\\
+   E_y&=E_{y,0}\cos(\omega t-\Delta_y)
+   \end{split}
 
 where :math:`\Delta_x` and :math:`\Delta_y` are phase lags. The phase lag between
 the :math:`y` and :math:`x`-fields is :math:`\Delta=\Delta_y-\Delta_x`, meaning that for
@@ -1813,12 +1813,12 @@ define the Stokes components as:
 
 .. math::
    
-   \begin{eqnarray}
-   I &=& E_{x,0}^2+E_{y,0}^2.. _eq-def-stokes-i:\\
-   Q &=& E_{x,0}^2-E_{y,0}^2.. _eq-def-stokes-q:\\
-   U &=& 2E_{x,0}E_{y,0}\cos\Delta.. _eq-def-stokes-u:\\
-   V &=& 2E_{x,0}E_{y,0}\sin\Delta.. _eq-def-stokes-v:
-   \end{eqnarray}
+   \begin{split}
+   I &= E_{x,0}^2+E_{y,0}^2.. _eq-def-stokes-i:\\
+   Q &= E_{x,0}^2-E_{y,0}^2.. _eq-def-stokes-q:\\
+   U &= 2E_{x,0}E_{y,0}\cos\Delta.. _eq-def-stokes-u:\\
+   V &= 2E_{x,0}E_{y,0}\sin\Delta.. _eq-def-stokes-v:
+   \end{split}
    
 Note that for :math:`V=I` (:math:`\Delta=\pi/2`, i.e.\ the :math:`E_y` lags
 :math:`\pi/2` behind :math:`E_x`) we have *right-handed* circularly polarized
@@ -1838,10 +1838,10 @@ The :math:`E_x` and :math:`E_y` get absorbed in the following way:
 
 .. math::
    
-   \begin{eqnarray}
-   E_{x,0}' &=& E_{x,0} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
-   E_{y,0}' &=& E_{y,0} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
-   \end{eqnarray}
+   \begin{split}
+   E_{x,0}' &= E_{x,0} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
+   E_{y,0}' &= E_{y,0} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
+   \end{split}
    
 where :math:`s` is a length along the ray.
 
@@ -1850,37 +1850,37 @@ Stokes parameters* :math:`I_{\mathrm{h}}` and :math:`I_{\mathrm{v}}`:
 
 .. math::
    
-   \begin{eqnarray}
-   I_{\mathrm{h}} &=& \frac{1}{2}(I+Q).. _eq-modif-stokes-h:\\
-   I_{\mathrm{v}} &=& \frac{1}{2}(I-Q).. _eq-modif-stokes-v:
-   \end{eqnarray}
+   \begin{split}
+   I_{\mathrm{h}} &= \frac{1}{2}(I+Q).. _eq-modif-stokes-h:\\
+   I_{\mathrm{v}} &= \frac{1}{2}(I-Q).. _eq-modif-stokes-v:
+   \end{split}
    
 so that we have 
 
 .. math::
 
-   \begin{eqnarray}
-   I &=& I_{\mathrm{h}}+I_{\mathrm{v}}\\
-   Q &=& I_{\mathrm{h}}-I_{\mathrm{v}}
-   \end{eqnarray}
+   \begin{split}
+   I &= I_{\mathrm{h}}+I_{\mathrm{v}}\\
+   Q &= I_{\mathrm{h}}-I_{\mathrm{v}}
+   \end{split}
    
 so that one can say, for perfectly coherent light,
 
 .. math::
    
-   \begin{eqnarray}
-   I_{\mathrm{h}} &=& E_{x,0}^2\\
-   I_{\mathrm{v}} &=& E_{y,0}^2
-   \end{eqnarray}
+   \begin{split}
+   I_{\mathrm{h}} &= E_{x,0}^2\\
+   I_{\mathrm{v}} &= E_{y,0}^2
+   \end{split}
    
 With this we get the following extinction law:
 
 .. math::
    
-   \begin{eqnarray}
-   I_{\mathrm{h}}' &=& I_{\mathrm{h}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
-   I_{\mathrm{v}}' &=& I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
-   \end{eqnarray}
+   \begin{split}
+   I_{\mathrm{h}}' &= I_{\mathrm{h}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
+   I_{\mathrm{v}}' &= I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
+   \end{split}
 
 How do :math:`U` and :math:`V` extinct? If we use Eqs.~(:ref:`eq-def-stokes-u`,
 :ref:`eq-def-stokes-v`), and assume that the phase lag :math:`\Delta` will not
@@ -1890,7 +1890,7 @@ change during the extinction, then
 
    \begin{split}
    U' &= U e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{h}}s} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}\\
-   &=U e^{-\tfrac{1}{2}(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}})s}
+      &= U e^{-\tfrac{1}{2}(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}})s}
    \end{split}
 
 This means that 
@@ -1904,10 +1904,10 @@ and
 
 .. math::
    
-   \begin{eqnarray}
-   I_{\mathrm{u}}' &=& I_{\mathrm{u}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{uv}}s}\\
-   I_{\mathrm{v}}' &=& I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{uv}}s}
-   \end{eqnarray}
+   \begin{split}
+   I_{\mathrm{u}}' &= I_{\mathrm{u}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{uv}}s}\\
+   I_{\mathrm{v}}' &= I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{uv}}s}
+   \end{split}
 
 In matrix notation
 
@@ -1963,11 +1963,11 @@ with
 
 .. math::
 
-   \begin{eqnarray}
-   \alpha_1 &=& \frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right) 
+   \begin{split}
+   \alpha_1 &= \frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right) 
    = \alpha_{\mathrm{abs},\nu,\mathrm{uv}}\\
-   \alpha_2 &=& \frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}-\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right) 
-   \end{eqnarray}
+   \alpha_2 &= \frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}-\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right) 
+   \end{split}
 
 The emission will be also independently in horizontal and vertical
 direction. But nothing will be emitted in U or V direction. So it is most
@@ -1976,12 +1976,12 @@ modified Stokes parameters:
 
 .. math::
 
-   \begin{eqnarray}
-   \frac{dI_{\nu,\mathrm{h}}}{ds} &=& \alpha_{\mathrm{abs},\nu,\mathrm{h}} (\frac{1}{2}B_\nu(T)-I_{\nu,\mathrm{h}}) \\
-   \frac{dI_{\nu,\mathrm{v}}}{ds} &=& \alpha_{\mathrm{abs},\nu,\mathrm{v}} (\frac{1}{2}B_\nu(T)-I_{\nu,\mathrm{v}}) \\
-   \frac{dU_{\nu}}{ds} &=& -\alpha_{\mathrm{abs},\nu,\mathrm{uv}} U_{\nu} \\
-   \frac{dV_{\nu}}{ds} &=& -\alpha_{\mathrm{abs},\nu,\mathrm{uv}} V_{\nu}
-   \end{eqnarray}
+   \begin{split}
+   \frac{dI_{\nu,\mathrm{h}}}{ds} &= \alpha_{\mathrm{abs},\nu,\mathrm{h}} (\frac{1}{2}B_\nu(T)-I_{\nu,\mathrm{h}}) \\
+   \frac{dI_{\nu,\mathrm{v}}}{ds} &= \alpha_{\mathrm{abs},\nu,\mathrm{v}} (\frac{1}{2}B_\nu(T)-I_{\nu,\mathrm{v}}) \\
+   \frac{dU_{\nu}}{ds} &= -\alpha_{\mathrm{abs},\nu,\mathrm{uv}} U_{\nu} \\
+   \frac{dV_{\nu}}{ds} &= -\alpha_{\mathrm{abs},\nu,\mathrm{uv}} V_{\nu}
+   \end{split}
    
 In terms of matrix notation this becomes
 
@@ -2234,12 +2234,12 @@ equation along this ray segment:
 
 .. math::
 
-   \begin{eqnarray}
-   I_{\mathrm{h,end}} &=&  e^{-\tau_h}I_{\mathrm{h,start}} + \tfrac{1}{2}e^{-\tau_h}B_\nu(T)\\
-   I_{\mathrm{v,end}} &=&  e^{-\tau_v}I_{\mathrm{v,start}} + \tfrac{1}{2}e^{-\tau_v}B_\nu(T) \\
-   U_{\mathrm{end}} &=&    e^{-\tau_{uv}}U_{\mathrm{start}}\\
-   V_{\mathrm{end}} &=&    e^{-\tau_{uv}}V_{\mathrm{start}}
-   \end{eqnarray}
+   \begin{split}
+   I_{\mathrm{h,end}} &=  e^{-\tau_h}I_{\mathrm{h,start}} + \tfrac{1}{2}e^{-\tau_h}B_\nu(T)\\
+   I_{\mathrm{v,end}} &=  e^{-\tau_v}I_{\mathrm{v,start}} + \tfrac{1}{2}e^{-\tau_v}B_\nu(T) \\
+   U_{\mathrm{end}} &=    e^{-\tau_{uv}}U_{\mathrm{start}}\\
+   V_{\mathrm{end}} &=    e^{-\tau_{uv}}V_{\mathrm{start}}
+   \end{split}
    
 where 'start' stands for the start of the ray segment, and 'end' the end of the
 ray segment (which becomes the start of the next ray segment), and
@@ -2333,10 +2333,10 @@ horizontal (orthogonal to the alignment orientation vector) and vertical
 
 .. math::
 
-   \begin{eqnarray}
-   \kappa_{\mathrm{abs},\nu,h}(\theta) &=& \kappa_{\mathrm{abs},\nu}\,k_{\nu,h}(\theta) .. _eq-align-kappa-k-h:\\
-   \kappa_{\mathrm{abs},\nu,v}(\theta) &=& \kappa_{\mathrm{abs},\nu}\,k_{\nu,v}(\theta) .. _eq-align-kappa-k-v:
-   \end{eqnarray}
+   \begin{split}
+   \kappa_{\mathrm{abs},\nu,h}(\theta) &= \kappa_{\mathrm{abs},\nu}\,k_{\nu,h}(\theta) .. _eq-align-kappa-k-h:\\
+   \kappa_{\mathrm{abs},\nu,v}(\theta) &= \kappa_{\mathrm{abs},\nu}\,k_{\nu,v}(\theta) .. _eq-align-kappa-k-v:
+   \end{split}
    
 where :math:`k_{\nu,h}(\theta)` and :math:`k_{\nu,v}(\theta)` are dimensionless
 functions, and where we take :math:`\theta\in[0,90]` (in degrees), or
@@ -2440,10 +2440,10 @@ Eqs.~(:ref:`eq-align-kappa-k-h`, :ref:`eq-align-kappa-k-v`) then become
 
 .. math::
 
-   \begin{eqnarray}
-   \kappa_{\mathrm{abs},\nu,h}(\theta) &=& \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,h}(\theta)+1-\epsilon_{\mathrm{align}}] \\
-   \kappa_{\mathrm{abs},\nu,v}(\theta) &=& \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,v}(\theta)+1-\epsilon_{\mathrm{align}}] 
-   \end{eqnarray}
+   \begin{split}
+   \kappa_{\mathrm{abs},\nu,h}(\theta) &= \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,h}(\theta)+1-\epsilon_{\mathrm{align}}] \\
+   \kappa_{\mathrm{abs},\nu,v}(\theta) &= \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,v}(\theta)+1-\epsilon_{\mathrm{align}}] 
+   \end{split}
 
 In order to tell RADMC-3D that it should include the effect of alignment on the
 thermal emission of dust grains one must add a line in the ``radmc3d.inp`` file
