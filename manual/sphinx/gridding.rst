@@ -15,7 +15,6 @@ at the gridding possibilities and things to take special care of.
 Regular grids
 =============
 
-
 A regular grid is called 'grid style 0' in RADMC-3D. It can be used in
 Cartesian coordinates as well as in spherical coordinates (Section
 :ref:`sec-coord-systems`).
@@ -196,7 +195,6 @@ Section on sub-pixeling in spherical coordinate: Section
 
 Oct-tree Adaptive Mesh Refinement
 =================================
-
 
 An oct-tree refinened grid is called 'grid style 1' in RADMC-3D. It can be
 used in Cartesian coordinates as well as in spherical coordinates (Section
