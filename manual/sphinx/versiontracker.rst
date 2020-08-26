@@ -407,5 +407,6 @@ This version overview is very rough, and has only been started as of version
   * We removed the fortran-unformatted data format from the manual,
     and will remove it from the code in later versions. Use either text
     (ascii) format or binary format. 
-  
+  * The manual is now converted to Sphinx, from which the LaTeX version
+    and the HTML version can be automatically created.
 
