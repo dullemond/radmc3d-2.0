@@ -1414,20 +1414,25 @@ the line can then have a doppler shift substantially to the blue of the
 wavelength-of-sight, while in the next cell the line suddenly shifted to the
 red side. If the intrinsic (= thermal + microturbulent) line width is
 smaller than these shifts, neither cell gives a contribution to the emission
-in the ray. See Fig.~:ref:`fig-doppler-catch`-Left for a pictographic
+in the ray. See Fig.~:ref:`fig-doppler-jump` for a pictographic
 representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength-of-sight, and thus make a contribution. Therefore the numerical
 integration may thus go wrong.
 
-.. _fig-doppler-catch:
+.. _fig-doppler-jump:
 
 .. figure:: Figures/line_doppjump.*
-            Figures/line_doppcatch.*
-   :width: 45%
+   :width: 75%
 
-   Left: Pictographic representation of the doppler jumping problem with 
+   Pictographic representation of the doppler jumping problem with 
    ray-tracing through a model with strong cell-to-cell velocity differences. 
+
+.. _fig-doppler-catch:
+
+.. figure:: Figures/line_doppcatch.*
+   :width: 75%
+
    Right: Pictographic representation of the doppler catching method to 
    prevent this problem: First of all, second order integration is done
    instead of first order. Secondly, the method automatically detects a
@@ -1448,7 +1453,7 @@ in great detail in Pontoppidan et al.~(2009, ApJ 704, 1482). The idea is
 that the method automatically tests if a line might 'doppler jump' over
 the current wavelength channel. If so, it will insert substeps in the
 integration at the location where this danger is present. See
-Fig.~:ref:`fig-doppler-catch`-Right for a pictographic representation of this
+Fig.~:ref:`fig-doppler-catch` for a pictographic representation of this
 method. Note that this method can only be used with the second order
 ray-tracing (see Section :ref:`sec-second-order`); in fact, as soon as you
 switch the doppler catching on, RADMC-3D will automatically also switch on
