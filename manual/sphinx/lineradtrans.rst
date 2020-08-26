@@ -1094,7 +1094,7 @@ The optical depth of the combined LVG + EscProb method is then:
    \tau_{ij} = \mathrm{min}\left(\tau_{ij}^{\mathrm{LVG}},\tau_{ij}^{\mathrm{EscProb}}\right)
 
 This is then the :math:`\tau_{ij}` that needs to be inserted into
-Eq.~(:ref:`eq-escprob-beta-formula`) for obtaining the escape probability
+Eq. (:ref:`eq-escprob-beta-formula`) for obtaining the escape probability
 :math:`\beta_{ij}` (which includes escape due to LVG as well as the finite
 length scale :math:`L`).
 
