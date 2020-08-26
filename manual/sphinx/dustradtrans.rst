@@ -320,8 +320,7 @@ This computes the mean intensity
 erg:math:`\,`s:math:`^{-1}`:math:`\,`cm:math:`^{-2}`:math:`\,`Hz:math:`^{-1}`:math:`\,`ster:math:`^{-1}`)
 as a function of the :math:`(x,y,z)` (cartesian) or :math:`(r,\theta,\phi)`
 (spherical) coordinates at frequencies :math:`\nu_i\equiv 10^4c/\lambda_i` where
-:math:`\lambda_i` are the wavelengths (in :math:`\mu`m) specified in the file ``
-mcmono_wavelength_micron.inp`` (same format as the file
+:math:`\lambda_i` are the wavelengths (in :math:`\mu`m) specified in the file ``mcmono_wavelength_micron.inp`` (same format as the file
 ``wavelength_micron.inp`` which is described in Section
 :ref:`sec-wavelengths`). The results of this computation can be interesting for,
 for instance, models of photochemistry.
@@ -1382,8 +1381,8 @@ means rotating the vector in that basis in clockwise direction, hence the sign
 convention in the matrix.
 
 If we have :math:`(I,Q,U,V)` in the '-basis (which we might have written as
-:math:`(I',Q',U',V')` but by convention we drop the '), the :math:`(I'',Q'',U'',V'')` in
-the ''-basis becomes
+:math:`(I',Q',U',V')` but by convention we drop the '), the
+:math:`(I'',Q'',U'',V'')` in the ''-basis becomes
 
 .. math::
 
@@ -1494,10 +1493,11 @@ cm:math:`^2`/gram/steradian. The conversion from the conventions of other books 
    Z_{ij,\mathrm{RADMC-3D}} = \frac{Z_{ij,\mathrm{Mishchenko}}}{m_{\mathrm{grain}}}
    = \frac{S_{ij,\mathrm{BohrenH}}}{k^2m_{\mathrm{grain}}}
 
-except that for the :math:`Z_{13}`, :math:`Z_{14}`, :math:`Z_{23}`, :math:`Z_{24}`, :math:`Z_{31}`,
-:math:`Z_{41}`, :math:`Z_{32}`, :math:`Z_{42}` elements (if non-zero) there must be a minus
-sign before the :math:`Z_{ij,\mathrm{RADMC-3D}}` because of the opposite :math:`U` and
-:math:`V` sign conventions (see Section :ref:`sec-stokes-convent-differences`).
+except that for the :math:`Z_{13}`, :math:`Z_{14}`, :math:`Z_{23}`,
+:math:`Z_{24}`, :math:`Z_{31}`, :math:`Z_{41}`, :math:`Z_{32}`, :math:`Z_{42}`
+elements (if non-zero) there must be a minus sign before the
+:math:`Z_{ij,\mathrm{RADMC-3D}}` because of the opposite :math:`U` and :math:`V`
+sign conventions (see Section :ref:`sec-stokes-convent-differences`).
 
 Note that the :math:`S_{ij,\mathrm{BohrenH}}` are the matrix elements obtained
 from the famous ``BHMIE.F`` code from the Bohren \& Huffman book
@@ -1649,8 +1649,8 @@ discrete set of values of :math:`\theta`, and store these in a table. This is
 indeed the philosophy of RADMC-3D: You have to precompute them using, for
 instance, the Mie code of Bohren and Huffman (see Chapter
 :ref:`chap-acquiring-opacities` for RADMC-3D compliant wrappers around that
-code), and then provide them to RADMC-3D through a file called ``
-dustkapscatmat_xxx.inp`` (where ``xxx`` is the name of the dust species) which
+code), and then provide them to RADMC-3D through a file called
+``dustkapscatmat_xxx.inp`` (where ``xxx`` is the name of the dust species) which
 is described in Section :ref:`sec-dustkapscatmat-files`.  This file provides not
 only the matrix elements, but also the :math:`\kappa_{\mathrm{abs}}`,
 :math:`\kappa_{\mathrm{scat}}` and :math:`g` (the anisotropy factor). RADMC-3D
