@@ -1811,13 +1811,15 @@ the :math:`y` and :math:`x`-fields is :math:`\Delta=\Delta_y-\Delta_x`, meaning 
 positive :math:`\Delta` the :math:`y`-field lags behind the :math:`x`-field. We then 
 define the Stokes components as:
 
+.. _eq-def-stokes-iquv:
+
 .. math::
    
    \begin{split}
-   I &= E_{x,0}^2+E_{y,0}^2.. _eq-def-stokes-i:\\
-   Q &= E_{x,0}^2-E_{y,0}^2.. _eq-def-stokes-q:\\
-   U &= 2E_{x,0}E_{y,0}\cos\Delta.. _eq-def-stokes-u:\\
-   V &= 2E_{x,0}E_{y,0}\sin\Delta.. _eq-def-stokes-v:
+   I &= E_{x,0}^2+E_{y,0}^2\\
+   Q &= E_{x,0}^2-E_{y,0}^2\\
+   U &= 2E_{x,0}E_{y,0}\cos\Delta\\
+   V &= 2E_{x,0}E_{y,0}\sin\Delta
    \end{split}
    
 Note that for :math:`V=I` (:math:`\Delta=\pi/2`, i.e.\ the :math:`E_y` lags
@@ -1848,11 +1850,13 @@ where :math:`s` is a length along the ray.
 For this kind of problem it is convenient to introduce the so-called *modified
 Stokes parameters* :math:`I_{\mathrm{h}}` and :math:`I_{\mathrm{v}}`:
 
+.. _eq-modif-stokes-hv:
+
 .. math::
    
    \begin{split}
-   I_{\mathrm{h}} &= \frac{1}{2}(I+Q).. _eq-modif-stokes-h:\\
-   I_{\mathrm{v}} &= \frac{1}{2}(I-Q).. _eq-modif-stokes-v:
+   I_{\mathrm{h}} &= \frac{1}{2}(I+Q)\\
+   I_{\mathrm{v}} &= \frac{1}{2}(I-Q)
    \end{split}
    
 so that we have 
@@ -2331,11 +2335,13 @@ horizontal (orthogonal to the alignment orientation vector) and vertical
 :math:`\theta=90^{\circ}` we will have the maximum difference between
 :math:`\kappa_{\mathrm{abs},\nu,h}` and :math:`\kappa_{\mathrm{abs},\nu,v}`. We write
 
+.. _eq-align-kappa-k-hv:
+
 .. math::
 
    \begin{split}
-   \kappa_{\mathrm{abs},\nu,h}(\theta) &= \kappa_{\mathrm{abs},\nu}\,k_{\nu,h}(\theta) .. _eq-align-kappa-k-h:\\
-   \kappa_{\mathrm{abs},\nu,v}(\theta) &= \kappa_{\mathrm{abs},\nu}\,k_{\nu,v}(\theta) .. _eq-align-kappa-k-v:
+   \kappa_{\mathrm{abs},\nu,h}(\theta) &= \kappa_{\mathrm{abs},\nu}\,k_{\nu,h}(\theta)\\
+   \kappa_{\mathrm{abs},\nu,v}(\theta) &= \kappa_{\mathrm{abs},\nu}\,k_{\nu,v}(\theta)
    \end{split}
    
 where :math:`k_{\nu,h}(\theta)` and :math:`k_{\nu,v}(\theta)` are dimensionless
