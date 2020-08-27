@@ -1,0 +1,6 @@
+This directory contains some IDL and Fortran subroutines to create opacities
+for dust continuum and for gas lines. They require, however, input data from
+databases on the WWW. In this directory only the IDL routines and information
+on how to get the data from the web are given. 
+
+23.03.11

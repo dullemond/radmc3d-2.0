@@ -1,0 +1,67 @@
+MOLECULAR DATA FILES FROM THE HITRAN DATABASE
+---------------------------------------------
+
+The HITRAN database contains molecular data for rotational and
+ro-vibrational transitions of a set of common molecules in the Earth's
+atmosphere. The web site is:
+
+   http://www.cfa.harvard.edu/hitran/
+
+Since LTE is usually a good assumption in planetary atmospheres, these
+datafiles contain "only" line lists. These data is therefore not suitable
+for non-LTE radiative transfer.
+
+The subroutines in this directory convert the HITRAN style line lists
+into RADMC-3D style line lists. RADMC-3D style line lists have the lines
+of different molecules and their isotopologues separated: One list per
+isotopologue/molecule. This allows the user to specify exactly the 
+abundance of each isotopologue or molecule separately. 
+
+To produce RADMC-3D style line lists from the HITRAN database, do the
+following:
+
+ - Request access to HITRAN (see web site) by emailing to L. Rothman
+
+ - Ftp to their web site and download the by-molecule files called:
+       01_hit08.par         
+       02_hit08_f53.par     
+       03_hit08.par         
+       04_hit08.par         
+       05_hit08.par         
+       06_hit08.par         
+       07_hit08.par         
+       08_hit08.par         
+       09_hit08.par         
+       10_hit08.par         
+       11_hit08.par         
+       12_hit08.par         
+       13_hit08.par         
+       14_hit08.par         
+       15_hit08.par
+   as well as the following additional files:
+       molparam.txt
+       parsum.dat
+
+ - Go into IDL
+
+ - Type .r convert_hitran_to_radmc3d_linelist_session.pro
+
+ - This should produce line lists for a set of molecules. This is not
+   the full list! Please add further lines to the file
+   convert_hitran_to_radmc3d_linelist_session.pro to add further 
+   molecules (each of the above **_hit08* files is one molecule with
+   several possible isotopologues). Since the partition sum table
+   (required for LTE transfer) is in the parsum.dat file, you will
+   have to figure out which column of parsum.dat belongs to which
+   molecule/isotopologue. That is why getting more molecules is a 
+   bit of hand-work. But the examples in the file
+   convert_hitran_to_radmc3d_linelist_session.pro will help you 
+   figure out how this works. See also the ByMolecule-Readme.pdf 
+   file from the ftp site of HITRAN to help you find your molecule
+   of interest.
+
+ - The plot_linelist.pro program helps you visualize the lines by
+   plotting the opacity or emissivity of the lines for a given 
+   temperature (again: assuming LTE).
+
+23.03.11

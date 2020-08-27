@@ -1,0 +1,21 @@
+MOLECULAR DATA FILES FROM THE LEIDEN LAMDA DATABASE
+---------------------------------------------------
+
+The Leiden molecular database contains data for (mostly) rotational
+transitions of molecules of astrophysical interest. The files from the
+Leiden "LAMDA" database can be directly fed into RADMC-3D. No conversion is
+required. This database contains the required data for LTE and non-LTE line
+transfer in molecular lines. The database is specialized on rotational
+(i.e. sub-millimeter) lines. But the format is valid for lines of any
+kind. The database can be found at:
+
+   http://www.strw.leidenuniv.nl/~moldata/
+
+Note that this also features the RADEX code which is very handy for 
+getting a first feeling for the behavior of these molecular lines as
+a function of density and temperature.
+
+NOTE: To use these files in RADMC-3D, you must rename them. Example:
+      The co.dat file must be renamed to molecule_co.inp
+
+23.03.11

@@ -1,0 +1,93 @@
+This is a python version of the famous Bohren & Huffman Mie code. It was
+ported to Python from its original version bhmie.f (written by Bruce Draine)
+by Cornelis Dullemond, February 2017.
+
+The ported Python version of the bhmie code is:
+
+  bhmie.py
+
+This directory also includes the infrastructure around the bhmie.py code to
+produce the actual opacities:
+
+  makedustopac.py
+
+And finally, it has an example:
+
+  example_run.py 
+
+To run the code, you must have a file containing optical constants.
+As an example, the "pyrmg70.lnk" file is included from the Jena database.
+The Jena database of optical constants can be found on the web at:
+
+  http://www.astro.uni-jena.de/Laboratory/Database/databases.html
+
+The file "pyrmg70.lnk" is from:
+
+  http://www.astro.uni-jena.de/Laboratory/OCDB/data/silicate/amorph/pyrmg70.lnk
+
+You are strongly encouraged to experiment also with other optical 
+constant files from that database. Also please cite the appropriate
+papers, and refer to the Jena database if you use "pyrmg70.lnk" or
+any other file from that database.
+
+Now you can go into Python with "python --matplotlib" and then type
+
+  %run example_run
+
+This should take about 1 minute to compute the opacities for an entire
+wavelength grid, and using a narrow grain size distribution around a given
+grain size. It will then produce 3 plots on the screen.
+
+The reason why a size distribution is used in this example (though you can
+switch this off) is that Mie scattering is known to produce very strong
+resonances in both the opacity as a function of wavelength and in scattering
+angle. These manifest themselves are strong wiggles. This is because Mie
+scattering assumes a perfect sphere. In real life perfect spheres and
+monodisperse size distributions are rare, so in real life these resonances
+are expected to be far less strong. To mimic this "real life situation" the
+makedustopac.py code can compute the Mie scattering for a Gaussian
+distribution of grain sizes around a given grain size and then average
+them. This will suppress the wiggles and is thus a more realistic
+"semi-monodisperse" model. I call this "smearing". You can set the width of
+this Gauss (or switch this "smearing" off altogether if you want a truly
+monodisperse size "distribution").
+
+Another feature of the makedustopac.py code is that it allows you to chop
+off excessive forward scattering. For large grains and small wavelengths
+most of the scattering occurs as very strongly forward-peaked scattering.
+While this may be important when trying to model extreme forward scattering
+effects such as the halo around the moon on a foggy evening, for most
+purposes this forward scattering is not very interesting, as it almost
+exactly behaves as no scattering. In fact, if you compute the full
+scattering matrix elements on a not too fine theta-angle-grid, then the
+integral of Z_11 over mu (which should yield kappa_scat) may yield a value
+different from kappa_scat, because the forward peak is not resolved
+sufficiently well. So it may, for many purposes, be useful to simply remove
+the forward peaked scattering altogether, at least out to some angle. This
+is possible with the "chopforward" keyword. It gives the angle within which
+the forward scattering should be removed (and replaced with the scattering
+computed for that particular angle). The code will then also recompute
+kappa_scat so that it will again be consistent with the integral of Z_11.
+The kappa_scat will then for very small wavelength reduce below the usual
+Mie scattering value of about kappa_geometric, because we remove most of
+the scattering due to Huygens bending in this way. 
+
+The example_run.py plots all these different calculations against each
+other for comparison for an example of a 10 micron radius grain made of
+pyroxene with 70 percent magnesium and 30 percent iron.
+
+If you are interested merely in making dust opacity files for the RADMC-3D
+code, then you can find the appropriate example in:
+
+   example_radmc3d_opacities.py
+
+You can run that straight from the command line in linux:
+
+   python example_radmc3d_opacities.py
+
+No plots will be made when using example_radmc3d_opacities.py; it will only
+write the file dustkapscatmat_pyrmg70.inp which is an example of an opacity
+file needed by the RADMC-3D code.
+
+19.02.2017
+

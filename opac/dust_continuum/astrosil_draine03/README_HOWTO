@@ -1,0 +1,23 @@
+Create the "astronomical silicate" opacity of Draine (2003), which is the
+successor of the opacity of Laor & Draine (1993).
+If you use this, please cite this paper.
+
+Manual:
+
+First edit the example_radmc3d_opacities.py file to choose the grain
+size and some of the other adjustable parameters. See the directory
+bohrenhuffman_python/ and its README file for more details.
+
+Then:
+
+ python example_radmc3d_opacities.py
+
+This will create the file
+
+ dustkapscatmat_astrosilicate_draine03.inp
+
+To make some plots:
+
+ python plot_opacity.py
+
+2018.06.12

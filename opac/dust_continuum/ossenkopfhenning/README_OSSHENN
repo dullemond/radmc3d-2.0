@@ -1,0 +1,56 @@
+DUST OPACITIES FROM OSSENKOPF & HENNING 1994
+--------------------------------------------
+
+The opacity table database for dust opacities from the Ossenkopf & Henning
+1994 paper is located at:
+
+http://hera.ph1.uni-koeln.de/~ossk/Jena/tables.html
+
+These tables contain two columns. The first gives the wavelength in micron.
+The second the absorption opacity in cm^2/gram-of-refractory-dust. Note:
+This is NOT per gram of dust, but per gram of refractory dust (i.e. per 
+gram of non-icy dust material). This is also the way in which the IDL
+program below will convert it into dustkappa_osshenn.inp. 
+
+The simple IDL code to convert from the tables from Ossenkopf to the
+RADMC-3D standard format is:
+
+  make_opac.pro
+
+Just do the following:
+
+ - First download one of the opacity files of Ossenkopf & Henning from
+   the above web site. In the example here you should download:
+
+      http://hera.ph1.uni-koeln.de/~ossk/Jena/tables/thin5
+
+ - Then go into IDL and type:
+
+      .r make_opac
+
+ - This should convert into dustkappa_osshenn.inp
+
+ - It will immediately thereafter read in this opacity in the standard
+   RADMC-3D way, and plot it on the screen.
+
+NOTE: The opacity tables of Ossenkopf & Henning only go down to 1 micron
+      wavelength! Therefore we have to extrapolate to shorter wavelength,
+      because RADMC-3D needs to have the opacity also in the wavelength
+      domain where the stars emit light. This is done in a very ad-hoc
+      way, but I see no other way.
+
+NOTE: Icy grains have a ice feature in the NIR. Be careful with this! If you
+      see this feature in emission in your RADMC-3D model spectra, then you
+      apparently heated up the dust to temperatures where the ice should, in
+      reality, have long evaporated. Since RADMC-3D does not explicitly
+      treat evaporation, this would give physically wrong results. The ice
+      feature should NEVER be in emission! This feature can only be seen in
+      absorption. The best way to deal with this is to first do a
+      calculation with RADMC-3D with this icy dust, and then replace it with
+      ice-free dust in all regions where the temperature turns out to be
+      above, say, 100 K or so. Though please look at the phase diagram of
+      water to find out at which pressures and temperatures ice can remain
+      in solid form. See e.g. Bauer, I., Finocchi, F., Duschl, W. J., 
+      Gail, H.-P., & Schloder, J. P. 1997, A&A, 317, 273.
+
+23.03.11

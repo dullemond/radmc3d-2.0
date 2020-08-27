@@ -1,0 +1,48 @@
+Create the opacity for a mix of silicate (pyroxene) and carbon grains. The
+mixing is done in an oversimplified way: simply averaging by weight the opacites
+for each of the species. This is very crude, and likely to be incorrect for
+aggregated dust grains (because when dust coagulates, it will not form
+silicate-only and carbon-only grains, but mixed aggregates). But given that
+it is extremely hard to compute the opacities for such mixed aggregates
+self-consistently (and given that Mie theory cannot handle complex aggregates
+anyway), this simple mass-weighted averaging is a reasonable thing to do.
+In fact, the mixing of the opacities in this way means that the constituents
+are (must be) in thermal contact, because by averaging opacities the grains
+of the different constituents will automatically have the same temperature.
+
+If you want to allow these different species of dust to have their own individual
+temperatures (temperature decoupling), then you must use them as separate
+opacities and separate dust components in your model.
+
+In this simple mixing example we use pyroxene and amorphous carbon. The optical
+constants are from:
+
+Pyroxene:
+Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655.
+
+Amorphous Carbon:
+Preibisch, Ossenkopf, Yorke and Henning (1993) A&A 279, 577.
+
+If you use this, please cite these papers.
+
+Manual:
+
+First edit the example_radmc3d_opacities.py file to choose the grain size, the
+mixing ratio, and some of the other adjustable parameters. See the directory
+bohrenhuffman_python/ and its README file for more details.
+
+Then:
+
+ python example_radmc3d_opacities.py
+
+This will create the files
+
+ dustkapscatmat_pyroxene_amorph_mg70_jaeger94.inp
+ dustkapscatmat_carbon_amorph_preibisch93.inp     
+ dustkapscatmat_mix.inp
+
+To make some plots of the mix:
+
+ python plot_opacity.py
+
+2018.06.13

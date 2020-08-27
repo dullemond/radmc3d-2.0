@@ -1,0 +1,52 @@
+For dust continuum radiative transfer RADMC-3D requires dust opacities,
+which are typically given in tabulated form as a function of wavelength (one
+line per wavelength point). For each wavelength point the absorption opacity
+(kappa_abs in units of cm^2/gram-of-dust) and the scattering opacity
+(kappa_scat in units of cm^2/gram-of-dust) is given, and perhaps also some
+information about the scattering phase function.
+
+Some of these opacity tables can be downloaded directly from the web, but
+usually the web databases give merely the "optical constants" of the
+material. To convert these into opacity tables requires some more software.
+Things are explained more deeply in the sub-directories.
+
+Currently the recommended method of computing your own opacities is by
+using the Mie code of Bohren & Huffman. The python version of that code,
+including the necessary "wrappers", is in the directory:
+
+  bohrenhuffman_python/
+
+Older fortran versions can be found in:
+
+  bohrenhuffman_fortran/
+
+23.03.2011
+19.02.2017
+
+For your convenience you can find here also the routine
+
+  radmc3dDustOpac.py
+
+which contains a reading routine for reading RADMC-3D-style opacity files.
+This routine is an extraction from the radmc3dPy/analyze.py package
+provided by Attila Juhasz. 
+
+----------------
+
+NOTE: Recently a new database for solid state optical data has been
+put online:
+
+https://www.sshade.eu
+
+2018.06.06
+
+----------------
+
+The well-known astronomical silicate of Laor & Draine (1993) and of Draine (2003)
+are added in their separate directories. Read the README_HOWTO files.
+
+2018.06.12
+
+Added an example of simple mixing
+
+2018.06.13

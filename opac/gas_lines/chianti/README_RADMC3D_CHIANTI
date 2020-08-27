@@ -1,0 +1,38 @@
+ATOMIC DATA FILES FROM THE CHIANTI DATABASE
+-------------------------------------------
+
+The CHIANTI database is a database for atomic data for typical ions in
+astrophysics. The web site is:
+
+   http://www.chiantidatabase.org/
+
+We use, from this database, the energy levels, the radiative transition
+rates and the collisional transition rates, i.e. all that we need to 
+do LTE and non-LTE line transfer in these lines.
+
+RADMC-3D needs these atomic data in the format of the LAMDA database (see
+../leiden/ directory for more information). So we need to convert from
+CHIANTI into LAMDA format. To this end there are a set of IDL subroutines 
+in this directory. To get going, do the following:
+
+ - Download and install the CHIANTI database package, following the 
+   instructions on their web site. 
+
+ - Edit the "chianti_startup.pro" file located here to set the paths
+   right, so that IDL can find the CHIANTI package. 
+
+ - Go into IDL
+
+ - Type:  @chianti_startup
+
+ - Type:  .r convert_chianti_to_leiden_session.pro
+   (never mind the NaN warnings)
+
+ - This should now create the file called molecule_o+2.inp, which is
+   the LAMDA-style atomic data file for doubly ionized oxygen (i.e.
+   O++ or OIII). It only gives the first 6 levels and the corresponding
+   transitions. Edit convert_chianti_to_leiden_session.pro to output
+   more levels, or to choose another atom/ion.
+
+23.03.11
+

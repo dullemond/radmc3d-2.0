@@ -1,0 +1,39 @@
+For doing LTE and non-LTE line transfer RADMC-3D needs to know the energy
+level structure of the atom or molecule, the radiative transitions and their
+rates, and (for non-LTE transfer) the collision transition rates. RADMC-3D
+does not care about whether it is an atom or a molecule, whether it is a
+rotational, vibrational or electronic transition etc. It only needs to know
+the above data and it will be able to do its work. 
+
+As of version 0.28, RADMC-3D can read two types of atomic/molecular data
+files:
+
+ - Leiden-style (LAMDA-database) atomic/molecular data files. These files
+   are usable for both LTE and non-LTE radiative transfer calculations.
+   They contain information about energy levels, lines and (optionally)
+   collisions. The collisional data is optional, but if they are not
+   there, then no non-LTE transfer can be done (only LTE transfer). 
+   The Leiden database is (obviously) of this type. Also the CHIANTI 
+   database can be converted into this form. 
+
+ - RADMC-3D-style line list files. These files do not contain any information
+   about the level structure of the atom/molecule. Only lines are listed.
+   This is useful for LTE transfer. But non-LTE transfer is not possible
+   with these files. The HITRAN database is based on line lists, and can
+   be transformed into RADMC-3D standard line list form. 
+
+23.03.11
+
+For testing purposes and/or to get familiar with the physics of line
+transfer, there is a super-simple one-zone LTE line transfer python code
+included in this directory:
+
+  onezone_lte_line_trans/
+
+The example is for CO but you can put in any other molecule from the
+Leiden LAMDA database.
+
+You can also use it to test the outcomes of RADMC-3D models for simplified
+test cases.
+
+2017.08.21
