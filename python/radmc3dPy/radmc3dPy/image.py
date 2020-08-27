@@ -2161,7 +2161,7 @@ class radmc3dCircimage(object):
 
             psize = self.getPixelSize()
             conv = psize / (nc.pc**2) * 1e23
-            self.imageJyppix = np.zeros((self.nr, self.nphi, self.npol, self.nfreq), dtype=np.float64)
+            self.imageJyppix = np.zeros((self.nr + 1, self.nphi, self.npol, self.nfreq), dtype=np.float64)
             for ipol in range(self.npol):
                 for inu in range(self.nfreq):
                     self.imageJyppix[:, :, ipol, inu] = self.image[:, :, ipol, inu] * conv
