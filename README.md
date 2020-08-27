@@ -10,7 +10,7 @@ Compared to version 0.41, the new version 2.0 is not very different. The basic F
 What is new in version 2.0 is some of the Python front- and back-end. I also removed old stuff that is no longer necessary. And in version 2.0 IDL front/back-end is no longer supported (if you don't know what IDL is, no need to worry). 
 
 ## How to use RADMC-3D
-To learn what can be done with RADMC-3D and how to use it, please consult the extensive manual in the directory `manual/`. This manual is written using Sphinx, and therefore has a latex version (manual/sphinx/_build/latex/radmc3d.pdf) and an HTML version (manual/sphinx/_build/html/index.html).
+To learn what can be done with RADMC-3D and how to use it, please consult the extensive manual in the directory `manual/`. This manual is written using Sphinx, and therefore has a latex version (`manual/sphinx/_build/latex/radmc3d.pdf`) and an HTML version (`manual/sphinx/_build/html/index.html`).
 
 Simple example models are found in the `examples/` directory. The README files in these directories explain how to run the models.
 
