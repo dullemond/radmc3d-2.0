@@ -1046,7 +1046,110 @@ If ``camera_maxdphi=0`` this segment cutting is switched off (for
 backward compatibility to earlier versions of ``RADMC-3d``). 
 
 
+.. _sec-circularimages:
 
+Circular images
+===============
+
+RADMC-3D offers (optionally!) an alternative to the usual x-y rectangular pixel
+arrangement of images: *circular images*. Here the pixels are not arranged in
+rows that are vertically stacked :math:`(x,y)`, but in concentric circles
+:math:`(r,\phi)`. Such a pixel arrangement is, of course, radically different
+from what we usually consider "an image", and it is therefore not possible to
+view such an image with the usual image viewing methods (such as Python's
+``plt.imshow()``). Or more precisely: if you would use ``plt.imshow()``
+on a circular image you would see something that you would not recognize
+as the image it should represent.
+
+So what is the purpose? It is useful for models created on a spherical
+coordinate system. Such models can have structure at a huge range of scales,
+from very tiny (at the small-end side of the radius coordinate :math:`r`)
+to very large (at the large-end side of the radius coordinate :math:`r`).
+If you make a normal image, you have to pick the right "zoom factor": are
+you interested to see the outer regions or more interested in the inner
+regions? If you choose a "zoomed out" image, you will under-resolve
+the inner regions. If you choose a "zoomed in" image, you will not see
+the outer regions (they are beyond the edge of the image). One solution
+could be to choose a huge number of pixels, but that would create huge
+image files.
+
+Circular images solve this dilemma. By arranging the pixels not in :math:`(x,y)`
+but instead of :math:`(r,\phi)`, the :math:`r` coordinate grid of the image will
+automatically be adapted to the :math:`r` coordinate grid of the spherical
+coordinate system. If the latter is logarithmically spaced, so will the circular
+image.
+
+Here is how it works: Assuming you have a model in spherical coordinates,
+you can create a circular image as follows::
+
+  radmc3d image circ lambda 10
+
+which creates a circular image at wavelength :math:`\lambda=10\mu m`.
+
+Using ``radmc3dPy`` you can read this image as follows::
+
+  from radmc3dPy import image
+  im = image.readcircimage()
+
+The data is now in ``im.image``. A radial plot of the intensity at a given angle
+:math:`\phi` could be made as follows::
+
+  import matplotlib.pyplot as plt
+  plt.loglog(im.rc,im.image[:,0,0,0])
+  plt.xlabel('r [cm]')
+  plt.ylabel(r'$I_\nu [erg\, cm^{-2}\, s^{-1}\, Hz^{-1}\, ster^{-1}]$')
+
+The result will look like shown in Fig. :numref:`fig-circ-image` .
+
+.. _fig-circ-image:
+
+.. figure:: Figures/circularimage.*
+
+   Example of a circular image of a 1-D spherical model (the model in the
+   ``examples/run_spher1d_1/`` directory).
+
+If you have 2-D or 3-D models in spherical coordinates, the circular images
+(should) have not only a grid in :math:`r`, but also :math:`\phi` grid points.
+A simple plot such as Fig. :numref:`fig-circ-image` will only show the intensity
+for a single :math:`phi` choice. There is no "right" or "wrong" way of displaying
+such an image. It depends on your taste. You could, of course, remap onto a
+"normal" image, but that would defeat the purpose of circular images. You could
+also display the :math:`(r,\phi)` image directly with e.g. ``plt.imshow()``,
+which simply puts the :math:`r` axis horizontally on the screen, and the
+:math:`\phi` axis vertically, essentially creating a 'heat map' of the
+intensity as a function of :math:`r` and :math:`\phi`.
+
+This is illustrated in the model ``examples/run_spher2d_1/``.
+Fig. :numref:`fig-circ-image-2d` shows the circular image (as a 'heat map')
+at a wavelength of :math:`\lambda=10\;\mu m`. For comparison, the same image
+is shown as a 'normal' image in Fig. :numref:`fig-rect-circ-image-2d`.
+
+.. _fig-circ-image-2d:
+
+.. figure:: Figures/circim2d.*
+
+   Example of a circular image of a 2-D spherical model (the model in the
+   ``examples/run_spher2d_1/`` directory).
+
+.. _fig-rect-circ-image-2d:
+
+.. figure:: Figures/spher2dim10mic.*
+
+   The rectangular ('normal') version of the image of Fig. :numref:`fig-circ-image-2d`.
+   As one can see: the inner regions of this image are not well-resolved.
+
+With a bit of "getting used to" one will find that the circular images will
+reveal a lot of information.
+
+*Note:* Fig. :numfig:`fig-circ-image-2d` shows an effect similar to what is
+shown in Fig. :numref:`fig-innerrim-lowres`. This indicates that near the inner
+radius of the model, the radial grid is under-resolved in example model
+``examples/run_spher2d_1/``: see Section :ref:`sec-things-going-wrong`, point
+'Too optically thick cells at the surface or inner edge'. So, to improve
+the reliability of model ``examples/run_spher2d_1/``, one would need to
+refine the radial grid near the inner edge and/or smooth the density there.
+
+   
 .. _sec-tausurf:
 
 Visualizing the :math:`\tau=1` surface

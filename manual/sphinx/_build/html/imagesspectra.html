@@ -125,6 +125,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#second-order-integration-in-spherical-coordinates-a-subtle-issue">Second order integration in spherical coordinates: a subtle issue</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#circular-images">Circular images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualizing-the-tau-1-surface">Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#for-public-outreach-work-local-observers-inside-the-model">For public outreach work: local observers inside the model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multiple-vantage-points-the-movie-mode">Multiple vantage points: the ‘Movie’ mode</a></li>
@@ -240,7 +241,7 @@ location of the observer by 30 degrees clockwise around the
 z-axis (Here clockwise is defined with the z-axis pointing toward
 you, i.e. with respect to the observer the model is rotated
 counter-clockwise around the z-axis by 30 degrees).</p>
-<div class="figure align-default" id="id1">
+<div class="figure align-default" id="id3">
 <span id="fig-cameraorient"></span><a class="reference internal image-reference" href="_images/camera_orient.png"><img alt="_images/camera_orient.png" src="_images/camera_orient.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Figure depicting how the angles ‘incl’ and ‘phi’ place the camera for images
 and spectra made with RADMC-3D. The code uses a right-handed coordinate
@@ -251,14 +252,14 @@ system, where <span class="math notranslate nohighlight">\(i_{\mathrm{obs}}\)</s
 (left-to-right) and vertical (bottom-to-top) coordinates of the image. For
 <span class="math notranslate nohighlight">\(i_{\mathrm{obs}}=0\)</span> and <span class="math notranslate nohighlight">\(\phi_{\mathrm{obs}}=0\)</span> the
 <span class="math notranslate nohighlight">\(x_{\mathrm{image}}\)</span> aligns with the 3-D <span class="math notranslate nohighlight">\(x\)</span>-coordinate and
-<span class="math notranslate nohighlight">\(y_{\mathrm{image}}\)</span> aligns with the 3-D <span class="math notranslate nohighlight">\(y\)</span>-coordinate.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<span class="math notranslate nohighlight">\(y_{\mathrm{image}}\)</span> aligns with the 3-D <span class="math notranslate nohighlight">\(y\)</span>-coordinate.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
-<div class="figure align-default" id="id2">
+<div class="figure align-default" id="id4">
 <span id="fig-posang"></span><a class="reference internal image-reference" href="_images/posang.png"><img alt="_images/posang.png" src="_images/posang.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">This figure shows the way the camera can be rotated in the image plane using
 ‘posang’. Positive ‘posang’ means that the camera is rotated clockwise, so
 the object shown is rotated counter-clockwise with respect to the image
-coordinates.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+coordinates.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>You can also rotate the camera in the image plane with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">posang</span> <span class="mi">20</span>
@@ -906,7 +907,7 @@ transfer equation. By default, for images and spectra, RADMC-3D uses first
 order integration: The source term and the opacity in each cell are assumed
 to be constant over the cell. This is illustrated in
 Fig. <a class="reference internal" href="#fig-cellcenter"><span class="std std-numref">Fig. 11</span></a>.</p>
-<div class="figure align-default" id="id3">
+<div class="figure align-default" id="id5">
 <span id="fig-cellcenter"></span><a class="reference internal image-reference" href="_images/cellcenter.pdf"><img alt="_images/cellcenter.pdf" src="_images/cellcenter.pdf" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Pictographic representation of the <em>first order</em> integration of the transfer
 equation along a ray (red line with arrow head) through an AMR grid (black
@@ -914,7 +915,7 @@ lines).  The grid cuts the ray into ray segments A, B, C and D. At the bottom
 it is shown how the integrands are assumed to be along these four segments.
 The emissivity function <span class="math notranslate nohighlight">\(j_\nu\)</span> and extinction function
 <span class="math notranslate nohighlight">\(\alpha_\nu\)</span> are constant within each cell and thus constant along each
-ray segment.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+ray segment.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
 </div>
 <p>The integration over each cell proceeds according to the following formula:</p>
 <div class="math notranslate nohighlight">
@@ -933,7 +934,7 @@ grid. For objects with high optical depths you may even see grid patterns in
 the images.</p>
 <p>RADMC-3D can also use second order integration for its images and spectra.
 This is illustrated in Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>.</p>
-<div class="figure align-default" id="id4">
+<div class="figure align-default" id="id6">
 <span id="fig-cellcorner"></span><a class="reference internal image-reference" href="_images/cellcorner.pdf"><img alt="_images/cellcorner.pdf" src="_images/cellcorner.pdf" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Pictographic representation of the <em>second order</em> integration of the transfer
 equation along a ray (red line with arrow head) through an AMR grid (black
@@ -944,7 +945,7 @@ The emissivity function <span class="math notranslate nohighlight">\(j_\nu\)</sp
 linearly interpolated from the cell corners to the locations where the ray
 crosses the cell walls (open blue circles).  Then, along each ray segment the
 emissivity and extinction functions are assumed to be linear functions, so
-that the integration result is quadratic.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+that the integration result is quadratic.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
 <p>This is done with a simple <code class="docutils literal notranslate"><span class="pre">secondorder</span></code> option added on the
 command line, for instance:</p>
@@ -999,25 +1000,25 @@ physical variables will thus be used twice: once for the ‘end’ and once
 for the ‘start’ of a ray segment (except of course at the very beginning
 and very end of the ray).</p></li>
 </ul>
-<div class="figure align-default" id="id5">
+<div class="figure align-default" id="id7">
 <span id="fig-effect-of-second-order-integration-4-1"></span><a class="reference internal image-reference" href="_images/simple_4_1st.png"><img alt="_images/simple_4_1st.png" src="_images/simple_4_1st.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
-seen at inclination 4 degrees.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id6">
-<span id="fig-effect-of-second-order-integration-60-1"></span><a class="reference internal image-reference" href="_images/simple_60_1st.png"><img alt="_images/simple_60_1st.png" src="_images/simple_60_1st.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
-seen at inclination 60 degrees.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id7">
-<span id="fig-effect-of-second-order-integration-4-2"></span><a class="reference internal image-reference" href="_images/simple_4_2nd.png"><img alt="_images/simple_4_2nd.png" src="_images/simple_4_2nd.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
 seen at inclination 4 degrees.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id8">
+<span id="fig-effect-of-second-order-integration-60-1"></span><a class="reference internal image-reference" href="_images/simple_60_1st.png"><img alt="_images/simple_60_1st.png" src="_images/simple_60_1st.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
+seen at inclination 60 degrees.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id9">
+<span id="fig-effect-of-second-order-integration-4-2"></span><a class="reference internal image-reference" href="_images/simple_4_2nd.png"><img alt="_images/simple_4_2nd.png" src="_images/simple_4_2nd.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
+seen at inclination 4 degrees.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id10">
 <span id="fig-effect-of-second-order-integration-60-2"></span><a class="reference internal image-reference" href="_images/simple_60_2nd.png"><img alt="_images/simple_60_2nd.png" src="_images/simple_60_2nd.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
-seen at inclination 60 degrees.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+seen at inclination 60 degrees.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
 </div>
 <p>If you compare the images or spectra obtained with first order integration
 (default, see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 15</span></a> and
@@ -1061,6 +1062,92 @@ consist of more than one segment.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">camera_maxdphi=0</span></code> this segment cutting is switched off (for
 backward compatibility to earlier versions of <code class="docutils literal notranslate"><span class="pre">RADMC-3d</span></code>).</p>
 </div>
+</div>
+<div class="section" id="circular-images">
+<span id="sec-circularimages"></span><h2>Circular images<a class="headerlink" href="#circular-images" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D offers (optionally!) an alternative to the usual x-y rectangular pixel
+arrangement of images: <em>circular images</em>. Here the pixels are not arranged in
+rows that are vertically stacked <span class="math notranslate nohighlight">\((x,y)\)</span>, but in concentric circles
+<span class="math notranslate nohighlight">\((r,\phi)\)</span>. Such a pixel arrangement is, of course, radically different
+from what we usually consider “an image”, and it is therefore not possible to
+view such an image with the usual image viewing methods (such as Python’s
+<code class="docutils literal notranslate"><span class="pre">plt.imshow()</span></code>). Or more precisely: if you would use <code class="docutils literal notranslate"><span class="pre">plt.imshow()</span></code>
+on a circular image you would see something that you would not recognize
+as the image it should represent.</p>
+<p>So what is the purpose? It is useful for models created on a spherical
+coordinate system. Such models can have structure at a huge range of scales,
+from very tiny (at the small-end side of the radius coordinate <span class="math notranslate nohighlight">\(r\)</span>)
+to very large (at the large-end side of the radius coordinate <span class="math notranslate nohighlight">\(r\)</span>).
+If you make a normal image, you have to pick the right “zoom factor”: are
+you interested to see the outer regions or more interested in the inner
+regions? If you choose a “zoomed out” image, you will under-resolve
+the inner regions. If you choose a “zoomed in” image, you will not see
+the outer regions (they are beyond the edge of the image). One solution
+could be to choose a huge number of pixels, but that would create huge
+image files.</p>
+<p>Circular images solve this dilemma. By arranging the pixels not in <span class="math notranslate nohighlight">\((x,y)\)</span>
+but instead of <span class="math notranslate nohighlight">\((r,\phi)\)</span>, the <span class="math notranslate nohighlight">\(r\)</span> coordinate grid of the image will
+automatically be adapted to the <span class="math notranslate nohighlight">\(r\)</span> coordinate grid of the spherical
+coordinate system. If the latter is logarithmically spaced, so will the circular
+image.</p>
+<p>Here is how it works: Assuming you have a model in spherical coordinates,
+you can create a circular image as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">circ</span> <span class="k">lambda</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>which creates a circular image at wavelength <span class="math notranslate nohighlight">\(\lambda=10\mu m\)</span>.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> you can read this image as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="n">image</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">readcircimage</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The data is now in <code class="docutils literal notranslate"><span class="pre">im.image</span></code>. A radial plot of the intensity at a given angle
+<span class="math notranslate nohighlight">\(\phi\)</span> could be made as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">rc</span><span class="p">,</span><span class="n">im</span><span class="o">.</span><span class="n">image</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;r [cm]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$I_\nu [erg\, cm^{-2}\, s^{-1}\, Hz^{-1}\, ster^{-1}]$&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result will look like shown in Fig. <a class="reference internal" href="#fig-circ-image"><span class="std std-numref">Fig. 17</span></a> .</p>
+<div class="figure align-default" id="id11">
+<span id="fig-circ-image"></span><img alt="_images/circularimage.png" src="_images/circularimage.png" />
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Example of a circular image of a 1-D spherical model (the model in the
+<code class="docutils literal notranslate"><span class="pre">examples/run_spher1d_1/</span></code> directory).</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>If you have 2-D or 3-D models in spherical coordinates, the circular images
+(should) have not only a grid in <span class="math notranslate nohighlight">\(r\)</span>, but also <span class="math notranslate nohighlight">\(\phi\)</span> grid points.
+A simple plot such as Fig. <a class="reference internal" href="#fig-circ-image"><span class="std std-numref">Fig. 17</span></a> will only show the intensity
+for a single <span class="math notranslate nohighlight">\(phi\)</span> choice. There is no “right” or “wrong” way of displaying
+such an image. It depends on your taste. You could, of course, remap onto a
+“normal” image, but that would defeat the purpose of circular images. You could
+also display the <span class="math notranslate nohighlight">\((r,\phi)\)</span> image directly with e.g. <code class="docutils literal notranslate"><span class="pre">plt.imshow()</span></code>,
+which simply puts the <span class="math notranslate nohighlight">\(r\)</span> axis horizontally on the screen, and the
+<span class="math notranslate nohighlight">\(\phi\)</span> axis vertically, essentially creating a ‘heat map’ of the
+intensity as a function of <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+<p>This is illustrated in the model <code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code>.
+Fig. <a class="reference internal" href="#fig-circ-image-2d"><span class="std std-numref">Fig. 18</span></a> shows the circular image (as a ‘heat map’)
+at a wavelength of <span class="math notranslate nohighlight">\(\lambda=10\;\mu m\)</span>. For comparison, the same image
+is shown as a ‘normal’ image in Fig. <a class="reference internal" href="#fig-rect-circ-image-2d"><span class="std std-numref">Fig. 19</span></a>.</p>
+<div class="figure align-default" id="id12">
+<span id="fig-circ-image-2d"></span><img alt="_images/circim2d.png" src="_images/circim2d.png" />
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Example of a circular image of a 2-D spherical model (the model in the
+<code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code> directory).</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id13">
+<span id="fig-rect-circ-image-2d"></span><img alt="_images/spher2dim10mic.png" src="_images/spher2dim10mic.png" />
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">The rectangular (‘normal’) version of the image of Fig. <a class="reference internal" href="#fig-circ-image-2d"><span class="std std-numref">Fig. 18</span></a>.
+As one can see: the inner regions of this image are not well-resolved.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<p>With a bit of “getting used to” one will find that the circular images will
+reveal a lot of information.</p>
+<p><em>Note:</em> Fig. <a href="#id1"><span class="problematic" id="id2">:numfig:`fig-circ-image-2d`</span></a> shows an effect similar to what is
+shown in Fig. <a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 29</span></a>. This indicates that near the inner
+radius of the model, the radial grid is under-resolved in example model
+<code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code>: see Section <a class="reference internal" href="tipsandtricks.html#sec-things-going-wrong"><span class="std std-ref">Careful: Things that might go wrong</span></a>, point
+‘Too optically thick cells at the surface or inner edge’. So, to improve
+the reliability of model <code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code>, one would need to
+refine the radial grid near the inner edge and/or smooth the density there.</p>
 </div>
 <div class="section" id="visualizing-the-tau-1-surface">
 <span id="sec-tausurf"></span><h2>Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface<a class="headerlink" href="#visualizing-the-tau-1-surface" title="Permalink to this headline">¶</a></h2>

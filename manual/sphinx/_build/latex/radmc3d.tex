@@ -6074,7 +6074,7 @@ system, where \(i_{\mathrm{obs}}\) is the ‘incl’ keyword and
 (left\sphinxhyphen{}to\sphinxhyphen{}right) and vertical (bottom\sphinxhyphen{}to\sphinxhyphen{}top) coordinates of the image. For
 \(i_{\mathrm{obs}}=0\) and \(\phi_{\mathrm{obs}}=0\) the
 \(x_{\mathrm{image}}\) aligns with the 3\sphinxhyphen{}D \(x\)\sphinxhyphen{}coordinate and
-\(y_{\mathrm{image}}\) aligns with the 3\sphinxhyphen{}D \(y\)\sphinxhyphen{}coordinate.}\label{\detokenize{imagesspectra:id1}}\label{\detokenize{imagesspectra:fig-cameraorient}}\end{figure}
+\(y_{\mathrm{image}}\) aligns with the 3\sphinxhyphen{}D \(y\)\sphinxhyphen{}coordinate.}\label{\detokenize{imagesspectra:id3}}\label{\detokenize{imagesspectra:fig-cameraorient}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -6084,7 +6084,7 @@ system, where \(i_{\mathrm{obs}}\) is the ‘incl’ keyword and
 \caption{This figure shows the way the camera can be rotated in the image plane using
 ‘posang’. Positive ‘posang’ means that the camera is rotated clockwise, so
 the object shown is rotated counter\sphinxhyphen{}clockwise with respect to the image
-coordinates.}\label{\detokenize{imagesspectra:id2}}\label{\detokenize{imagesspectra:fig-posang}}\end{figure}
+coordinates.}\label{\detokenize{imagesspectra:id4}}\label{\detokenize{imagesspectra:fig-posang}}\end{figure}
 
 You can also rotate the camera in the image plane with
 
@@ -6877,7 +6877,7 @@ lines).  The grid cuts the ray into ray segments A, B, C and D. At the bottom
 it is shown how the integrands are assumed to be along these four segments.
 The emissivity function \(j_\nu\) and extinction function
 \(\alpha_\nu\) are constant within each cell and thus constant along each
-ray segment.}\label{\detokenize{imagesspectra:id3}}\label{\detokenize{imagesspectra:fig-cellcenter}}\end{figure}
+ray segment.}\label{\detokenize{imagesspectra:id5}}\label{\detokenize{imagesspectra:fig-cellcenter}}\end{figure}
 
 The integration over each cell proceeds according to the following formula:
 \begin{equation*}
@@ -6913,7 +6913,7 @@ The emissivity function \(j_\nu\) and extinction function
 linearly interpolated from the cell corners to the locations where the ray
 crosses the cell walls (open blue circles).  Then, along each ray segment the
 emissivity and extinction functions are assumed to be linear functions, so
-that the integration result is quadratic.}\label{\detokenize{imagesspectra:id4}}\label{\detokenize{imagesspectra:fig-cellcorner}}\end{figure}
+that the integration result is quadratic.}\label{\detokenize{imagesspectra:id6}}\label{\detokenize{imagesspectra:fig-cellcorner}}\end{figure}
 
 This is done with a simple \sphinxcode{\sphinxupquote{secondorder}} option added on the
 command line, for instance:
@@ -6990,7 +6990,7 @@ and very end of the ray).
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_4_1st}.pdf}
 \caption{First\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id5}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-1}}\end{figure}
+seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id7}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-1}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -6998,7 +6998,7 @@ seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id5}}\label{\det
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_60_1st}.pdf}
 \caption{First\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id6}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-1}}\end{figure}
+seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id8}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-1}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -7006,7 +7006,7 @@ seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id6}}\label{\de
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_4_2nd}.pdf}
 \caption{Second\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id7}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}}\end{figure}
+seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id9}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -7014,7 +7014,7 @@ seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id7}}\label{\det
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_60_2nd}.pdf}
 \caption{Second\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id8}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-2}}\end{figure}
+seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id10}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-2}}\end{figure}
 
 If you compare the images or spectra obtained with first order integration
 (default, see Figs. \hyperref[\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}}} and
@@ -7063,6 +7063,116 @@ consist of more than one segment.
 
 If \sphinxcode{\sphinxupquote{camera\_maxdphi=0}} this segment cutting is switched off (for
 backward compatibility to earlier versions of \sphinxcode{\sphinxupquote{RADMC\sphinxhyphen{}3d}}).
+
+
+\section{Circular images}
+\label{\detokenize{imagesspectra:circular-images}}\label{\detokenize{imagesspectra:sec-circularimages}}
+RADMC\sphinxhyphen{}3D offers (optionally!) an alternative to the usual x\sphinxhyphen{}y rectangular pixel
+arrangement of images: \sphinxstyleemphasis{circular images}. Here the pixels are not arranged in
+rows that are vertically stacked \((x,y)\), but in concentric circles
+\((r,\phi)\). Such a pixel arrangement is, of course, radically different
+from what we usually consider “an image”, and it is therefore not possible to
+view such an image with the usual image viewing methods (such as Python’s
+\sphinxcode{\sphinxupquote{plt.imshow()}}). Or more precisely: if you would use \sphinxcode{\sphinxupquote{plt.imshow()}}
+on a circular image you would see something that you would not recognize
+as the image it should represent.
+
+So what is the purpose? It is useful for models created on a spherical
+coordinate system. Such models can have structure at a huge range of scales,
+from very tiny (at the small\sphinxhyphen{}end side of the radius coordinate \(r\))
+to very large (at the large\sphinxhyphen{}end side of the radius coordinate \(r\)).
+If you make a normal image, you have to pick the right “zoom factor”: are
+you interested to see the outer regions or more interested in the inner
+regions? If you choose a “zoomed out” image, you will under\sphinxhyphen{}resolve
+the inner regions. If you choose a “zoomed in” image, you will not see
+the outer regions (they are beyond the edge of the image). One solution
+could be to choose a huge number of pixels, but that would create huge
+image files.
+
+Circular images solve this dilemma. By arranging the pixels not in \((x,y)\)
+but instead of \((r,\phi)\), the \(r\) coordinate grid of the image will
+automatically be adapted to the \(r\) coordinate grid of the spherical
+coordinate system. If the latter is logarithmically spaced, so will the circular
+image.
+
+Here is how it works: Assuming you have a model in spherical coordinates,
+you can create a circular image as follows:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{radmc3d} \PYG{n}{image} \PYG{n}{circ} \PYG{k}{lambda} \PYG{l+m+mi}{10}
+\end{sphinxVerbatim}
+
+which creates a circular image at wavelength \(\lambda=10\mu m\).
+
+Using \sphinxcode{\sphinxupquote{radmc3dPy}} you can read this image as follows:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{radmc3dPy} \PYG{k}{import} \PYG{n}{image}
+\PYG{n}{im} \PYG{o}{=} \PYG{n}{image}\PYG{o}{.}\PYG{n}{readcircimage}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+The data is now in \sphinxcode{\sphinxupquote{im.image}}. A radial plot of the intensity at a given angle
+\(\phi\) could be made as follows:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{loglog}\PYG{p}{(}\PYG{n}{im}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{,}\PYG{n}{im}\PYG{o}{.}\PYG{n}{image}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{r [cm]}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{\PYGZdl{}I\PYGZus{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{nu [erg}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{, cm\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}2\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{, s\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}1\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{, Hz\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}1\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{, ster\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}1\PYGZcb{}]\PYGZdl{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+The result will look like shown in Fig. \hyperref[\detokenize{imagesspectra:fig-circ-image}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-circ-image}}} .
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics{{circularimage}.pdf}
+\caption{Example of a circular image of a 1\sphinxhyphen{}D spherical model (the model in the
+\sphinxcode{\sphinxupquote{examples/run\_spher1d\_1/}} directory).}\label{\detokenize{imagesspectra:id11}}\label{\detokenize{imagesspectra:fig-circ-image}}\end{figure}
+
+If you have 2\sphinxhyphen{}D or 3\sphinxhyphen{}D models in spherical coordinates, the circular images
+(should) have not only a grid in \(r\), but also \(\phi\) grid points.
+A simple plot such as Fig. \hyperref[\detokenize{imagesspectra:fig-circ-image}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-circ-image}}} will only show the intensity
+for a single \(phi\) choice. There is no “right” or “wrong” way of displaying
+such an image. It depends on your taste. You could, of course, remap onto a
+“normal” image, but that would defeat the purpose of circular images. You could
+also display the \((r,\phi)\) image directly with e.g. \sphinxcode{\sphinxupquote{plt.imshow()}},
+which simply puts the \(r\) axis horizontally on the screen, and the
+\(\phi\) axis vertically, essentially creating a ‘heat map’ of the
+intensity as a function of \(r\) and \(\phi\).
+
+This is illustrated in the model \sphinxcode{\sphinxupquote{examples/run\_spher2d\_1/}}.
+Fig. \hyperref[\detokenize{imagesspectra:fig-circ-image-2d}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-circ-image-2d}}} shows the circular image (as a ‘heat map’)
+at a wavelength of \(\lambda=10\;\mu m\). For comparison, the same image
+is shown as a ‘normal’ image in Fig. \hyperref[\detokenize{imagesspectra:fig-rect-circ-image-2d}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-rect-circ-image-2d}}}.
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics{{circim2d}.pdf}
+\caption{Example of a circular image of a 2\sphinxhyphen{}D spherical model (the model in the
+\sphinxcode{\sphinxupquote{examples/run\_spher2d\_1/}} directory).}\label{\detokenize{imagesspectra:id12}}\label{\detokenize{imagesspectra:fig-circ-image-2d}}\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics{{spher2dim10mic}.pdf}
+\caption{The rectangular (‘normal’) version of the image of Fig. \hyperref[\detokenize{imagesspectra:fig-circ-image-2d}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-circ-image-2d}}}.
+As one can see: the inner regions of this image are not well\sphinxhyphen{}resolved.}\label{\detokenize{imagesspectra:id13}}\label{\detokenize{imagesspectra:fig-rect-circ-image-2d}}\end{figure}
+
+With a bit of “getting used to” one will find that the circular images will
+reveal a lot of information.
+
+\sphinxstyleemphasis{Note:} Fig. {\color{red}\bfseries{}:numfig:\textasciigrave{}fig\sphinxhyphen{}circ\sphinxhyphen{}image\sphinxhyphen{}2d\textasciigrave{}} shows an effect similar to what is
+shown in Fig. \hyperref[\detokenize{tipsandtricks:fig-innerrim-lowres}]{Fig.\@ \ref{\detokenize{tipsandtricks:fig-innerrim-lowres}}}. This indicates that near the inner
+radius of the model, the radial grid is under\sphinxhyphen{}resolved in example model
+\sphinxcode{\sphinxupquote{examples/run\_spher2d\_1/}}: see Section {\hyperref[\detokenize{tipsandtricks:sec-things-going-wrong}]{\sphinxcrossref{\DUrole{std,std-ref}{Careful: Things that might go wrong}}}}, point
+‘Too optically thick cells at the surface or inner edge’. So, to improve
+the reliability of model \sphinxcode{\sphinxupquote{examples/run\_spher2d\_1/}}, one would need to
+refine the radial grid near the inner edge and/or smooth the density there.
 
 
 \section{Visualizing the \protect\(\tau=1\protect\) surface}
