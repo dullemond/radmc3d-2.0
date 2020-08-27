@@ -1,0 +1,11 @@
+The RADMC-3D Manual is created with Sphinx (https://www.sphinx-doc.org).
+
+For the HTML version, open a web browser, and open the document:
+
+    sphinx/_build/html/index.html
+
+For the PDF version, open a PDF viewer, and open the document:
+
+    sphinx/_build/latex/radmc3d.pdf
+
+2020-08-27
