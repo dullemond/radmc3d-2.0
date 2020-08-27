@@ -1,0 +1,1848 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Main input and output files of RADMC-3D &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Binary I/O files" href="binaryio.html" />
+    <link rel="prev" title="Tips, tricks and problem hunting" href="tipsandtricks.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Main input and output files of RADMC-3D</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-radmc3d-inp">INPUT: radmc3d.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-required-amr-grid-inp">INPUT (required): amr_grid.inp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#regular-grid">Regular grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oct-tree-style-amr-grid">Oct-tree-style AMR grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#layer-style-amr-grid">Layer-style AMR grid</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#input-required-for-dust-transfer-dust-density-inp">INPUT (required for dust transfer): dust_density.inp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-dust-density-inp-for-a-regular-grid">Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a regular grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-dust-density-inp-for-an-oct-tree-refined-grid">Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for an oct-tree refined grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-dust-density-inp-for-a-layer-style-refined-grid">Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a layer-style refined grid</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#input-output-dust-temperature-dat">INPUT/OUTPUT: dust_temperature.dat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-mostly-required-stars-inp">INPUT (mostly required): stars.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-optional-stellarsrc-templates-inp">INPUT (optional): stellarsrc_templates.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-optional-stellarsrc-density-inp">INPUT (optional): stellarsrc_density.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-optional-external-source-inp">INPUT (optional): external_source.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-optional-heatsource-inp">INPUT (optional): heatsource.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-required-wavelength-micron-inp">INPUT (required): wavelength_micron.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-optional-camera-wavelength-micron-inp">INPUT (optional): camera_wavelength_micron.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-dustopac-inp-file">The dustopac.inp file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-dustkappa-inp-files">The dustkappa_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-dustkapscatmat-inp-files">The dustkapscatmat_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-dustopac-inp-files-backward-compatibility-with-radmc-2d">The dustopac_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files: Backward compatibility with RADMC-2D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#output-spectrum-out">OUTPUT: spectrum.out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-image-out-or-image-out">OUTPUT: image.out or image_****.out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-minor-input-files">INPUT: (minor input files)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-color-inus-inp-file-required-with-comm-line-option-loadcolor">The <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> file (required with comm-line option ‘loadcolor’)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-aperture-info-inp">INPUT: <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#for-developers-some-details-on-the-internal-workings">For developers: some details on the internal workings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Main input and output files of RADMC-3D</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/inputoutputfiles.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="main-input-and-output-files-of-radmc-3d">
+<span id="chap-input-files"></span><h1>Main input and output files of RADMC-3D<a class="headerlink" href="#main-input-and-output-files-of-radmc-3d" title="Permalink to this headline">¶</a></h1>
+<p>RADMC-3D is written in fortran-90. It is written in such a way that the user
+prepares input files (ending in <code class="docutils literal notranslate"><span class="pre">.inp</span></code>) for the program and then calls
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> with some command-line options. The program then reads the input
+files, and based on the command-line options will perform a certain calculation,
+and finally outputs the results to output files (ending in <code class="docutils literal notranslate"><span class="pre">.out</span></code>) or
+intermediate files (ending in <code class="docutils literal notranslate"><span class="pre">.dat</span></code>) which need further processing. In
+principle the user therefore needs to compile the program only once, and can
+then use the executable from that point onward. In this chapter we will describe
+the various input/output and intermediate files and their formats. Just for
+clarity: the Python routines in the <code class="docutils literal notranslate"><span class="pre">python/</span></code> directory are only meant to make
+it easier for the user to prepare the <code class="docutils literal notranslate"><span class="pre">.inp</span></code> files, and to make sense of the
+<code class="docutils literal notranslate"><span class="pre">.out</span></code> and <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files. They are not part of the main code <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>.</p>
+<p>A few comments on RADMC-3D input and output files:</p>
+<ul class="simple">
+<li><p>Most (though not all) files start with a <em>format number</em>. This number simply
+keeps track of the version of the way the information is stored the file. The
+idea is that if new versions of RADMC-3D come out in the future, it would be
+good to have the possibility that new information is added to the files. The
+format number is there to tell RADMC-3D whether a file is the new version or
+still an older version. NOTE: Do not confuse <em>format number</em> with
+<em>unformatted/formatted I/O</em> (see below for the latter). These are unrelated
+issues.</p></li>
+<li><p>RADMC-3D is no longer backward compatible with the older RADMC code input
+files. It has proven to be too messy to maintain this option.</p></li>
+<li><p>RADMC-3D has four types of I/O files:</p>
+<ol class="arabic simple">
+<li><p>Files ending with <code class="docutils literal notranslate"><span class="pre">.inp</span></code> or <code class="docutils literal notranslate"><span class="pre">.binp</span></code> are input files that
+allow the user to specify to RADMC-3D which problem to solve.</p></li>
+<li><p>Files ending with <code class="docutils literal notranslate"><span class="pre">.dat</span></code> or <code class="docutils literal notranslate"><span class="pre">.bdat</span></code>are intermediate
+files that are typically created by RADMC-3D itself, but can also be read
+by RADMC-3D for further processing. For instance, the dust temperature is
+computed by the Monte Carlo method, but can also be read in later for
+ray-tracing.</p></li>
+<li><p>Files ending with <code class="docutils literal notranslate"><span class="pre">.out</span></code> or <code class="docutils literal notranslate"><span class="pre">.bout</span></code> are final products of
+RADMC-3D, such as an image or spectrum.</p></li>
+<li><p>File ending with <code class="docutils literal notranslate"><span class="pre">.info</span></code> are small files containing some numbers that are
+useful to better interpret the output files of RADMC-3D. They are typically
+not very important for every-day use.</p></li>
+</ol>
+</li>
+<li><p>For many of the I/O files RADMC-3D can read and write formatted (i.e. text
+style: ascii) files, fortran-style unformatted (i.e. with ‘records’) files as
+well as binary files (i.e. C-style unformatted). This is specified by the file
+extension. See Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for more details.</p></li>
+</ul>
+<div class="section" id="input-radmc3d-inp">
+<span id="sec-radmc-inp"></span><h2>INPUT: radmc3d.inp<a class="headerlink" href="#input-radmc3d-inp" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file is a namelist file with the main settings for
+RADMC-3D. The namelist is not a standard Fortran namelist style, but a simple
+<em>name = value</em> list. If a name is not specified, the default values are taken.
+So if the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file is empty, then all settings are standard.  Note
+that some of these settings can be overwritten by command-line options! Here
+is a non-exhaustive list of the variables that can be set.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">incl_dust</span></code> (default: depends on which input files are present)</p>
+<p>Normally RADMC-3D will recognize automatically whether dust continuum
+emission, absorption and scattering must be included: if e.g. a file
+called <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> is present, it assumes that the dust
+must be included. But with this flag you can explicitly tell RADMC-3D
+whether it must be included (1) or not (0).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">incl_lines</span></code> (default: depends on which input files are present)</p>
+<p>Normally RADMC-3D will recognize automatically whether line emission and
+absorption must be included: if e.g. a file called <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code>
+is present, it assumes that molecular/atomic lines must be included. But
+with this flag you can explicitly tell RADMC-3D whether it must be
+included (1) or not (0).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">incl_freefree</span></code> (default: 0)</p>
+<p>If 1, then include free-free emission and absorption (Bremsstrahlung).  For
+this, the gas temperature must be known (but see option <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust</span></code>
+below).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot</span></code> or <code class="docutils literal notranslate"><span class="pre">nphot_therm</span></code> (default: 100000)</p>
+<p>The number of photon packages used for the thermal Monte Carlo simulation.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> (default: 100000)</p>
+<p>The number of photon packages for the scattering Monte Carlo simulations,
+done before image-rendering.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> (default: 10000)</p>
+<p>The number of photon packages for the scattering Monte Carlo simulations, done
+during spectrum-calculation. This is actually the same functionality as for
+<code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>, but it is used (and only used) for the spectrum and SED
+calculations. The reason to have a separate value for this is that for spectra
+you may not need as many photon packages as for imaging, because you anyway
+integrate over the images. Many of the annoying ‘stripe noise’ in images when
+using insufficiently large <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> will cancel each other out in the
+flux calculation. So <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> is usually taken smaller than
+<code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iseed</span></code> (default: -17933201) <em>[Fine-tuning only]</em></p>
+<p>A starting value of the random seed for the Monte Carlo simulation.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ifast</span></code> (default: 0) <em>[Fine-tuning only]</em></p>
+<p>By setting this to 1 or 2 you will get a faster Monte Carlo simulation,
+at the cost of being less accurate.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enthres</span></code> (default: 0.01) <em>[Fine-tuning only]</em></p>
+<p>This is the fraction by which the energy in each cell may increase
+before the temperature is recalculated in the Monte Carlo simulation.
+The smaller this value, the more accurate the thermal Monte Carlo
+simulation, but the more computationally costly. 0.01 has proven to be
+fine.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">itempdecoup</span></code> (default: 1)</p>
+<p>If set to 0, then the temperatures of all coexisting dust species are
+always forced to be the same. If 1, then each dust species is thermally
+independent of the other.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">istar_sphere</span></code> (default: 0)</p>
+<p>If 0 (=default), then all stars are treated as point-sources. If 1, then
+all stars are treated as finite-size spheres. This mode is more accurate
+and more realistic, but the applications are a bit more restricted.
+Such finite-size stars are (for technical reasons) not always allowed
+anywhere in the model. But for problems of circumstellar disks and envelopes
+in spherical coordinates, it is recommended to set this to 1. Typically,
+if a star is outside the grid (in spherical coordinates this can also be
+at the origin of the coordinate system, as long as the inner radius of
+the coordinate system is larger than the stellar radius!) the use of the
+finite-size star mode is always possible. But if the star is on the grid,
+there are technical limitations.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ntemp</span></code> (default: 1000) <em>[Fine-tuning only]</em></p>
+<p>The temperatures are determined in the Monte Carlo method using tabulated
+pre-computed integrals. This saves time. This is the number of
+temperatures for which this is precalculated. The temperatures are sampled
+in a logarithmic way, i.e. log(temp) is linearly equally spaced between
+log(temp0) and log(temp1), see below.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">temp0</span></code> (default: 0.01) <em>[Fine-tuning only]</em></p>
+<p>The lowest pre-calculated temperature.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">temp1</span></code> (default: 1e5) <em>[Fine-tuning only]</em></p>
+<p>The highest pre-calculated temperature.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code></p>
+<p>When <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> reads the dust opacity files it checks if one or more of the
+opacity files has scattering opacity included. If yes, the <code class="docutils literal notranslate"><span class="pre">scattering_mode</span></code>
+will automatically be set to 1. It will also check if one or more includes
+<em>anisotropic</em> scattering. If yes, the <code class="docutils literal notranslate"><span class="pre">scattering_mode</span></code> will automatically
+be set to 2. But the user <em>may</em> nevertheless want to exclude anisotropic
+scattering or exclude scattering altogether (for instance for testing
+purposes, or if the user knows from experience that the scattering or
+anisotropic nature of scattering is not important for the problem at
+hand). Rather than editing the opacity files to remove the scattering and/or
+Henyey-Greenstein <span class="math notranslate nohighlight">\(g\)</span>-factors, you can limit the value that <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+is allowed to make <code class="docutils literal notranslate"><span class="pre">scattering_mode</span></code> by setting the variable
+<code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code>. If you set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max=0</span></code> then no matter
+what opacity files you have, scattering will not be treated.  If you set
+<code class="docutils literal notranslate"><span class="pre">scattering_mode_max=1</span></code>, then no matter what opacity files you have,
+scattering will be treated in an isotropic way.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unformatted</span></code> (Obsolete)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rto_style</span></code> (default=1)</p>
+<p>This determines whether the output of space-dependent data will be in ASCII
+form (<code class="docutils literal notranslate"><span class="pre">rto_style=1</span></code>), f77-unformatted form (<code class="docutils literal notranslate"><span class="pre">rto_style=2</span></code>, obsolete)
+or binary form (<code class="docutils literal notranslate"><span class="pre">rto_style=3</span></code>).  See Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for
+details.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_tracemode</span></code> (default: 1)</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">camera_tracemode</span></code>=-1, the images that are rendered by RADMC-3D will
+instead by the column depth traced along each ray.  If <code class="docutils literal notranslate"><span class="pre">camera_tracemode</span></code>=-2, the images that are rendered by RADMC-3D will instead by the continuum
+optical depth traced along each ray.  By default <code class="docutils literal notranslate"><span class="pre">camera_tracemode</span></code>=1,
+which is the normal mode, where real images are being created.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_nrrefine</span></code> (default: 100)</p>
+<p>For images: to assure that flux is correctly sampled, the image pixels
+will not just be rendered one ray per pixel. Instead, if necessary,
+a pixel will spawn 2x2 sub-pixels recursively (each of which can
+split again into 2x2 until the required resolution is obtained) so
+as to assure that the flux in each pixel is correct. Nrrefine tells
+how deep RADMC-3D is allowed to recursively refine. 100 is therefore
+effectively infinite. Putting this to 0 means that you go back to
+1 ray per pixel, which is fast, but may seriously misrepresent the flux
+in each pixel. NOTE: The recursive pixel refinement is done internally
+and the user will not notice it except for getting better answers. In
+the output image only the original pixels are shown; all subpixels have
+been integrated over to get the flux of the original pixel. So you can
+keep this to the default value of 100 without having to worry about
+handling complex data structures. The only drawback is that it may take
+longer to compute. See Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a> for more details.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_refine_criterion</span></code> (default: 1.0) <em>[Fine-tuning only]</em></p>
+<p>Setting this value to smaller than 1 means that you refine the recursive
+pixeling until a tighter criterion is met. The smaller this value, the
+more accurate the fluxes in each pixel, but the longer it takes to
+render. See Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a> for more details.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_incl_stars</span></code> (default: 1)</p>
+<p>If 0, then only the interstellar/circumstellar material is rendered
+for the images and spectra. If 1, then also the stellar flux is
+included in the spectra and images. So far, stars are treated always
+as point sources.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_starsphere_nrpix</span></code> (default: 20) <em>[Fine-tuning only]</em></p>
+<p>For rectangular images and for the spectra/SEDs (but not for spectra/SEDs
+created with circular pixel arrangements), this number tells RADMC-3D how
+much it should do sub-pixeling over the stellar surface. That is: 20 means
+that at least 20 sub-pixels are assured over the stellar surface. This is
+important for flux conservation (see Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_spher_cavity_relres</span></code> (default: 0.05) <em>[Fine-tuning only]</em></p>
+<p>Determines the size of sub-pixels inside the inner grid radius of
+spherical coordinates.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_localobs_projection</span></code> (default: 1)</p>
+<p>(Only for local observer mode) The type of projection on the sphere of
+observation.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code> (default 0.05) <em>[Fine-tuning only]</em></p>
+<p>Fine-tuning parameter for recursive subpixeling, for spherical coordinates,
+assuring that not too fine subpixeling would slow down the rendering of
+images or spectra too much.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_max_dangle</span></code> (default 0.3) <em>[Fine-tuning only]</em></p>
+<p>Fine-tuning parameter for recursive subpixeling, for spherical coordinates,
+preventing that too coarse subpixeling would reduce the accuracy.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dr</span></code> (default 0.003) <em>[Fine-tuning only]</em></p>
+<p>Fine-tuning parameter for recursive subpixeling, for spherical coordinates,
+assuring that not too fine subpixeling would slow down the rendering of
+images or spectra too much.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_diagnostics_subpix</span></code> (default: 0)</p>
+<p>Setting this to 1 forces RADMC-3D to write out a file called
+<code class="docutils literal notranslate"><span class="pre">subpixeling_diagnostics.out</span></code> which contains four columns, for respectivly:
+<code class="docutils literal notranslate"><span class="pre">px,py,pdx,pdy</span></code>, i.e. the pixel position and its size. This is for all
+pixels, including the sub-pixels created during the recursive subpixeling
+procedure (Section <a class="reference internal" href="imagesspectra.html#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>). This allows the user to
+find out if the recursive subpixeling went well or if certain areas were
+over/under-resolved. This is really only meant as a diagnostic.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_secondorder</span></code> (default: 0)</p>
+<p>If set to 1, RADMC-3D will interpolate all emission/absorption quantities
+to the cell corners, and then use a second order integration routine with
+bilinear interpolation of the source terms to integrate the ray-tracing
+formal transfer equations. See Section <a class="reference internal" href="imagesspectra.html#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a> for more
+information about the second order integration: It is recommended to
+read it!</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_interpol_jnu</span></code> (default: 0) <em>[Fine-tuning only]</em></p>
+<p>Fine-tuning parameter for ray-tracing, only used for when second order
+integration is done (i.e. if <code class="docutils literal notranslate"><span class="pre">camera_secondorder</span></code>=1). If 0
+(default), then the source function <span class="math notranslate nohighlight">\(S_\nu\)</span> is the one that is
+interpolated on the grid, while if 1, then the emissivity <span class="math notranslate nohighlight">\(j_\nu\)</span> is the
+one that is interpolated on the grid. The differences are minimal, but
+if strange results appear (when using second order integration) then you
+may want to experiment a bit with this parameter.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mc_weighted_photons</span></code> (default: 1) <em>[Fine-tuning only]</em></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">mc_weighted_photons</span></code>=1 (default) then in Monte Carlo simulations not
+all photon packages will have the same energy (see Section
+<a class="reference internal" href="dustradtrans.html#sec-photon-packages-mc"><span class="std std-ref">More about photon packages in the Monte Carlo simulations</span></a>). The energy will be weighted such that each
+star or emission mechanism will emit, on average, the same number of photon
+packages. As an example: If you have a stellar binary consisting of an O-star
+surrounded by a Brown Dwarf, but the Brown Dwarf is surrounded by a disk, then
+although the O star is much brighter than the O-star, the very inner regions
+of the Brown Dwarf disk is still predominantly heated by the Brown Dwarf
+stellar surface, because it is much closer to that material. If you do not
+have weighted photon packages, then statistically the Brown Dwarf would emit
+perhaps 1 or 2 photon packages, which makes the statistics of the energy
+balance in the inner disk very bad. By <code class="docutils literal notranslate"><span class="pre">mc_weighted_photons</span></code>=1 both the
+Brown Dwarf and the O-star will each emit the same number of photon packages;
+just the energy of the photon packages emitted by the Brown Dwarf are much
+less energetic than those from the O-star.  This now assures a good photon
+statistics everywhere.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">optimized_motion</span></code> (default: 0) <em>[Fine-tuning only]</em></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">optimized_motion</span></code> is set to 1, then RADMC-3D will try to
+calculate the photon motion inside cells more efficiently. This may
+save computational time, but since it is still not very well tested,
+please use this mode with great care! It is always safer not to use
+this mode.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lines_mode</span></code> (default: 1)</p>
+<p>This mode determines how the level populations for line transfer are
+computed. The default is 1, which means: Local Thermodynamic Equilibrium
+(LTE). For other modes, please consult Chapter <a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lines_maxdoppler</span></code> (default: 0.3) <em>[Fine-tuning only]</em></p>
+<p>If the doppler catching mode is used, this parameter tells how fine RADMC-3D
+must sample along the ray, in units of the doppler width, when a line is
+doppler-shifting along the wavelength-of-sight.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lines_partition_ntempint</span></code> (default 1000) <em>[Fine-tuning only]</em></p>
+<p>Number of temperature sampling points for the internally calculated
+partition function for molecular/atomic lines.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lines_partition_temp0</span></code> (default 0.1) <em>[Fine-tuning only]</em></p>
+<p>Smallest temperature sampling point for the internally calculated
+partition function for molecular/atomic lines.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lines_partition_temp1</span></code> (default 1E5) <em>[Fine-tuning only]</em></p>
+<p>Largest temperature sampling point for the internally calculated
+partition function for molecular/atomic lines.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lines_show_pictograms</span></code> (default 0)</p>
+<p>If 1, then print a pictogram of the levels of the molecules/atoms.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust</span></code> (default: 0)</p>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust=1</span></code> you tell <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to
+simply read the <code class="docutils literal notranslate"><span class="pre">dust_temperature.inp</span></code> file and then equate
+the gas temperature to the dust temperature. If multiple dust species
+are present, only the first species will be used.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subbox_nx,subbox_ny,subbox_nz,subbox_x0,subbox_x1,subbox_y0,subbox_y1,subbox_z0,subbox_z1</span></code></p>
+<p>Parameters specifying the subbox size for the subbox extraction.
+See Section <a class="reference internal" href="toolsinside.html#sec-subbox"><span class="std std-ref">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</span></a> for details.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="input-required-amr-grid-inp">
+<span id="sec-grid-input"></span><h2>INPUT (required): amr_grid.inp<a class="headerlink" href="#input-required-amr-grid-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that specifies what the spatial grid of the model looks
+like. See Chapter <a class="reference internal" href="gridding.html#chap-gridding"><span class="std std-ref">More information about the gridding</span></a>. This file is essential, because most
+other <code class="docutils literal notranslate"><span class="pre">.inp</span></code> and <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files are simple lists of numbers which do not
+contain any information about the grid. All information about the grid is
+contained in the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>, also for non-AMR regular grids. Note that
+in the future we will also allow for unstructured grids. The corresponding grid
+files will then be named differently.</p>
+<p>There are three possible AMR grid styles:</p>
+<ul class="simple">
+<li><p>Regular grid: No mesh refinement. This is grid style 0.</p></li>
+<li><p>Oct-tree-style AMR (‘Adaptive Mesh Refinement’, although for now it
+is not really ‘adaptive’). This is grid style 1.</p></li>
+<li><p>Layer-style AMR. This is grid style 10.</p></li>
+</ul>
+<div class="section" id="regular-grid">
+<span id="sec-amr-grid-regular"></span><h3>Regular grid<a class="headerlink" href="#regular-grid" title="Permalink to this headline">¶</a></h3>
+<p>For a regular grid, without grid refinement, the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="mi">0</span>                                        <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="n">regular</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">coordsystem</span>
+<span class="n">gridinfo</span>
+<span class="n">incl_x</span>       <span class="n">incl_y</span>       <span class="n">incl_z</span>
+<span class="n">nx</span>           <span class="n">ny</span>           <span class="n">nz</span>
+<span class="n">xi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">xi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">xi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">xi</span><span class="p">[</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">yi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">yi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">yi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">yi</span><span class="p">[</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">zi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">zi</span><span class="p">[</span><span class="n">nz</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The meaning of the entries are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present 1. For
+unformatted files this must be 4-byte integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfcoordsystem:</span></code> If <code class="docutils literal notranslate"><span class="pre">coordsystem</span></code><span class="math notranslate nohighlight">\(&lt;\)</span><span class="math notranslate nohighlight">\(&lt;\)</span>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>&lt;<a href="#id3"><span class="problematic" id="id4">`</span></a>300 the coordinate system is cylindrical. For unformatted
+files this must be 4-byte integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfgridinfo:</span></code> If <code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>==1 there will be
+abundant grid information written into this file, possibly useful for
+post-processing routines. Typically this is redundant information, so it
+is advised to set <code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>=0 to save disk space. In the
+following we will assume that <code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>=0. For unformatted
+files this must be 4-byte integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfincl_x,incl_y,incl_z:</span></code> These are either 0 or
+1. If 0 then this dimension is not active (so upon grid refinement no
+refinement in this dimension is done). If 1 this dimension is fully
+active, even if the number of base grid cells in this direction is just
+1. Upon refinement the cell will also be splitted in this dimension. For
+unformatted files these numbers must be 4-byte integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnx,ny,nz:</span></code> These are the number of grid cells on the
+base grid in each of these dimensions. For unformatted files these numbers
+must be 4-byte integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfxi[1]...xi[nx+1]:</span></code> The edges of the cells of the base grid in
+x-direction. For <code class="docutils literal notranslate"><span class="pre">nx</span></code> grid cells we have <code class="docutils literal notranslate"><span class="pre">nx+1</span></code> cell walls, hence <code class="docutils literal notranslate"><span class="pre">nx+1</span></code>
+cell wall positions. For unformatted files these numbers must be 8-byte reals
+(=double precision).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfyi[1]...yi[ny+1]:</span></code> Same as above, but now for
+y-direction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfzi[1]...zi[nz+1]:</span></code> Same as above, but now for
+z-direction.</p></li>
+</ul>
+<p>Example of a simple 2x2x2 regular grid in cartesian coordinates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>
+<span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">2</span>
+<span class="o">-</span><span class="mf">1.</span>  <span class="mf">0.</span> <span class="mf">1.</span>
+<span class="o">-</span><span class="mf">1.</span>  <span class="mf">0.</span> <span class="mf">1.</span>
+<span class="o">-</span><span class="mf">1.</span>  <span class="mf">0.</span> <span class="mf">1.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="oct-tree-style-amr-grid">
+<span id="sec-amr-grid-oct-tree"></span><h3>Oct-tree-style AMR grid<a class="headerlink" href="#oct-tree-style-amr-grid" title="Permalink to this headline">¶</a></h3>
+<p>For a grid with oct-tree style grid refinement, the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="mi">1</span>                                        <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="mi">1</span> <span class="o">=</span> <span class="n">Oct</span><span class="o">-</span><span class="n">tree</span><span class="p">)</span>
+<span class="n">coordsystem</span>
+<span class="n">gridinfo</span>
+<span class="n">incl_x</span>       <span class="n">incl_y</span>       <span class="n">incl_z</span>
+<span class="n">nx</span>           <span class="n">ny</span>           <span class="n">nz</span>
+<span class="n">levelmax</span>     <span class="n">nleafsmax</span>    <span class="n">nbranchmax</span>     <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">line</span> <span class="n">only</span> <span class="k">if</span> <span class="n">grid</span> <span class="n">style</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="n">xi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">xi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">xi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">xi</span><span class="p">[</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">yi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">yi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">yi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">yi</span><span class="p">[</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">zi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">zi</span><span class="p">[</span><span class="n">nz</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">&lt;===</span> <span class="mi">0</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="mi">1</span><span class="o">=</span><span class="n">branch</span> <span class="p">(</span><span class="n">only</span> <span class="k">if</span> <span class="n">amrstyle</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>The keywords have the same meaning as before, but in addition we have:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bf(0/1):</span></code> <em>NOTE: Only for amrstyle==1</em>. These are numbers that are either 0
+or 1. If 0, this means the current cell is a leaf (= a cell that is not
+refined and is therefore a ‘true’ cell). If 1, the current cell is a branch
+with 2 (in 1-D), 4 (in 2-D) or 8 (in 3-D) daughter cells. In that case the
+next (0/1) numbers are for these daughter cells. In other words, we
+immediately recursively follow the tree. The order in which this happens is
+logical. In 3-D the first daughter cell is (1,1,1), then (2,1,1), then
+(1,2,1), then (2,2,1), then (1,1,2), then (2,1,2), then (1,2,2) and finally
+(2,2,2), where the first entry represents the x-direction, the second the
+y-direction and the third the z-direction. If one or more of the daughter
+cells is also refined (i.e. has a value 1), then first this sub-tree is
+followed before continuing with the rest of the daughter cells. If we finally
+return to the base grid at some point, the next (0/1) number is for the next
+base grid cell (again possibly going into this tree if the value is 1). The
+order in which the base grid is scanned in this way is from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">nx</span></code> in
+the innermost loop, from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">ny</span></code> in the middle loop and from <code class="docutils literal notranslate"><span class="pre">1</span></code> to
+<code class="docutils literal notranslate"><span class="pre">nz</span></code> in the outermost loop. For unformatted files these numbers must be
+4-byte integers, one record per number.</p></li>
+</ul>
+<p>Example of a simple 1x1x1 grid which is refined into 2x2x2 and for
+which the (1,2,1) cell is refined again in 2x2x2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
+<span class="mi">1</span>
+<span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>
+<span class="mi">10</span> <span class="mi">100</span> <span class="mi">100</span>
+<span class="o">-</span><span class="mf">1.</span>  <span class="mf">1.</span>
+<span class="o">-</span><span class="mf">1.</span>  <span class="mf">1.</span>
+<span class="o">-</span><span class="mf">1.</span>  <span class="mf">1.</span>
+<span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+<span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="layer-style-amr-grid">
+<span id="sec-amr-grid-layered"></span><h3>Layer-style AMR grid<a class="headerlink" href="#layer-style-amr-grid" title="Permalink to this headline">¶</a></h3>
+<p>For a grid with layer-style grid refinement, the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="mi">10</span>                                       <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="mi">10</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-</span><span class="n">style</span><span class="p">)</span>
+<span class="n">coordsystem</span>
+<span class="n">gridinfo</span>
+<span class="n">incl_x</span>       <span class="n">incl_y</span>       <span class="n">incl_z</span>
+<span class="n">nx</span>           <span class="n">ny</span>           <span class="n">nz</span>
+<span class="n">nrlevels</span>     <span class="n">nrlayers</span>                    <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">line</span> <span class="n">only</span> <span class="k">if</span> <span class="n">grid</span> <span class="n">style</span> <span class="o">==</span> <span class="mi">10</span>
+<span class="n">xi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">xi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">xi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">xi</span><span class="p">[</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">yi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">yi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">yi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">yi</span><span class="p">[</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">zi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">zi</span><span class="p">[</span><span class="n">nz</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">parentid</span>     <span class="n">ix</span>  <span class="n">iy</span>  <span class="n">iz</span>   <span class="n">nx</span>  <span class="n">ny</span>  <span class="n">nz</span>
+<span class="n">parentid</span>     <span class="n">ix</span>  <span class="n">iy</span>  <span class="n">iz</span>   <span class="n">nx</span>  <span class="n">ny</span>  <span class="n">nz</span>
+<span class="n">parentid</span>     <span class="n">ix</span>  <span class="n">iy</span>  <span class="n">iz</span>   <span class="n">nx</span>  <span class="n">ny</span>  <span class="n">nz</span>
+<span class="n">parentid</span>     <span class="n">ix</span>  <span class="n">iy</span>  <span class="n">iz</span>   <span class="n">nx</span>  <span class="n">ny</span>  <span class="n">nz</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+</pre></div>
+</div>
+<p>The keywords have the same meaning as before, but in addition we have:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnrlevels:</span></code> How many levels you plan to go, where
+nrlevels==0 means no refinement, nrlevels==1 means one level of refinement
+(factor of 2 in resolution), etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnrlayers:</span></code> How many layers do you have, with nrlayers==0
+means no refinement, nrlayers==1 means one layer of refinement (factor of
+2 in resolution), etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfparentid:</span></code> (For each layer) The parent layer for this
+layer. parentid==0 means parent is base grid. First layer has id==1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfix,iy,iz:</span></code> (For each layer) The location in the parent
+layer where the current layer starts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnx,ny,nz:</span></code> (For each layer) The size of the layer as measured in units of
+the the parent layer. So the actual size of the current layer will be (in
+3-D): <code class="docutils literal notranslate"><span class="pre">2*nx,2*ny,2*nz</span></code>. In 2-D, with only the x- and y- dimensions active,
+we have a size of <code class="docutils literal notranslate"><span class="pre">2*nx,2*ny</span></code> with of course size 1 in z-direction.</p></li>
+</ul>
+<p>As you can see, this is a much easier and more compact way to specify
+mesh refinement. But it is also less ‘adaptive’, as it is always organized
+in square/cubic patches. But it is much easier to handle for the user than
+full oct-tree refinement.</p>
+<p>Note that this layer-style refinement is in fact, internally, translated
+into the oct-tree refinement. But you, as the user, will not notice any
+of that. The code will input and output entirely in layer style.</p>
+<p><em>NOTE:</em> The layers must be specify in increasing refinement level!  So
+the first layer (layer 1) must have the base grid (layer 0) as its
+parent. The second layer can have either the base grid (layer 0) or the
+first layer (layer 1) as parent, etc. In other words: the parent layer
+must always already have been specified before.</p>
+<p>Example of a simple 2-D 4x4 grid which has a refinement patch in the middle
+of again 4x4 cells (=2x2 on the parent grid), and a patch of 2x2 (=1x1 on
+the parent grid) starting in the upper left corner:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
+<span class="mi">100</span>
+<span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">0</span>
+<span class="mi">4</span>  <span class="mi">4</span>  <span class="mi">1</span>
+<span class="mi">1</span>  <span class="mi">2</span>
+<span class="o">-</span><span class="mf">2.</span> <span class="o">-</span><span class="mf">1.</span> <span class="mf">0.</span> <span class="mf">1.</span> <span class="mf">2.</span>
+<span class="o">-</span><span class="mf">2.</span> <span class="o">-</span><span class="mf">1.</span> <span class="mf">0.</span> <span class="mf">1.</span> <span class="mf">2.</span>
+<span class="o">-</span><span class="mf">0.5</span> <span class="mf">0.5</span>
+<span class="mi">0</span>  <span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">1</span>
+<span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>
+</pre></div>
+</div>
+<p>This has just one level of refinement, but two patches at level 1.</p>
+<p>Anothe example: two recursive layers. Again start with a 2-D 4x4 grid,
+now refine it in the middle with again a 4x4 sub-grid (=2x2 on the parent
+grid = layer 0) and then again a deeper layer of 4x4 (=2x2 on the
+parent grid = layer 1) this time starting in the corner:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
+<span class="mi">100</span>
+<span class="mi">1</span>
+<span class="mi">0</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">0</span>
+<span class="mi">4</span>  <span class="mi">4</span>  <span class="mi">1</span>
+<span class="mi">2</span>  <span class="mi">2</span>
+<span class="o">-</span><span class="mf">2.</span> <span class="o">-</span><span class="mf">1.</span> <span class="mf">0.</span> <span class="mf">1.</span> <span class="mf">2.</span>
+<span class="o">-</span><span class="mf">2.</span> <span class="o">-</span><span class="mf">1.</span> <span class="mf">0.</span> <span class="mf">1.</span> <span class="mf">2.</span>
+<span class="o">-</span><span class="mf">0.5</span> <span class="mf">0.5</span>
+<span class="mi">0</span>  <span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">1</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Note that with this layer-style grid, the input data will have to be speficied
+layer-by-layer: first the base grid, then the first layer, then the second
+etc. This is worked out in detail for <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> in Section
+<a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>. This will include redundant data, because you specify the
+data on the entire base grid, also the cells that later will be replaced by a
+layer. Same is true for any layer that has sub-layers. The data that is
+specified in these regions will be simply ignored. But for simplicity we do
+still require it to be present, so that irrespective of the deeper layers, the
+data in any layer (including the base grid, which is layer number 0) is simply
+organized as a simple data cube. This redundancy makes the input and output
+files larger than strictly necessary, but it is much easier to handle as each
+layer is a datacube. For memory/hardisk-friendly storage you must use the
+oct-tree refinement instead. The layers are meant to make the AMR much more
+accessible, but are somewhat more memory consuming.</p>
+</div>
+</div>
+<div class="section" id="input-required-for-dust-transfer-dust-density-inp">
+<span id="sec-dustdens"></span><h2>INPUT (required for dust transfer): dust_density.inp<a class="headerlink" href="#input-required-for-dust-transfer-dust-density-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that contains the dust densities. It is merely a list of
+numbers. Their association to grid cells is via the file <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> (see
+Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for the binary version of this file, which is more
+compact).  Each dust species will have its own density distribution, completely
+independently of the others. That means that at each position in space several
+dust species can exist, and the density of these can be fully freely
+specified. The structure of this file is as follows. For formatted style
+(<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">nrspec</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">nrspec</span></code> is the number of independent dust species densities
+that will be given here. It can be 1 or larger. If it is 1, then of course
+the <code class="docutils literal notranslate"><span class="pre">density[1,ispec=2]</span></code> and following lines are not present
+in the file. The <code class="docutils literal notranslate"><span class="pre">nrcells</span></code> is the number of cells. For different
+kinds of grids this can have different meaning. Moreover, for different
+kinds of grids the order in which the density values are given is also
+different.  So let us now immediately make the following distinction (See
+Chapter <a class="reference internal" href="gridding.html#chap-gridding"><span class="std std-ref">More information about the gridding</span></a> on the different kinds of grids):</p>
+<ul>
+<li><p><em>For regular grid and oct-tree AMR grids:</em></p>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">nrcells</span></code> denotes the number of <em>true</em> cells,
+excluding the cells that are in fact the parents of 2x2x2 subcells; i.e.
+the sum of the volumes of all true cells (=leafs) adds up to the volume of
+the total grid). The order of these numbers is always the same ‘immediate
+recursive subtree entry’ as in the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
+(Section <a class="reference internal" href="#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>).</p>
+</li>
+<li><p><em>For layer-style AMR grids:</em></p>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">nrcells</span></code> denotes the number of values that are specified. This
+is generally a bit more than the true number of cells specified in the
+oct-tree style AMR (see above). In the layer-style AMR mode you specify the
+dust density (or any other value) first at all cells of the base grid (whether
+a cell is refined or not does not matter), the at all cells of the first
+layer, then the second layer etc. Each layer is a regular (sub-)grid, so the
+order of the values is simply the standard order (same as for regular
+grids). This means, however, that the values of the density in the regular
+grid cells that are replaced by a layer are therefore redundant. See Section
+<a class="reference internal" href="gridding.html#sec-layer-amr-redundancy"><span class="std std-ref">On the ‘successively regular’ kind of data storage, and its slight redundancy</span></a> for a discussion of this redundancy. The main
+advantage of this layer-style grid refinement is that the input and output
+always takes place on <em>regular</em> grids and subgrids (=layers). This is much
+easier to handle than the complexities of the oct-tree AMR.</p>
+</li>
+</ul>
+<div class="section" id="example-dust-density-inp-for-a-regular-grid">
+<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a regular grid<a class="headerlink" href="#example-dust-density-inp-for-a-regular-grid" title="Permalink to this headline">¶</a></h3>
+<p>Now let us look at an example of a <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file,
+starting with one for the simplified case of a regular 3-D grid (see
+Sections <a class="reference internal" href="#sec-amr-grid-regular"><span class="std std-ref">Regular grid</span></a> and <a class="reference internal" href="gridding.html#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">nrspec</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nx</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nz</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">nz</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nz</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">nz</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="figure align-default" id="id9">
+<span id="fig-regular-grid-numbered"></span><img alt="_images/base_amr.png" src="_images/base_amr.png" />
+<p class="caption"><span class="caption-number">Fig. 27 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3 (as
+Fig. <a class="reference internal" href="gridding.html#fig-regular-grid"><span class="std std-numref">Fig. 17</span></a>), with the order of the cells shown as
+numbers in the cells.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="example-dust-density-inp-for-an-oct-tree-refined-grid">
+<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for an oct-tree refined grid<a class="headerlink" href="#example-dust-density-inp-for-an-oct-tree-refined-grid" title="Permalink to this headline">¶</a></h3>
+<p>For the case when you have an oct-tree refined grid (see Sections
+<a class="reference internal" href="#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a> and <a class="reference internal" href="gridding.html#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>), the order of the
+numbers is the same as the order of the cells as specified in the
+<code class="docutils literal notranslate"><span class="pre">amr_grid.(u)inp</span></code> file (Section <a class="reference internal" href="#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>).  Let us take the
+example of a simple 1x1x1 grid which is refined into 2x2x2 and for which the
+(1,2,1) cell is refined again in 2x2x2 (this is exactly the same example as
+shown in Section <a class="reference internal" href="#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a>, and for which the
+<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> is given in that section). Let us also assume that we have only
+one dust species. Then the <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="mi">15</span>                                       <span class="o">&lt;===</span> <span class="mi">2</span><span class="n">x2x2</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="n">x2x2</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="mi">1</span>                                        <span class="o">&lt;===</span> <span class="n">Let</span> <span class="n">us</span> <span class="n">take</span> <span class="n">just</span> <span class="n">one</span> <span class="n">dust</span> <span class="n">spec</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>                           <span class="o">&lt;===</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">first</span> <span class="n">base</span> <span class="n">grid</span> <span class="n">cell</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>                     <span class="o">&lt;===</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">first</span> <span class="n">refined</span> <span class="n">cell</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>                     <span class="o">&lt;===</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">last</span> <span class="n">refined</span> <span class="n">cell</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>                           <span class="o">&lt;===</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">last</span> <span class="n">base</span> <span class="n">grid</span> <span class="n">cell</span>
+</pre></div>
+</div>
+<p>A more complex example is shown in Fig.~:ref:<cite>fig-oct-tree-amr-numbered</cite>.
+An unformatted version is also available, in the standard way (see above).</p>
+<div class="figure align-default" id="id10">
+<span id="fig-oct-tree-amr-numbered"></span><img alt="_images/oct_tree_amr.png" src="_images/oct_tree_amr.png" />
+<p class="caption"><span class="caption-number">Fig. 28 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement (as
+Fig.~:ref:<cite>fig-oct-tree-amr</cite>) with the order of the cells shown as numbers in
+the cells.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="example-dust-density-inp-for-a-layer-style-refined-grid">
+<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a layer-style refined grid<a class="headerlink" href="#example-dust-density-inp-for-a-layer-style-refined-grid" title="Permalink to this headline">¶</a></h3>
+<p>For the case when you have an layer-style refined grid (see Sections
+<a class="reference internal" href="#sec-amr-grid-layered"><span class="std std-ref">Layer-style AMR grid</span></a> and <a class="reference internal" href="gridding.html#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a>) you specify the
+density in a series of regular boxes (=layers). The first box is the base
+grid, the second the first layer, the third the second layer etc.  The value
+<code class="docutils literal notranslate"><span class="pre">nrcells</span></code> now tells the combined sizes of the all the boxes. If we
+take the second example of Section <a class="reference internal" href="#sec-amr-grid-layered"><span class="std std-ref">Layer-style AMR grid</span></a>: a simple 2-D
+4x4 grid which has a refinement patch (=layer) in the middle of again 4x4
+cells, and again one patch of 4x4 this time, however, starting in the upper
+left corner (see the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file given in Section
+<a class="reference internal" href="#sec-amr-grid-layered"><span class="std std-ref">Layer-style AMR grid</span></a>), then the <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file
+has the following form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="mi">48</span>                                       <span class="o">&lt;===</span> <span class="mi">4</span><span class="n">x4</span> <span class="o">+</span> <span class="mi">4</span><span class="n">x4</span> <span class="o">+</span> <span class="mi">4</span><span class="n">x4</span> <span class="o">=</span> <span class="mi">48</span>
+<span class="mi">1</span>                                        <span class="o">&lt;===</span> <span class="n">Let</span> <span class="n">us</span> <span class="n">take</span> <span class="n">just</span> <span class="n">one</span> <span class="n">dust</span> <span class="n">spec</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>                   <span class="o">&lt;===</span> <span class="n">This</span> <span class="n">a</span> <span class="n">redundant</span> <span class="n">value</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>An unformatted version is also available, in the standard way (see above).</p>
+<p>It is clear that 48 is now the total number of values to be read, which is
+16 values for layer 0 (= base grid), 16 values for layer 1 and 16 values
+for layer 2. It is also clear that some values are redundant (they can
+have any value, does not matter). But it at least assures that each data
+block is a simple regular data block, which is easier to handle. Note that
+these values (marked as redundant in the above example) <em>must</em> be
+present in the file, but they can have any value you like (typically 0).</p>
+<p>Note that if you have multiple species of dust then we will still have
+48 as the value of <code class="docutils literal notranslate"><span class="pre">nrcells</span></code>. The number of values to be read,
+if you have 2 dust species, is then simply 2*``nrcells`` = 2*48 = 96.</p>
+</div>
+</div>
+<div class="section" id="input-output-dust-temperature-dat">
+<h2>INPUT/OUTPUT: dust_temperature.dat<a class="headerlink" href="#input-output-dust-temperature-dat" title="Permalink to this headline">¶</a></h2>
+<p>The dust temperature file is an intermediate result of RADMC-3D and follows from
+the thermal Monte Carlo simulation. The name of this file is
+<code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> (see Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for the binary
+version of this file, which is more compact). It can be used by the user for
+other purposes (e.g. determination of chemical reaction rates), but also by
+RADMC-3D itself when making ray-traced images and/or spectra. The user can also
+produce his/her own <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> file (without invoking the Monte
+Carlo computation) if she/he has her/his own way of computing the dust
+temperature.</p>
+<p>The structure of this file is identical to that of <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> (Section
+<a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>), but with density replaced by temperature. We refer to
+section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a> for the details.</p>
+</div>
+<div class="section" id="input-mostly-required-stars-inp">
+<span id="sec-stars"></span><h2>INPUT (mostly required): stars.inp<a class="headerlink" href="#input-mostly-required-stars-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that specifies the number of stars, their positions,
+radii, and spectra. Stars are sources of netto energy. For the dust
+continuum Monte Carlo simulation these are a source of photon packages.
+This file exists only in formatted (ascii) style. Its structure is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>iformat                           &lt;=== Put this to 2 !
+nstars        nlam
+rstar[1]      mstar[1]      xstar[1]      ystar[1]      zstar[1]
+  .             .              .             .             .
+  .             .              .             .             .
+rstar[nstars  mstar[nstars] xstar[nstars] ystar[nstars] zstar[nstars]
+lambda[1]
+  .
+  .
+lambda[nlam]
+flux[1,star=1]
+  .
+  .
+flux[nlam,star=1]
+flux[1,star=2]
+  .
+  .
+flux[nlam,star=2]
+  .
+  .
+  .
+  .
+flux[nlam,star=nstar]
+</pre></div>
+</div>
+<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat</span></code>==2. The meaning of the variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present better keep it at 2.
+If you put it to 1, the list of wavelengths (see below) will instead be
+a list of frequencies in Herz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnstars:</span></code> The number of stars you wish to specify.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+spectra. At present this must be identical to the number of walvelength
+points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfrstar[i]:</span></code> The radius of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfmstar[i]:</span></code> The mass of star <span class="math notranslate nohighlight">\(i\)</span> in grams. This is not
+important for the current version of RADMC-3D, but may be in the
+future.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfxstar[i]:</span></code> The <code class="docutils literal notranslate"><span class="pre">x</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfystar[i]:</span></code> The <code class="docutils literal notranslate"><span class="pre">y</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfzstar[i]:</span></code> The <code class="docutils literal notranslate"><span class="pre">z</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns. This must be identical (!) to the equivalent
+point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfflux[i,star=n]:</span></code> The flux <span class="math notranslate nohighlight">\(F_\nu\)</span> at wavelength point <span class="math notranslate nohighlight">\(i\)</span>
+for star <span class="math notranslate nohighlight">\(n\)</span> in units of erg cm:math:<cite>^{-2}</cite> s:math:<cite>^{-1}</cite> Hz:math:<cite>^{-1}</cite> as seen from a
+distance of 1 parsec = <span class="math notranslate nohighlight">\(3.08572\times 10^{18}\)</span> cm (for normalization).</p></li>
+</ul>
+<p>Sometimes it may be sufficient to assume simple blackbody spectra
+for these stars. If for any of the stars the first (!) flux number
+(<code class="docutils literal notranslate"><span class="pre">flux[1,star=n]</span></code>) is negative, then the absolute value of this number
+is taken to be the blackbody temperature of the star, and no further values
+for this star are read. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<span class="mi">1</span>            <span class="mi">100</span>
+<span class="mf">6.96e10</span>      <span class="mf">1.99e33</span>        <span class="mf">0.</span>      <span class="mf">0.</span>    <span class="mf">0.</span>
+<span class="mf">0.1</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="mf">1000.</span>
+<span class="o">-</span><span class="mf">5780.</span>
+</pre></div>
+</div>
+<p>will make one star, at the center of the coordinate system, with one solar
+radius, one solar mass, on a wavelength grid ranging from 0.1 micron to 1000
+micron (100 wavelength points) and with a blackbody spectrum with a
+temperature equal to the effective temperature of the sun.</p>
+<p>Note: The position of a star can be both inside and outside of the
+computational domain.</p>
+</div>
+<div class="section" id="input-optional-stellarsrc-templates-inp">
+<span id="sec-stellarsrc-templates"></span><h2>INPUT (optional): stellarsrc_templates.inp<a class="headerlink" href="#input-optional-stellarsrc-templates-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that specifies the template spectra for the smooth stellar
+source distributions. See Section <a class="reference internal" href="stars.html#sec-distrib-of-stars"><span class="std std-ref">Distributions of zillions of stars</span></a>.
+The file exists only in formatted (ascii) style. Its structure is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>iformat                           &lt;=== Put this to 2 !
+ntempl
+nlam
+lambda[1]
+  .
+  .
+lambda[nlam]
+flux[1,templ=1]
+  .
+  .
+flux[nlam,templ=1]
+flux[1,templ=2]
+  .
+  .
+flux[nlam,templ=2]
+  .
+  .
+  .
+  .
+flux[nlam,templ=ntempl]
+</pre></div>
+</div>
+<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat</span></code>==2. The meaning of the variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present better keep it at 2.
+If you put it to 1, the list of wavelengths (see below) will instead be
+a list of frequencies in Herz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfntempl:</span></code> The number of stellar templates you wish to specify.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+template spectra. At present this must be identical to the number of
+walvelength points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
+Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in
+[1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns. This must be identical (!) to the
+equivalent point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
+Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfflux[i,templ=n]:</span></code> The ‘flux’ at wavelength <span class="math notranslate nohighlight">\(i\)</span> for
+stellar template <span class="math notranslate nohighlight">\(n\)</span>. The units are somewhat tricky. It is given in units
+of erg / sec / Hz / gram-of-star. So multiply this by the density of
+stars in units of gram-of-star / cm:math:<cite>^3</cite>, and divide by 4*pi to get the
+stellar source function in units of erg / src / Hz / cm:math:<cite>^3</cite> / steradian.</p></li>
+</ul>
+<p>Sometimes it may be sufficient to assume simple blackbody spectra
+for these stellar sources. If for any of the stellar sources the first (!)
+flux number (<code class="docutils literal notranslate"><span class="pre">flux[1,templ=n]</span></code>) is negative, then the absolute
+value of this number is taken to be the blackbody temperature of the stellar
+source, and the following two numbers are interpreted as the stellar radius
+and stellar mass respectively. From that, RADMC-3D will then internally
+compute the stellar template. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<span class="mi">1</span>
+<span class="mi">100</span>
+<span class="mf">0.1</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="mf">1000.</span>
+<span class="o">-</span><span class="mf">5780.</span>
+<span class="mf">6.9600000e+10</span>
+<span class="mf">1.9889200e+33</span>
+</pre></div>
+</div>
+<p>will tell RADMC-3D that there is just one stellar template, assumed to have
+a blackbody spectrum with solar effective temperature. Each star of this
+template has one solar radius, one solar mass.</p>
+</div>
+<div class="section" id="input-optional-stellarsrc-density-inp">
+<span id="sec-stellarsrc-density"></span><h2>INPUT (optional): stellarsrc_density.inp<a class="headerlink" href="#input-optional-stellarsrc-density-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that contains the smooth stellar source densities. If you
+have the file <code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code> specified (see Section
+<a class="reference internal" href="#sec-stellarsrc-templates"><span class="std std-ref">INPUT (optional): stellarsrc_templates.inp</span></a>) then you <em>must</em> also specify <code class="docutils literal notranslate"><span class="pre">stellarsrc_density.inp</span></code> (or its binary form, see Chapter
+<a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>).  The format of this file is very similar to
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> (Section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>), but instead
+different dust species, we have different templates.  For the rest we refer
+to Section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a> for the format.  Just replace <code class="docutils literal notranslate"><span class="pre">ispec</span></code> (the dust species) with <code class="docutils literal notranslate"><span class="pre">itempl</span></code> (the template).</p>
+</div>
+<div class="section" id="input-optional-external-source-inp">
+<span id="sec-ext-src-inp"></span><h2>INPUT (optional): external_source.inp<a class="headerlink" href="#input-optional-external-source-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that specifies the spectrum and intensity of the
+external radiation field, i.e. the ‘interstellar radiation field’
+(see Section <a class="reference internal" href="stars.html#sec-external-source"><span class="std std-ref">The interstellar radiation field: external source of energy</span></a>). Its structure is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>iformat                           &lt;=== Put this to 2 !
+nlam
+lambda[1]
+  .
+  .
+lambda[nlam]
+Intensity[1]
+  .
+  .
+Intensity[nlam]
+</pre></div>
+</div>
+<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat</span></code>==2. The meaning of the variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present better keep it at 2.
+If you put it to 1, the list of wavelengths (see below) will instead be
+a list of frequencies in Herz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+template spectra. At present this must be identical to the number of
+walvelength points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
+Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in
+[1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns. This must be identical (!) to the
+equivalent point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
+Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfIntensity[i]:</span></code> The intensity of the radiation field at
+wavelength <span class="math notranslate nohighlight">\(i\)</span> in units of erg / cm:math:<cite>^2</cite> / sec / Hz / steradian.</p></li>
+</ul>
+</div>
+<div class="section" id="input-optional-heatsource-inp">
+<span id="sec-heatsource"></span><h2>INPUT (optional): heatsource.inp<a class="headerlink" href="#input-optional-heatsource-inp" title="Permalink to this headline">¶</a></h2>
+<p>This file, if present (it is an optional file!), gives the internal heat
+source of the gas-dust mixture in every cell. For formatted style
+(<code class="docutils literal notranslate"><span class="pre">heatsource.inp</span></code>) the structure of this file is as follows.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">heatsource</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="n">heatsource</span><span class="p">[</span><span class="n">nrcells</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>As with most input/output files of RADMC-3D, you can also specify the input
+data in binary form (<code class="docutils literal notranslate"><span class="pre">heatsource.binp</span></code>), see Chapter
+<a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>.</p>
+<p>The physical unit of <code class="docutils literal notranslate"><span class="pre">heatsource</span></code> is
+<span class="math notranslate nohighlight">\(\mathrm{erg}\,\mathrm{cm}^{-3}\,\mathrm{s}^{-1}\)</span>. The total luminosity of
+the heat source would then be the sum over all cells of <code class="docutils literal notranslate"><span class="pre">heatsource</span></code> times the cell volume.</p>
+</div>
+<div class="section" id="input-required-wavelength-micron-inp">
+<span id="sec-wavelengths"></span><h2>INPUT (required): wavelength_micron.inp<a class="headerlink" href="#input-required-wavelength-micron-inp" title="Permalink to this headline">¶</a></h2>
+<p>This is the file that sets the discrete wavelength points for the continuum
+radiative transfer calculations. Note that this is not the same as the
+wavelength grid used for e.g. line radiative transfer.  See Section <a class="reference internal" href="#sec-camera-wavelengths"><span class="std std-ref">INPUT (optional): camera_wavelength_micron.inp</span></a> and/or Chapter <a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a> for
+that. This file is only in formatted (ascii) style. It’s structure is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nlam</span>
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>where</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+spectra.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns.</p></li>
+</ul>
+<p>The list of wavelengths can be in increasing order or decreasing order, but
+must be monotonically increasing/decreasing.</p>
+<p>{bf IMPORTANT:} It is important to keep in mind that the wavelength
+coverage must include the wavelengths at which the stellar spectra have most
+of their energy, and at which the dust cools predominantly.  This in
+practice means that this should go all the way from 0.1 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m, typically logarithmically spaced (i.e. equally spaced in
+log:math:<cite>lambda</cite>). A smaller coverage will cause serious problems in the Monte
+Carlo run and dust temperatures may then be severely miscalculated. Note
+that the 0.1 :math:<a href="#id5"><span class="problematic" id="id6">`</span></a>mu`m is OK for stellar temperatures below 10000 K. For higher
+temperatures a shorter wavelength lower limit must be used.</p>
+</div>
+<div class="section" id="input-optional-camera-wavelength-micron-inp">
+<span id="sec-camera-wavelengths"></span><h2>INPUT (optional): camera_wavelength_micron.inp<a class="headerlink" href="#input-optional-camera-wavelength-micron-inp" title="Permalink to this headline">¶</a></h2>
+<p>The wavelength points in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file are the
+global continuum wavelength points. On this grid the continuum transfer is
+done. However, there may be various reasons why the user may want to
+generate spectra on a different (usually more finely spaced) wavelength
+grid, or make an image at a wavelength that is not available in the global
+continuum wavelength grid. Rather than redoing the entire model with a
+different <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>, which may involve a lot of
+reorganization and recomputation, the user can specify a file called <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code>. If this file exists, it will be read into
+RADMC-3D, and the user can now ask RADMC-3D to make images in those
+wavelength or make a spectrum in those wavelengths.</p>
+<p>If the user wants to make images or spectra of a model that involves gas
+lines (such as atomic lines or molecular rotational and/or ro-vibrational
+lines), the use of a <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> file allows
+the user to do the line+dust transfer (gas lines plus the continuum) on this
+specific wavelength grid. For line transfer there are also other ways by
+which the user can specify the wavelength grid (see Chapter
+<a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a>), and it is left to the user to choose which method
+to use.</p>
+<p>The structure of the <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> file is
+identical to that of <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see Section
+<a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p>
+<p>Note that there are also various other ways by which the user can let
+RADMC-3D choose wavelength points, many of which may be even simpler
+and more preferable than the method described here. See Section
+<a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>.</p>
+</div>
+<div class="section" id="input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp">
+<span id="sec-opacities"></span><h2>INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp<a class="headerlink" href="#input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp" title="Permalink to this headline">¶</a></h2>
+<p>These files specify the dust opacities to be used. More than one can be
+specified, meaning that there will be more than one co-existing dust
+species. Each of these species will have its own dust density specified
+(see Section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>). The opacity of each species is specified
+in a separate file for each species. The <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file tells which
+file to read for each of these species.</p>
+<div class="section" id="the-dustopac-inp-file">
+<span id="sec-dustopac-inp-file"></span><h3>The dustopac.inp file<a class="headerlink" href="#the-dustopac-inp-file" title="Permalink to this headline">¶</a></h3>
+<p>The file <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> has the following structure, where an example
+of 2 separate dust species is used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                          <span class="o">&lt;===</span> <span class="n">Put</span> <span class="n">this</span> <span class="n">to</span> <span class="mi">2</span>
+<span class="n">nspec</span>
+<span class="o">-----------------------------</span>
+<span class="n">inputstyle</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">iquantum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>                      <span class="o">&lt;===</span> <span class="n">Put</span> <span class="n">to</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">example</span>
+<span class="o">&lt;</span><span class="n">name</span> <span class="n">of</span> <span class="n">dust</span> <span class="n">species</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">-----------------------------</span>
+<span class="n">inputstyle</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">iquantum</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>                      <span class="o">&lt;===</span> <span class="n">Put</span> <span class="n">to</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">example</span>
+<span class="o">&lt;</span><span class="n">name</span> <span class="n">of</span> <span class="n">dust</span> <span class="n">species</span> <span class="mi">2</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> Currently the format number is 2, and in this manual
+we always assume it is 2.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnspec:</span></code> The number of dust species that will be loaded.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfinputstyle[i]:</span></code> This number tells in which form the dust
+opacity of dust species <span class="math notranslate nohighlight">\(i\)</span> is to be read:</p>
+<ul class="simple">
+<li><p><em>1</em> Use the <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code> input file
+style (see Section <a class="reference internal" href="#sec-dustkappa-files"><span class="std std-ref">The dustkappa_&lt;&gt;`.inp files</span></a>).</p></li>
+<li><p><em>10</em> Use the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_:math:`&lt;`name:math:`&gt;`.inp</span></code> input
+file style (see Section <a class="reference internal" href="#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>).</p></li>
+<li><p><em>-1</em> Use the <code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code> input file
+style (see Section <a class="reference internal" href="#sec-dustopac-oldstyle"><span class="std std-ref">The dustopac_&lt;&gt;`.inp files: Backward compatibility with RADMC-2D</span></a>). This is just a backward
+compatibility mode. Should be avoided if possible.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiquantum[i]:</span></code> For normal thermal grains this is 0. If,
+however, this grain species is supposed to be treated as a quantum-heated
+grain, then non-zero values are to be specified. <a href="#id7"><span class="problematic" id="id8">*</span></a>NOTE: At the moment</p>
+<blockquote>
+<div><p>the quantum heating is not yet implemented. Will be done in the near
+future. Until then, please set this to 0!*</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bf:math:`&lt;`nameofdustspeciesi:math:`&gt;`:</span></code> This is the name of the
+dust species (without blank spaces). This name is then glued to the base
+name of the opacity file (see above). For instance, if the name is
+<code class="docutils literal notranslate"><span class="pre">enstatite</span></code>, and <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code>==1, then the file to be
+read is <code class="docutils literal notranslate"><span class="pre">dustkappa_enstatite.inp</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="the-dustkappa-inp-files">
+<span id="sec-dustkappa-files"></span><h3>The <a href="#id11"><span class="problematic" id="id12">dustkappa_</span></a><span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files<a class="headerlink" href="#the-dustkappa-inp-files" title="Permalink to this headline">¶</a></h3>
+<p>If you wish to use dust opacities that include the mass-weighted absorption
+opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span>, the (optionally) mass-weighted scattering
+opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span>, and (optionally) the anisotropy factor <span class="math notranslate nohighlight">\(g\)</span>
+for scattering, you can do this with a file <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code> (set input style to 1 in <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code>, see Section <a class="reference internal" href="#sec-dustopac-inp-file"><span class="std std-ref">The dustopac.inp file</span></a>). With this kind of
+opacity scattering is included either isotropically or using the
+Henyey-Greenstein function.  Using an opacity of this kind does <em>not</em>
+allow for full realistic scattering phase functions nor for
+polarization. For that, you need <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_:math:`&lt;`name:math:`&gt;`.inp</span></code>
+files (see Section <a class="reference internal" href="#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>). Please refer to Section
+<a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for more information about how RADMC-3D treats
+scattering.</p>
+<p>If for dust species <code class="docutils literal notranslate"><span class="pre">:math:`&lt;`name:math:`&gt;`</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file is set to 1, then the file
+<code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code>
+is sought and read. The structure of this file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Any amount of arbitrary</span>
+<span class="c1"># comment lines that tell which opacity this is.</span>
+<span class="c1"># Each comment line must start with an # or ; or ! character</span>
+<span class="n">iformat</span>                     <span class="o">&lt;==</span> <span class="n">This</span> <span class="n">example</span> <span class="ow">is</span> <span class="k">for</span> <span class="n">iformat</span><span class="o">==</span><span class="mi">3</span>
+<span class="n">nlam</span>
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">kappa_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>       <span class="n">kappa_scat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>      <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+   <span class="o">.</span>                  <span class="o">.</span>                  <span class="o">.</span>              <span class="o">.</span>
+   <span class="o">.</span>                  <span class="o">.</span>                  <span class="o">.</span>              <span class="o">.</span>
+<span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>    <span class="n">kappa_abs</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>   <span class="n">kappa_scat</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>    <span class="n">g</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The meaning of these entries is:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> If iformat==1, then only the lambda and
+kappa_abs colums are present. In that case the scattering opacity is
+assumed to be 0, i.e. a zero albedo is assumed. If iformat==2 also
+kappa_scat is read (third column). If iformat==3 (which is what is used in
+the above example) then <em>also</em> the anisotropy factor <span class="math notranslate nohighlight">\(g\)</span> is included.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of wavelength points in this file. This
+can be any number, and does not have to be the same as those of the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. It is typically advisable to have a rather
+large number of wavelength points.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> The wavelength point <span class="math notranslate nohighlight">\(i\)</span> in micron. This does
+not have to be (and indeed typically is not) the same as the values in the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. Also for each opacity this list of
+wavelengths can be different (and can be a different quantity of points).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_abs[i]:</span></code> The absorption opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of cm:math:<cite>^2</cite> per gram of dust.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_scat[i]:</span></code> The scattering opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of cm:math:<cite>^2</cite>
+per gram of dust. Note that this column should only be included if
+iformat==2 or higher.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfg[ilam]:</span></code> The mean scattering angle
+<span class="math notranslate nohighlight">\(\langle\cos(\theta)\rangle\)</span>, often called <span class="math notranslate nohighlight">\(g\)</span>. This will be used by
+RADMC-3D in the Henyey-Greenstein scattering phase function. Note that
+this column should only be included if iformat==3 or higher.</p></li>
+</ul>
+<p>Once this file is read, the opacities will be mapped onto the global
+wavelength grid of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. Since this mapping
+always involve uncertainties and errors, a file <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp_used</span></code> is created which lists the opacity how it
+is remapped onto the global wavelength grid. This is only for you as the
+user, so that you can verify what RADMC-3D has internally done. Note that if
+the upper or lower edges of the wavelength domain of the <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code> file is within the domain of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> grid, some extrapolation will have to be done.  At
+short wavelength this will simply be constant extrapolation while at long
+wavelength a powerlaw extrapolation is done. Have a look at the <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp_used</span></code> file to see how RADMC-3D has done this
+in your particular case.</p>
+</div>
+<div class="section" id="the-dustkapscatmat-inp-files">
+<span id="sec-dustkapscatmat-files"></span><h3>The <a href="#id13"><span class="problematic" id="id14">dustkapscatmat_</span></a><span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files<a class="headerlink" href="#the-dustkapscatmat-inp-files" title="Permalink to this headline">¶</a></h3>
+<p>If you wish to treat scattering in a more realistic way than just the
+Henyey-Greenstein non-polarized way, then you must provide RADMC-3D with
+more information than is present in the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code>
+files: RADMC-3D will need the full scattering M”uller matrix for all angles
+of scattering (see e.g. the books by Mishchenko, or by Bohren &amp; Huffman or
+by van de Hulst). For <em>randomly oriented particles</em> only 6 of these
+matrix elements can be non-zero: <span class="math notranslate nohighlight">\(Z_{11}\)</span>, <span class="math notranslate nohighlight">\(Z_{12}=Z_{21}\)</span>, <span class="math notranslate nohighlight">\(Z_{22}\)</span>,
+<span class="math notranslate nohighlight">\(Z_{33}\)</span>, <span class="math notranslate nohighlight">\(Z_{34}=-Z_{43}\)</span>, <span class="math notranslate nohighlight">\(Z_{44}\)</span>, where 1,2,3,4 represent the I,Q,U,V
+Stokes parameters. Moreover, for randomly oriented particles there is only 1
+scattering angle involved: the angle between the incoming and outgoing
+radiation of the scattering event. This means that we must give RADMC-3D,
+(for every wavelength and for a discrete set of scattering angles) a list of
+values of these 6 matrix elements. These can be provided in a file
+<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> (set input style to 10 in <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code>, see Section <a class="reference internal" href="#sec-dustopac-inp-file"><span class="std std-ref">The dustopac.inp file</span></a>) which comes *  instead of* the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code> file. Please refer to
+Section <a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for more information about how RADMC-3D treats
+scattering.</p>
+<p>If for dust species <code class="docutils literal notranslate"><span class="pre">:math:`&lt;`name:math:`&gt;`</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file is set to 10, then the file
+<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_:math:`&lt;`name:math:`&gt;`.inp</span></code>
+is sought and read. The structure of this file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Any amount of arbitrary</span>
+<span class="c1"># comment lines that tell which opacity this is.</span>
+<span class="c1"># Each comment line must start with an # or ; or ! character</span>
+<span class="n">iformat</span>            <span class="o">&lt;==</span> <span class="n">Format</span> <span class="n">number</span> <span class="n">must</span> <span class="n">be</span> <span class="mi">1</span>
+<span class="n">nlam</span>
+<span class="n">nang</span>               <span class="o">&lt;==</span> <span class="n">A</span> <span class="n">reasonable</span> <span class="n">value</span> <span class="ow">is</span> <span class="mi">181</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">angle</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="mf">180.0</span><span class="p">)</span>
+
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">kappa_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>       <span class="n">kappa_scat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+   <span class="o">.</span>                  <span class="o">.</span>                  <span class="o">.</span>             <span class="o">.</span>
+   <span class="o">.</span>                  <span class="o">.</span>                  <span class="o">.</span>             <span class="o">.</span>
+<span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>    <span class="n">kappa_abs</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>   <span class="n">kappa_scat</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>   <span class="n">g</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+
+<span class="n">angle_in_degrees</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+   <span class="o">.</span>
+   <span class="o">.</span>
+<span class="n">angle_in_degrees</span><span class="p">[</span><span class="n">nang</span><span class="p">]</span>
+
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="mi">3</span><span class="p">]</span>
+ <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>
+ <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="n">nang</span><span class="p">]</span>
+
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="mi">2</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+ <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>
+ <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="mi">2</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="n">nang</span><span class="p">]</span>
+
+<span class="o">....</span>
+<span class="o">....</span>
+<span class="o">....</span>
+
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="n">nlam</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+ <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>
+ <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>     <span class="o">.</span>
+<span class="n">Z_11</span>  <span class="n">Z_12</span>  <span class="n">Z_22</span>  <span class="n">Z_33</span>  <span class="n">Z_34</span>  <span class="n">Z_44</span>   <span class="p">[</span><span class="nb">all</span> <span class="k">for</span> <span class="n">ilam</span><span class="o">=</span><span class="n">nlam</span> <span class="ow">and</span> <span class="n">iang</span><span class="o">=</span><span class="n">nang</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The meaning of these entries is:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> For now this value should remain 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of wavelength points in this file. This
+can be any number, and does not have to be the same as those of the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. It is typically advisable to have a rather
+large number of wavelength points.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnang:</span></code> The number of scattering angle sampling points.
+This should be large enough that a proper integration over scattering angle
+can be carried out reliably. A reasonable value is 181, so that (for
+a regular grid in scattering angle <span class="math notranslate nohighlight">\(\theta\)</span>) you have as scattering angles
+<span class="math notranslate nohighlight">\(\theta=0,1,2,\cdots,180\)</span> (in degrees). But if you have extremely forward-
+or backward peaked scattering, then maybe even 181 is not enough.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[ilam]:</span></code> The wavelength point <span class="math notranslate nohighlight">\(ilam\)</span> in micron. This does
+not have to be (and indeed typically is not) the same as the values in the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. Also for each opacity this list of
+wavelengths can be different (and can be a different quantity of points).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfangle_in_degrees[iang]:</span></code> The scattering angle
+sampling point <span class="math notranslate nohighlight">\(iang\)</span> in degrees (0 degrees is perfect forward scattering,
+180 degrees is perfect backscattering). There should be <code class="docutils literal notranslate"><span class="pre">nang</span></code>
+such points, where <code class="docutils literal notranslate"><span class="pre">angle_in_degrees[1]</span></code> must be 0 and
+<code class="docutils literal notranslate"><span class="pre">angle_in_degrees[nang]</span></code> must be 180. In between the angle
+grid can be anything, as long as it is monotonic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_abs[ilam]:</span></code> The absorption opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of cm:math:<cite>^2</cite> per gram of dust.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_scat[ilam]:</span></code> The scattering opacity
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> in units of cm:math:<cite>^2</cite> per gram of dust. RADMC-3D can
+(and will) in fact calculate <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> from the scattering
+matrix elements. It will then check (for every wavelength) if that is the
+same as the value listed here. If the difference is small, it will simply
+adjust the <code class="docutils literal notranslate"><span class="pre">bfkappa_scat[ilam]</span></code> value internally to get a
+perfect match. If it is larger than 1E-4 then it will, in addition to
+adjusting, make a warning. if it is larger than 1E-1, it will abort. Note
+that the fewer angles are used, the worse the match will be because the
+integration over angle will be worse.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfg[ilam]:</span></code> The mean scattering angle
+<span class="math notranslate nohighlight">\(\langle\cos(\theta)\rangle\)</span>, often called <span class="math notranslate nohighlight">\(g\)</span>. RADMC-3D can (and will) in
+fact calculate <span class="math notranslate nohighlight">\(g\)</span> from the scattering matrix elements. Like with
+<code class="docutils literal notranslate"><span class="pre">bfkappa_scat[ilam]</span></code> it will adjust if the difference is not
+too large and it will complain or abort if the difference is larger than
+some limit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Z_{xx}</span></code> These are the scattering matrix elements
+in units of cm:math:<cite>^2</cite> gram:math:<cite>^{-1}</cite> ster:math:<cite>^{-1}</cite> (i.e. they are angular
+differential cross sections). See Section <a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for
+more details.</p></li>
+</ul>
+<p>NOTE: This only allows the treatment of <em>randomly oriented particles</em>. RADMC-3D
+does not, for now, have the capability of treating scattering off fixed-oriented
+particles. In fact, for oriented particles it would be impractical to
+use dust opacity files of this kind, since we would then have at least <em>three</em>
+scattering angles, which would require huge table. In that case it would be
+presumably necessary to compute the matrix elements on-the-fly.</p>
+<p>Note that the scattering-angle grid of the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> files can
+be chosen non-regular, e.g. to put a more finely spaced grid close to
+<span class="math notranslate nohighlight">\(\theta=0\)</span> (forward scattering) and <span class="math notranslate nohighlight">\(\theta=\pi\)</span> (backscattering).
+This can be useful for large grains and/or short wavelengths, where forward
+scattering can be extremely strongly peaked. Since multiple dust species can
+each have a different scattering <span class="math notranslate nohighlight">\(\theta\)</span>-grid, it requires you to give an
+additional file to <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> that represents the scattering
+<span class="math notranslate nohighlight">\(\theta\)</span>-grid for all grains. This file is called
+<code class="docutils literal notranslate"><span class="pre">scattering_angular_grid.inp</span></code>. The format is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>            <span class="o">&lt;===</span> <span class="n">Format</span> <span class="n">number</span><span class="p">,</span> <span class="n">must</span> <span class="n">be</span> <span class="mi">1</span>
+<span class="mi">181</span>          <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">theta</span> <span class="n">grid</span> <span class="n">points</span>
+<span class="mf">0.0</span>          <span class="o">&lt;===</span> <span class="n">First</span> <span class="n">angle</span> <span class="p">(</span><span class="ow">in</span> <span class="n">degrees</span><span class="p">)</span><span class="o">.</span> <span class="n">Must</span> <span class="n">be</span> <span class="mi">0</span>
+<span class="mf">1.0</span>
+<span class="mf">2.0</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="mf">179.0</span>
+<span class="mf">180.0</span>        <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">angle</span> <span class="p">(</span><span class="ow">in</span> <span class="n">degrees</span><span class="p">)</span><span class="o">.</span> <span class="n">Must</span> <span class="n">be</span> <span class="mi">180</span>
+</pre></div>
+</div>
+<p>{bf NOTE:} This file is not compulsory. If it is not given, then
+<code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> will make its own internal scattering angle grid.</p>
+</div>
+<div class="section" id="the-dustopac-inp-files-backward-compatibility-with-radmc-2d">
+<span id="sec-dustopac-oldstyle"></span><h3>The <a href="#id15"><span class="problematic" id="id16">dustopac_</span></a><span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files: Backward compatibility with RADMC-2D<a class="headerlink" href="#the-dustopac-inp-files-backward-compatibility-with-radmc-2d" title="Permalink to this headline">¶</a></h3>
+<p>If you want to be able to redo a model from the old RADMC (2D-version) code
+with RADMC-3D, you require RADMC-3D to be able to read the old style
+dust opacity files <code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code>.</p>
+<p>If for dust species <code class="docutils literal notranslate"><span class="pre">:math:`&lt;`name:math:`&gt;`</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file is set to -1, then the file <code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code>
+is sought and read. The structure of this file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nlam</span>   <span class="n">dummy</span>
+<span class="n">kappa_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">kappa_abs</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+<span class="n">kappa_scat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">kappa_scat</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The meaning of these entries is:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency (wavelength) points. This
+must be <em>identical</em> to those of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file
+or else the code stops.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfdummy:</span></code> Put this number to 1. It is here for historic
+reasons (and backward compatibility with older RADMC incarnations).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_abs[i]:</span></code> The absorption opacity at wavelength point
+<span class="math notranslate nohighlight">\(i\)</span> of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> wavelength grid, in units of
+cm:math:<cite>^2</cite> per gram of dust.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_scat[i]:</span></code> The scattering opacity at wavelength point
+<span class="math notranslate nohighlight">\(i\)</span> of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> wavelength grid, in units of
+cm:math:<cite>^2</cite> per gram of dust. <em>NOTE: Here isotropic scattering is assumed.</em></p></li>
+</ul>
+<p>Note that the opacities listed in this kind of file belong to the wavelength
+points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. So if you change the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file, you also must change the
+<code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code> files. This is why this kind of opacity
+specification is not recommended.</p>
+</div>
+</div>
+<div class="section" id="output-spectrum-out">
+<span id="sec-output-spectrum-out"></span><h2>OUTPUT: spectrum.out<a class="headerlink" href="#output-spectrum-out" title="Permalink to this headline">¶</a></h2>
+<p>Any spectrum that is made with RADMC-3D will be either called
+<code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> or <em>spectrum_:math:`&lt;`somename:math:`&gt;`.out</em> and will have
+the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                      <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">now</span> <span class="n">this</span> <span class="ow">is</span> <span class="mi">1</span>
+<span class="n">nlam</span>
+
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>       <span class="n">flux</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+   <span class="o">.</span>              <span class="o">.</span>
+   <span class="o">.</span>              <span class="o">.</span>
+<span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>   <span class="n">flux</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> This format number is currently set to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of wavelength points in this spectrum.
+This does not necessarily have to be the same as those in the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. It can be any number.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength in micron.  This does not necessarily
+have to be the same as those in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.
+The wavelength grid of a spectrum file can be completely independent
+of all other wavelength grids. For standard SED computations for the
+continuum typically these will be indeed the same as those in the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. But for line transfer or for
+spectra based on the <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> they are
+not.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfflux[i]:</span></code> Flux in erg cm:math:<cite>^{-2}</cite> s:math:<cite>^{-1}</cite> Hz:math:<cite>^{-1}</cite> at this
+wavelength as measured at a standard distance of 1 parsec (just as a way
+of normalization).</p></li>
+</ul>
+<p><em>NOTE: Maybe in the future a new iformat version will be possible
+where more telescope information is given in the spectrum file.</em></p>
+</div>
+<div class="section" id="output-image-out-or-image-out">
+<span id="sec-image-out"></span><h2>OUTPUT: image.out or image_****.out<a class="headerlink" href="#output-image-out-or-image-out" title="Permalink to this headline">¶</a></h2>
+<p>Any images that are produced by RADMC-3D will be written in a file called
+<code class="docutils literal notranslate"><span class="pre">image.out</span></code>. The file has the following structure (for the case
+without Stokes parameters):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                      <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">now</span> <span class="n">this</span> <span class="ow">is</span> <span class="mi">1</span> <span class="p">(</span><span class="ow">or</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">local</span> <span class="n">observer</span> <span class="n">mode</span><span class="p">)</span>
+<span class="n">im_nx</span>        <span class="n">im_ny</span>
+<span class="n">nlam</span>
+<span class="n">pixsize_x</span>    <span class="n">pixsize_y</span>
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="o">.........</span> <span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="n">im_ny</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="n">im_ny</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="n">nlam</span><span class="p">]</span>
+
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="n">im_ny</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In most cases the nr of images (nr of wavelengths) is just 1, meaning only
+one image is written (i.e. the img=2, …. img=nlam are not there, only
+the img=1). The meaning of the various entries is:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> This format number is currently set to 1</p></li>
+</ul>
+<p>for images from an observer at infinity (default) and 2 for a local observer.
+Note: For full-Stokes images it is 3, but then also the data changes a
+bit, see below.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfim_nx,im_ny:</span></code> The number of pixels in x and in y
+direction of the image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of images at different wavelengths that</p></li>
+</ul>
+<p>are in this file. You can make a series of images at different wavelengths
+in one go, and write them in this file. The wavelength belonging to each of
+these images is listed below. The <code class="docutils literal notranslate"><span class="pre">nlam</span></code> can be any number from 1 to
+however large you want. Mostly one typically just makes an images at one
+wavelength, meaning <code class="docutils literal notranslate"><span class="pre">nlam</span></code>=1.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfpixsize_x,pixsize_y:</span></code> The size of the pixels in cm (for an observer at
+infinity) or radian (for local observer mode).  This means that for the
+observer-at-infinity mode (default) the size is given in model units (distance
+within the 3-D model) and the user can, for any distance, convert this into
+arcseconds: pixel size in arcsec = ( pixel size in cm / 1.496E13) / (distance
+in parsec). The pixel size is the full size from the left of the pixel to the
+right of the pixel (or from bottom to top).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelengths in micron belonging to the various images in this
+file. In case <code class="docutils literal notranslate"><span class="pre">nlam</span></code>=1 there will be here just a single number. Note that
+this set of wavelengths can be completely independent of all other wavelength
+grids.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bfimage[ix,iy,img]:</span></code> Intensity in the image at pixel <code class="docutils literal notranslate"><span class="pre">ix</span></code>, <code class="docutils literal notranslate"><span class="pre">iy</span></code> at
+wavelength <code class="docutils literal notranslate"><span class="pre">img</span></code> (of the above listed wavelength points) in units of erg
+cm:math:<cite>^{-2}</cite> s:math:<cite>^{-1}</cite> Hz:math:<cite>^{-1}</cite> ster:math:<cite>^{-1}</cite>. <em>Important:</em>
+The pixels are ordered from left to right (i.e. increasing <span class="math notranslate nohighlight">\(x\)</span>) in the
+inner loop, and from bottom to top (i.e. increasing <span class="math notranslate nohighlight">\(y\)</span>) in the outer
+loop.</p></li>
+</ul>
+<p>You can also make images with full Stokes parameters. For this you must have
+dust opacities that include the full scattering matrix, <em>and</em> you must
+add the keyword <code class="docutils literal notranslate"><span class="pre">stokes</span></code> to the <code class="docutils literal notranslate"><span class="pre">radmc3dimage</span></code> command
+on the command-line. In that case the <code class="docutils literal notranslate"><span class="pre">image.out</span></code> file has the
+following form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                      <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Stokes</span> <span class="n">this</span> <span class="ow">is</span> <span class="mi">3</span>
+<span class="n">im_nx</span>        <span class="n">im_ny</span>
+<span class="n">nlam</span>
+<span class="n">pixsize_x</span>    <span class="n">pixsize_y</span>
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="o">.........</span> <span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="n">image_Q</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="n">image_U</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="n">image_V</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="n">im_ny</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="n">im_ny</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="n">nlam</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">image_I</span><span class="p">[</span><span class="n">ix</span><span class="o">=</span><span class="n">im_nx</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="n">im_ny</span><span class="p">,</span><span class="n">img</span><span class="o">=</span><span class="n">nlam</span><span class="p">]</span> <span class="p">(</span><span class="ow">and</span> <span class="n">so</span> <span class="n">forth</span> <span class="k">for</span> <span class="n">Q</span> <span class="n">U</span> <span class="ow">and</span> <span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That is: instead of 1 number per line we now have 4 numbers per line, which
+are the four Stokes parameters. Note that <code class="docutils literal notranslate"><span class="pre">iformat</span></code>=3 to indicate
+that we have now all four Stokes parameters in the image.</p>
+</div>
+<div class="section" id="input-minor-input-files">
+<span id="sec-minor-input-files"></span><h2>INPUT: (minor input files)<a class="headerlink" href="#input-minor-input-files" title="Permalink to this headline">¶</a></h2>
+<p>There is a number of lesser important input files, or input files that are
+only read under certain circumstances (for instance when certain command
+line options are given). Here they are described.</p>
+<div class="section" id="the-color-inus-inp-file-required-with-comm-line-option-loadcolor">
+<span id="sec-color-inus"></span><h3>The <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> file (required with comm-line option ‘loadcolor’)<a class="headerlink" href="#the-color-inus-inp-file-required-with-comm-line-option-loadcolor" title="Permalink to this headline">¶</a></h3>
+<p>The file <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> will only be read by RADMC-3D if on the command line
+the option <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code> or <code class="docutils literal notranslate"><span class="pre">color</span></code> is specified, and if the main action is
+<code class="docutils literal notranslate"><span class="pre">image</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                      <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">now</span> <span class="n">this</span> <span class="ow">is</span> <span class="mi">1</span>
+<span class="n">nlam</span>
+<span class="n">ilam</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>
+  <span class="o">.</span>
+<span class="n">ilam</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat</span></code>: This format number is currently set to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: Number of wavelength indices specified here.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ilam[i]</span></code>: The wavelength index for image i (the wavelength
+index refers to the list of wavelengths in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.</p></li>
+</ul>
+</div>
+<div class="section" id="input-aperture-info-inp">
+<span id="sec-aperture-info-file"></span><h3>INPUT: <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code><a class="headerlink" href="#input-aperture-info-inp" title="Permalink to this headline">¶</a></h3>
+<p>If you wish to make spectra with wavelength-dependent collecting area, i.e.
+aperture (see Section <a class="reference internal" href="imagesspectra.html#sec-aperture"><span class="std std-ref">Can one specify more realistic ‘beams’?</span></a>), then you must prepare the file
+<code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code>. Here is its structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                      <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">now</span> <span class="n">this</span> <span class="ow">is</span> <span class="mi">1</span>
+<span class="n">nlam</span>
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>      <span class="n">rcol_as</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="o">.</span>            <span class="o">.</span>
+  <span class="o">.</span>            <span class="o">.</span>
+<span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>   <span class="n">rcol_as</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>with</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat</span></code>: This format number is currently set to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: Number of wavelength indices specified here. This
+does <em>not</em> have to be the same as the number of wavelength of a
+spectrum or the number of wavelengths specified in the file
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. It can be any number.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelength sampling point, in microns. You can use
+a course grid, as long as the range of wavelengths is large enough to
+encompass all wavelengths you may wish to include in spectra.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rcol_as[i]</span></code>: The radius of the circular image mask used for
+the aperture model, in units of arcsec.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="for-developers-some-details-on-the-internal-workings">
+<h2>For developers: some details on the internal workings<a class="headerlink" href="#for-developers-some-details-on-the-internal-workings" title="Permalink to this headline">¶</a></h2>
+<p>There are several input files that can be quite large. Reading these files
+into RADMC-3D memory can take time, so it is important not to read files
+that are not required for the execution of the particular command at
+hand. For instance, if a model exists in which both dust and molecular
+lines are included, but RADMC-3D is called to merely make a continuum
+SED (which in RADMC-3D never includes the lines), then it would be a
+waste of time to let RADMC-3D read all the gas velocity and temperature
+data and level population data into memory if they are not used.</p>
+<p>To avoid unnecessary reading of large files the reading of these files is
+usually organized in a <cite>read when required’ way. Any subroutine in the code
+that relies on e.g. line data to be present in memory can simply call the
+routine ``read_lines_all(action)`</cite> with argument <code class="docutils literal notranslate"><span class="pre">action</span></code> being 1,
+i.e.:
+begin{verbatim}
+call read_lines_all(1)
+end{verbatim}
+This routine will check if the data are present: if no, it will read them,
+if yes, it will return without further action. This means that you can call
+<code class="docutils literal notranslate"><span class="pre">read_lines_all(1)</span></code> as often as you want: the line data will be read
+once, and only once. If you look through the code you will therefore find
+that many <code class="docutils literal notranslate"><span class="pre">read_***</span></code> routines are called abundantly, whenever the
+program wants to make sure that certain data is present. The advantage is
+then that the programmer does not have to have a grand strategy for when
+which data must be read in memory: he/she simply inserts a call to the read
+routines for all the data she/he needs at that particular point in the
+program, (always with action=1), and it will organize itself. If certain
+data is nowhere needed, they will not be read.</p>
+<p>All these <code class="docutils literal notranslate"><span class="pre">read_***</span></code> routines with argument <code class="docutils literal notranslate"><span class="pre">action</span></code> can also
+be called with <code class="docutils literal notranslate"><span class="pre">action=2</span></code>. This will force the routine to (re-)read
+these data. But this is rarely needed.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="binaryio.html" class="btn btn-neutral float-right" title="Binary I/O files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tipsandtricks.html" class="btn btn-neutral float-left" title="Tips, tricks and problem hunting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

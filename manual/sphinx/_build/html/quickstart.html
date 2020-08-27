@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quickstarting with RADMC-3D &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Overview of the RADMC-3D package" href="overview.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Quickstarting with RADMC-3D</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstarting-with-radmc-3d">
+<span id="chap-quick-start"></span><h1>Quickstarting with RADMC-3D<a class="headerlink" href="#quickstarting-with-radmc-3d" title="Permalink to this headline">¶</a></h1>
+<p>In general I recommend reading the manual fully, but it is often useful
+to get a quick impression of the package with a quick-start. To make your
+first example model, this is what you do:</p>
+<ol class="arabic simple">
+<li><p>When you read this you have probably already unzipped this package, or
+cloned the git repository.
+You should find, among others, a <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory and a
+<code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory. Go into the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory.</p></li>
+<li><p>Edit the <code class="docutils literal notranslate"><span class="pre">src/Makefile</span></code> file, and make sure to set the
+<code class="docutils literal notranslate"><span class="pre">FF</span></code> variable to the Fortran-90 compiler you have installed on
+your system.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">make</span></code>. If all goes well, this should compile the
+entire code and create an executable called <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>. If all goes well this should try to
+create a link to <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in your <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code>
+directory, where <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> is your home directory.
+If this <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code> directory does not exist, it will ask to make one.</p></li>
+<li><p>Make sure to have the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code> directory in your path.  If
+you use, for instance, the <code class="docutils literal notranslate"><span class="pre">bash</span></code> shell, you do this by setting the
+<code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable by adding a line like <code class="docutils literal notranslate"><span class="pre">export</span>
+<span class="pre">PATH=$HOME/bin:\$PATH</span></code> to your <code class="docutils literal notranslate"><span class="pre">$HOME/.bashrc</span></code> file. If you
+change these things you may have to open a new shell to make sure that the
+shell now recognizes the new path.</p></li>
+<li><p>Check if the executable is OK by typing <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in the
+shell. You should get a small welcoming message by the code.</p></li>
+<li><p>Now enter the directory <code class="docutils literal notranslate"><span class="pre">examples/run_simple_1/</span></code>. This is
+the simplest example model.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">problem_setup.py</span></code> (Note: you must have a
+working Python distribution on your computer, which is reasonably
+up to date, with <code class="docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> libraries
+included). This will create a series of input files for RADMC-3D.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">mctherm</span></code>. This should let the code do a Monte
+Carlo run. You should see <code class="docutils literal notranslate"><span class="pre">Photon</span> <span class="pre">nr</span> <span class="pre">1000</span></code>, followed by
+<code class="docutils literal notranslate"><span class="pre">Photon</span> <span class="pre">nr</span> <span class="pre">2000</span></code>, etc until you reach <code class="docutils literal notranslate"><span class="pre">Photon</span> <span class="pre">nr</span>
+<span class="pre">1000000</span></code>. The Monte Carlo modeling for the dust temperatures has now
+been done. A file <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> should have
+been created.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">image</span> <span class="pre">lambda</span> <span class="pre">1000</span> <span class="pre">incl</span> <span class="pre">60</span> <span class="pre">phi</span> <span class="pre">30</span></code>. This should
+create an image with the camera at inclination 60 degrees (from pole-on), and
+rotated 30 degrees (along the polar axis, clockwise, i.e.the object rotating
+counter-clockwise), at wavelength <span class="math notranslate nohighlight">\(\lambda=1000\,\mu\mathrm{m}\)</span> (i.e. at 1
+millimeter wavelength). The file that contains the image is <code class="docutils literal notranslate"><span class="pre">image.out</span></code>.
+It is a text file that can be read with the <code class="docutils literal notranslate"><span class="pre">simpleread.py</span></code> tool in the
+directory <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code>.</p></li>
+</ol>
+<p>If you experience troubles with the above steps, and you cannot fix it,
+please read the next chapters for more details.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview of the RADMC-3D package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

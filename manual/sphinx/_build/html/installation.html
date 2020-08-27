@@ -1,0 +1,630 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation of RADMC-3D &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic structure and functionality" href="basicstructure.html" />
+    <link rel="prev" title="Overview of the RADMC-3D package" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation of RADMC-3D</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-the-code-with-make">Compiling the code with ‘make’</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-install-perl-script">The install.perl script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-to-do-if-this-all-does-not-work">What to do if this all does not work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-python-analysis-tools">Installing the Python analysis tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-and-use-the-python-tools">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-and-use-the-python-radmc3dpy-library">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/radmc3dPy</span></code> library</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#making-special-purpose-modified-versions-of-radmc-3d-optional">Making special-purpose modified versions of RADMC-3D (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installation of RADMC-3D</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-of-radmc-3d">
+<span id="chap-compilation"></span><h1>Installation of RADMC-3D<a class="headerlink" href="#installation-of-radmc-3d" title="Permalink to this headline">¶</a></h1>
+<p>Although the RADMC-3D package contains a lot of different software,
+the main code is located in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory, and is
+written in Fortran-90. The executable is <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>. Here
+we explain how to compile the fortran-90 source codes and create
+the executable <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>.</p>
+<div class="section" id="compiling-the-code-with-make">
+<span id="sec-makeing"></span><h2>Compiling the code with ‘make’<a class="headerlink" href="#compiling-the-code-with-make" title="Permalink to this headline">¶</a></h2>
+<p>To compile the code, enter the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory in your shell. You now
+<em>may</em> need to edit the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> in this directory using your favorite
+text editor and replace the line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FF</span> <span class="o">=</span> <span class="n">gfortran</span> <span class="o">-</span><span class="n">fopenmp</span>
+</pre></div>
+</div>
+<p>with a line specifying your own compiler (and possibly OpenMP directive,
+if available). If, of course, you use gfortran,
+you can keep this line. But if you use, e.g., ifort, then replace the above
+line by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FF</span> <span class="o">=</span> <span class="n">ifort</span> <span class="o">-</span><span class="n">openmp</span>
+</pre></div>
+</div>
+<p>(note the slightly different OpenMP directive here, too).
+If you save this file, and you are back in the shell, you can compile the
+radmc3d code by typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span>
+</pre></div>
+</div>
+<p>in the shell. If all goes well, you have now created a file called <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory.</p>
+<p>If, for whatever reason, the OpenMP compilation does not work, you can also
+compile the code in serial mode. Simply remove the <code class="docutils literal notranslate"><span class="pre">-fopenmp</span></code> directive.</p>
+</div>
+<div class="section" id="the-install-perl-script">
+<h2>The install.perl script<a class="headerlink" href="#the-install-perl-script" title="Permalink to this headline">¶</a></h2>
+<p>If instead of typing just <code class="docutils literal notranslate"><span class="pre">make</span></code> you type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>(or you first type <code class="docutils literal notranslate"><span class="pre">make</span></code> and then <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>, it is the same), then in
+addition to creating the executable, it also automatically executes a perl
+script called <code class="docutils literal notranslate"><span class="pre">install.perl</span></code> (located also in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory).  This
+PERL script installs the code in such a way that it can be conveniently used in
+any directory. What it does is:</p>
+<ul>
+<li><p>It checks if a <code class="docutils literal notranslate"><span class="pre">bin/</span></code> directory is present in your home
+directory (i.e. a <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code> directory). If not, it asks if
+you want it to automatically make one.</p></li>
+<li><p>It checks if the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code> directory is in the <em>path</em> of
+the currently used shell. This is important to allow the computer to look
+for the program <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code> directory. If you
+use a bash shell, then you can add the following line to your
+<code class="docutils literal notranslate"><span class="pre">$HOME/.bashrc</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PATH=/myhomedirectory/bin/python:$PATH
+</pre></div>
+</div>
+</li>
+<li><p>It creates a file <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in this <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code>
+directory with the correct executable permissions. This file is merely a
+dummy executable, that simply redirects everything to the true <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+executable located in your current <code class="docutils literal notranslate"><span class="pre">src/</span></code>
+directory. When you now open a new shell, the path contains the
+<code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code> directory, and the command <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> is
+recognized. You can also type <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">$HOME/.bashrc</span></code> followed
+by <code class="docutils literal notranslate"><span class="pre">rehash</span></code>. This also makes sure that your shell recognizes the
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> command.</p></li>
+<li><p>It checks if a <code class="docutils literal notranslate"><span class="pre">python/</span></code> subdirectory exists in the above
+mentioned <code class="docutils literal notranslate"><span class="pre">bin/</span></code> directory, i.e.a <code class="docutils literal notranslate"><span class="pre">$HOME/bin/python/</span></code>
+directory. If not, it asks if you want it to automatically create one.</p></li>
+<li><p>If yes, then it will copy all the files ending with <code class="docutils literal notranslate"><span class="pre">.py</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code> directory of the distribution to that
+$HOME``/bin/python/radmc3d_tools/`` directory. This is useful to
+allow you to make an <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> entry to allow python to find
+these python scripts automatically.</p></li>
+</ul>
+<p>Note that this perl script installs the code only for the user that installs
+it. A system-wide installation is not useful, because the code package is not
+very big and it should remain in the control of the user which version of the
+code he/she uses for each particular problem.</p>
+<p>If all went well, then the <code class="docutils literal notranslate"><span class="pre">perl.install</span></code> script described here is
+called automatically once you type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> following the
+procedure in Section <a class="reference internal" href="#sec-makeing"><span class="std std-ref">Compiling the code with ‘make’</span></a>.</p>
+<p>Before the installation is recognized by your shell, you must now either
+type <code class="docutils literal notranslate"><span class="pre">rehash</span></code> in the shell or simply open a new shell.</p>
+<p>How do you know that all went OK? If you type <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in the
+shell the RADMC-3D code should now be executed and give some comments. It
+should write:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>================================================================
+     WELCOME TO RADMC-3D: A 3-D CONTINUUM AND LINE RT SOLVER
+
+                         VERSION 2.0
+
+               (c) 2008-2020 Cornelis Dullemond
+
+      Please feel free to ask questions. Also please report
+       bugs and/or suspicious behavior without hestitation.
+     The reliability of this code depends on your vigilance!
+                   dullemond@uni-heidelberg.de
+
+  To keep up-to-date with bug-alarms and bugfixes, register to
+                    the RADMC-3D forum:
+           http://radmc3d.ita.uni-heidelberg.de/phpbb/
+
+             Please visit the RADMC-3D home page at
+ http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/
+================================================================
+
+Nothing to do... Use command line options to generate action:
+  mctherm        : Do Monte Carlo simul of thermal radiation
+  mcmono         : Do Monte Carlo simul only for computing mean intensity
+  spectrum       : Make continuum spectrum
+  image          : Make continuum image
+</pre></div>
+</div>
+<p>on the screen (or for newer versions of RADMC-3D perhaps some more
+or different text). This should also work from any other directory.</p>
+</div>
+<div class="section" id="what-to-do-if-this-all-does-not-work">
+<h2>What to do if this all does not work?<a class="headerlink" href="#what-to-do-if-this-all-does-not-work" title="Permalink to this headline">¶</a></h2>
+<p>In case the above compilation and installation does not work, here is a
+proposed procedure to do problem hunting:</p>
+<ol class="arabic">
+<li><p>First, answer the following questions:</p>
+<ul class="simple">
+<li><p>Did you type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> in the <code class="docutils literal notranslate"><span class="pre">src/</span></code>
+directory? I mean, did you not forget the <code class="docutils literal notranslate"><span class="pre">install</span></code> part?</p></li>
+<li><p>Did you put $HOME``/bin/`` in your path (see above)?</p></li>
+<li><p>If you just added $HOME``/bin/`` to your path, did you
+follow the rest of the procedure (either closing the current shell and
+opening a new shell or typing the <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">rehash</span></code> commands as
+described above)?</p></li>
+</ul>
+<p>If this does not help, then continue:</p>
+</li>
+<li><p>Close the shell, open a new shell.</p></li>
+<li><p>Go to the RADMC-3D <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">./radmc3d</span></code>. This should give the above message. If
+not, then make sure that the compilation went right in the first place:</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">radmc3d</span></code>, to make sure that any old executable
+is not still present.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>. This should return the sentence
+<code class="docutils literal notranslate"><span class="pre">OBJECT</span> <span class="pre">and</span> <span class="pre">MODULE</span> <span class="pre">files</span> <span class="pre">removed.</span></code></p></li>
+<li><p>In case the problem lies with the OpenMP parallellization, you
+could do <code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">Makefile_normal</span> <span class="pre">Makefile</span></code>, which switches
+off the OpenMP compilation.</p></li>
+<li><p>Then type <code class="docutils literal notranslate"><span class="pre">make</span></code>. This should produce a set of lines, each
+representing a compilation of a module, e.g. <code class="docutils literal notranslate"><span class="pre">gfortran</span> <span class="pre">-c</span> <span class="pre">-O2</span>
+<span class="pre">./amr_module.f90</span> <span class="pre">-o</span> <span class="pre">amr_module.o</span></code>, etc. The final line should be
+something like <code class="docutils literal notranslate"><span class="pre">gfortran</span> <span class="pre">-O2</span> <span class="pre">main.o</span> <span class="pre">.....</span> <span class="pre">gascontinuum_module.o</span> <span class="pre">-o</span> <span class="pre">radmc3d</span></code>. If instead there
+is an error message, then do the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Check if the compiler used (by default <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>) is
+available on your computer system.</p></li>
+<li><p>If you use an other compiler, check if the compiler options used
+are recognized by your compiler.</p></li>
+<li><p>Check if the executable <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> is now indeed present.
+If it is not present, then something must have gone wrong with the
+compilation. So then please check the compilation and linking stage
+again carefully.</p></li>
+</ul>
+<p>If you followed all these procedures, but you still cannot get even the
+executable in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory to run by typing (in the
+<code class="docutils literal notranslate"><span class="pre">src/</span></code> directory) <code class="docutils literal notranslate"><span class="pre">./radmc3d</span></code> (don’t forget the dot
+slash!), then please contact the author.</p>
+</div></blockquote>
+</li>
+<li><p>At this point we assume that the previous point worked. Now go to
+another directory (any one), and type <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>.  This should
+also give the above message. If not, but the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> executable
+was present, then apparently the shell path settings are wrong. Do this:</p>
+<ul class="simple">
+<li><p>Check if, in the current directory (which is now not <code class="docutils literal notranslate"><span class="pre">src/</span></code>)
+there is by some accident another copy of the executable
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>. If yes, please remove it.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">radmc3d</span></code> to find out if it is recognized at all,
+and if yes, to which location it points.</p></li>
+<li><p>Did you make sure that the shell path includes the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/</span></code>
+directory, as it should? Otherwise the shell does not know
+where to find the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/radmc3d</span></code> executable (which is
+a perl link to the <code class="docutils literal notranslate"><span class="pre">src/radmc3d</span></code> executable).</p></li>
+<li><p>Does the file <code class="docutils literal notranslate"><span class="pre">$HOME/bin/radmc3d</span></code> perl file exist in the
+first place? If no, check why not.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">less</span> <span class="pre">$HOME/bin/radmc3d</span></code> and you should
+see a text with first line being <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/perl</span></code> and the
+second line being someting like
+<code class="docutils literal notranslate"><span class="pre">system(&quot;/Users/user1/radmc-3d/version_2.0/src/radmc3d</span> <span class="pre">&#64;ARGV&quot;);</span></code>
+where the <code class="docutils literal notranslate"><span class="pre">/Users/user1</span></code> should of course be the path to
+your home directory, in fact to the directory in which you installed
+RADMC-3D.</p></li>
+</ul>
+</li>
+</ol>
+<p>If this all brings you no further, please first ask your system administrators
+if they can help. If not, then please contact the author.</p>
+</div>
+<div class="section" id="installing-the-python-analysis-tools">
+<span id="sec-install-pythonscripts"></span><h2>Installing the Python analysis tools<a class="headerlink" href="#installing-the-python-analysis-tools" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D offers (in addition to the model setup scripts in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code>
+subdirectories) two Python support libraries:</p>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">python/tools/</span></code></p>
+<p>This library contains only some bare-bones small Python scripts.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python/radmc3dPy/</span></code></p>
+<p>This library is a sophisticated stand-alone library developed by
+Attila Juhasz, and further maintained together with the RADMC-3D
+main author.</p>
+</li>
+</ol>
+<div class="section" id="how-to-install-and-use-the-python-tools">
+<h3>How to install and use the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code><a class="headerlink" href="#how-to-install-and-use-the-python-tools" title="Permalink to this headline">¶</a></h3>
+<p>The installation of the <code class="docutils literal notranslate"><span class="pre">python/tools</span></code> should be automatic when you
+type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> code directory (see
+above). It will copy the files to the <code class="docutils literal notranslate"><span class="pre">bin/python/radmc3d_tools/</span></code>
+directory in your home directory. If this directory does not exist, you
+will be asked if you want it to be created. If you confirm (typing ‘y’),
+then the files from the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code> directory will be
+copied into the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/python/radmc3d_tools/</span></code> directory.</p>
+<p>Now you need to make sure that Python knows that these tools are there.
+In Python here are two ways how you can make sure that Python automatically
+finds these scripts:</p>
+<ol class="arabic">
+<li><p>Under Unix/Linux/MacOSX you can set the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> directly in your
+<code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> file. For example: in
+<code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> (if you use the bash shell) you can write:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$HOME/bin/python:$PYTHONPATH
+</pre></div>
+</div>
+</li>
+</ol>
+<p>(where <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> is your home directory name).</p>
+<ol class="arabic">
+<li><p>Alternatively you can set the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> directly from within
+Python with the python command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;HOME&quot;</span><span class="p">]</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">home</span><span class="o">+</span><span class="s1">&#39;/bin/python&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>If all goes well, if you now start Python you should be able to have access to
+the basic Python tools of RADMC-3D directly. To test this, try typing <code class="docutils literal notranslate"><span class="pre">from</span>
+<span class="pre">radmc3d_tools.simpleread</span> <span class="pre">import</span> <span class="pre">*</span></code> in Python. If this gives an error message
+that <code class="docutils literal notranslate"><span class="pre">simpleread.py</span></code> cannot be found, then please ask your system
+administrators how to solve this.</p>
+<p>You may ask why first copy these files to <code class="docutils literal notranslate"><span class="pre">$HOME/bin/python/radmc3d_tools/</span></code>
+and not point PYTHONPATH directly to the <code class="docutils literal notranslate"><span class="pre">python/tools</span></code> in your RADMC-3D
+distribution? The reason is that if you have multiple versions of RADMC-3D on
+your computer system, you always are assured that Python finds the python
+routines belonging to the latest installation of RADMC-3D (note: only assured if
+that latest compilation was done with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>).</p>
+<p>Now you should be ready to use the tools. The most important one would be
+the <code class="docutils literal notranslate"><span class="pre">simpleread.py</span></code> tool, which contains a set of functions for
+reading typical RADMC-3D input and output files (though only for regular
+model grid, not for octree grids). In a Python command line interface
+you can import them by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3d_tools</span> <span class="k">import</span> <span class="n">simpleread</span>
+</pre></div>
+</div>
+<p>And you can then, for instance, read the dust density file with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">simpleread</span><span class="o">.</span><span class="n">read_dustdens</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">d</span></code> is now an object containing a <code class="docutils literal notranslate"><span class="pre">d.grid</span></code> subobject (which contain
+information about the grid) and the dust density array <code class="docutils literal notranslate"><span class="pre">d.rhodust</span></code>. Have a
+look at the various functions in <code class="docutils literal notranslate"><span class="pre">simpleread</span></code>, to see what is available.</p>
+</div>
+<div class="section" id="how-to-install-and-use-the-python-radmc3dpy-library">
+<h3>How to install and use the <code class="docutils literal notranslate"><span class="pre">python/radmc3dPy</span></code> library<a class="headerlink" href="#how-to-install-and-use-the-python-radmc3dpy-library" title="Permalink to this headline">¶</a></h3>
+<p>The installation of the <code class="docutils literal notranslate"><span class="pre">python/radmc3dPy</span></code> package is described in the
+<code class="docutils literal notranslate"><span class="pre">python/radmc3dPy/README</span></code> file. In short, by going into the
+<code class="docutils literal notranslate"><span class="pre">python/radmc3dPy/</span></code> directory and typing in the shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span>
+</pre></div>
+</div>
+<p>it should install itself right into your Python distribution. For instance,
+if you have <code class="docutils literal notranslate"><span class="pre">anaconda3</span></code> on a Mac, it would copy the files into the
+directory</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$HOME/.local/lib/python3.7/site-packages/radmc3dPy/
+</pre></div>
+</div>
+<p>Python knows where to find it there.</p>
+<p>Now you should be ready to use <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code>, by importing it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">radmc3dPy</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> consists of
+several sub libraries such as <code class="docutils literal notranslate"><span class="pre">radmc3dPy.analyze</span></code> and
+<code class="docutils literal notranslate"><span class="pre">radmc3dPy.image</span></code>. For instance, to read the dust density
+distribution, you could do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="n">analyze</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">readData</span><span class="p">(</span><span class="n">ddens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">d.rhodust</span></code> array now contains the dust density.</p>
+<p>For more information, please consult the <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> documentation
+in the <code class="docutils literal notranslate"><span class="pre">python/radmc3dPy/doc/</span></code> directory.</p>
+</div>
+</div>
+<div class="section" id="making-special-purpose-modified-versions-of-radmc-3d-optional">
+<span id="sec-special-purpose-compile"></span><h2>Making special-purpose modified versions of RADMC-3D (optional)<a class="headerlink" href="#making-special-purpose-modified-versions-of-radmc-3d-optional" title="Permalink to this headline">¶</a></h2>
+<p>For most purposes it should be fine to simply compile the latest version of
+RADMC-3D once-and-for-all, and simply use the resulting <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+executable for all models you make. Normally there is no reason to have to
+modify the code, because models can be defined quite flexibly by preparing
+the various input files for RADMC-3D to your needs. So if you are an
+average user, you can skip to the next subsection without problem.</p>
+<p>But sometimes there <em>is</em> a good reason to want to modify the code.  For
+instance to allow special behavior for a particular model. Or for a model
+setup that is simply easier made internally in the code rather than by
+preparing large input files. One can imagine some analytic model setup
+that might be easier to create internally, so that one can make use of
+the full AMR machinery to automatically refine the grid where needed.
+Having to do so externally from the code would require you to set up
+your own AMR machinery, which would be a waste of time.</p>
+<p>The problem is that if the user would modify the central code for each
+special purpose, one would quickly lose track of which modification of the
+code is installed right now.</p>
+<p>Here is how this problem is solved in RADMC-3D:</p>
+<ul class="simple">
+<li><p>For most purposes you can achieve your goals by only editing the file
+<code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>. This is a set of standard subroutines
+that the main code calls at special points in the code, and the user can
+put anything he/she wants into those subroutines. See Chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a>
+for more information about these standard
+subroutines. This method is the safest way to create special-purpose
+codes. It means (a) that you know that your modification cannot do much
+harm unless you make really big blunders, because these subroutines are
+meant to be modified, and (b) you have all your modifications <em>only</em>
+in one single file, leaving the rest of the code untouched.</p></li>
+<li><p>You can create a <em>local</em> version of the code, without touching
+the main code. Suppose you have a model directory <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code> and for
+this model you want to make a special-purpose version of the code.
+This is what you do:</p>
+<ol class="arabic simple">
+<li><p>Copy the Makefile from the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory into <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code>.</p></li>
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">.f90</span></code> file(s) you want to modify from the <code class="docutils literal notranslate"><span class="pre">src/</span></code>
+directory into <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code>. Usually you only want to modify
+the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> file, but you can also copy any other
+file if you want.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">run_mymodel/Makefile</span></code> replace the <code class="docutils literal notranslate"><span class="pre">SRC</span> <span class="pre">=</span> <span class="pre">.</span></code> line with
+<code class="docutils literal notranslate"><span class="pre">SRC</span> <span class="pre">=</span> <span class="pre">XXXXXX</span></code>, where <code class="docutils literal notranslate"><span class="pre">XXXXXX</span></code> should
+be the <em>full</em> path to the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory. An example line
+is given in the Makefile, but is commented out.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">run_mymodel/Makefile</span></code> make sure that all the
+<code class="docutils literal notranslate"><span class="pre">.f90</span></code> files that should remain as they are have a <code class="docutils literal notranslate"><span class="pre">$(SRC)/</span></code>
+in front of the name, and all the <code class="docutils literal notranslate"><span class="pre">.f90</span></code> files that
+you want to modify (and which now have a copy in the <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code>
+directory) have a <code class="docutils literal notranslate"><span class="pre">./</span></code> in front of the name. By
+default all <code class="docutils literal notranslate"><span class="pre">.f90</span></code> files have <code class="docutils literal notranslate"><span class="pre">$(SRC)/</span></code> in front of
+the name, except the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> file, which has a
+<code class="docutils literal notranslate"><span class="pre">./</span></code> in front of the name because that is the file that is
+usually the one that is going to be edited by you.</p></li>
+<li><p>Now edit the local <code class="docutils literal notranslate"><span class="pre">.f90</span></code> files in the <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code> directory
+in the way you want. See Chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a> for more details.</p></li>
+<li><p>Now <em>inside</em> the <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code> directory you can now type
+<code class="docutils literal notranslate"><span class="pre">make</span></code> and you will create your own local <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> executable.
+NOTE: Do not type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> in this case, because it should
+remain a local executable, only inside the <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code> directory.</p></li>
+<li><p>If you want (though this is not required) you can clean up all the
+local <code class="docutils literal notranslate"><span class="pre">.o</span></code> and <code class="docutils literal notranslate"><span class="pre">.mod</span></code> files by typing <code class="docutils literal notranslate"><span class="pre">make</span>
+<span class="pre">clean</span></code>, so that your <code class="docutils literal notranslate"><span class="pre">run_mymodel</span></code> directory is not filled
+with junk.</p></li>
+<li><p>You can now use this special purpose version of <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+by simply calling on the command line: <code class="docutils literal notranslate"><span class="pre">./radmc3d</span></code>, with any
+command-line options you like. Just beware that, depending on the order
+in which you have your paths set (in tcsh or bash) typing just
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> <em>may</em> instead use the global version (that you
+may have created in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory with <code class="docutils literal notranslate"><span class="pre">make</span>
+<span class="pre">install</span></code>). So to be sure to use the {em local} version, just put the
+<code class="docutils literal notranslate"><span class="pre">./</span></code> in front of the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>.</p></li>
+</ol>
+</li>
+</ul>
+<p>Note: In chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a> there is more information on how to
+set up models internally in the code using the method described here.</p>
+<p>Note: You can use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code> to remove all the .o and .mod files from your
+model directory, because they can be annoying to have hanging around. By typing
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">cleanmodel</span></code> you remove, in addition to the .o and .mod files, also all
+model input and output files, with the exception of dust opacity or molecular
+data files (because these latter files are usually not created locally by the
+<code class="docutils literal notranslate"><span class="pre">problem_setup.py</span></code> script). By typing <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">cleanall</span></code> you remove everything
+<em>except</em> the basic files such as the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>, any <code class="docutils literal notranslate"><span class="pre">.f90</span></code> files, any
+<code class="docutils literal notranslate"><span class="pre">.py</span></code> files, the dust opacity or molecular data files and <code class="docutils literal notranslate"><span class="pre">README</span></code> files.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="basicstructure.html" class="btn btn-neutral float-right" title="Basic structure and functionality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview of the RADMC-3D package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

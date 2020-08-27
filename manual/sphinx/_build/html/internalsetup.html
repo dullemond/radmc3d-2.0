@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Modifying RADMC-3D: Internal setup and user-specified radiative processes &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python analysis tool set" href="pythontools.html" />
+    <link rel="prev" title="More information about the treatment of stars" href="stars.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-a-model-inside-of-radmc-3d">Setting up a model <em>inside</em> of RADMC-3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-pre-defined-subroutines-of-the-userdef-module-f90">The pre-defined subroutines of the userdef_module.f90</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#some-caveats-and-advantages-of-internal-model-setup">Some caveats and advantages of internal model setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-userdef-module-to-compute-integrals-of-j-nu">Using the userdef module to compute integrals of <span class="math notranslate nohighlight">\(J_\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#some-tips-and-tricks-for-programming-user-defined-subroutines">Some tips and tricks for programming user-defined subroutines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-your-own-emission-and-absorption-processes">Creating your own emission and absorption processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-radmc-3d-as-a-fancy-volume-rendering-tool">Using RADMC-3D as a fancy volume-rendering tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Modifying RADMC-3D: Internal setup and user-specified radiative processes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/internalsetup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="modifying-radmc-3d-internal-setup-and-user-specified-radiative-processes">
+<span id="chap-internal-setup"></span><h1>Modifying RADMC-3D: Internal setup and user-specified radiative processes<a class="headerlink" href="#modifying-radmc-3d-internal-setup-and-user-specified-radiative-processes" title="Permalink to this headline">¶</a></h1>
+<p>It has been mentioned several times before that as an alternative to the
+standard <cite>compile once-and-for-all’ philosophy, one can also use RADMC-3D by
+modifying the code directly so that ``radmc3d`</cite> will have new
+functionality that might be of use for you. We refer to Section
+<a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a> for an in-depth description of how to
+modify the code in a way that is <em>non-invasive</em> to the main code. We
+urge the reader to read Section <a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a> first
+before continuing to read this chapter. In all of the following we assume
+that the editings to the fortran files are done in the local way described
+in Section <a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a> so that the original source
+files in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory stay unaffected, and only local
+copies are edited.</p>
+<div class="section" id="setting-up-a-model-inside-of-radmc-3d">
+<h2>Setting up a model <em>inside</em> of RADMC-3D<a class="headerlink" href="#setting-up-a-model-inside-of-radmc-3d" title="Permalink to this headline">¶</a></h2>
+<p>The most common reason for editing the code itself is for setting up the
+model <em>internally</em> rather than reading in all data via input files. For
+a list of advantages and disadvantages of setting models up internally as
+opposed to the standard way, see Section <a class="reference internal" href="#sec-internalsetup-proscons"><span class="std std-ref">Some caveats and advantages of internal model setup</span></a>
+below. Setting up a model within RADMC-3D is done by making a local copy of
+the file <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> and editing it (see Section
+<a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a>). This file contains a set of standard
+subroutines that are called by the main program at special points in the
+code. Each subroutine has a special purpose which will be described below.
+By keeping a subroutine empty, nothing is done. By filling it with your own
+code lines, you can set up the density, temperature or whatever needs to be
+set up for the model. In addition to this you can do the following as well:</p>
+<ul class="simple">
+<li><p>Add new variables or arrays in the module header (above the <code class="docutils literal notranslate"><span class="pre">contains</span></code>
+command), which you can use in the subroutines of the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>
+module. You are completely free to add any new variables you like. A small
+tip: it may be useful (though not required) to start all their names with
+e.g. <code class="docutils literal notranslate"><span class="pre">userdef_</span></code> to make sure that no name conflicts with other variables in
+the code happen.</p></li>
+<li><p>Add new subroutines at will (below the <code class="docutils literal notranslate"><span class="pre">contains</span></code> command) which you can
+call from within the standard subroutines.</p></li>
+<li><p>Introduce your own <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> command-line options (see Section
+<a class="reference internal" href="#sec-predef-userdef"><span class="std std-ref">The pre-defined subroutines of the userdef_module.f90</span></a>).</p></li>
+<li><p>Introduce your own <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> namelist variables (see Section
+<a class="reference internal" href="#sec-predef-userdef"><span class="std std-ref">The pre-defined subroutines of the userdef_module.f90</span></a>).</p></li>
+</ul>
+<div class="figure align-default" id="id1">
+<span id="fig-dataflow-basic-userdef"></span><img alt="_images/dataflow-basic-userdef.svg" src="_images/dataflow-basic-userdef.svg" /><p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Pictographic representation of the dataflow for the case when you define your
+model <em>internally</em> using the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>Often you still want some of the input data to be still read in in the usual
+way, using input files. For instance, you may want to still read the
+<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> and the opacities using the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code> files. This
+is all possible. Typically, you simply keep the files you still want RADMC-3D to
+read, and omit the files that contain data that you allocate and set in the
+<code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>. This is all a bit complicated, so the best way to
+learn how to do this is to start from the example directories in which a model
+is set up with the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> method.</p>
+<p>In Fig. <a class="reference internal" href="#fig-dataflow-basic-userdef"><span class="std std-numref">Fig. 23</span></a> the dataflow for the user-defined
+model setup is graphically depicted.</p>
+</div>
+<div class="section" id="the-pre-defined-subroutines-of-the-userdef-module-f90">
+<span id="sec-predef-userdef"></span><h2>The pre-defined subroutines of the userdef_module.f90<a class="headerlink" href="#the-pre-defined-subroutines-of-the-userdef-module-f90" title="Permalink to this headline">¶</a></h2>
+<p>The idea of the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> is that it contains a number of standard
+pre-defined subroutines that are called from the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> code (and <em>only</em>
+from there). Just browse through the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> file and search for the
+sequence <code class="docutils literal notranslate"><span class="pre">calluserdef_</span></code> and you will find all the points where these standard
+routines are called. It means that at these points you as the user have
+influence on the process of model setup. Here is the list of standard routines
+and how they are used. They are ordered roughly in chronological order in which
+they are called.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_defaults()</span></code></p>
+<p>This subroutine allows you to set the default value of any new parameters you
+may have introduced. If neither on the command line nor in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>
+file the values of these parameters are set, then they will simply retain this
+default value.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_commandline(buffer,numarg,iarg,fromstdi,gotit)</span></code></p>
+<p>This subroutine allows you to add your own command-line options for
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>. The routine has a series of standard arguments which you are
+not allowed to change. The <code class="docutils literal notranslate"><span class="pre">buffer</span></code> is a string containing the current
+command line option that is parsed. You will check here if it is an option of
+your module, and if yes, activate it.  An example is listed in the code. You
+an also require a second argument, for which also an example is listed in the
+original code.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_commandline_postprocessing()</span></code></p>
+<p>After the command line options have been read, it can be useful to check if
+the user has not asked for conflicting things. Here you can do such checks.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_parse_main_namelist()</span></code></p>
+<p>Here you can add your own namelist parameters that read from the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file. An example is provided in the original code.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_main_namelist_postprocessing()</span></code></p>
+<p>Also here, after the entire <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file has been read and
+interpreted, you can do some consistency checks and postprocessing here.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_prep_model()</span></code></p>
+<p>This routine can be used if you wish to set up the grid not from input files
+but internally. You will have to know how to deal with the <code class="docutils literal notranslate"><span class="pre">amr_module.f90</span></code>
+module. You can also set your own global frequency grid here. And finally, you
+can set your own stellar sources here. In all cases, if you set these things
+here (which requires you to make the proper memory allocations, or in case of
+the gridding, let the <code class="docutils literal notranslate"><span class="pre">amr_module.f90</span></code> do the memory allocations for you)
+the further course of <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will skip any of its own settings (it will
+simply detect if these arrays are allocated already, and if yes, it will
+simply not read or allocate them anymore).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_setup_model()</span></code></p>
+<p>This is the place where you can actually make your own model setup.  By the
+time this subroutine is called, all your parameters have been read in, as well
+as all of the other parameters from the original <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code. So you can
+now set up the dust density, or the gas velocity or you name it. For all of
+these things you will have to allocate the arrays youself (!!!). Once you did
+this, the rest of the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code won’t read those data anymore, because
+it detects that the corresponding arrays have already been allocated (by
+you). This allows you to completely circumvent the reading of any of the
+following files by making these data yourself here at this location:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> or in the future the input files for any of the other griding types.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_density.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_temperature.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_velocity.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">microturbulence.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">levelpop_XXX.dat</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numberdens_XXX.inp</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>To learn how to set up a model in this way, we refer you for now to the
+<code class="docutils literal notranslate"><span class="pre">ioput_module.f90</span></code> or <code class="docutils literal notranslate"><span class="pre">lines_module.f90</span></code> and search for the above file
+names to see how the arrays are allocated and how the data are inserted. I
+apologise for not explaining this in more detail at this point. But examples
+are or will be given in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_dostuff()</span></code></p>
+<p>This routine will be called by the main routine to allow you to do any kind of
+calculation after the main calculation (for instance after the monte carlo
+simulation). This is done within the execution-loop.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_compute_levelpop()</span></code></p>
+<p>This is a subroutine that can be called by the camera module for
+on-the-fly calculation of level populations according to your own recipe.
+This may be a bit tricky to use, but I hope to be able to provide some
+example(s) in the near future.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_srcalp()</span></code></p>
+<p>This subroutine allows you to add any emission/absorption process you
+want, even fake ones. For instance, you could use this to create nicely
+volume-rendered images of your 3-D models with fake opacities, which are
+chosen to make the image look nice and/or insight-giving.  You can also
+use this to add physical processes that are not yet implemented in
+RADMC-3D. This subroutine allows you full freedom and flexibility to
+add emissivity and extinction whereever/however you like. To activate
+it you must set <code class="docutils literal notranslate"><span class="pre">incl_userdef_srcalp=1</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">userdef_writemodel()</span></code></p>
+<p>This allows the user to dump any stuff to file that the user computed
+in this module. You can also use this routine to write out files that would
+have been used normally as input file (like <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> or
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code>) so that the Python routines can read them if
+they need. In particular the grid information may be needed by these
+external analysis tools. Here is a list of standard subroutines you can
+call for writing such files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">write_grid_file()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">write_dust_density()</span></code></p></li>
+<li><p>…more to come…</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>For now this is it, more routines will be included in the future.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">userdef_compute_levelpop()</span></code> subroutine, in contrast to all the
+others, is called not from the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> program but from the
+<code class="docutils literal notranslate"><span class="pre">camera_module.f90</span></code> module. This is why the camera module is the only module
+that is higher in compilation ranking than the userdef module (i.e. the userdef
+module will be compiled before the camera module). For this reason the userdef
+module has no access to the variables of the camera module. For the rest, the
+userdef module has access to the variables in all other modules.</p>
+<p>Note also that not all input data is meant to be generated in this way. The
+following types of data are still supposed to be read from file:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Dust opacity data</p></li>
+<li><p>Molecular fundamental data</p></li>
+</ul>
+</div></blockquote>
+<p>Please have a look in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory for models
+which are set up in this internal way.</p>
+</div>
+<div class="section" id="some-caveats-and-advantages-of-internal-model-setup">
+<span id="sec-internalsetup-proscons"></span><h2>Some caveats and advantages of internal model setup<a class="headerlink" href="#some-caveats-and-advantages-of-internal-model-setup" title="Permalink to this headline">¶</a></h2>
+<p>Setting up the models internally has several advantages as well as
+disadvantages compared to the standard way of feeding the models into
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> via files. The advantages are, among others:</p>
+<ul class="simple">
+<li><p>You can modify the model parameters in <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> and/or in the command
+line options (depending on how you allow the user to set these parameters,
+i.e. in the <code class="docutils literal notranslate"><span class="pre">userdef_parse_main_namelist()</span></code> routine and/or in the
+<code class="docutils literal notranslate"><span class="pre">userdef_commandline()</span></code> routine. You then do not need to run Python anymore
+(except for setting up the basic files; see examples). Some advantages of
+this:</p>
+<ul>
+<li><p>It allows you, for instance, to create a version of the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code
+that acts as if it is a special-purpose model. You can specify model
+parameters on the command line (rather than going through the cumbersome
+Python stuff).</p></li>
+<li><p>It is faster: even a large model is built up quickly and does not
+require a long read from large input files.</p></li>
+</ul>
+</li>
+<li><p>You can make use of the AMR module routines such as the
+<code class="docutils literal notranslate"><span class="pre">amr_branch_refine()</span></code> routine, so you can adaptively refine the grid while
+you are setting up the model.</p></li>
+</ul>
+<p>Some of the disadvantages are:</p>
+<ul class="simple">
+<li><p>The model needs to be explicitly written out to file and read into Python or
+any other data plotting package before you can analyze the density structure
+to test if you’ve done it right. You can explicitly ask <code class="docutils literal notranslate"><span class="pre">./radmc3d</span></code> to call
+the <code class="docutils literal notranslate"><span class="pre">userdef_writemodel()</span></code> subroutine (which is supposed to be writing out
+all essential data; but that is the user’s responsibility) by typing
+<code class="docutils literal notranslate"><span class="pre">./radmc3dwritemodel</span></code>.</p></li>
+<li><p>Same is true for the grid, and this is potentially even more dangerous if not
+done. You can explicitly ask <code class="docutils literal notranslate"><span class="pre">./radmc3d</span></code> to write out the grid file by
+typing <code class="docutils literal notranslate"><span class="pre">./radmc3dwritegridfile</span></code>.  Note that if you call the
+<code class="docutils literal notranslate"><span class="pre">write_grid_file()</span></code> subroutine from within <code class="docutils literal notranslate"><span class="pre">userdef_writemodel()</span></code>, then
+you do not have to explicitly type <code class="docutils literal notranslate"><span class="pre">./radmc3dwritegridfile</span></code> as well.  Note
+also that <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will automatically call the <code class="docutils literal notranslate"><span class="pre">write_grid_file()</span></code>
+subroutine when it writes the results of the thermal Monte Carlo computation,
+if it has its grid from inside (i.e. it has not read the grid from the file
+<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>.</p></li>
+<li><p>It requires a bit more knowledge of the internal workings of the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+code, as you will need to directly insert code lines in the
+<code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> file.</p></li>
+</ul>
+</div>
+<div class="section" id="using-the-userdef-module-to-compute-integrals-of-j-nu">
+<span id="sec-compute-radiation-integrals"></span><h2>Using the userdef module to compute integrals of <span class="math notranslate nohighlight">\(J_\nu\)</span><a class="headerlink" href="#using-the-userdef-module-to-compute-integrals-of-j-nu" title="Permalink to this headline">¶</a></h2>
+<p>With the monochromatic Monte Carlo computation (see Section
+<a class="reference internal" href="dustradtrans.html#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>) we can calculate the mean intensity
+<span class="math notranslate nohighlight">\(J_\nu\)</span> at every location in the model at a user-defined set of
+wavelengths. However, as mentioned before, for large models and large numbers of
+wavelengths this could easily lead to a data volume that is larger than what the
+computer can handle. Since typically the main motivation for computing
+<span class="math notranslate nohighlight">\(J_\nu\)</span> is to compute some integral of the the form:</p>
+<div class="math notranslate nohighlight">
+\[Q = \int_0^{\infty} J_\nu K_\nu d\nu\]</div>
+<p>where <span class="math notranslate nohighlight">\(K_\nu\)</span> is some cross section function or so, it may not be
+necessary to store the entire function <span class="math notranslate nohighlight">\(J\)</span> as a function of <span class="math notranslate nohighlight">\(nu\)</span>.
+Instead we would then only by interested in the result of this integral
+at each spatial location.</p>
+<p>So it would be useful to allow the user to do this computation internally.  We
+should start by initializing <span class="math notranslate nohighlight">\(Q(x,y,z)=0\)</span> (or <span class="math notranslate nohighlight">\(Q(r,\theta,\phi)=0\)</span>
+if you use spherical coordinates). Then we call the monochromatic Monte Carlo
+routine for the first wavelength we want to include, and multiply the resulting
+mean intensities with an appropriate <span class="math notranslate nohighlight">\(\Delta\nu\)</span> and add this to
+<span class="math notranslate nohighlight">\(Q(x,y,z)\)</span>. Then we do the monochromatic Monte Carlo for the next
+wavelength and again add to <span class="math notranslate nohighlight">\(Q\)</span> everywhere. We repeat this until our
+integral (at every spatial location on the grid) is finished, and we are
+done. This saves a huge amount of memory.</p>
+<p>Since this is somewhat hard to explain in this PDF document, we refer to
+the example model <code class="docutils literal notranslate"><span class="pre">run_example_jnu_integral/</span></code>.</p>
+<p><em>STILL IN PROGRESS.</em></p>
+</div>
+<div class="section" id="some-tips-and-tricks-for-programming-user-defined-subroutines">
+<h2>Some tips and tricks for programming user-defined subroutines<a class="headerlink" href="#some-tips-and-tricks-for-programming-user-defined-subroutines" title="Permalink to this headline">¶</a></h2>
+<p>Apart from the standard subroutines that <em>must</em> be present in the
+<code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> file (see Section <a class="reference internal" href="#sec-predef-userdef"><span class="std std-ref">The pre-defined subroutines of the userdef_module.f90</span></a>), you are
+free to add any subroutines or functions that you want, which you can call from
+within the predefined subroutines of Section <a class="reference internal" href="#sec-predef-userdef"><span class="std std-ref">The pre-defined subroutines of the userdef_module.f90</span></a>. You are
+completely free to expand this module as you wish. You can add your own
+variables, your own arrays, allocate arrays, etc.</p>
+<p>Sometimes you may need to know ‘where you are’ in the grid. For instance, the
+subroutine <code class="docutils literal notranslate"><span class="pre">userdef_compute_levelpop()</span></code> is called with an argument <code class="docutils literal notranslate"><span class="pre">index</span></code>. This is the index of the current cell from within which the subroutine has
+been called. You can now address, for instance, the dust temperature at this
+location:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">temp</span> <span class="o">=</span> <span class="n">dusttemp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(for the case of a single dust species). You may also want to know the
+coordinates of the center of the cell. For this, you must first get a pointer to
+the AMR-tree structure of this cell. The pointer <code class="docutils literal notranslate"><span class="pre">b</span></code> is declared as</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">amr_branch</span><span class="p">),</span> <span class="n">pointer</span> <span class="p">::</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>Then you can point the pointer to that cell structure</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=&gt;</span> <span class="n">amr_index_to_leaf</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">%</span><span class="n">link</span>
+</pre></div>
+</div>
+<p>And now you can get the x,y,z-coordinates of the center of the cell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xc</span> <span class="o">=</span> <span class="n">amr_finegrid_xc</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">yc</span> <span class="o">=</span> <span class="n">amr_finegrid_xc</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">zc</span> <span class="o">=</span> <span class="n">amr_finegrid_xc</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="mi">3</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or the left and right cell walls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xi_l</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">yi_l</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">zi_l</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="mi">3</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">xi_r</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">yi_r</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+<span class="n">zi_r</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-your-own-emission-and-absorption-processes">
+<h2>Creating your own emission and absorption processes<a class="headerlink" href="#creating-your-own-emission-and-absorption-processes" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D Allows you to add your own physics to the ray-tracing images and
+spectra. At every point during the ray-tracing process, when it computes the
+emissivity and extinction coefficients <span class="math notranslate nohighlight">\(j_\nu\)</span> and <span class="math notranslate nohighlight">\(\alpha_\nu\)</span> it
+calls the <code class="docutils literal notranslate"><span class="pre">userdef_srcalp()</span></code> subroutine, giving it the <code class="docutils literal notranslate"><span class="pre">index</span></code> in which cell
+we are, the frequencies of the different image channels and the <code class="docutils literal notranslate"><span class="pre">src</span></code> and
+<code class="docutils literal notranslate"><span class="pre">alp</span></code> arrays which are for resp.<span class="math notranslate nohighlight">\(j_\nu\)</span> and <span class="math notranslate nohighlight">\(\alpha_\nu\)</span>. You
+can <em>add</em> any process by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src</span><span class="p">(:)</span> <span class="o">=</span> <span class="n">src</span><span class="p">(:)</span> <span class="o">+</span> <span class="o">.....</span>
+<span class="n">alp</span><span class="p">(:)</span> <span class="o">=</span> <span class="n">alp</span><span class="p">(:)</span> <span class="o">+</span> <span class="o">.....</span>
+</pre></div>
+</div>
+<p>where …… is your formula. You can find the local variables like
+density and temperature using the <code class="docutils literal notranslate"><span class="pre">index</span></code>, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rho_g</span> <span class="o">=</span> <span class="n">gasdens</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can be completely free in your choices. If you need some information
+that is not usually read into RADMC-3D, you can add read commands in the
+<code class="docutils literal notranslate"><span class="pre">userdef_setup_model()</span></code> subroutine, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="n">read_gas_density</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See the example directory <code class="docutils literal notranslate"><span class="pre">examples/run_simple_userdefsrc</span></code> for
+more ideas.</p>
+</div>
+<div class="section" id="using-radmc-3d-as-a-fancy-volume-rendering-tool">
+<h2>Using RADMC-3D as a fancy volume-rendering tool<a class="headerlink" href="#using-radmc-3d-as-a-fancy-volume-rendering-tool" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you want to make nice 3-D volume rendering images of e.g. your
+3-D hydrodynamics simulation. You may, in that case, not be interested in
+<em>real</em> emission/extinction processes, but rather some artificial
+transfer function - as long as the outcoming image looks nice.</p>
+<p>RADMC-3D offers a number of advantages over off-the-shelf programs for
+volume rendering:</p>
+<ul class="simple">
+<li><p>It has AMR refinement, so you do not need to first convert into
+non-AMR grids which are necessary for many volume rendering codes.</p></li>
+<li><p>It allows you full control over the transfer function, i.e. the
+dependence of the emission/extinction coefficients on any quantities
+such as density, temperature, magnetic field etc.</p></li>
+</ul>
+<p>The example directory</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">examples</span><span class="o">/</span><span class="n">run_simple_userdefsrc</span>
+</pre></div>
+</div>
+<p>gives an example of how this can be done. It also shows how you can link this to
+the <code class="docutils literal notranslate"><span class="pre">viewimage.pro</span></code> routine, and allow on-the-fly modification of the transfer
+function, so that you can experiment to get the nicest image output.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pythontools.html" class="btn btn-neutral float-right" title="Python analysis tool set" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="stars.html" class="btn btn-neutral float-left" title="More information about the treatment of stars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

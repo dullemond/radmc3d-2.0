@@ -1,0 +1,45 @@
+.. |radmc| replace:: BLA
+
+Getting started with RADMC-3D
+=============================
+
+First steps
+-----------
+
+First you have to do this, then do ``latex document.tex``.
+
+You should check `this` out. And of course **that**. Or *that*.
+
+The following code sample is what you need to do ::
+
+  latex document.tex
+  open document.pdf
+  python
+  import bla as bl
+
+Now this should work. We could solve :math:`\int f(x)dx`, but that
+is too simple. Better would be
+
+.. math::
+
+   \oint f(x,y) dx dy
+
+Now check out |radmc|.
+
+Here is a figure:
+
+.. image:: test.png
+   :width: 50%
+
+or the following SVG image:
+
+.. image:: dataflow-basic-python.*
+   :width: 50%
+           
+You can quote something::
+
+  "Hi there, I really like this!"
+
+  -- Kees Dullemond, 2020
+
+Now let's continue.

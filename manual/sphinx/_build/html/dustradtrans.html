@@ -1,0 +1,2332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Dust continuum radiative transfer &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Line radiative transfer" href="lineradtrans.html" />
+    <link rel="prev" title="Basic structure and functionality" href="basicstructure.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dust continuum radiative transfer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-thermal-monte-carlo-simulation-computing-the-dust-temperature">The thermal Monte Carlo simulation: computing the dust temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modified-random-walk-method-for-high-optical-depths">Modified Random Walk method for high optical depths</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#making-seds-spectra-images-for-dust-continuum">Making SEDs, spectra, images for dust continuum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#openmp-parallelized-monte-carlo">OpenMP parallelized Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview-of-input-data-for-dust-radiative-transfer">Overview of input data for dust radiative transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-purpose-feature-computing-the-local-radiation-field">Special-purpose feature: Computing the local radiation field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#more-about-scattering-of-photons-off-dust-grains">More about scattering of photons off dust grains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#five-modes-of-treating-scattering">Five modes of treating scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scattering-phase-functions">Scattering phase functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scattering-of-photons-in-the-thermal-monte-carlo-run">Scattering of photons in the Thermal Monte Carlo run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scattering-of-photons-in-the-monochromatic-monte-carlo-run">Scattering of photons in the Monochromatic Monte Carlo run</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scattered-light-in-images-and-spectra-the-scattering-monte-carlo-computation">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#single-scattering-vs-multiple-scattering">Single-scattering vs. multiple-scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simplified-single-scattering-mode-spherical-coordinates">Simplified single-scattering mode (spherical coordinates)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#warning-when-using-an-isotropic-scattering">Warning when using an-isotropic scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-experts-some-more-background-on-scattering">For experts: Some more background on scattering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#polarization-stokes-vectors-and-full-phase-functions">Polarization, Stokes vectors and full phase-functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#definitions-and-conventions-for-stokes-vectors">Definitions and conventions for Stokes vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#our-conventions-compared-to-other-literature">Our conventions compared to other literature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-orientation-for-non-observed-radiation">Defining orientation for non-observed radiation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polarized-scattering-off-dust-particles-general-formalism">Polarized scattering off dust particles: general formalism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polarized-scattering-off-dust-particles-randomly-oriented-particles">Polarized scattering off dust particles: randomly oriented particles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scattering-and-axially-symmetric-models">Scattering and axially symmetric models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#more-about-photon-packages-in-the-monte-carlo-simulations">More about photon packages in the Monte Carlo simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#polarized-emission-and-absorption-by-aligned-grains">Polarized emission and absorption by aligned grains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation-in-radmc-3d">Implementation in RADMC-3D</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#polarized-emission-in-the-images-and-spectra">Polarized emission in the images and spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polarized-emission-as-source-term-in-the-monte-carlo-simulation">Polarized emission as source term in the Monte Carlo simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#consistency-with-other-radiative-processes">Consistency with other radiative processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-files-for-radmc-3d-for-aligned-grains">Input files for RADMC-3D for aligned grains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#effect-of-aligned-grains-on-the-scattering">Effect of aligned grains on the scattering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Dust continuum radiative transfer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/dustradtrans.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dust-continuum-radiative-transfer">
+<span id="chap-dust-transfer"></span><h1>Dust continuum radiative transfer<a class="headerlink" href="#dust-continuum-radiative-transfer" title="Permalink to this headline">¶</a></h1>
+<p>Many of the things related to dust continuum radiative transfer have
+already been said in the previous chapters. But here we combine these
+things, and expand with more in-depth information.</p>
+<p>Most users simply want RADMC-3D to compute images and spectra from a
+model. This is done in a two-stage procedure:</p>
+<ol class="arabic simple">
+<li><p>First compute the dust temperature everywhere using the thermal Monte
+Carlo computation (Section <a class="reference internal" href="#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>).</p></li>
+<li><p>Then making the images and/or spectra (Section <a class="reference internal" href="#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a>).</p></li>
+</ol>
+<p>You can then view the output spectra and images with the Python tools or use
+your own plotting software.</p>
+<p>Some expert users may wish to use RADMC-3D for something entirely different:
+to compute the local radiation field {em inside} a model, and use this
+for e.g.computing photochemistry rates of a chemical model or so.
+This is described in Section <a class="reference internal" href="#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>.</p>
+<p>You may also use the thermal Monte Carlo computation of the dust temperature
+to help estimating the {em gas} temperature for the line radiative transfer.
+See Chapter <a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a> for more on line transfer.</p>
+<div class="section" id="the-thermal-monte-carlo-simulation-computing-the-dust-temperature">
+<span id="sec-dust-thermal-monte-carlo"></span><h2>The thermal Monte Carlo simulation: computing the dust temperature<a class="headerlink" href="#the-thermal-monte-carlo-simulation-computing-the-dust-temperature" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D can compute the dust temperature using the Monte Carlo method of
+Bjorkman &amp; Wood (2001, ApJ 554, 615) with various improvements such as the
+continuous absorption method of Lucy (1999, A&amp;A 344, 282). Once a model is
+entirely set up, you can ask <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to do the Monte Carlo
+run for you by typing in a shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">mctherm</span>
+</pre></div>
+</div>
+<p>if you use the standard <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code, or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">mctherm</span>
+</pre></div>
+</div>
+<p>if you have created a local version of <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> (see Section
+<a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a>).</p>
+<p>What the method does is the following: First all the netto sources of energy
+(or more accurately: sources of luminosity) are identified. The following
+net sources of energy can be included:</p>
+<ul class="simple">
+<li><p><em>Stars:</em> You can specify any number of individual stars: their
+position, and their spectrum and luminosity (See Section
+<span class="xref std std-ref">sec-stars</span>). This is the most commonly used source of luminosity, and
+as a beginning user we recommend to use only this for now.</p></li>
+<li><p><em>Continuum stellar source:</em> For simulations of galaxies it would
+require by far too many individual stars to properly include the input
+of stellar light from the billions of stars in the galaxy. To overcome
+this problem you can specify a continuously spatially distributed source
+of stars. <em>NOTE: Still in testing phase.</em></p></li>
+<li><p><em>Viscous heating / internal heating:</em> Sometimes the dust grains
+acquire energy directly from the gas, for instance through viscous heating
+of the gas or adiabatic compression of the gas. This can be included as a
+spatially distributed source of energy. <em>NOTE: Still in
+progress… Not yet working.</em></p></li>
+</ul>
+<p>To compute the dust temperature we must have at least one source of luminosity,
+otherwise the equilibrium dust temperature would be everywhere 0.</p>
+<p>The next step is that this total luminosity is divided into <code class="docutils literal notranslate"><span class="pre">nphot</span></code> packages,
+where <code class="docutils literal notranslate"><span class="pre">nphot</span></code> is 100000 by default, but can be set to any value by the user
+(see the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> described in Section <span class="xref std std-ref">sec-radmc-inp</span>). Then
+these photon packages are emitted by these sources one-by-one. As they move
+through the grid they may scatter off dust grains and thus change their
+direction. They may also get absorbed by the dust. If that happens, the photon
+package is immediately re-emitted in another direction and with another
+wavelength. The wavelength is chosen according to the recipe by Bjorkman &amp; Wood
+(2001, ApJ 554, 615). The luminosity fraction that each photon package
+represents remains, however, the same. Each time a photon package enters a cell
+it increases the ‘energy’ of this cell and thus increases the temperature of
+the dust of this cell.  The recipe for this is again described by Bjorkman &amp;
+Wood (2001, ApJ 554, 615), but contrary to that paper we increase the
+temperature of the dust always when a photon package enters a cell, while
+Bjorkman &amp; Wood only increase the dust temperature if a discrete absorption
+event has taken place. Each photon package will ping-pong through the model and
+never gets lost until it escapes the model through the outer edge of the grid
+(which, for cartesianl coordinates, is any of the grid edges in <span class="math notranslate nohighlight">\(x\)</span>,
+<span class="math notranslate nohighlight">\(y\)</span> or <span class="math notranslate nohighlight">\(z\)</span>, and for spherical coordinates is the outer edge of
+<span class="math notranslate nohighlight">\(r\)</span>). Once it escapes, a new photon package is launched, until also it
+escapes. After all photon packages have been launched and escaped, the dust
+temperature that remains is the final answer of the dust temperature.</p>
+<p>One must keep in mind that the temperature thus computed is an <em>equilibrium</em>
+dust temperature. It assumes that each dust grain acquires as much energy as it
+radiates away. This is for most cases presumably a very good approximation,
+because the heating/cooling time scales for dust grains are typically very short
+compared to any time-dependent dynamics of the system. But there might be
+situations where this may not be true: in case of rapid compression of gas, near
+shock waves or in extremely optically thick regions.</p>
+<p><em>NOTE:</em> Monte Carlo simulations are based on pseudo-random numbers.
+The seed for the random number generator is by default set to -17933201.
+If you want to perform multiple identical simulations with a different
+random sequence you will need to set the seed by hand. This can be
+done by adding a line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iseed</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5415</span>
+</pre></div>
+</div>
+<p>(where -5415 is to be replaced by the value you want) to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+<div class="section" id="modified-random-walk-method-for-high-optical-depths">
+<span id="sec-modrandwalk"></span><h3>Modified Random Walk method for high optical depths<a class="headerlink" href="#modified-random-walk-method-for-high-optical-depths" title="Permalink to this headline">¶</a></h3>
+<p>As you will soon find out: very optically thick models make the RADMC-3D thermal
+Monte Carlo simulations to be slow. This is because in the thermal Monte Carlo
+method a photon package is never destroyed unless it leaves the system. A photon
+package can thus ‘get lost’ deep inside an optically thick region, making
+millions (or even billions) of absorption+reemission or scattering
+events. Furthermore, you will notice that in order to get the temperatures in
+these very optically thick regions to be reliable (i.e. not too noisy) you may
+need a very large number of photon packages for your simulation, which slows
+down the simulation even more. It is hard to prevent such problems. Min,
+Dullemond, Dominik, de Koter &amp; Hovenier (2009) A&amp;A 497, 155 discuss two methods
+of dealing with this problem. One is a diffusion method, which we will not
+discuss here. The other is the ‘Modified Random Walk’ (MRW) method, based on the
+method by Fleck &amp; Canfield (1984) J.Comput.Phys. 54, 508. Note that
+Robitaille (2010) A&amp;A 520, 70 presented a simplification of this method. Min et
+al. first implemented this method into the MCMax code. It is also implemented in
+RADMC-3D, in Robitaille’s simplified form.</p>
+<p>The crucial idea of the method is that if a photon package ‘gets lost’ deep
+inside a single ultra-optically-thick cell, we can use the analytical solutions
+of the diffusion equation in a constant-density medium to predict where the
+photon package will go next. This thus allows RADMC-3D to make a single large
+step of the photon package which actually corresponds to hundreds or thousands
+of absorption+reemission or scattering events.</p>
+<p>The method works best if the optically thick cells are as large as possible.
+This is because the analytical solutions are only valid within a single cell,
+and thus the ‘large step’ can not be larger than a single cell size.  Moreover,
+cell crossings will reduce the step length again to the physical mean free path,
+so the more cell crossings are made, the less effective the MRW becomes.</p>
+<p><em>NOTE:</em> The MRW is by default switched off. The reason is that it is, after all,
+an approximation. However, if RADMC-3D thinks that the MRW may help speed up the
+thermal Monte Carlo, it will make the suggestion to the user to switch on the
+MRW method.</p>
+<p>You can switch on the MRW by adding the following line to the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified_random_walk</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="making-seds-spectra-images-for-dust-continuum">
+<span id="sec-dust-ray-tracing"></span><h2>Making SEDs, spectra, images for dust continuum<a class="headerlink" href="#making-seds-spectra-images-for-dust-continuum" title="Permalink to this headline">¶</a></h2>
+<p>You can use RADMC-3D for computing spectra and images in dust continuum
+emission. This is described in detail in Chapter
+<a class="reference internal" href="imagesspectra.html#chap-images-spectra"><span class="std std-ref">Making images and spectra</span></a>. RADMC-3D needs to know not only the dust spatial
+distribution, given in the file <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code>, but also the
+dust temperature, given in the file <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> (see
+Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for the binary version of these files, which
+are more compact, and which you can use instead of the ascii versions). The
+<code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> is normally computed by RADMC-3D itself
+through the thermal Monte Carlo computation (see Section
+<a class="reference internal" href="#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>). But if you, the user, wants to specify
+the dust temperature at each location in the model youself, then you can
+simply create your own file <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> and skip the
+thermal Monte Carlo simulation and go straight to the creation of images or
+spectra.</p>
+<p>The basic command to make a spectrum at the global grid of wavelength
+(specified in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>,
+see Section <span class="xref std std-ref">sec-wavelengths</span>) is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span>
+</pre></div>
+</div>
+<p>You can specify the direction of the observer with <code class="docutils literal notranslate"><span class="pre">incl</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">incl</span> <span class="mi">20</span> <span class="n">phi</span> <span class="mi">80</span>
+</pre></div>
+</div>
+<p>which means: put the observer at inclination 20 degrees and <span class="math notranslate nohighlight">\(\phi\)</span>-angle
+80 degrees.</p>
+<p>You can also make a spectrum for a given grid of wavelength (independent of the
+global wavelength grid). You first create a file
+<code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code>, which has the same format as
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. You can put any set of wavelengths in this file
+without modifying the global wavelength grid (which is used by the thermal Monte
+Carlo computation). Then you type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">loadlambda</span>
+</pre></div>
+</div>
+<p>and it will create the spectrum on this wavelength grid. More information about
+making spectra is given in Chapter <a class="reference internal" href="imagesspectra.html#chap-images-spectra"><span class="std std-ref">Making images and spectra</span></a>.</p>
+<p>For creating an image you can type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>which creates an image at wavelength <span class="math notranslate nohighlight">\(\lambda\)</span>mu`m. More information
+about making images is given in Chapter <a class="reference internal" href="imagesspectra.html#chap-images-spectra"><span class="std std-ref">Making images and spectra</span></a>.</p>
+<p><em>Important note:</em> To handle scattering of light off dust grains, the ray-tracing
+is preceded by a quick Monte Carlo run that is specially designed to compute the
+‘scattering source function’. This Monte Carlo run is usually <em>much</em> faster
+than the thermal Monte Carlo run, but must be done at each wavelength. It can
+lead, however, to slight spectral noise, because the random photon paths are
+different for each wavelength.  See Section <a class="reference internal" href="#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for details.</p>
+</div>
+<div class="section" id="openmp-parallelized-monte-carlo">
+<span id="sec-omp-mc"></span><h2>OpenMP parallelized Monte Carlo<a class="headerlink" href="#openmp-parallelized-monte-carlo" title="Permalink to this headline">¶</a></h2>
+<p>Depending on the model properties and the number of photon packages used in
+the simulation the Monte Carlo calculation (in particular the thermal Monte
+Carlo, but under some conditions also the scattering Monte Carlo) can be a
+time-consuming computation when executed only in a serial mode. To improve
+this, these Monte Carlo calculations can be done in OpenMP parallel mode.
+The loop over photon packages is then distributed amongst the different
+threads, where each thread adopts a specific number of loop iterations
+following the order of the thread identification number. To this end the
+random number generator was modified. The important point for the parallel
+version is that different threads must not share the same random seed
+initially. To be certain that each thread is assigned a different seed at
+the beginning, the thread identity number is added to the initial seed.</p>
+<p>The default value for the number of threads in the parallel version is set to
+one, so that the program is identical with the serial version, except for the
+random generator’s initial seed. The user can change the value by either typing
+<code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">&lt;nr&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;nr&gt;</span></code> is the number of requested threads (integer
+value) in the command line or by adding a corresponding line to the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file. If the chosen number of threads is larger than the
+available number of processor cores, the user is asked to reduce it.</p>
+<p>For example, you can ask <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to do the parallelized Monte
+Carlo run for you by typing in a shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">mctherm</span> <span class="n">setthreads</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>or by adding the following keyword to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setthreads</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>which means that four threads are used for the thermal Monte Carlo computation.</p>
+<p>For the image or spectrum you can do the same: just add <code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">4</span></code> or so
+on the command line or put <code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">=</span> <span class="pre">4</span></code> into the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+<p>Make sure that you have included the <code class="docutils literal notranslate"><span class="pre">-fopenmp</span></code> keyword in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>
+and have compiled the whole <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> source code with this additional command
+before using the OpenMP parallelized thermal Monte Carlo version (cf. Section
+<a class="reference internal" href="installation.html#sec-makeing"><span class="std std-ref">Compiling the code with ‘make’</span></a>).</p>
+</div>
+<div class="section" id="overview-of-input-data-for-dust-radiative-transfer">
+<h2>Overview of input data for dust radiative transfer<a class="headerlink" href="#overview-of-input-data-for-dust-radiative-transfer" title="Permalink to this headline">¶</a></h2>
+<p>In order to perform any of the actions described in Sections
+<a class="reference internal" href="#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>, <a class="reference internal" href="#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>
+or <a class="reference internal" href="#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a>, you must give RADMC-3D the following
+data:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">amr_grid.inp:</span></code> The grid file (see Section <span class="xref std std-ref">sec-grid-input</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp:</span></code> The global wavelength file (see Section
+<span class="xref std std-ref">sec-wavelengths</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stars.inp:</span></code> The locations and properties of stars (see Section
+<span class="xref std std-ref">sec-stars</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dust_density.inp:</span></code> The spatial distribution of dust on the grid (see
+Section <span class="xref std std-ref">sec-dustdens</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dustopac.inp:</span></code> A file with overall information about the various species of
+dust in the model (see Section <span class="xref std std-ref">sec-opacities</span>).  One of the main pieces
+of information here is (a) how many dust species are included in the model
+and (b) the tag names of these dust species (see <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
+below). The file <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> must contain exactly this number of
+density distributions: one density distribution for each dust species.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp:</span></code> One or more dust opacity files (where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> should in
+fact be a tag name you define, for instance <code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code>). The
+labels are listed in the <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file. ee Section
+<span class="xref std std-ref">sec-opacities</span> for more information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span> <span class="pre">(optional):</span></code> This file is only needed if you
+want to create a spectrum at a special set of wavelengths (otherwise use
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">sed</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcmono_wavelength_micron.inp</span> <span class="pre">(optional):</span></code> This file is only needed if you
+want to compute the radiation field inside the model by calling <code class="docutils literal notranslate"><span class="pre">radmc3d</span>
+<span class="pre">mcmono</span></code> (e.g. for photochemistry).</p></li>
+</ul>
+<p>Other input files could be required in certain cases, but you will then
+be asked about it by RADMC-3D.</p>
+</div>
+<div class="section" id="special-purpose-feature-computing-the-local-radiation-field">
+<span id="sec-dust-monochromatic-monte-carlo"></span><h2>Special-purpose feature: Computing the local radiation field<a class="headerlink" href="#special-purpose-feature-computing-the-local-radiation-field" title="Permalink to this headline">¶</a></h2>
+<p>If you wish to use RADMC-3D for computing the radiation field <em>inside</em>
+the model, for instance for computing photochemical rates in a chemical model,
+then RADMC-3D can do so by calling RADMC-3D in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">mcmono</span>
+</pre></div>
+</div>
+<p>This computes the mean intensity</p>
+<div class="math notranslate nohighlight">
+\[J_\nu = \frac{1}{4\pi}\oint I_\nu(\Omega)d\Omega\]</div>
+<p>(in units of
+erg:math:<cite>,`s:math:`^{-1}</cite><span class="math notranslate nohighlight">\(\,\)</span><span class="math notranslate nohighlight">\(\,\)</span><span class="math notranslate nohighlight">\(\,\)</span>)
+as a function of the <span class="math notranslate nohighlight">\((x,y,z)\)</span> (cartesian) or <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span>
+(spherical) coordinates at frequencies <span class="math notranslate nohighlight">\(\nu_i\equiv 10^4c/\lambda_i\)</span> where
+<span class="math notranslate nohighlight">\(\lambda_i\)</span> are the wavelengths (in <span class="math notranslate nohighlight">\(\mu\)</span> (same format as the file
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> which is described in Section
+<span class="xref std std-ref">sec-wavelengths</span>). The results of this computation can be interesting for,
+for instance, models of photochemistry.</p>
+<p>The file that is produced by <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">mcmono</span></code> is called
+<code class="docutils literal notranslate"><span class="pre">mean_intensity.out</span></code> and has the following form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">2</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">nfreq</span>                                    <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">frequencies</span>
+<span class="n">freq_1</span> <span class="n">freq_2</span> <span class="o">...</span> <span class="n">freq_nfreq</span>             <span class="o">&lt;===</span> <span class="n">List</span> <span class="n">of</span> <span class="n">frequencies</span> <span class="ow">in</span> <span class="n">Hz</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The list of frequencies will, in fact, be the same as those listed in the file
+<code class="docutils literal notranslate"><span class="pre">mcmono_wavelength_micron.inp</span></code>.</p>
+<p>Note that if your model is very large, the computation of the radiation field on
+a large set of wavelength could easily overload the memory of the
+computer. However, often you are in the end not interested in the entire
+spectrum at each location, but just in integrals of this spectrum over some
+cross section. For instance, if you want to compute the degree to which dust
+shields molecular photodissociation lines in the UV, then you only need to
+compute the total photodissociation rate, which is an integral of the
+photodissociation cross section times the radiation field. In Section
+<span class="xref std std-ref">sec-compute-radiation-integrals</span> it will be explained how you can create a
+userdef subroutine (see Chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a>) that will do this
+for you in a memory-saving way.</p>
+<p>There is an important parameter for this Monochromatic Monte Carlo that you
+may wish to play with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_mono</span></code>\
+The parameter <code class="docutils literal notranslate"><span class="pre">nphot_mono</span></code> sets the number of photon packages
+that are used for the Monochromatic Monte Carlo simulation. It has as
+default 100000, but that may be too little for 3-D models. You can set
+this value in two ways:</p>
+<ul>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file as a line <code class="docutils literal notranslate"><span class="pre">nphot_mono</span> <span class="pre">=</span> <span class="pre">1000000</span></code> for instance.</p></li>
+<li><p>On the command-line by adding <code class="docutils literal notranslate"><span class="pre">nphot_mono</span> <span class="pre">1000000</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="more-about-scattering-of-photons-off-dust-grains">
+<span id="sec-scattering"></span><h2>More about scattering of photons off dust grains<a class="headerlink" href="#more-about-scattering-of-photons-off-dust-grains" title="Permalink to this headline">¶</a></h2>
+<p>Photons can not only be absorbed and re-emitted by dust grains: They can also be
+scattered. Scattering does nothing else than change the direction of propagation
+of a photon, and in case polarization is included, its Stokes
+parameters. Strictly speaking it may also slightly change its wavelength, if the
+dust grains move with considerable speed they may Doppler-shift the wavelength
+of the outgoing photon (which may be relevant, if at all, when dust radiative
+transfer is combined with line radiative transfer, see chapter
+<a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a>), but this subtle effect is not treated in
+RADMC-3D. For RADMC-3D scattering is just the changing of direction of a photon.</p>
+<div class="section" id="five-modes-of-treating-scattering">
+<span id="sec-modes-of-scattering"></span><h3>Five modes of treating scattering<a class="headerlink" href="#five-modes-of-treating-scattering" title="Permalink to this headline">¶</a></h3>
+<p>RADMC-3D has five levels of realism of treatment of scattering, starting
+with <code class="docutils literal notranslate"><span class="pre">scattering_mode=1</span></code> (simplest) to <code class="docutils literal notranslate"><span class="pre">scattering_mode=5</span></code> (most realistic):</p>
+<ul>
+<li><p><em>No scattering</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=0</span></code>):</p>
+<p>If either the <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> files do not contain a scattering opacity
+or scattering is switched off by setting <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> to 0 in the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, then scattering is ignored. It is then assumed that the
+dust grains have zero albedo.</p>
+</li>
+<li><p><em>Isotropic scattering</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=1</span></code>):</p>
+<p>If either the <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> files do not contain information about the
+anisotropy of the scattering or anisotropic scattering is switched off by
+setting <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> to 1 in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, then
+scattering is treated as isotropic scattering.  Note that this can be a bad
+approximation.</p>
+</li>
+<li><p><em>Anisotropic scattering using Henyey-Greenstein</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=2</span></code>):</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> files contain the scattering opacity and the
+<span class="math notranslate nohighlight">\(g\)</span> parameter of anisotropy (the Henyey-Greenstein <span class="math notranslate nohighlight">\(g\)</span> parameter
+which is equal, by definition, to <span class="math notranslate nohighlight">\(g=\langle\cos\theta\rangle\)</span>, where
+<span class="math notranslate nohighlight">\(\theta\)</span> is the scattering deflection angle), and
+<code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 2 or higher in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file then
+anisotropic scattering is treated using the Henyey-Greenstein approximate
+formula.</p>
+</li>
+<li><p><em>Anisotropic scattering using tabulated phase function</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=3</span></code>):</p>
+<p>To treat scattering using a tabulated phase function, you must specify the
+dust opacities using <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the simpler
+<code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> files (see Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>). You
+must also set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 3 or higher.</p>
+</li>
+<li><p><em>Anisotropic scattering with polarization for last scattering</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=4</span></code>):</p>
+<p>To treat scattering off randomly oriented particles with the full polarization
+you need to set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 4 or higher, and you must
+specify the full dust opacity and scattering matrix using the
+<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the simpler <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
+files (see Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>). If <code class="docutils literal notranslate"><span class="pre">scattering_mode=4</span></code>
+the full polarization is only done upon the last scattering before light
+reaches the observer (i.e. it is only treated in the computation of the
+scattering source function that is used for the images, but it is not used for
+the movement of the photons in the Monte Carlo simulation).  See Section
+<a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a> for more information about polarized
+scattering.</p>
+</li>
+<li><p><em>Anisotropic scattering with polarization, full treatment</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=5</span></code>):</p>
+<p>For the full treatment of polarized scattering off randomly oriented
+particles, you need to set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 5, and you must
+specify the full dust opacity and scattering matrix using the
+<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the simpler <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
+files (see Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>).  See Section
+<a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a> for more information about polarized
+scattering.  end{enumerate} Please refer to Sections
+<a class="reference internal" href="#sec-scat-phasefunc"><span class="std std-ref">Scattering phase functions</span></a> and <a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a> for more
+information about these different scattering modes.</p>
+</li>
+</ul>
+<p>So in summary: the dust opacity files themselves tell how detailed the
+scattering is going to be included. If no scattering information is present in
+these files, RADMC-3D has no choice but to ignore scattering. If they only
+contain scattering opacities but no phase information (no <span class="math notranslate nohighlight">\(g\)</span>-factor),
+then RADMC-3D will treat scattering in the isotropic approximation. If the
+<span class="math notranslate nohighlight">\(g\)</span>-factor is also included, then RADMC-3D will use the Henyey-Greenstein
+formula for anisotropic scattering. If you specify the full scattering matrix
+(using the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
+files) then you can use tabulated scattering phase functions, and even polarized
+scattering.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is <em>not</em> set in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, it is by
+default 9999, meaning: RADMC-3D will always use the maximally realistic
+scattering mode that the dust opacities allow.</p>
+<p>BUT you can always limit the realism of scattering by setting the
+<code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> to 4, 3, 3, 1 or 0 in the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>. This can
+be useful to speed up the calculations or be sure to avoid certain complexities
+of the full phase-function treatment of scattering.</p>
+<p>At the moment there are some limitations to the full anisotropic scattering
+treatment:</p>
+<ul>
+<li><p><em>Anisotropic scattering in 1-D and 2-D Spherical coordinates:</em></p>
+<p>For 1-D spherical coordinates there is currently no possibility of treating
+anisotropic scattering in the image- and spectrum-making. The reason is that
+the scattering source function (see Section <a class="reference internal" href="#sec-scat-monte-carlo"><span class="std std-ref">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</span></a>) must
+be stored in an angle-dependent way.  However, for 2-D spherical coordinates,
+this has been implemented, and for each grid ‘cell’ (actually an annulus) the
+scattering source function is now stored for an entire sequence of angles.</p>
+</li>
+<li><p><em>Full phase functions and polarization only for randomly-oriented particles:</em></p>
+<p>Currently RADMC-3D cannot handle scattering off fixed-oriented non-spherical
+particles, because it requires a much more detailed handling of the angles. It
+would require at least 3 scattering angles (for axially-symmetric particles)
+or more (for completely asymmetric particles), which is currently beyond the
+scope of RADMC-3D.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="scattering-phase-functions">
+<span id="sec-scat-phasefunc"></span><h3>Scattering phase functions<a class="headerlink" href="#scattering-phase-functions" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, for the different <code class="docutils literal notranslate"><span class="pre">scattering_mode</span></code> settings
+you have different levels of realism of treating scattering.</p>
+<p>The transfer equation along each ray, ignoring polarization for now, is:</p>
+<div class="math notranslate nohighlight" id="eq-ray-tracing-rt">
+\[\frac{dI_\nu}{ds} = j_\nu^{\mathrm{therm}} + j_\nu^{\mathrm{scat}}
+- (\alpha_\nu^{\mathrm{abs}}+\alpha_\nu^{\mathrm{scat}}) I_\nu\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha_\nu^{\mathrm{abs}}\)</span> and <span class="math notranslate nohighlight">\(\alpha_\nu^{\mathrm{scat}}\)</span> are the
+extinction coefficients for absorption and scattering.  Let us assume, for
+convenience of notation, that we have just one dust species with density
+dstribution <span class="math notranslate nohighlight">\(\rho\)</span>, absorption opacity <span class="math notranslate nohighlight">\(\kappa_\nu^{\mathrm{abs}}\)</span> and
+scattering opacity <span class="math notranslate nohighlight">\(\kappa_\nu^{\mathrm{scat}}\)</span>. We then have</p>
+<div class="math notranslate nohighlight" id="eq-thermal-source-function">
+\[\begin{split}\begin{split}
+\alpha_\nu^{\mathrm{abs}} &amp;\equiv \rho\kappa_\nu^{\mathrm{abs}}\\
+\alpha_\nu^{\mathrm{scat}} &amp;\equiv \rho\kappa_\nu^{\mathrm{scat}}\\
+j_\nu^{\mathrm{therm}} &amp;= \alpha_\nu^{\mathrm{abs}} B_\nu(T)
+\end{split}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(B_\nu(T)\)</span> is the Planck function. The last equation is an
+expression of Kirchhoff’s law.</p>
+<p>For <em>isotropic</em> scattering (<code class="docutils literal notranslate"><span class="pre">scattering_mode=1</span></code>) the
+scattering source function <span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[j_\nu^{\mathrm{scat}} = \alpha_\nu^{\mathrm{scat}} \frac{1}{4\pi}\oint I_\nu d\Omega\]</div>
+<p>where the integral is the integral over solid angle. In this case
+<span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}\)</span> does not depend on solid angle.</p>
+<p>For <em>anisotropic</em> scattering (<code class="docutils literal notranslate"><span class="pre">scattering_mode</span></code><span class="math notranslate nohighlight">\(\ge\)</span>Phi({bf n}_{mathrm{in}},
+{bf n}_{mathrm{out}})`, where
+<span class="math notranslate nohighlight">\({\bf n}_{\mathrm{in}}\)</span> is the unit direction vector for incoming radiation
+and <span class="math notranslate nohighlight">\({\bf n}_{\mathrm{out}}\)</span> is the unit direction vector for the scattered
+radiation. The
+scattering phase function is normalized to unity:</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{4\pi}\oint\Phi({\bf n}_{\mathrm{in}},
+{\bf n}_{\mathrm{out}}) d\Omega_{\mathrm{out}}
+=\frac{1}{4\pi}\oint\Phi({\bf n}_{\mathrm{in}},
+{\bf n}_{\mathrm{out}}) d\Omega_{\mathrm{in}}=1\]</div>
+<p>where we integrated over all possible <span class="math notranslate nohighlight">\({\bf n}_{\mathrm{out}}\)</span> or
+<span class="math notranslate nohighlight">\({\bf n}_{\mathrm{in}}\)</span>.
+Then the scattering source function becomes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+j_\nu^{\mathrm{scat}}({\bf n}_{\mathrm{out}}) =
+\alpha_\nu^{\mathrm{scat}} \frac{1}{4\pi}\oint I_\nu({\bf n}_{\mathrm{in}})
+\Phi({\bf n}_{\mathrm{in}},{\bf n}_{\mathrm{out}}) d\Omega_{\mathrm{in}}
+\end{split}\]</div>
+<p>which is angle-dependent. The angular dependence means: a photon package has not
+completely forgotten from which direction it came before hitting the dust grain.</p>
+<p>If we do not include the polarization of radiation and we have randomly oriented
+particles, then the scattering phase function will only depend on the scattering
+(deflection) angle <span class="math notranslate nohighlight">\(\theta\)</span> defined by</p>
+<div class="math notranslate nohighlight">
+\[\cos\theta \equiv \mu = {\bf n}_{\mathrm{out}}\cdot {\bf n}_{\mathrm{in}}\]</div>
+<p>We will thus be able to write</p>
+<div class="math notranslate nohighlight">
+\[\Phi({\bf n}_{\mathrm{in}},{\bf n}_{\mathrm{out}})
+\equiv \Phi(\mu)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Phi(\mu)\)</span> is normalized as</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}\int_{-1}^{+1} \Phi(\mu) d\mu = 1\]</div>
+<p>If we have <code class="docutils literal notranslate"><span class="pre">scattering_mode=2</span></code> then the phase function is
+the Henyey-Greenstein phase function defined as</p>
+<div class="math notranslate nohighlight">
+\[\Phi(\mu)=\frac{1-g^2}{(1+g^2-2g\mu)^{3/2}}\]</div>
+<p>where the value of the anisotropy parameter <span class="math notranslate nohighlight">\(g\)</span> is taken from the dust
+opacity file. Note that for <span class="math notranslate nohighlight">\(g=0\)</span> you get <span class="math notranslate nohighlight">\(\Phi(\mu)=1\)</span> which is the
+phase function for isotropic scattering.</p>
+<p>If we have <code class="docutils literal notranslate"><span class="pre">scattering_mode=3</span></code> then the phase function is
+tabulated by you. You have to provide the tabulated phase function as the
+<span class="math notranslate nohighlight">\(Z_{11}(\theta)\)</span> scattering matrix element for a tabulated set of <span class="math notranslate nohighlight">\(\theta_i\)</span>
+values, and this is done in a file <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> (see
+Section <span class="xref std std-ref">sec-dustkapscatmat-files</span> and note that for <code class="docutils literal notranslate"><span class="pre">scattering_mode=3</span></code>
+the other <span class="math notranslate nohighlight">\(Z_{ij}\)</span> elements can be kept 0 as they are
+of no consequence). The relation between <span class="math notranslate nohighlight">\(Z_{11}(\theta)\)</span> and
+<span class="math notranslate nohighlight">\(\Phi(\mu)\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[\Phi(\mu) \equiv \Phi(\cos(\theta)) = \frac{4\pi}{\kappa_{\mathrm{scat}}}\,Z_{11}(\theta)\]</div>
+<p>(which holds at each wavelength individually).</p>
+<p>If we have <code class="docutils literal notranslate"><span class="pre">scattering_mode=4</span></code> then the scattering in the Monte Carlo code is
+done according to the tabulated <span class="math notranslate nohighlight">\(\Phi(\mu)\)</span> mode mentioned above, but for
+computing the scattering source function the full polarized scattering matrix is
+used. See Section <a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a>.</p>
+<p>If we have <code class="docutils literal notranslate"><span class="pre">scattering_mode=5</span></code> then the scattering phase function is not only
+dependent on <span class="math notranslate nohighlight">\(\mu\)</span> but also on the other angle.  And it depends on the
+polarization state of the input radiation. See Section
+<a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a>.</p>
+</div>
+</div>
+<div class="section" id="scattering-of-photons-in-the-thermal-monte-carlo-run">
+<span id="sec-scat-in-therm-mc"></span><h2>Scattering of photons in the Thermal Monte Carlo run<a class="headerlink" href="#scattering-of-photons-in-the-thermal-monte-carlo-run" title="Permalink to this headline">¶</a></h2>
+<p>So how is scattering treated in practice? In the thermal Monte Carlo model
+(Section <a class="reference internal" href="#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>) the scattering has only one
+effect: it changes the direction of propagation of the photon packages whenever
+such a photon package experiences a scattering event. This may change the
+results for the dust temperatures subtly. In special cases it may even change
+the dust temperatures more strongly, for instance if scattering allows ‘hot’
+photons to reach regions that would have otherwise been in the shadow. It may
+also increase the optical depth of an object and thus change the temperatures
+accordingly. But this is all there is to it.</p>
+<p>If you include the full treatment of polarized scattering
+(<code class="docutils literal notranslate"><span class="pre">scattering_mode=5</span></code>), then a photon package also gets polarized when it
+undergoes a scattering event. This can affect the phase function for the next
+scattering event. This means that the inclusion of the full polarized scattering
+processes (as opposed to using non-polarized photon packages) can, at least in
+principle, have an effect on the dust temperatures that result from the thermal
+Monte Carlo computation. This effect is, however, rather small in practice.</p>
+</div>
+<div class="section" id="scattering-of-photons-in-the-monochromatic-monte-carlo-run">
+<span id="sec-scat-in-mono-mc"></span><h2>Scattering of photons in the Monochromatic Monte Carlo run<a class="headerlink" href="#scattering-of-photons-in-the-monochromatic-monte-carlo-run" title="Permalink to this headline">¶</a></h2>
+<p>For the monochromatic Monte Carlo calculation for computing the mean intensity
+radiation field (Section <a class="reference internal" href="#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>) the
+scattering has the same effect as for the thermal Monte Carlo model: it changes
+the direction of photon packages. In this way ‘hot’ radiation may enter regions
+which would otherwise have been in a shadow. And by increasing the optical depth
+of regions, it may increase the local radiation field by the greenhouse effect
+or decrease it by preventing photons from entering it. As in the thermal Monte
+Carlo model the effect of scattering in the monochromatic Monte Carlo model is
+simply to change the direction of motion of the radiation field, but for the
+rest nothing differs to the case without scattering. Also here the small effects
+caused by polarized scattering apply, like in the thermal Monte Carlo case.</p>
+<div class="section" id="scattered-light-in-images-and-spectra-the-scattering-monte-carlo-computation">
+<span id="sec-scat-monte-carlo"></span><h3>Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation<a class="headerlink" href="#scattered-light-in-images-and-spectra-the-scattering-monte-carlo-computation" title="Permalink to this headline">¶</a></h3>
+<p>For making images and spectra with the ray-tracing capabilities of RADMC-3D (see
+Section <a class="reference internal" href="#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a> and Chapter <a class="reference internal" href="imagesspectra.html#chap-images-spectra"><span class="std std-ref">Making images and spectra</span></a>) the
+role of scattering is a much more complex one than in the thermal and
+monochromatic Monte Carlo runs. The reason is that the scattered radiation will
+eventually end up on your images and spectra.</p>
+<p>If we want to make an image or a spectrum, then for each pixel we must integrate
+Eq. (<span class="xref std std-ref">eq-ray-tracing-rt</span>) along the 1-D ray belonging to that pixel. If we
+performed the thermal Monte Carlo simulation beforehand (or if we specified the
+dust temperatures by hand) we know the thermal source function through
+Eq. (<span class="xref std std-ref">eq-thermal-source-function</span>). But we have, at that point, no
+information yet about the scattering source function. The thermal Monte Carlo
+calculation {em could} have also stored this function at each spatial point and
+each wavelength and each observer direction, but that would require gigantic
+amounts of memory (for a typical 3-D model it might be many Gbytes, going into
+the Tbyte regime). So in RADMC-3D the scattering source function is {em not}
+computed during the thermal Monte Carlo run.</p>
+<p>In RADMC-3D the scattering source function <span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}(\Omega')\)</span>
+is computed {em just prior to} the ray-tracing through a brief ‘Scattering
+Monte Carlo’ run. This is done {em automatically} by RADMC-3D, so you
+don’t have to worry about this. Whenever you ask RADMC-3D to make an image
+(and if the scattering is in fact included in the model, see Section
+<a class="reference internal" href="#sec-modes-of-scattering"><span class="std std-ref">Five modes of treating scattering</span></a>), RADMC-3D will automatically realize that it
+requires knowledge of <span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}(\Omega')\)</span>, and it will start a
+brief single-wavelength Monte Carlo simulation for computing
+<span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}(\Omega')\)</span>. This single-wavelength <cite>Scattering Monte
+Carlo’ simulation is relatively fast compared to the thermal Monte Carlo
+simulation, because photon packages can be destroyed by absorption. So
+photon packages do not bounce around for long, as they do in the thermal
+Monte Carlo simulation.  This Scattering Monte Carlo simulation is in fact
+very similar to the monochromatic Monte Carlo model described in Section
+:ref:`sec-dust-monochromatic-monte-carlo</cite>. While the monochromatic Monte
+Carlo model is called specifically by the user (by calling RADMC-3D with
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">mcmono</span></code>), the Scattering Monte Carlo simulation is not
+something the user must specify him/her-self: it is automatically done by
+RADMC-3D if it is needed (which is typically before making an image or
+during the making of a spectrum). And while the monochromatic Monte Carlo
+model returns the mean intensity inside the model, the Scattering Monte Carlo
+simulation provides the raytracing routines with the scattering source
+function but does <em>not</em> store this function in a file.</p>
+<p>You can see this happen if you have a model with scattering opacity included,
+and you make an image with RADMC-3D, you see that it prints <code class="docutils literal notranslate"><span class="pre">1000</span></code>, <code class="docutils literal notranslate"><span class="pre">2000</span></code>,
+<code class="docutils literal notranslate"><span class="pre">3000</span></code>, … etc., in other words, it performs a little Monte Carlo simulation
+before making the image.</p>
+<p>There is an important parameter for this Scattering Monte Carlo that you
+may wish to play with:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code></p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> sets the number of photon packages
+that are used for the Scattering Monte Carlo simulation. It has as default
+100000, but that may be too little for 3-D models and/or cases where you
+wish to reduce the ‘streaky’ features sometimes visible in
+scattered-light images when too few photon packages are used. You can
+set this value in two ways:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file as a line <code class="docutils literal notranslate"><span class="pre">nphot_scat</span> <span class="pre">=</span> <span class="pre">1000000</span></code> for instance.</p></li>
+<li><p>On the command-line by adding <code class="docutils literal notranslate"><span class="pre">nphot_scat</span> <span class="pre">1000000</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<p>In Figure <a class="reference internal" href="#fig-polscat"><span class="std std-ref">The effect of nphot_scat on the image quality when the image is dominated
+by scattered light. The images show the result of model
+examples/run_simple_2_scatmat at \lambda=0.84\mu about the
+scattering matrices for polarized scattering. See Section
+sec-single-multiple-scattering for a discussion about the ‘scratches’
+seen in the top two panels.</span></a> you can see how the quality of an image in
+scattered light improves when increasing <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code></p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> is actually exactly the same as
+<code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>, but is used (and used only!) for the creation of
+spectra. The default is 10000, i.e.~substantially smaller than <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>.
+The reason for this separate parameter is that if you make
+spectra, you integrate over the image to obtain the flux (i.e. the value of
+the spectrum at that wavelength). Even if the scattered light image may
+look streaky, the integral may still be accurate. We can thus afford much
+fewer photon packages when we make spectra than when we make images, and
+can thus speed up the calculation of the spectrum. You can set this value
+in two ways:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file as a line <code class="docutils literal notranslate"><span class="pre">nphot_spec</span> <span class="pre">=</span> <span class="pre">100000</span></code> for instance.</p></li>
+<li><p>On the command-line by adding <code class="docutils literal notranslate"><span class="pre">nphot_spec</span> <span class="pre">100000</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<p><em>NOTE:</em> It may be possible to get still very good results with even
+smaller values of <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> than the default value of
+10000. That might speed up the calculation of the spectrum even more in some
+cases. On the other hand, if you notice ‘noise’ on your spectrum, you may want
+to increase <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code>. If you are interested in an optimal balance
+between accuracy (high value of <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code>) and speed of calculation (low
+value of <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code>) then it is recommended to experiment with this value.
+If you want to be on the safe side, then set <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> to a high value
+(i.e. set it to 100000, as <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code>).</p>
+</li>
+</ul>
+<div class="figure align-default" id="id1">
+<span id="fig-polscat"></span><a class="reference internal image-reference" href="_images/polscat.png"><img alt="_images/polscat.png" src="_images/polscat.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">The effect of <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> on the image quality when the image is dominated
+by scattered light. The images show the result of model
+<code class="docutils literal notranslate"><span class="pre">examples/run_simple_2_scatmat</span></code> at <span class="math notranslate nohighlight">\(\lambda=0.84\mu\)</span> about the
+scattering matrices for polarized scattering. See Section
+<a class="reference internal" href="#sec-single-multiple-scattering"><span class="std std-ref">Single-scattering vs. multiple-scattering</span></a> for a discussion about the ‘scratches’
+seen in the top two panels.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p><em>WARNING:</em> At wavelengths where the dominant source of photons is thermal dust
+emission but scattering is still important (high albedo), it cannot be excluded
+that the ‘scattering monte carlo’ method used by RADMC-3D produces very large
+noise. Example: a very optically thick dust disk consisting of large grains (10
+<span class="math notranslate nohighlight">\(\mu\)</span> is
+huge, most thermally emitted photons from the inner disk will be emitted so
+deeply in the disk interior (i.e. below the surface) that they will be
+immediately reabsorbed and lost. This means that that radiation that does escape
+is extremely noisy. The corresponding scattered light source function at large
+radii is therefore very noisy as well, unless <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> is taken to be
+huge. Currently no elegant solution is found, but maybe there will in the
+future. Stay tuned…</p>
+<p><em>NOTE:</em> Monte Carlo simulations are based on pseudo-random numbers.
+The seed for the random number generator is by default set to -17933201.
+If you want to perform multiple identical simulations with a different
+random sequence you will need to set the seed by hand. This can be
+done by adding a line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iseed</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5415</span>
+</pre></div>
+</div>
+<p>(where -5415 is to be replaced by the value you want) to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+</div>
+<div class="section" id="single-scattering-vs-multiple-scattering">
+<span id="sec-single-multiple-scattering"></span><h3>Single-scattering vs. multiple-scattering<a class="headerlink" href="#single-scattering-vs-multiple-scattering" title="Permalink to this headline">¶</a></h3>
+<p>If scattering is included in the images and spectra, the Monte Carlo run
+computes the full multiple-scattering problem. Photon packages are followed as
+they scatter and change their direction (possibly many times) until they escape
+to infinity or until they are extincted by many orders of magnitude (the exact
+extinction limit can be set by <code class="docutils literal notranslate"><span class="pre">mc_scat_maxtauabs</span></code>, which by default is set to
+30, meaning a photon package is considered extincted when it has travelled an
+absorption optical depth of 30).</p>
+<p><strong>Important note:</strong> <em>In many (most?) cases this default value of
+``mc_scat_maxtauabs=30`` is overly conservative. Especially
+when the scattering Monte Carlo is very time-consuming, you may want
+to experiment with a lower value. Try adding a line to the
+``radmc3d.inp`` with</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mc_scat_maxtauabs</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p><em>This may speed up the scattering Monte Carlo by up to a factor
+of 6, while still yielding reasonable results.</em></p>
+<p>It can be useful to figure out how important the effect of
+multiple scattering in an image is compared to single scattering. For
+instance: a protoplanetary disk with a ‘self-shadowed’ geometry will
+show some scattering even in the shadowed region because some photon
+packages scatter {em into} the shadowed region and then scatter into
+the line of sight. To figure out if this is indeed what happens, you
+can make two images: one normal image with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mf">1.0</span>
+<span class="n">cp</span> <span class="n">image</span><span class="o">.</span><span class="n">out</span> <span class="n">image_fullscat</span><span class="o">.</span><span class="n">out</span>
+</pre></div>
+</div>
+<p>and then another image which only treats single scattering:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mf">1.0</span> <span class="n">maxnrscat</span> <span class="mi">1</span>
+<span class="n">cp</span> <span class="n">image</span><span class="o">.</span><span class="n">out</span> <span class="n">image_singlescat</span><span class="o">.</span><span class="n">out</span>
+</pre></div>
+</div>
+<p>The command-line option <code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">1</span></code> tells RADMC-3D to stop following photon
+packages once they hit their first discrete scattering event. You can also check
+out the effect of single- and double-scattering (but excluding triple and higher
+order scattering) with: <code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">2</span></code>, etc.</p>
+<p>Note that multiple scattering may require a very high number of photon packages
+(i.e.~setting <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> to a very high number). For single scattering with
+too low <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> you typically see radial ‘rays’ in the image emanating
+from each stellar source of photons. For multiple scattering, when taking too
+low <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> small you would see strange non-radial ‘scratches’ in the
+image (see Fig.~:ref:<cite>fig-polscat</cite>, top two images). It looks as if someone has
+used a pen and randomly added some streaks. These streaks are the
+double-scattering events which, in that case, apparently are rare enough that
+they show up as individual streaks. To test whether these streaks are indeed
+such double scattering events, you can use <code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">1</span></code>, and they should
+disappear. If the streaks are indeed very few, it may turn out that the
+single-scattering image (<code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">1</span></code>) is almost already the correct
+image. The double scattering is then only a minor addition to the image, but due
+to the finite Monte Carlo noise it would yield annoying streaks which ruin a
+nice image. If you are {em very sure} that the second scattering and
+higher-order scattering are only a very minor effect, then you might use the
+<code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">1</span></code> image as the final image. By comparing the flux in the images
+with full scattering and single scattering you can estimate how important the
+multiple-scattering contribution is compared to single scattering. But of
+course, it is always safer to simply increase <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> and patiently wait
+until the Monte Carlo run is finished.</p>
+</div>
+<div class="section" id="simplified-single-scattering-mode-spherical-coordinates">
+<span id="sec-simple-single-scattering"></span><h3>Simplified single-scattering mode (spherical coordinates)<a class="headerlink" href="#simplified-single-scattering-mode-spherical-coordinates" title="Permalink to this headline">¶</a></h3>
+<p>If you are sure that multiple scattering is rare (low albedo and/or low optical
+depth), then you may be interested in using a simpler (non-Monte-Carlo) mode for
+including scattering in your images.  But please first read Section
+<a class="reference internal" href="#sec-single-multiple-scattering"><span class="std std-ref">Single-scattering vs. multiple-scattering</span></a> and test if multiple scattering is indeed
+unimportant. If so, and if you are using spherical coordinates, a single star at
+the center which is point-like, and if you are confident that at the wavelength
+you are interested in the thermal dust emission is not strong enough to be a
+considerable source of light that can be scattered into the line-of-sight
+(i.e.~all scattered light is scattered <em>star</em> light), then you can use the
+simplified single-scattering mode.</p>
+<p>This mode does not use the Monte Carlo method to compute the scattering source
+function, but instead uses direct integration of the starlight through the
+grid. It is much faster than Monte Carlo, and it does not contain noise.</p>
+<p>By adding <code class="docutils literal notranslate"><span class="pre">simplescat</span></code> to the command line when making an image or spectrum,
+you switch this mode on. Please compare first to the single-scattering Monte
+Carlo method (see Section <a class="reference internal" href="#sec-single-multiple-scattering"><span class="std std-ref">Single-scattering vs. multiple-scattering</span></a>; it should yield
+very similar result, but without noise) and then to the full multiple scattering
+Monte Carlo. The full multiple scattering case will likely produce more flux. If
+the difference is large, then you should not use the simple single scattering
+mode. However, if the difference is minor, then the single scattering
+approximation is reasonable.</p>
+</div>
+<div class="section" id="warning-when-using-an-isotropic-scattering">
+<h3>Warning when using an-isotropic scattering<a class="headerlink" href="#warning-when-using-an-isotropic-scattering" title="Permalink to this headline">¶</a></h3>
+<p>An important issue with anisotropic scattering is that if the phase function is
+very forward-peaked, then you may get problems with the <em>spatial</em> resolution
+of your model: it could then happen that one grid cell may be too much to the
+left to ‘beam’ the scattered light into your line of sight, while the next grid
+point will be too much to the right. A proper treatment of strongly anisotropic
+scattering therefore requires also a good check of the spatial resolution of
+your model. There are, however, also two possible tricks (approximations) to
+prevent problems. They both involve slight modifications of the dust opacity
+files:</p>
+<ul class="simple">
+<li><p>You can simply assure in the opacity files that the forward peaking of
+the phase function has some upper limit.</p></li>
+<li><p>Or you can simply treat extremely forward-peaked scattering as no
+scattering at all (simply setting the scattering opacity to zero at those
+wavelengths).</p></li>
+</ul>
+<p>Both ‘tricks’ are presumably reasonable and will not affect your results, unless
+you concentrate in your modeling very much on the angular dependence of the
+scattering.</p>
+</div>
+<div class="section" id="for-experts-some-more-background-on-scattering">
+<span id="sec-scat-background"></span><h3>For experts: Some more background on scattering<a class="headerlink" href="#for-experts-some-more-background-on-scattering" title="Permalink to this headline">¶</a></h3>
+<p>The inclusion of the scattering source function in the images and spectra is a
+non-trivial task for RADMC-3D because of memory constraints. If we would have
+infinite random access memory, then the inclusion of scattering in the images
+and spectra would be relatively easy, as we could then store the entire
+scattering source function <span class="math notranslate nohighlight">\(j^{\mathrm{scat}}(x,y,z,\nu,\Omega)\)</span> and use
+what we need at any time. But as you see, this function is a 6-dimensional
+function: three spatial dimensions, one frequency and one angular direction
+(which consists of two angles). For any respectable model this function is far
+too large to be stored. So nearly all the ‘numerical logistic’ complexity of the
+treatment of scattering comes from various ways to deal with this problem. In
+principle RADMC-3D makes the choices of which method to use itself, so the user
+is not bothered with it. But depending on which kind of model the user sets up,
+the performance of RADMC-3D may change as a result of this issue.</p>
+<p>So here are a few hints as to the internal workings of RADMC-3D in this
+regard. You do not have to read this, but it may help understanding the
+performance of RADMC-3D in various cases.</p>
+<ul>
+<li><p><em>Scattering in spectra and multi-wavelength images</em></p>
+<p>If no scattering is present in the model (see Section
+<a class="reference internal" href="#sec-modes-of-scattering"><span class="std std-ref">Five modes of treating scattering</span></a>), then RADMC-3D can save time when making
+spectra and/or multi-wavelength images. I will then do each integration of
+Eq.~(<span class="xref std std-ref">eq-ray-tracing-rt</span>) directly for all wavelengths at once before
+going to the next pixel. This saves some time because RADMC-3D then has to
+calculate the geometric stuff (how the ray moves through the model) just once
+for each ray. If, however, scattering is included, the scattering source
+function must be computed using the Scattering Monte Carlo computation. Since
+for large models it would be too memory consuming (in particular for 3-D
+models) to store this function for all positions <em>and</em> all wavelengths, it
+must do this calculation one-by-one for each wavelength, and calculate the
+image for that wavelength, and then go off to the next wavelength. This means
+that for each ray (pixel) the geometric computations (where the ray moves
+through the model) has to be redone for each new wavelength. This may slow
+down the code a bit.</p>
+</li>
+<li><p><em>Anisotropic scattering and multi-viewpoint images</em></p>
+<p>Suppose we wish to look at an object at one single wavelength, but from a
+number of different vantage points. If we have {em isotropic} scattering,
+then we need to do the Scattering Monte Carlo calculation just once, and we
+can make multiple images at different vantage points with the same scattering
+source function. This saves time, if you use the ‘movie’ mode of RADMC-3D
+(Section <a class="reference internal" href="imagesspectra.html#sec-movie-mode"><span class="std std-ref">Multiple vantage points: the ‘Movie’ mode</span></a>). However, if the scattering is anisotropic,
+then the source function would differ for each vantage point.  In that case
+the scattering source function must be recalculated for each vantage
+point. There is, deeply hidden in RADMC-3D, a way to compute scattering source
+functions for multiple vantage points within a single Scattering Monte Carlo
+run, but for the moment this is not yet activated.  end{itemize}</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="polarization-stokes-vectors-and-full-phase-functions">
+<span id="sec-polarized-scattering"></span><h2>Polarization, Stokes vectors and full phase-functions<a class="headerlink" href="#polarization-stokes-vectors-and-full-phase-functions" title="Permalink to this headline">¶</a></h2>
+<p>The module in RADMC-3D that deals with polarization
+(<code class="docutils literal notranslate"><span class="pre">polarization_module.f90</span></code>) is based on code developed by Michiel Min for his
+MCMAX code, and has been used and modified for use in RADMC-3D with his
+permission.</p>
+<p>Radiative transfer of polarized radiation is a relatively complex issue. A good
+and extensive review on the details of polarization is given in the book by
+Mishchenko, Travis &amp; Lacis, ‘Scattering, Absorption and Emission of Light by
+Small Particles’, 2002, Cambridge University Press (also electronically
+available on-line). Another good book (and a classic!)  is the book by Bohren &amp;
+Huffman ‘Absorption and scattering of light by small particles’,
+Wiley-VCH. Finally, the ultimate classic is the book by van de Hulst ‘Light
+scattering by small particles’, 1981. For some discussions on how polarization
+can be built in into radiative transfer codes, see e.g.Wolf, Voshchinnikov &amp;
+Henning (2002, A&amp;A 385, 365).</p>
+<p>When we wish to include polarization in our model we must follow not just the
+intensity <span class="math notranslate nohighlight">\(I\)</span> of light (or equivalently, the energy <span class="math notranslate nohighlight">\(E\)</span> of a photon
+package), but the full Stokes vector <span class="math notranslate nohighlight">\((I,Q,U,V)\)</span> (see review above for
+definitions, or any textbook on radiation processes). If a photon scatters off a
+dust grain, then the scattering angular probability density function depends not
+only on the scattering angle <span class="math notranslate nohighlight">\(\mu\)</span>, but also on the input state of
+polarization, i.e. the values of <span class="math notranslate nohighlight">\((I,Q,U,V)\)</span>. And the output polarization
+state will be modified. Moreover, even if we would not be interested in
+polarization at all, but we {em do} want to have a correct scattering phase
+function, we need to treat polarization, because a first scattering will
+polarize the photon, which will then have different angular scattering
+probability in the next scattering event. Normally these effects are very small,
+so if we are not particularly interested in polarization, one can usually ignore
+this effect without too high a penalty in reliability. But if one wants to be
+accurate, there is no way around a full treatment of the <span class="math notranslate nohighlight">\((I,Q,U,V)\)</span>.</p>
+<p>Interaction between polarized radiation with matter happens through so-called
+Müller matrices, which are 4:math:<cite>times`4 matrices that can be multiplied by
+the :math:`(I,Q,U,V)</cite> vector. More on this later.</p>
+<p>It is important to distinguish between two situations:</p>
+<ol class="arabic">
+<li><p>The simplest case (and fortunately applicable in many cases) is if all
+dust particles are <em>randomly oriented</em>, and there is <em>no
+preferential helicity</em> of the dust grains (i.e. for each particle shape
+there are equal numbers of particles with that shape and with its mirror
+copy shape). This is also automatically true if all grains are spherically
+symmetric. In this case the problem of polarized radiative transfer
+simplifies in several ways:</p>
+<ul class="simple">
+<li><p>The scattering Müller matrix simplifies, and contains only 6
+independent matrix elements (see later). Moreover, these matrix elements
+depend only on a single angle: the scattering angle <span class="math notranslate nohighlight">\(\theta\)</span>, and of
+course on the wavelength. This means that the amount of information is
+small enough that these Müller matrix elements can be stored in
+computer memory in tabulated form, so that they do not have to be
+calculated real-time.</p></li>
+<li><p>The total scattering cross section is independent of the input
+polarization state. Only the output radiation (i.e. in which
+direction the photon will scatter) depends on the input polarization
+state.</p></li>
+<li><p>The absorption cross section is the same for all components of
+the <span class="math notranslate nohighlight">\((I,Q,U,V)\)</span>-vector. In other words: the absorption Müller
+matrix is the usual scalar absorption coefficient times the unit
+matrix.</p></li>
+</ul>
+<p>The last two points assure that most of the structure of the RADMC-3D code
+for non-polarized radiation can remain untouched. Only for computing the
+new direction and polarization state of a photon after a scattering event
+in the Monte Carlo module, as well as for computing the scattering source
+function in the Monte Carlo module (for use in the camera module) we must
+do extra work. Thermal emission and thermal absorption remain the same,
+and computing optical depths remains also the same.</p>
+</li>
+<li><p>A (much!) more complex situation arises if dust grains are <em>non-spherical</em>
+and are somehow <em>aligned due to external forces</em>. For
+instance, particles tend to align themselves in the interstellar medium if
+strong enough magnetic fields are present. Or particles tend to align
+themselves due to the combination of gravity and friction if they are in a
+planetary/stellar atmosphere. Here are the ways in which things become more
+complex:</p>
+<ul class="simple">
+<li><p>All the scattering Müller matrix components will become
+non-zero and independent. We will thus get 16 independent variables.</p></li>
+<li><p>The matrix elements will depend on four angles, of which one can,
+in some cases, be removed due to symmetry (e.g. if we have gravity,
+there is still a remaining rotational symmetry; same is true of
+particles are aligned by a <span class="math notranslate nohighlight">\(\vec B\)</span>-field; but if both gravity and a
+<span class="math notranslate nohighlight">\(\vec B\)</span>-field are present, this symmetry may get lost). It will in
+most practical circumstances not be possible to precalculate the
+scattering Müller matrix beforehand and tabulate it, because there
+are too many variables. The matrix must be computed on-the-fly.</p></li>
+<li><p>The total scattering cross section now <em>does</em> depend on the
+polarization state of the input photon, and on the incidence angle.
+This means that scattering extinction becomes anisotropic.</p></li>
+<li><p>Thermal emission and absorption extinction will also no longer
+be isotropic. Moreover, they are no longer scalar: they are described
+by a non-trivial Müller matrix.</p></li>
+</ul>
+<p>The complexity of this case is rather large. As of version 0.41 we
+have included polarized thermal emission by aligned grains (see
+Section <a class="reference internal" href="#sec-polarized-thermal-emission"><span class="std std-ref">Polarized emission and absorption by aligned grains</span></a>), and we will
+implement more of the above mentioned aspects of aligned grains
+step by step.</p>
+</li>
+</ol>
+<div class="section" id="definitions-and-conventions-for-stokes-vectors">
+<span id="sec-definitions-stokes"></span><h3>Definitions and conventions for Stokes vectors<a class="headerlink" href="#definitions-and-conventions-for-stokes-vectors" title="Permalink to this headline">¶</a></h3>
+<p>There are different conventions for how to set up the coordinate system and
+define the Stokes vectors. Our definition follows the IAU 1974 definition as
+described in Hamaker &amp; Bregman (1996) A&amp;AS 117, pp.161.</p>
+<p>In this convention the <span class="math notranslate nohighlight">\(x'\)</span> axis points to the north on the sky, while the
+<span class="math notranslate nohighlight">\(y'\)</span> axis points to the east on the sky (but see the ‘important note’
+below). The <span class="math notranslate nohighlight">\(z'\)</span> axis points to the observer. This coordinate system is
+positively right-handed. The radiation moves toward positive <span class="math notranslate nohighlight">\(z'\)</span>. Angles
+in the <span class="math notranslate nohighlight">\((x',y')\)</span> plane are measured counter-clockwise (angle=0 means
+positive <span class="math notranslate nohighlight">\(x'\)</span> direction, angle=:math:<cite>pi</cite>/2 means positive <span class="math notranslate nohighlight">\(y'\)</span>
+direction).</p>
+<p>In the following we will (still completely consistent with the IAU definitions
+above, see the ‘important note’ below) define “up” to be positive <span class="math notranslate nohighlight">\(y'\)</span> and
+“right” to be positive <span class="math notranslate nohighlight">\(x'\)</span>. So, the <span class="math notranslate nohighlight">\((x',y')\)</span> coordinates are in a
+plane perpendicular to the photon propagation, and oriented as seen by the
+observer of that photon. So the direction of propagation is toward you, while
+<span class="math notranslate nohighlight">\(y'\)</span> points up and <span class="math notranslate nohighlight">\(x'\)</span> points to the right, just as one would
+normally orient it.</p>
+<p><em>Important Note</em>: This is fully equivalent to adjusting the IAU 1974 definition
+to have <span class="math notranslate nohighlight">\(x'\)</span> pointing west and <span class="math notranslate nohighlight">\(y'\)</span> pointing north, which is perhaps
+more intuitive, since most images in the literature have this orientation. So
+for convenience of communication, let us simply adjust the IAU 1974 definition
+to have positive <span class="math notranslate nohighlight">\(x'\)</span> (‘right’) pointing west and positive <span class="math notranslate nohighlight">\(y'\)</span>
+(‘up’) pointing north.  It will have no further consequences for the definitions
+and internal workings of RADMC-3D because RADMC-3D does not know what ‘north’
+and ‘east’ are.</p>
+<p>The <span class="math notranslate nohighlight">\((Q,U)\)</span> definition (linear polarization) is such that a linearly
+polarized ray with <span class="math notranslate nohighlight">\(Q=+I\)</span>, <span class="math notranslate nohighlight">\(U=V=0\)</span> has the electric field in the
+<span class="math notranslate nohighlight">\((x',y')=(1,0)\)</span> direction, while <span class="math notranslate nohighlight">\(Q=-I\)</span>, <span class="math notranslate nohighlight">\(U=V=0\)</span> has the
+electric field in the <span class="math notranslate nohighlight">\((x',y')=(0,1)\)</span> direction. If we have <span class="math notranslate nohighlight">\(Q=0\)</span>,
+<span class="math notranslate nohighlight">\(U=+I\)</span>, <span class="math notranslate nohighlight">\(V=0\)</span> then the E-field points in the <span class="math notranslate nohighlight">\(x'=y'\)</span>
+direction, while <span class="math notranslate nohighlight">\(Q=0\)</span>, <span class="math notranslate nohighlight">\(U=-I\)</span>, <span class="math notranslate nohighlight">\(V=0\)</span> the E-field points in
+the <span class="math notranslate nohighlight">\(x'=-y'\)</span> direction (see Figure 1 of Hamaker &amp; Bregman 1996).</p>
+<p>The <span class="math notranslate nohighlight">\((V)\)</span> definition (circular polarization) is such that (quoting
+directly from the Hamaker &amp; Bregman paper): <em>For {em right}-handed circularly
+polarized radiation, the position angle of the electric vector at any point
+increases with time; this implies that the :math:`y’` component of the field
+lags the :math:`x’` component. Also the electric vectors along the line of sight
+form a {em left}-handed screw. The Stokes :math:`V` is positive for
+right-handed circular polarization.</em></p>
+<div class="figure align-default" id="id2">
+<span id="fig-stokes-definition"></span><a class="reference internal image-reference" href="_images/stokes_and_angles_iaudef.png"><img alt="_images/stokes_and_angles_iaudef.png" src="_images/stokes_and_angles_iaudef.png" style="width: 90%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">The definition of the Stokes parameters used in RADMC-3D, which is consistent
+with the IAU 1974 definitions (see Hamaker &amp; Bregman (1996) A&amp;AS 117,
+pp.161). First panel shows that positive angle means counter-clockwise. In
+the second to fourth panels the fat lines show how the tip of the real
+electric field vector goes as a function of time for an observer at a fixed
+location in space watching the radiation. The radiation moves toward the
+reader. We call the second panel (<span class="math notranslate nohighlight">\(Q=+I\)</span>) ‘horizontally polarized’, the
+third panel (<span class="math notranslate nohighlight">\(U=+I\)</span>) ‘diagonally polarized by +45 degrees’ and the
+fourth panel (<span class="math notranslate nohighlight">\(V=+I\)</span>) ‘right-handed circularly polarized’. In the
+images produced by RADMC-3D (<code class="docutils literal notranslate"><span class="pre">image.out</span></code>, see Section <span class="xref std std-ref">sec-image-out</span>
+and Fig.~:ref:<cite>fig-cameraorient</cite>) the <span class="math notranslate nohighlight">\(x'\)</span> direction is the horizontal
+direction and the <span class="math notranslate nohighlight">\(y'\)</span> direction is the vertical direction.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>We can put these definitions into the standard formulae:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+Q &amp;= I\cos(2\beta)\cos(2\chi)\\
+U &amp;= I\cos(2\beta)\sin(2\chi)\\
+V &amp;= I\sin(2\beta)
+\end{split}\end{split}\]</div>
+<p>The angle <span class="math notranslate nohighlight">\(\chi\)</span> is the angle of the E-field in the <span class="math notranslate nohighlight">\((x',y')\)</span>
+coordinates, measured counter-clockwise from <span class="math notranslate nohighlight">\(x'\)</span> (consistent with our
+definition of angles). Example: <span class="math notranslate nohighlight">\(\chi\)</span> = 45 deg = <span class="math notranslate nohighlight">\(\pi/4\)</span>, then
+<span class="math notranslate nohighlight">\(\cos(2\chi)=0\)</span> and <span class="math notranslate nohighlight">\(\sin(2\chi)=1\)</span>, meaning that <span class="math notranslate nohighlight">\(Q=0\)</span> and
+<span class="math notranslate nohighlight">\(U/I=+1\)</span>. Indeed this is consistent with the above definition that
+<span class="math notranslate nohighlight">\(U/I=+1\)</span> is <span class="math notranslate nohighlight">\(E_x'=E_y'\)</span>.</p>
+<p>The angle <span class="math notranslate nohighlight">\(2\beta\)</span> is the phase difference between the
+<span class="math notranslate nohighlight">\(y'\)</span>-component of the E-field and the <span class="math notranslate nohighlight">\(x'\)</span>-component of the E-field
+such that for <span class="math notranslate nohighlight">\(0&lt;\beta&lt;\pi/2\)</span> the E-field rotates in a counter-clockwise
+sense. In other words: the <span class="math notranslate nohighlight">\(y'\)</span>-wave lags <span class="math notranslate nohighlight">\(2\beta\)</span> behind the
+<span class="math notranslate nohighlight">\(x'\)</span> wave. Example: if we have <span class="math notranslate nohighlight">\(\beta=\pi/4\)</span>, i.e.
+<span class="math notranslate nohighlight">\(2\beta=\pi/2\)</span>, then <span class="math notranslate nohighlight">\(\cos(2\beta)=0\)</span> and <span class="math notranslate nohighlight">\(\sin(2\beta)=1\)</span>, so
+we have <span class="math notranslate nohighlight">\(Q=U=0\)</span> and <span class="math notranslate nohighlight">\(V/I=+1\)</span>. This corresponds to the <span class="math notranslate nohighlight">\(y'\)</span>
+wave being lagged <span class="math notranslate nohighlight">\(\pi/2\)</span> behind the <span class="math notranslate nohighlight">\(x'\)</span> wave, meaning that we have
+a counter-clockwise rotation. If we use the right-hand-rule and point the thumb
+into the direction of propagation (toward us) then the fingers indeed point in
+counter-rotating direction, meaning that <span class="math notranslate nohighlight">\(V/I=+1\)</span> is righthanded polarized
+radiation.</p>
+<p>In terms of the <em>real</em> electric fields of a plane monochromatic wave:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+E_x'(t) &amp;= E_h \cos(\omega t-\Delta_h)\\
+E_y'(t) &amp;= E_v \cos(\omega t-\Delta_v)
+\end{split}\end{split}\]</div>
+<p>(with <span class="math notranslate nohighlight">\(E_h&gt;0\)</span> and <span class="math notranslate nohighlight">\(E_v&gt;0\)</span> and <span class="math notranslate nohighlight">\(\Delta_{h,v}\)</span> are the phase
+lags of the components with respect to some arbitrary phase) we can write the
+Stokes components as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I &amp;= E_h^2 + E_v^2 \\
+Q &amp;= E_h^2 - E_v^2\\
+U &amp;= 2 E_h E_v \cos(\Delta) \\
+V &amp;= 2 E_h E_v \sin(\Delta)
+\end{split}\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\Delta = \Delta_v - \Delta_h = 2\beta\)</span>.</p>
+<p>In terms of the {em complex} electric fields of a plane monochromatic wave
+(the sign before the <span class="math notranslate nohighlight">\(i\omega t\)</span> is important):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+E_x'(t) &amp;= E_h e^{i(\Delta_h-\omega t)}\\
+E_y'(t) &amp;= E_v e^{i(\Delta_v-\omega t)}
+\end{split}\end{split}\]</div>
+<p>(with <span class="math notranslate nohighlight">\(E_h&gt;0\)</span> and <span class="math notranslate nohighlight">\(E_v&gt;0\)</span> real numbers and <span class="math notranslate nohighlight">\(\Delta_{h,v}\)</span> are
+the phase lags of the components with respect to some arbitrary phase) we can
+write the Stokes components as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I &amp;= \langle E_{x'}E_{x'}^{*} + E_{y'}E_{y'}^{*}   \rangle\\
+Q &amp;= \langle E_{x'}E_{x'}^{*} - E_{y'}E_{y'}^{*}   \rangle\\
+U &amp;= \langle E_{x'}E_{y'}^{*} + E_{y'}E_{x'}^{*}   \rangle\\
+V &amp;= i\langle E_{x'}E_{y'}^{*} - E_{y'}E_{x'}^{*}  \rangle
+\end{split}\end{split}\]</div>
+</div>
+<div class="section" id="our-conventions-compared-to-other-literature">
+<span id="sec-stokes-convent-differences"></span><h3>Our conventions compared to other literature<a class="headerlink" href="#our-conventions-compared-to-other-literature" title="Permalink to this headline">¶</a></h3>
+<p>The IAU 1974 definition is different from the definitions used in the
+Planck mission, for instance. So be careful. There is something said about
+this on the website of the healpix software
+<a class="reference external" href="http://healpix.jpl.nasa.gov/html/intronode12.htm">http://healpix.jpl.nasa.gov/html/intronode12.htm</a> .</p>
+<p>Our definition is also different from the Mishchenko book and papers (see
+below). Compared to the books of Mishchenko and Bohren &amp; Huffman, our
+definitions are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I_{\mathrm{ours}} &amp;=  I_{\mathrm{mishch}}  = I_{\mathrm{bohrenhuffman}} \\
+Q_{\mathrm{ours}} &amp;=  Q_{\mathrm{mishch}}  = Q_{\mathrm{bohrenhuffman}} \\
+U_{\mathrm{ours}} &amp;=  -U_{\mathrm{mishch}} = -U_{\mathrm{bohrenhuffman}} \\
+V_{\mathrm{ours}} &amp;=  -V_{\mathrm{mishch}} = -V_{\mathrm{bohrenhuffman}}
+\end{split}\end{split}\]</div>
+<p>As you see: only the <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> change sign. For a 4:math:<cite>times`4
+Müller matrix :math:`M</cite> this means that the <span class="math notranslate nohighlight">\(M_{II}\)</span>, <span class="math notranslate nohighlight">\(M_{IQ}\)</span>,
+<span class="math notranslate nohighlight">\(M_{QI}\)</span>, <span class="math notranslate nohighlight">\(M_{QQ}\)</span>, as well as the <span class="math notranslate nohighlight">\(M_{UU}\)</span>, <span class="math notranslate nohighlight">\(M_{UV}\)</span>,
+<span class="math notranslate nohighlight">\(M_{VU}\)</span>, <span class="math notranslate nohighlight">\(M_{VV}\)</span> stay the same, while <span class="math notranslate nohighlight">\(M_{IU}\)</span>,
+<span class="math notranslate nohighlight">\(M_{IV}\)</span>, <span class="math notranslate nohighlight">\(M_{QU}\)</span>, <span class="math notranslate nohighlight">\(M_{QV}\)</span>, as well as <span class="math notranslate nohighlight">\(M_{UI}\)</span>,
+<span class="math notranslate nohighlight">\(M_{UQ}\)</span>, <span class="math notranslate nohighlight">\(M_{VI}\)</span>, <span class="math notranslate nohighlight">\(M_{VQ}\)</span> components would flip sign.</p>
+<p>Compared to Mishchenko, Travis &amp; Lacis book, what we call <span class="math notranslate nohighlight">\(x'\)</span> they call
+<span class="math notranslate nohighlight">\(\theta\)</span> and what we call <span class="math notranslate nohighlight">\(y'\)</span> they call <span class="math notranslate nohighlight">\(\phi\)</span>. In their
+Figure 1.3 (which describes the definition of the Stokes parameters) they have
+the <span class="math notranslate nohighlight">\(\theta\)</span> direction pointing downward, rather than toward the right,
+i.e.rotated by 90 degrees clockwise compared to RADMC-3D. However, since
+RADMC-3D does not know what ‘right’ or ‘down’ are (only what <span class="math notranslate nohighlight">\(x'\)</span> and
+<span class="math notranslate nohighlight">\(y'\)</span> are) this rotation is merely a difference in how we plot things in a
+figure, and has no consequences for the results, as long as we define how
+<span class="math notranslate nohighlight">\(x'\)</span> and <span class="math notranslate nohighlight">\(y'\)</span> are oriented compared to our model (see
+Fig.~:ref:<cite>fig-cameraorient</cite> where <span class="math notranslate nohighlight">\(x_{\mathrm{image}}\)</span> is our <span class="math notranslate nohighlight">\(x'\)</span>
+here and likewise for <span class="math notranslate nohighlight">\(y'\)</span>).</p>
+<p>Bohren &amp; Huffman have the two unit vectors plotted in the following way:
+<span class="math notranslate nohighlight">\({\bf e}_{\parallel}\)</span> is plotted horizontally to the left and <span class="math notranslate nohighlight">\({\bf
+e}_{\perp}\)</span> is plotted vertically upward. Compared to us, our <span class="math notranslate nohighlight">\(x'\)</span> points
+toward {em minus} their <span class="math notranslate nohighlight">\({\bf e}_{\parallel}\)</span>, while our <span class="math notranslate nohighlight">\(y'\)</span>
+points toward their <span class="math notranslate nohighlight">\({\bf e}_{\perp}\)</span>, but since they plot their
+<span class="math notranslate nohighlight">\({\bf e}_{\parallel}\)</span> to the left, the orientation of our plot and their
+plots are consistent (i.e.if they say ‘pointing to the right’, they mean the
+same direction as we). But their definition of ‘right-handed circular
+polarization’ (clockwise when seen toward the source of the radiation) is our
+‘left handed’.</p>
+<p>The book by Wendisch &amp; Yang ‘Theory of Atmospheric Radiative Transfer’ uses the
+same conventions as Bohren &amp; Huffman, but their basis vector <span class="math notranslate nohighlight">\({\bf
+e}_{\parallel}\)</span> is plotted vertically and <span class="math notranslate nohighlight">\({\bf e}_{\perp}\)</span> is plotted
+horizontally to the right. This only affects what they call ‘horizontal’ and
+‘vertical’ but the math stays the same.</p>
+<p>Our definition is identical to the one on the <em>English</em> Wikipedia page on Stokes
+parameters <a class="reference external" href="http://en.wikipedia.org/wiki/Stokes_parameters">http://en.wikipedia.org/wiki/Stokes_parameters</a> (on 2 January 2013),
+with the only exception that what they call ‘righthanded’ circularly polarized,
+we call ‘lefthanded’. This is just a matter of nomenclature of what is
+right/left-handed, and since RADMC-3D does not know what ‘right/lefthanded’ is,
+this difference has no further consequences. <em>Note</em>, however, that the same
+Wikipedia page in different languages use different conventions! For instance,
+the German version of the page (on 2 January 2013) has the same Q and U
+definitions, but has the sign of V flipped.</p>
+<p>Note that in RADMC-3D we have no global definition of the orientation of
+<span class="math notranslate nohighlight">\(x'\)</span> and <span class="math notranslate nohighlight">\(y'\)</span> (see e.g.Section
+<a class="reference internal" href="#sec-orientation-vector-stokes"><span class="std std-ref">Defining orientation for non-observed radiation</span></a>). If we make an image with RADMC-3D, then
+the horizontal (x-) direction in the image corresponds to <span class="math notranslate nohighlight">\(x'\)</span> and the
+vertical (y-) direction corresponds to <span class="math notranslate nohighlight">\(y'\)</span>, just as one would expect. So
+if you obtain an image from RADMC-3D and all the pixels in the image have
+<span class="math notranslate nohighlight">\(Q=I\)</span> and <span class="math notranslate nohighlight">\(U=V=0\)</span>, then the electric field points horizontally in
+the image.</p>
+</div>
+<div class="section" id="defining-orientation-for-non-observed-radiation">
+<span id="sec-orientation-vector-stokes"></span><h3>Defining orientation for non-observed radiation<a class="headerlink" href="#defining-orientation-for-non-observed-radiation" title="Permalink to this headline">¶</a></h3>
+<p>To complete our description of the Stokes parameters we still need to define in
+which direction we let <span class="math notranslate nohighlight">\(x'\)</span> and <span class="math notranslate nohighlight">\(y'\)</span> point if we do <em>not</em> have an
+obvious observer, i.e. for radiation moving through our object of interest which
+may never reach us. In the Monte Carlo modules of RADMC-3D, when polarization is
+switched on, any photon package does not only have a wavelength <span class="math notranslate nohighlight">\(\lambda\)</span>
+and a direction of propagation <span class="math notranslate nohighlight">\({\bf n}\)</span> associated with it, but also a
+second unit vector <span class="math notranslate nohighlight">\({\bf S}\)</span>, which is always assured to obey:</p>
+<div class="math notranslate nohighlight">
+\[|{\bf S}| = 1 \qquad \hbox{and} \qquad {\bf S}\cdot{\bf n}=0\]</div>
+<p>This leaves, for a given <span class="math notranslate nohighlight">\({\bf n}\)</span>, one degree of freedom (any direction
+as long as it is perpendicular to <span class="math notranslate nohighlight">\({\bf n}\)</span>). It is irrelevant which
+direction is chosen for this, but whatever choice is made, it sets the
+definitions of the <span class="math notranslate nohighlight">\(x'\)</span> and <span class="math notranslate nohighlight">\(y'\)</span> directions. The definitions are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+x' &amp;= \quad\hbox{points in the direction}\quad {\bf S}\times {\bf n}\\
+y' &amp;= \quad\hbox{points in the direction}\quad {\bf S}\\
+z' &amp;= \quad\hbox{points in the direction}\quad {\bf n}
+\end{split}\end{split}\]</div>
+<p>So for <span class="math notranslate nohighlight">\(Q=-I\)</span>, <span class="math notranslate nohighlight">\(U=V=0\)</span> the electric field points in the direction of
+<span class="math notranslate nohighlight">\({\bf S}\)</span>, while for <span class="math notranslate nohighlight">\(Q=+I\)</span>, <span class="math notranslate nohighlight">\(U=V=0\)</span> it is perpendicular to
+both <span class="math notranslate nohighlight">\({\bf n}\)</span> and <span class="math notranslate nohighlight">\({\bf S}\)</span>.</p>
+<p>However, if you are forced to change the direction of <span class="math notranslate nohighlight">\({\bf S}\)</span> for whatever
+reason, the Stokes components will also change. This coordinate transformation
+works as follows.
+We can transform from a ‘-basis to a ‘’-basis by rotating the <span class="math notranslate nohighlight">\({\bf S}\)</span>-vector
+counter-clockwise (as seen by the observer watching the radiation) by an
+angle <span class="math notranslate nohighlight">\(\alpha\)</span>. Any vector <span class="math notranslate nohighlight">\((x',y')\)</span> in the ‘-basis will become a vector
+<span class="math notranslate nohighlight">\((x'',y'')\)</span> in a ‘’-basis, given by the transformation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{matrix}
+x''\\y''
+\end{matrix}\right)
+=
+\left(\begin{matrix}
+\cos(\alpha) &amp; \sin(\alpha)\\
+-\sin(\alpha) &amp; \cos(\alpha)
+\end{matrix}\right)
+\left(\begin{matrix}
+x'\\y'
+\end{matrix}\right)\end{split}\]</div>
+<p>NOTE: We choose <span class="math notranslate nohighlight">\((x',y')\)</span> to be the usual counter-clockwise basis for the
+observer seeing the radiation. Rotating the basis in counter-clockwise direction
+means rotating the vector in that basis in clockwise direction, hence the sign
+convention in the matrix.</p>
+<p>If we have <span class="math notranslate nohighlight">\((I,Q,U,V)\)</span> in the ‘-basis (which we might have written as
+<span class="math notranslate nohighlight">\((I',Q',U',V')\)</span> but by convention we drop the ‘), the
+<span class="math notranslate nohighlight">\((I'',Q'',U'',V'')\)</span> in the ‘’-basis becomes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{matrix}
+I''\\Q''\\U''\\V''
+\end{matrix}\right)
+=
+\left(\begin{matrix}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; \cos(2\alpha) &amp; \sin(2\alpha) &amp; 0 \\
+0 &amp; -\sin(2\alpha) &amp; \cos(2\alpha) &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{matrix}\right)
+\left(\begin{matrix}
+I\\Q\\U\\V
+\end{matrix}\right)\end{split}\]</div>
+</div>
+<div class="section" id="polarized-scattering-off-dust-particles-general-formalism">
+<h3>Polarized scattering off dust particles: general formalism<a class="headerlink" href="#polarized-scattering-off-dust-particles-general-formalism" title="Permalink to this headline">¶</a></h3>
+<p>Suppose we have <em>one</em> dust particle of mass <span class="math notranslate nohighlight">\(m_{\mathrm{grain}}\)</span> and we
+place it at location <span class="math notranslate nohighlight">\({\bf x}\)</span>. Suppose this particle is exposed to a
+plane wave of electromagnetic radiation pointing in direction <span class="math notranslate nohighlight">\({\bf
+n}_{\mathrm{in}}\)</span> with a flux <span class="math notranslate nohighlight">\({\bf F}_{\mathrm{in}}=F_{\mathrm{in}}\,{\bf
+n}_{\mathrm{in}}\)</span>. This radiation can be polarized, so that
+<span class="math notranslate nohighlight">\(F_{\mathrm{in}}\)</span> actually is a Stokes vector:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}F_{\mathrm{in}} = \left(\begin{matrix}
+F_{I,\mathrm{in}}\\
+F_{Q,\mathrm{in}}\\
+F_{U,\mathrm{in}}\\
+F_{V,\mathrm{in}}
+\end{matrix}\right)\end{split}\]</div>
+<p>This particle will scatter some of this radiation into all directions.
+What will the flux of scattered radiation be, as observed at location
+<span class="math notranslate nohighlight">\({\bf y}\neq{\bf x}\)</span>? Let us define the vector</p>
+<div class="math notranslate nohighlight">
+\[{\bf r} = {\bf y} - {\bf x}\]</div>
+<p>its length</p>
+<div class="math notranslate nohighlight">
+\[r = |{\bf r}|\]</div>
+<p>and the unit vector</p>
+<div class="math notranslate nohighlight">
+\[{\bf e}_r = \frac{{\bf r}}{r}\]</div>
+<p>We will assume that <span class="math notranslate nohighlight">\(r\gg a\)</span> where <span class="math notranslate nohighlight">\(a\)</span> is the particle size.  We
+define the {em scattering matrix elements} <span class="math notranslate nohighlight">\(Z_{ij}\)</span> (with <span class="math notranslate nohighlight">\(i,j\)</span> =
+<span class="math notranslate nohighlight">\(1,2,3,4\)</span>) such that the measured outgoing flux from the particle at
+<span class="math notranslate nohighlight">\({\bf y}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[{\bf F}_{\mathrm{out}} = F_{\mathrm{out}}{\bf e}_r\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}F_{\mathrm{out}} = \left(\begin{matrix}
+F_{I,\mathrm{out}}\\
+F_{Q,\mathrm{out}}\\
+F_{U,\mathrm{out}}\\
+F_{V,\mathrm{out}}
+\end{matrix}\right)
+=\frac{m_{\mathrm{grain}}}{r^2}
+\left(\begin{matrix}
+Z_{11} &amp; Z_{12} &amp; Z_{13} &amp; Z_{14} \\
+Z_{21} &amp; Z_{22} &amp; Z_{23} &amp; Z_{24} \\
+Z_{31} &amp; Z_{32} &amp; Z_{33} &amp; Z_{34} \\
+Z_{41} &amp; Z_{42} &amp; Z_{43} &amp; Z_{44}
+\end{matrix}\right)
+\left(\begin{matrix}
+F_{I,\mathrm{in}}\\
+F_{Q,\mathrm{in}}\\
+F_{U,\mathrm{in}}\\
+F_{V,\mathrm{in}}
+\end{matrix}\right)\end{split}\]</div>
+<p>The values <span class="math notranslate nohighlight">\(Z_{ij}\)</span> depend on the direction into which the radiation is
+scattered (i.e.<span class="math notranslate nohighlight">\({\bf e}_r\)</span>) and on the direction of the incoming flux
+(i.e.<span class="math notranslate nohighlight">\({\bf n}\)</span>), but not on <span class="math notranslate nohighlight">\(r\)</span>: the radial dependence of the
+outgoing flux is taken care of through the <span class="math notranslate nohighlight">\(1/r^2\)</span> factor in the above
+formula.</p>
+<p>Some notes about our conventions are useful at this place. In many books the
+‘scattering matrix’ is written as <span class="math notranslate nohighlight">\(F_{ij}\)</span> instead of <span class="math notranslate nohighlight">\(Z_{ij}\)</span>, and is
+defined as the <span class="math notranslate nohighlight">\(Z_{ij}\)</span> for the case when radiation comes from one
+particular direction: <span class="math notranslate nohighlight">\({\bf n}=(0,0,1)\)</span>. In this manual and in the RADMC-3D
+code, however, we will always write <span class="math notranslate nohighlight">\(Z_{ij}\)</span>, because the symbol <span class="math notranslate nohighlight">\(F\)</span> can be
+confused with flux. The normalization of these matrix elements is also
+different in different books. In our case it has the dimension
+cm:math:<cite>^2</cite>/gram/steradian. The conversion from the conventions of other books is
+(where <span class="math notranslate nohighlight">\(k=2\pi/\lambda\)</span> is the wave number in units of 1/cm):</p>
+<div class="math notranslate nohighlight">
+\[Z_{ij,\mathrm{RADMC-3D}} = \frac{Z_{ij,\mathrm{Mishchenko}}}{m_{\mathrm{grain}}}
+= \frac{S_{ij,\mathrm{BohrenH}}}{k^2m_{\mathrm{grain}}}\]</div>
+<p>except that for the <span class="math notranslate nohighlight">\(Z_{13}\)</span>, <span class="math notranslate nohighlight">\(Z_{14}\)</span>, <span class="math notranslate nohighlight">\(Z_{23}\)</span>,
+<span class="math notranslate nohighlight">\(Z_{24}\)</span>, <span class="math notranslate nohighlight">\(Z_{31}\)</span>, <span class="math notranslate nohighlight">\(Z_{41}\)</span>, <span class="math notranslate nohighlight">\(Z_{32}\)</span>, <span class="math notranslate nohighlight">\(Z_{42}\)</span>
+elements (if non-zero) there must be a minus sign before the
+<span class="math notranslate nohighlight">\(Z_{ij,\mathrm{RADMC-3D}}\)</span> because of the opposite <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span>
+sign conventions (see Section <a class="reference internal" href="#sec-stokes-convent-differences"><span class="std std-ref">Our conventions compared to other literature</span></a>).</p>
+<p>Note that the <span class="math notranslate nohighlight">\(S_{ij,\mathrm{BohrenH}}\)</span> are the matrix elements obtained
+from the famous <code class="docutils literal notranslate"><span class="pre">BHMIE.F</span></code> code from the Bohren &amp; Huffman book
+(see Chapter <a class="reference internal" href="opacitieswww.html#chap-acquiring-opacities"><span class="std std-ref">Acquiring opacities from the WWW</span></a>).</p>
+</div>
+<div class="section" id="polarized-scattering-off-dust-particles-randomly-oriented-particles">
+<h3>Polarized scattering off dust particles: randomly oriented particles<a class="headerlink" href="#polarized-scattering-off-dust-particles-randomly-oriented-particles" title="Permalink to this headline">¶</a></h3>
+<p>In the special case in which we either have spherical particles or we
+average over a large number of randomly oriented particles, the <span class="math notranslate nohighlight">\(Z_{ij}\)</span>
+elements are no longer dependent on {em both} <span class="math notranslate nohighlight">\({\bf e}_r\)</span> and {bf n} but
+only on the angle between them:</p>
+<div class="math notranslate nohighlight">
+\[\cos\theta = {\bf n}\cdot{\bf e}_r\]</div>
+<p>So we go from <span class="math notranslate nohighlight">\(Z_{ij}({\bf n},{\bf e}_r)\)</span>, i.e.a four-angle dependence, to
+<span class="math notranslate nohighlight">\(Z_{ij}(\theta)\)</span>, i.e.a one-angle dependence.</p>
+<p>Now let us also assume that there is no netto helicity of the particles
+(they are either axisymmetric or there exist equal amounts of particles
+as their mirror symmetric counterparts). In that case (see e.g.Mishchenko book) of the 16 matrix elements only 6 are non-zero and independent:</p>
+<div class="math notranslate nohighlight" id="eq-scatmat-for-randorient-nohelic">
+\[\begin{split}F_{\mathrm{out}} = \left(\begin{matrix}
+F_{I,\mathrm{out}}\\
+F_{Q,\mathrm{out}}\\
+F_{U,\mathrm{out}}\\
+F_{V,\mathrm{out}}
+\end{matrix}\right)
+=\frac{m_{\mathrm{grain}}}{r^2}
+\left(\begin{matrix}
+Z_{11} &amp; Z_{12} &amp; 0 &amp; 0 \\
+Z_{12} &amp; Z_{22} &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; Z_{33} &amp; Z_{34} \\
+0 &amp; 0 &amp; -Z_{34} &amp; Z_{44}
+\end{matrix}\right)
+\left(\begin{matrix}
+F_{I,\mathrm{in}}\\
+F_{Q,\mathrm{in}}\\
+F_{U,\mathrm{in}}\\
+F_{V,\mathrm{in}}
+\end{matrix}\right)\end{split}\]</div>
+<p>This is the case for scattering in RADMC-3D. Note that in Mie scattering the
+number of independent matrix elements reduces to just 4 because then
+<span class="math notranslate nohighlight">\(Z_{22}=Z_{11}\)</span> and <span class="math notranslate nohighlight">\(Z_{44}=Z_{33}\)</span>. But RADMC-3D also allows for
+cases where <span class="math notranslate nohighlight">\(Z_{22}\neq Z_{11}\)</span> and <span class="math notranslate nohighlight">\(Z_{44}\neq Z_{33}\)</span>, i.e. for
+opacities resulting from more detailed calculations such as DDA or T-matrix
+calculations.</p>
+<p>Now, as described above, the Stokes vectors only have meaning if the directions
+of <span class="math notranslate nohighlight">\(x'\)</span> and <span class="math notranslate nohighlight">\(y'\)</span> are well-defined. For
+Eq.~(<span class="xref std std-ref">eq-scatmat-for-randorient-nohelic</span>) to be valid (and for the correct
+meaning of the <span class="math notranslate nohighlight">\(Z_{ij}\)</span> elements) the following definition is used: Before
+the scattering, the <span class="math notranslate nohighlight">\({\bf S}\)</span>-vector of the photon package is rotated (and
+the Stokes vectors accordingly transformed) such that the new <span class="math notranslate nohighlight">\({\bf
+S}\)</span>-vector is perpendicular to both <span class="math notranslate nohighlight">\({\bf n}\)</span> and <span class="math notranslate nohighlight">\({\bf e}_r\)</span>. In
+other words, the scattering angle <span class="math notranslate nohighlight">\(\theta\)</span> is a rotation of the photon
+propagation around the (new) <span class="math notranslate nohighlight">\({\bf S}\)</span>-vector. The sign convention is such
+that</p>
+<div class="math notranslate nohighlight">
+\[({\bf n}\times {\bf e}_r)\cdot{\bf S}=\sin(\theta)\]</div>
+<p>In other words, if we look into the incoming light (with <span class="math notranslate nohighlight">\(z'\)</span> pointing
+toward us), then for <span class="math notranslate nohighlight">\(\sin(\theta)&gt;0\)</span> the photon is scattered into the
+<span class="math notranslate nohighlight">\(x'&gt;0\)</span>, <span class="math notranslate nohighlight">\(y'=0\)</span> direction (i.e.for us it is scattered to the
+right).  The <span class="math notranslate nohighlight">\({\bf S}\)</span> vector for the outgoing photon remains unchanged,
+since the new <span class="math notranslate nohighlight">\({\bf n}\)</span> is also perpendicular to it.</p>
+<p>So what does this all mean for the opacity? The scattering opacity tells us
+how much of the incident radiation is removed and converted into outgoing
+scattered radiation. The absorption opacity tells us how much of the
+incident radiation is removed and converted into heat. For randomly oriented
+particles without netto helicity both opacities are independent of the
+polarization state of the radiation. Moreover, the thermal emission
+is unpolarized in this case. This means that in the radiative
+transfer equation the extinction remains simple:</p>
+<div class="math notranslate nohighlight" id="eq-radtrans-randomorient">
+\[\begin{split}\frac{d}{ds}\left(
+\begin{matrix}
+I_I\\I_Q\\I_U\\I_V
+\end{matrix}
+\right)
+=
+\left(
+\begin{matrix}
+j_{\mathrm{emis},I}\\0\\0\\0
+\end{matrix}
+\right)
++
+\left(
+\begin{matrix}
+j_{\mathrm{scat},I}\\j_{\mathrm{scat},Q}\\j_{\mathrm{scat},U}\\j_{\mathrm{scat},V}
+\end{matrix}
+\right)
+-\rho(\kappa_{\mathrm{abs}}+\kappa_{\mathrm{scat}})
+\left(
+\begin{matrix}
+I_I\\I_Q\\I_U\\I_V
+\end{matrix}
+\right)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(I_I\)</span>, <span class="math notranslate nohighlight">\(I_Q\)</span>, <span class="math notranslate nohighlight">\(I_U\)</span>, <span class="math notranslate nohighlight">\(I_V\)</span> are the intensities
+(erg/s/cm:math:<cite>^2</cite>/Hz/ster) for the four Stokes parameters, and likewise for
+<span class="math notranslate nohighlight">\(j_{\mathrm{emis}}\)</span> and <span class="math notranslate nohighlight">\(j_{\mathrm{scat}}\)</span>, and finally, <span class="math notranslate nohighlight">\(s\)</span>
+the path length along the ray under consideration. Note that if we would allow
+for fixed-orientation dust particles (which we don’t),
+Eq.~(<span class="xref std std-ref">eq-radtrans-randomorient</span>) would become considerably more complex,
+with extinction being matrix-valued and thermal emission being polarized.</p>
+<p>Since <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> converts incoming radiation into outgoing
+scattered radiation, it should be possible to calculate
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> from angular integrals of the scattering matrix
+elements. For randomly oriented non-helical particles we indeed have:</p>
+<div class="math notranslate nohighlight" id="eq-scatmat-selfconsist-kappa">
+\[\kappa_{\mathrm{scat}} = \oint Z_{11} d\Omega =
+2\pi \int_{-1}^{+1}Z_{11}(\mu)d\mu\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu=\cos\theta\)</span>. In a similar exercise we can calculate the
+anisotropy factor <span class="math notranslate nohighlight">\(g\)</span> from the scattering matrix elements:</p>
+<div class="math notranslate nohighlight" id="eq-scatmat-selfconsist-g">
+\[g = \frac{2\pi}{\kappa_{\mathrm{scat}}}\int_{-1}^{+1}Z_{11}(\mu)\mu d\mu\]</div>
+<p>This essentially completes the description of scattering as it is implemented in
+RADMC-3D.</p>
+<p>We can precalculate the <span class="math notranslate nohighlight">\(Z_{ij}(\theta)\)</span> for every wavelength and for a
+discrete set of values of <span class="math notranslate nohighlight">\(\theta\)</span>, and store these in a table. This is
+indeed the philosophy of RADMC-3D: You have to precompute them using, for
+instance, the Mie code of Bohren and Huffman (see Chapter
+<a class="reference internal" href="opacitieswww.html#chap-acquiring-opacities"><span class="std std-ref">Acquiring opacities from the WWW</span></a> for RADMC-3D compliant wrappers around that
+code), and then provide them to RADMC-3D through a file called
+<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> (where <code class="docutils literal notranslate"><span class="pre">xxx</span></code> is the name of the dust species) which
+is described in Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>.  This file provides not
+only the matrix elements, but also the <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span>,
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> and <span class="math notranslate nohighlight">\(g\)</span> (the anisotropy factor). RADMC-3D
+will then internally check that Eqs.(<span class="xref std std-ref">eq-scatmat-selfconsist-kappa</span>,
+<span class="xref std std-ref">eq-scatmat-selfconsist-g</span>) are indeed fulfilled. If not, an error message
+will result.</p>
+<p>One more note: As mentioned in Section <a class="reference internal" href="#sec-definitions-stokes"><span class="std std-ref">Definitions and conventions for Stokes vectors</span></a>, the sign
+conventions of the Stokes vector components we use (the IAU 1974 definition) are
+different from the Bohren &amp; Huffman and Mishchenko books. For randomly oriented
+particles, however, the sign conventions of the <span class="math notranslate nohighlight">\(Z\)</span>-matrix elements are
+not affected, because those matrix elements that would be affected are those
+that are in the upper-right and lower-left quadrants of the matrix, and these
+elements are anyway zero. So we can use, for randomly oriented particles, the
+matrix elements from those books and their computer codes without having to
+adjust the signs.</p>
+</div>
+<div class="section" id="scattering-and-axially-symmetric-models">
+<h3>Scattering and axially symmetric models<a class="headerlink" href="#scattering-and-axially-symmetric-models" title="Permalink to this headline">¶</a></h3>
+<p>In spherical coordinates it is possible in RADMC-3D to set up axially symmetric
+models. The trick is simply to set the number of <span class="math notranslate nohighlight">\(\phi\)</span> coordinate points
+<code class="docutils literal notranslate"><span class="pre">nphi</span></code> to 1 and to switch off the <span class="math notranslate nohighlight">\(\phi\)</span>-dimension in the grid (see
+Section <span class="xref std std-ref">sec-grid-input</span>). For isotropic scattering this mode has always
+been implemented. But for anisotropic scattering things become more complex. For
+such a model the scattering remains a fully 3-D problem: the scattering source
+function has to be stored not only as a function of <span class="math notranslate nohighlight">\(r\)</span> and
+<span class="math notranslate nohighlight">\(\theta\)</span>, but also as a function of <span class="math notranslate nohighlight">\(\phi\)</span> (for a given observer
+vantage point). The reason is that anisotropic scattering {em does} care about
+viewing angle (in contrast to isotropic scattering). So even though for an
+axisymmetric model the density and temperature functions only depend on
+<span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span> (and are therefore mathematically 2-D), the
+scattering source function depends on <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> and
+<span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+<p>For this reason anisotropic scattering was, until version 0.40, not allowed for
+2-D axisymmetric models. As of version 0.41 it is now possible to use the full
+polarized scattering mode (<code class="docutils literal notranslate"><span class="pre">scattering_mode=5</span></code>) also for 2-D axisymmetric
+models. The intermediate scattering modes (<code class="docutils literal notranslate"><span class="pre">scattering_mode=2,</span> <span class="pre">3,</span> <span class="pre">4</span></code>) remain
+incompatible with 2-D axisymmetry.  Isotropic scattering remains, as before,
+fully compatible with 2-D axisymmetry.</p>
+<p>One note of explanation: the way the full scattering is now implemented into
+the case of 2-D axisymmetry is the following: internally we compute not just
+the scattering source function for one angle, but for a whole set of <span class="math notranslate nohighlight">\(\phi\)</span>
+angles (even though the grid has no <span class="math notranslate nohighlight">\(\phi\)</span>-points). Each time a photon in
+the scattering Monte Carlo simulation enters a cell (which in 2-D
+axisymmetry is an annulus), a loop over 360 <span class="math notranslate nohighlight">\(\phi\)</span> angles is performed, and
+the scattering source function is computed for all of these angles.  {em
+This makes the code rather slow for each photon package!} But one needs
+fewer photon packages to get sufficiently high signal-to-noise ratio. You
+can experiment with fewer <span class="math notranslate nohighlight">\(\phi\)</span> angles by adding, in <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>,
+the following line (as an example):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dust_2daniso_nphi</span> <span class="o">=</span> <span class="mi">60</span>
+</pre></div>
+</div>
+<p>in which case instead of 360 the model will only use 60 <span class="math notranslate nohighlight">\(\phi\)</span>
+points. That will speed up the code significantly, but of course will treat the
+<span class="math notranslate nohighlight">\(\phi\)</span>-dependence of the scattering source function with lower precision.</p>
+<p>For now the 2-D axisymmetric version of full scattering is only possible with
+first-order integration.</p>
+</div>
+</div>
+<div class="section" id="more-about-photon-packages-in-the-monte-carlo-simulations">
+<span id="sec-photon-packages-mc"></span><h2>More about photon packages in the Monte Carlo simulations<a class="headerlink" href="#more-about-photon-packages-in-the-monte-carlo-simulations" title="Permalink to this headline">¶</a></h2>
+<p>In the ‘standard’ Monte Carlo approach, the input energy (e.g. starlight or, for
+the scattering Monte Carlo, the thermal emission of dust) is divided into
+<span class="math notranslate nohighlight">\(N\)</span> equal energy packages of photons, which then travel through the model
+and eventually either escape or get destroyed. This equal division scheme is,
+however, problematic for some model setups. For instance, if you have stars with
+vastly different luminosity in the model, then the brightest of these stars will
+dominate, by far, the number of output photon packages.  This means that the
+material around low-brightness stars (which, by their proximity to these
+low-brightness stars, are still dominated by heating by these low-brightness
+stars) will experience very bad photon statistics.</p>
+<p>To avoid this problem, RADMC-3D has, by default, its ‘weighted photon package
+mode’ switched on. This will make sure that each source of energy (i.e. each
+star, but also each other type of source) emits the same amount of
+photons. Only: bright stars will emit more energetic photon packages than dim
+stars.</p>
+<p>The ‘weighted photon package mode’ will also solve another problem.  Suppose a
+star lies far outside of the grid. It will emit most of its photons in
+directions that completely miss the grid. This means that RADMC-3D would waste a
+lot of time drawing random numbers for photons that will anyway not affect the
+model. Also here the ‘weighted photon package mode’ solves the problem: It will
+focus the photon packages toward the model grid, and lower their energy to
+compensate for their favorable focusing toward the grid.</p>
+<p><em>NOTE:</em> Since RADMC-3D is still in beta-phase, and both aspects of the ‘weighted
+photon package mode’ meddle with the standard equal-weighting procedure, it
+might be useful to sometimes check the results against a run without this mode
+but with a huge number of photon packages to compensate - just to check if there
+are no bugs or other subtleties. You can switch the mode off by setting
+<code class="docutils literal notranslate"><span class="pre">mc_weighted_photons=0</span></code> in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+</div>
+<div class="section" id="polarized-emission-and-absorption-by-aligned-grains">
+<span id="sec-polarized-thermal-emission"></span><h2>Polarized emission and absorption by aligned grains<a class="headerlink" href="#polarized-emission-and-absorption-by-aligned-grains" title="Permalink to this headline">¶</a></h2>
+<p><em>NOTE: This mode is still in the testing phase</em></p>
+<p>Grain alignment and its effects on radiative transfer is a complex topic. A
+review is e.g. Andersson, B.G., Lazarian, A., &amp; Vaillancourt, J.E. (2015)
+‘Interstellar Dust Grain Alignment’, Annual Review of Astronomy and
+Astrophysics, 53(1), 501–539. In RADMC-3D grain alignment is included only in a
+limited form. First and foremost: RADMC-3D does not know about the physics {em
+causing} the grain alignment. You, the user, will have to tell how the grain are
+aligned by giving the code a directional vector field and for each wavelength
+the degree to which the grain is aligned to that directional vector (more on
+this later). This is according to the RADMC-3D philosophy of doing {em only}
+the radiative transfer and leaving the physics of the material to the user.</p>
+<div class="section" id="basics">
+<span id="sec-basic-equations"></span><h3>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h3>
+<p>Suppose we have flattened (oblate) ellipsoidal grains with one axis of symmetry
+and no helicity. (While helicity may be needed to radiatively spin up grains, we
+assume that on average the helicity of the grains is zero.). Let us assume that
+they are aligned with that symmetry axis along the <span class="math notranslate nohighlight">\(y\)</span>-axis. We view
+radiation from the point where the <span class="math notranslate nohighlight">\(z\)</span>-axis points toward us. Horizontally
+polarized light (which has <span class="math notranslate nohighlight">\(E\)</span>-field in horizontal direction, i.e. in
+<span class="math notranslate nohighlight">\(x\)</span>-direction) has <span class="math notranslate nohighlight">\(Q/I=+1\)</span>, vertically polarized light (with the
+<span class="math notranslate nohighlight">\(\vec E\)</span> vector aligned with the symmetry axis of the grain) has
+<span class="math notranslate nohighlight">\(Q/I=-1\)</span>. We can then assume that the dust has different extinction
+coefficients for the horizontal and vertical axis. Let us call these:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+\alpha_{\mathrm{abs},\nu,\mathrm{h}} &amp;\equiv \rho_d\kappa_{\mathrm{abs},\nu,\mathrm{h}}\\
+\alpha_{\mathrm{abs},\nu,\mathrm{v}} &amp;\equiv \rho_d\kappa_{\mathrm{abs},\nu,\mathrm{v}}
+\end{split}\end{split}\]</div>
+<p>We can define <span class="math notranslate nohighlight">\(I\)</span>, <span class="math notranslate nohighlight">\(Q\)</span>, <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> in terms of the electric field
+components <span class="math notranslate nohighlight">\(E_x\)</span> and <span class="math notranslate nohighlight">\(E_y\)</span>. The electric field components for a perfectly
+coherent wave can be written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+E_x&amp;=E_{x,0}\cos(\omega t-\Delta_x)\\
+E_y&amp;=E_{y,0}\cos(\omega t-\Delta_y)
+\end{split}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta_x\)</span> and <span class="math notranslate nohighlight">\(\Delta_y\)</span> are phase lags. The phase lag between
+the <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(x\)</span>-fields is <span class="math notranslate nohighlight">\(\Delta=\Delta_y-\Delta_x\)</span>, meaning that for
+positive <span class="math notranslate nohighlight">\(\Delta\)</span> the <span class="math notranslate nohighlight">\(y\)</span>-field lags behind the <span class="math notranslate nohighlight">\(x\)</span>-field. We then
+define the Stokes components as:</p>
+<div class="math notranslate nohighlight" id="eq-def-stokes-iquv">
+\[\begin{split}\begin{split}
+I &amp;= E_{x,0}^2+E_{y,0}^2\\
+Q &amp;= E_{x,0}^2-E_{y,0}^2\\
+U &amp;= 2E_{x,0}E_{y,0}\cos\Delta\\
+V &amp;= 2E_{x,0}E_{y,0}\sin\Delta
+\end{split}\end{split}\]</div>
+<p>Note that for <span class="math notranslate nohighlight">\(V=I\)</span> (<span class="math notranslate nohighlight">\(\Delta=\pi/2\)</span>, i.e.the <span class="math notranslate nohighlight">\(E_y\)</span> lags
+<span class="math notranslate nohighlight">\(\pi/2\)</span> behind <span class="math notranslate nohighlight">\(E_x\)</span>) we have <em>right-handed</em> circularly polarized
+light, meaning that the tip of the <span class="math notranslate nohighlight">\(\vec E\)</span> field at a fixed point in
+space, when looking into the light (the propagation of light is toward the
+reader) rotates counter-clockwise (when the <span class="math notranslate nohighlight">\(x\)</span>-coordinate points right,
+and the <span class="math notranslate nohighlight">\(y\)</span>-coordinate points up). The 3-D helix of his field will be {em
+left-handed} (when the z-coordinate points into the propagation direction of the
+light, i.e. toward the reader, i.e.a right-handed coordinate system). For
+<span class="math notranslate nohighlight">\(Q=I\)</span> we have linearly polarized light in which the <span class="math notranslate nohighlight">\(\vec E\)</span>-field
+lies in the <span class="math notranslate nohighlight">\(x\)</span>-direction. For <span class="math notranslate nohighlight">\(U=I\)</span> we have linearly polarized
+light in which <span class="math notranslate nohighlight">\(\vec E\)</span> lies along the <span class="math notranslate nohighlight">\(x=y\)</span> line (when looking into
+the light). These definitions are consistent with the IAU 1974 definitions
+(Hamaker &amp; Bregman 1996, A&amp;AS 117, pp.161).</p>
+<p>The <span class="math notranslate nohighlight">\(E_x\)</span> and <span class="math notranslate nohighlight">\(E_y\)</span> get absorbed in the following way:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+E_{x,0}' &amp;= E_{x,0} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
+E_{y,0}' &amp;= E_{y,0} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
+\end{split}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(s\)</span> is a length along the ray.</p>
+<p>For this kind of problem it is convenient to introduce the so-called <em>modified
+Stokes parameters</em> <span class="math notranslate nohighlight">\(I_{\mathrm{h}}\)</span> and <span class="math notranslate nohighlight">\(I_{\mathrm{v}}\)</span>:</p>
+<div class="math notranslate nohighlight" id="eq-modif-stokes-hv">
+\[\begin{split}\begin{split}
+I_{\mathrm{h}} &amp;= \frac{1}{2}(I+Q)\\
+I_{\mathrm{v}} &amp;= \frac{1}{2}(I-Q)
+\end{split}\end{split}\]</div>
+<p>so that we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I &amp;= I_{\mathrm{h}}+I_{\mathrm{v}}\\
+Q &amp;= I_{\mathrm{h}}-I_{\mathrm{v}}
+\end{split}\end{split}\]</div>
+<p>so that one can say, for perfectly coherent light,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I_{\mathrm{h}} &amp;= E_{x,0}^2\\
+I_{\mathrm{v}} &amp;= E_{y,0}^2
+\end{split}\end{split}\]</div>
+<p>With this we get the following extinction law:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I_{\mathrm{h}}' &amp;= I_{\mathrm{h}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
+I_{\mathrm{v}}' &amp;= I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
+\end{split}\end{split}\]</div>
+<p>How do <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> extinct? If we use Eqs.~(<span class="xref std std-ref">eq-def-stokes-u</span>,
+<span class="xref std std-ref">eq-def-stokes-v</span>), and assume that the phase lag <span class="math notranslate nohighlight">\(\Delta\)</span> will not
+change during the extinction, then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+U' &amp;= U e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{h}}s} e^{-\tfrac{1}{2}\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}\\
+   &amp;= U e^{-\tfrac{1}{2}(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}})s}
+\end{split}\end{split}\]</div>
+<p>This means that</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{\mathrm{abs},\nu,\mathrm{uv}} =
+\frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right)\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I_{\mathrm{u}}' &amp;= I_{\mathrm{u}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{uv}}s}\\
+I_{\mathrm{v}}' &amp;= I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{uv}}s}
+\end{split}\end{split}\]</div>
+<p>In matrix notation</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{d}{ds}
+\left(\begin{matrix}
+I_{\mathrm{h}} \\
+I_{\mathrm{v}} \\
+U \\
+V \\
+\end{matrix}\right)
+= -
+\left(\begin{matrix}
+\alpha_{\mathrm{h}} &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; \alpha_{\mathrm{v}} &amp; 0 &amp; 0  \\
+0 &amp; 0 &amp; \alpha_{\mathrm{uv}} &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \alpha_{\mathrm{uv}} \\
+\end{matrix}\right)
+\left(\begin{matrix}
+I_{\mathrm{h}} \\
+I_{\mathrm{v}} \\
+U \\
+V \\
+\end{matrix}\right)\end{split}\]</div>
+<p>If we translate this to the usual Stokes components we get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{d}{ds}
+\left(\begin{matrix}
+I \\
+Q \\
+U \\
+V \\
+\end{matrix}\right)
+= -
+\left(\begin{matrix}
+\alpha_1 &amp; \alpha_2 &amp; 0 &amp; 0 \\
+\alpha_2 &amp; \alpha_1 &amp; 0 &amp; 0  \\
+0 &amp; 0 &amp; \alpha_1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \alpha_1 \\
+\end{matrix}\right)
+\left(\begin{matrix}
+I \\
+Q \\
+U \\
+V \\
+\end{matrix}\right)\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+\alpha_1 &amp;= \frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}+\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right)
+= \alpha_{\mathrm{abs},\nu,\mathrm{uv}}\\
+\alpha_2 &amp;= \frac{1}{2}\left(\alpha_{\mathrm{abs},\nu,\mathrm{h}}-\alpha_{\mathrm{abs},\nu,\mathrm{v}}\right)
+\end{split}\end{split}\]</div>
+<p>The emission will be also independently in horizontal and vertical
+direction. But nothing will be emitted in U or V direction. So it is most
+convenient to express the emission/absorption process in terms of the
+modified Stokes parameters:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+\frac{dI_{\nu,\mathrm{h}}}{ds} &amp;= \alpha_{\mathrm{abs},\nu,\mathrm{h}} (\frac{1}{2}B_\nu(T)-I_{\nu,\mathrm{h}}) \\
+\frac{dI_{\nu,\mathrm{v}}}{ds} &amp;= \alpha_{\mathrm{abs},\nu,\mathrm{v}} (\frac{1}{2}B_\nu(T)-I_{\nu,\mathrm{v}}) \\
+\frac{dU_{\nu}}{ds} &amp;= -\alpha_{\mathrm{abs},\nu,\mathrm{uv}} U_{\nu} \\
+\frac{dV_{\nu}}{ds} &amp;= -\alpha_{\mathrm{abs},\nu,\mathrm{uv}} V_{\nu}
+\end{split}\end{split}\]</div>
+<p>In terms of matrix notation this becomes</p>
+<div class="math notranslate nohighlight" id="eq-formal-rt-emisabs-in-rotated-system">
+\[\begin{split}\frac{d}{ds}
+\left(\begin{matrix}
+I_{\mathrm{h}} \\
+I_{\mathrm{v}} \\
+U \\
+V \\
+\end{matrix}\right)
+= \left(\begin{matrix}
+\tfrac{1}{2}\alpha_{\mathrm{h}} B_\nu(T) \\
+\tfrac{1}{2}\alpha_{\mathrm{v}} B_\nu(T) \\
+0 \\
+0 \\
+\end{matrix}\right)
+-
+\left(\begin{matrix}
+\alpha_{\mathrm{h}} &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; \alpha_{\mathrm{v}} &amp; 0 &amp; 0  \\
+0 &amp; 0 &amp; \alpha_{\mathrm{uv}} &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \alpha_{\mathrm{uv}} \\
+\end{matrix}\right)
+\left(\begin{matrix}
+I_{\mathrm{h}} \\
+I_{\mathrm{v}} \\
+U \\
+V \\
+\end{matrix}\right)\end{split}\]</div>
+<p>In terms of the normal Stokes parameters this becomes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{d}{ds}
+\left(\begin{matrix}
+I \\
+Q \\
+U \\
+V \\
+\end{matrix}\right)
+= \left(\begin{matrix}
+\alpha_1 B_\nu(T) \\
+\alpha_2 B_\nu(T) \\
+0 \\
+0 \\
+\end{matrix}\right)
+-
+\left(\begin{matrix}
+\alpha_1 &amp; \alpha_2 &amp; 0 &amp; 0 \\
+\alpha_2 &amp; \alpha_1 &amp; 0 &amp; 0  \\
+0 &amp; 0 &amp; \alpha_1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \alpha_1 \\
+\end{matrix}\right)
+\left(\begin{matrix}
+I \\
+Q \\
+U \\
+V \\
+\end{matrix}\right)\end{split}\]</div>
+<p>or written slightly differently:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{d}{ds}
+\left(\begin{matrix}
+I \\
+Q \\
+U \\
+V \\
+\end{matrix}\right)
+=
+\left(\begin{matrix}
+\alpha_1 &amp; \alpha_2 &amp; 0 &amp; 0 \\
+\alpha_2 &amp; \alpha_1 &amp; 0 &amp; 0  \\
+0 &amp; 0 &amp; \alpha_1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \alpha_1 \\
+\end{matrix}\right)
+\left[
+\left(\begin{matrix}
+B_\nu(T) \\
+0 \\
+0 \\
+0 \\
+\end{matrix}\right)
+-\left(\begin{matrix}
+I \\
+Q \\
+U \\
+V \\
+\end{matrix}\right)\right]\end{split}\]</div>
+<p>So to sum things up: We need only the absorption opacity for light with
+<span class="math notranslate nohighlight">\(\vec E\)</span> perpencidular to the symmetry axis
+(<span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,h}\)</span>) and the absorption opacity for light with
+<span class="math notranslate nohighlight">\(\vec E\)</span> parallel to the symmetry axis
+(<span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,v}\)</span>).</p>
+</div>
+<div class="section" id="implementation-in-radmc-3d">
+<h3>Implementation in RADMC-3D<a class="headerlink" href="#implementation-in-radmc-3d" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="polarized-emission-in-the-images-and-spectra">
+<h4>Polarized emission in the images and spectra<a class="headerlink" href="#polarized-emission-in-the-images-and-spectra" title="Permalink to this headline">¶</a></h4>
+<p>When creating images (and spectra) the <code class="docutils literal notranslate"><span class="pre">camera</span></code> module of RADMC-3D
+performs a ray-tracing calculation (‘volume rendering’) through the grid.
+Normally (for randomly oriented grains) the extinction along the line of
+sight is always unpolarized, i.e. each Stokes component is extincted
+equally much. The thermal emission along the line of sight is also
+unpolarized.</p>
+<p>Now, however, we wish to include the effect of grain alignment in the
+ray-tracing. We assume that at position <span class="math notranslate nohighlight">\(\vec x\)</span> in the grid our oblate
+grain is aligned such that the minor axis points in the direction of the
+orientation vector <span class="math notranslate nohighlight">\(\vec n_{\mathrm{align}}(\vec x)\)</span>. If the grain is
+prolate, we assume that it spins along one of its minor axes such that this
+spin axis is pointing along <span class="math notranslate nohighlight">\(\vec n_{\mathrm{align}}(\vec x)\)</span>, so that, in
+effect, it acts as if it were an oblate grain again. In practice the
+alignment vector <span class="math notranslate nohighlight">\(\vec n_{\mathrm{align}}(\vec x)\)</span> does not lie always in
+the plane of the sky of the observer. Instead it will have an angle <span class="math notranslate nohighlight">\(\theta\)</span>
+with the line-of-sight direction vector <span class="math notranslate nohighlight">\(\vec n_{\mathrm{los}}\)</span> (note that
+this <span class="math notranslate nohighlight">\(\theta\)</span> angle is different from the scattering angle <span class="math notranslate nohighlight">\(\theta\)</span>),
+defined as</p>
+<div class="math notranslate nohighlight">
+\[\cos\theta \equiv = \left|\vec n_{\mathrm{align}}\cdot
+\vec n_{\mathrm{los}}\right|\]</div>
+<p>Here we assume that the grains have top/bottom symmetry so that we only have to
+concern ourselves with the positive values of <span class="math notranslate nohighlight">\(\cos\theta\)</span>, hence the
+<span class="math notranslate nohighlight">\(||\)</span>. If <span class="math notranslate nohighlight">\(\cos\theta=1\)</span> then we see the oblate grain from the top or
+the bottom, so that we do not expect any polarized emission. The strongest
+polarized emission is expected when <span class="math notranslate nohighlight">\(\cos\theta=0\)</span>, which means that the
+oblate grain is seen edge-on.</p>
+<p>We can now define the ‘projected alignment vector’ <span class="math notranslate nohighlight">\(\vec
+n_{\mathrm{align,proj}}\)</span>, which is the alignment vector projected into
+the image plane:</p>
+<div class="math notranslate nohighlight">
+\[\vec n_{\mathrm{align,proj}} = \vec n_{\mathrm{align}} - (\vec n_{\mathrm{align}}\cdot
+\vec n_{\mathrm{los}})\;\vec n_{\mathrm{los}}\]</div>
+<p>To use the equations from Section <a class="reference internal" href="#sec-basic-equations"><span class="std std-ref">Basics</span></a> we must first
+rotate our image plane coordinates <span class="math notranslate nohighlight">\((x,y)\)</span> to new coordinates <span class="math notranslate nohighlight">\((x',y')\)</span> such
+that the <span class="math notranslate nohighlight">\(y'\)</span> (vertical) direction points along the <span class="math notranslate nohighlight">\(\vec
+n_{\mathrm{align,proj}}\)</span> vector while the <span class="math notranslate nohighlight">\(x'\)</span> (horizontal) direction points
+perpendicular to it. Let us write the Stokes vector of the radiation along
+the line of sight
+<span class="math notranslate nohighlight">\((I_{\mathrm{in}},Q_{\mathrm{in}},U_{\mathrm{in}},V_{\mathrm{in}})\)</span>, where
+we implicitly know that these are also a function of frequency <span class="math notranslate nohighlight">\(\nu\)</span>. This
+Stokes vector is defined with respect to the vector <span class="math notranslate nohighlight">\(\vec S\)</span> which is
+perpendicular to the line-of-sight direction vector <span class="math notranslate nohighlight">\(\vec n_{\mathrm{los}}\)</span>
+and defines the direction in which the <span class="math notranslate nohighlight">\(y\)</span>-coordinate of the image plane
+points. We must now express this incoming radiation (at the start of the
+segment) in the new <span class="math notranslate nohighlight">\((x',y')\)</span> image plane coordinates, i.e.~with respect to
+the new vector <span class="math notranslate nohighlight">\(\vec S'\)</span> that points along <span class="math notranslate nohighlight">\(\vec n_{\mathrm{align,proj}}\)</span>
+(i.e.~:math:<cite>vec S’</cite> is the normalized version of <span class="math notranslate nohighlight">\(\vec
+n_{\mathrm{align,proj}}\)</span>). This rotation is performed using</p>
+<div class="math notranslate nohighlight" id="eq-rot-stokes-align">
+\[\begin{split}\left(\begin{matrix}
+I'\\Q'\\U'\\V'
+\end{matrix}\right)
+=
+\left(\begin{matrix}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; \cos(2\alpha) &amp; \sin(2\alpha) &amp; 0 \\
+0 &amp; -\sin(2\alpha) &amp; \cos(2\alpha) &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{matrix}\right)
+\left(\begin{matrix}
+I_{\mathrm{in}}\\Q_{\mathrm{in}}\\U_{\mathrm{in}}\\V_{\mathrm{in}}
+\end{matrix}\right)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the angle between <span class="math notranslate nohighlight">\(\vec S'\)</span> and <span class="math notranslate nohighlight">\(\vec S\)</span>
+such that if (as seen by the observer) <span class="math notranslate nohighlight">\(\vec S'\)</span> lies counter-clockwise
+from <span class="math notranslate nohighlight">\(\vec S\)</span>, <span class="math notranslate nohighlight">\(\alpha\)</span> is positive (the usual definition). With
+this new Stokes vector <span class="math notranslate nohighlight">\((I',Q',U',V')\)</span> we will now use the equations of
+Section <a class="reference internal" href="#sec-basic-equations"><span class="std std-ref">Basics</span></a>.</p>
+<p>To be able to perform this rotation in a uniquely defined way, it is necessary
+that along each segment along the line of sight this new <span class="math notranslate nohighlight">\((x',y')\)</span>
+orientation stays fixed (but can vary from segment to segment). As the
+line-of-sight ray enters a cell and leaves it again, this line element (segment)
+will have its image-plane coordinates rotated according to the alignment vector
+of that cell. As a result, the integration must be done first order (assuming
+all source terms to be constant along the segment).  In principle second order
+integration would also be possible, but then the trick with the rotation of the
+image coordinate plane such that <span class="math notranslate nohighlight">\(y'\)</span> points along the orientation vector
+does no longer work, and the integration of the formal transfer equation would
+become much more complex, involving the full Müller matrix formulation. We will
+not do this, so we will stick to first order integration of
+Eq.~:ref:<cite>eq-formal-rt-emisabs-in-rotated-system</cite>.</p>
+<p>For convenience we will leave out the primes (‘) from here on, so while we write
+<span class="math notranslate nohighlight">\((I,Q,U,V)\)</span> we mean in fact <span class="math notranslate nohighlight">\((I',Q',U',V')\)</span>. We now compute
+<span class="math notranslate nohighlight">\(I_{\mathrm{h}}\)</span> and <span class="math notranslate nohighlight">\(I_{\mathrm{v}}\)</span> using
+Eqs.~(<span class="xref std std-ref">eq-modif-stokes-h</span>, <span class="xref std std-ref">eq-modif-stokes-v</span>). Now, along this
+segment of the ray, we can write
+Eq.~:ref:<cite>eq-formal-rt-emisabs-in-rotated-system</cite> in the following form:</p>
+<div class="math notranslate nohighlight" id="eq-firstorder-int-emisabs">
+\[\begin{split}\frac{d}{ds}
+\left(\begin{matrix}
+I_{\mathrm{h}} \\
+I_{\mathrm{v}} \\
+U \\
+V \\
+\end{matrix}\right)
+=
+\left(\begin{matrix}
+\alpha_{\mathrm{h}} &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; \alpha_{\mathrm{v}} &amp; 0 &amp; 0  \\
+0 &amp; 0 &amp; \alpha_{\mathrm{uv}} &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \alpha_{\mathrm{uv}} \\
+\end{matrix}\right)
+\left[
+\left(\begin{matrix}
+\tfrac{1}{2} B_\nu(T) \\
+\tfrac{1}{2} B_\nu(T) \\
+0 \\
+0 \\
+\end{matrix}\right)
+-
+\left(\begin{matrix}
+I_{\mathrm{h}} \\
+I_{\mathrm{v}} \\
+U \\
+V \\
+\end{matrix}\right)\right]\end{split}\]</div>
+<p>It becomes clear that it is easy to perform the first order integration of this
+equation along this ray segment:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+I_{\mathrm{h,end}} &amp;=  e^{-\tau_h}I_{\mathrm{h,start}} + \tfrac{1}{2}e^{-\tau_h}B_\nu(T)\\
+I_{\mathrm{v,end}} &amp;=  e^{-\tau_v}I_{\mathrm{v,start}} + \tfrac{1}{2}e^{-\tau_v}B_\nu(T) \\
+U_{\mathrm{end}} &amp;=    e^{-\tau_{uv}}U_{\mathrm{start}}\\
+V_{\mathrm{end}} &amp;=    e^{-\tau_{uv}}V_{\mathrm{start}}
+\end{split}\end{split}\]</div>
+<p>where ‘start’ stands for the start of the ray segment, and ‘end’ the end of the
+ray segment (which becomes the start of the next ray segment), and
+<span class="math notranslate nohighlight">\(\tau_h=\alpha_{\mathrm{h}}\Delta s\)</span>,
+<span class="math notranslate nohighlight">\(\tau_v=\alpha_{\mathrm{v}}\Delta s\)</span> and
+<span class="math notranslate nohighlight">\(\tau_{uv}=\alpha_{\mathrm{uv}}\Delta s\)</span>, with <span class="math notranslate nohighlight">\(\Delta s\)</span> being the
+length of the segment.</p>
+<p>We now compute <span class="math notranslate nohighlight">\(I_{\mathrm{end}}\)</span> and <span class="math notranslate nohighlight">\(Q_{\mathrm{end}}\)</span>, and rotate
+back to the <span class="math notranslate nohighlight">\((x,y)\)</span> image plane coordinate system (i.e.~using <span class="math notranslate nohighlight">\(\vec
+S\)</span> instead of <span class="math notranslate nohighlight">\(\vec S'\)</span> to define the Stokes parameters) by applying
+Eq.~:ref:<cite>eq-rot-stokes-align</cite> but now with <span class="math notranslate nohighlight">\(\alpha\rightarrow -\alpha\)</span>,
+and we have the values of the Stokes parameter at the end of the ray
+segment. Now we repeat this whole procedure for the next ray segment.</p>
+</div>
+<div class="section" id="polarized-emission-as-source-term-in-the-monte-carlo-simulation">
+<h4>Polarized emission as source term in the Monte Carlo simulation<a class="headerlink" href="#polarized-emission-as-source-term-in-the-monte-carlo-simulation" title="Permalink to this headline">¶</a></h4>
+<p>The polarization effects and anisotropic emission by aligned grains will
+also affect the Monte Carlo simulations.</p>
+<p>For the <em>thermal Monte Carlo</em> (see Section <a class="reference internal" href="#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>)
+this effect is <em>not included</em>. In principle it should be included, but it would
+slow the code down, and it is unlikely to play a significant role for the dust
+temperature, in particular since the anisotropy of thermal emission is not
+expected to be so strong (and the polarization state is irrelevant for computing
+the dust temperature). It is clear that we make a small error here, but we
+believe that this is well within the much stronger uncertainties of the dust
+opacities.</p>
+<p>For the <em>scattering Monte Carlo</em> (see Section <a class="reference internal" href="#sec-scat-monte-carlo"><span class="std std-ref">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</span></a>),
+however, this effect may be important! The polarization caused by scattering of
+light off dust grains yields of course different results if the incident light
+is unpolarized or if it is already strongly polarized through, for instance,
+polarized thermal emission. In RADMC-3D this is therefore built into the
+scattering Monte Carlo. This will not slow down the code much because (in
+contrast to the thermal Monte Carlo) the polarized thermal emission only has to
+be computed at the start of each photon path, if the photon is emitted by the
+dust.</p>
+<p>The way this is included is that when a photon is emitted by the dust inside a
+cell, RADMC-3D first randomly chooses which of the dust species emits the photon
+(the probabilities are weighted by the contribution each dust species makes to
+the emissivity at the given wavelength).  Then the emission direction is
+randomly chosen, based on the <span class="math notranslate nohighlight">\(\theta\)</span>-dependent probability function
+(where <span class="math notranslate nohighlight">\(\theta\)</span> is the angle with the alignment direction) given by the
+average of the orthogonal (horizontal) and parallel (vertical) absorption
+opacities. Once the emission direction is chosen, the polarization state of the
+photon package is computed based on the orthogonal and parallel absorption
+opacities. Then the photon package is sent on its way.</p>
+<p>Note that if <code class="docutils literal notranslate"><span class="pre">alignment_mode</span> <span class="pre">=</span> <span class="pre">-1</span></code> then the polarized (and anisotropic)
+thermal emission by aligned grains is only included in the ray-tracing for
+images and spectra, while for <code class="docutils literal notranslate"><span class="pre">alignment_mode</span> <span class="pre">=</span> <span class="pre">1</span></code> it is <em>also</em> included
+in the scattering Monte Carlo computation.</p>
+</div>
+</div>
+<div class="section" id="consistency-with-other-radiative-processes">
+<h3>Consistency with other radiative processes<a class="headerlink" href="#consistency-with-other-radiative-processes" title="Permalink to this headline">¶</a></h3>
+<p>The above equations assume that the absorption/emission is the only radiative
+process included. However, in practice we also have other processes involved,
+such as line emission/absorption or the scattering source function. The way this
+can be treated here is to simply add these additional opacities to all four
+components of the extinction matrix of
+Eq.~(<span class="xref std std-ref">eq-formal-rt-emisabs-in-rotated-system</span>) and to add the additional
+emissivities to the vector with the Planck functions in
+Eq.~(<span class="xref std std-ref">eq-formal-rt-emisabs-in-rotated-system</span>). For the scattered light
+emissivity (which is a Stokes vector) we must also first perform a rotation from
+<span class="math notranslate nohighlight">\(\vec S\)</span> to <span class="math notranslate nohighlight">\(\vec S'\)</span> using the Stokes rotation formula of
+Eq.~(<span class="xref std std-ref">eq-rot-stokes-align</span>) before we add this emissivity to the
+equation. If we include the effect of alignment on the scattering (see Section
+<a class="reference internal" href="#sec-align-scat"><span class="std std-ref">Effect of aligned grains on the scattering</span></a>) then also the scattering extinction will be different for
+the orthogonal (horizontal) and parallel (vertical) Stokes components. That is
+easy to include in this formalism.</p>
+</div>
+<div class="section" id="input-files-for-radmc-3d-for-aligned-grains">
+<h3>Input files for RADMC-3D for aligned grains<a class="headerlink" href="#input-files-for-radmc-3d-for-aligned-grains" title="Permalink to this headline">¶</a></h3>
+<p>In RADMC-3D we implement the functions <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,h}\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,v}\)</span> as a function of angle <span class="math notranslate nohighlight">\(\theta\)</span> which the
+alignment axis makes with the light of sight. For <span class="math notranslate nohighlight">\(\theta\)</span> we see the oblate
+grain from the top (face-on), so that there is no asymmetry between
+horizontal (orthogonal to the alignment orientation vector) and vertical
+(parallel to the alignment orientation vector). Then we will have
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,h}=\kappa_{\mathrm{abs},\nu,v}\)</span>. For
+<span class="math notranslate nohighlight">\(\theta=90^{\circ}\)</span> we will have the maximum difference between
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,h}\)</span> and <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs},\nu,v}\)</span>. We write</p>
+<div class="math notranslate nohighlight" id="eq-align-kappa-k-hv">
+\[\begin{split}\begin{split}
+\kappa_{\mathrm{abs},\nu,h}(\theta) &amp;= \kappa_{\mathrm{abs},\nu}\,k_{\nu,h}(\theta)\\
+\kappa_{\mathrm{abs},\nu,v}(\theta) &amp;= \kappa_{\mathrm{abs},\nu}\,k_{\nu,v}(\theta)
+\end{split}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_{\nu,h}(\theta)\)</span> and <span class="math notranslate nohighlight">\(k_{\nu,v}(\theta)\)</span> are dimensionless
+functions, and where we take <span class="math notranslate nohighlight">\(\theta\in[0,90]\)</span> (in degrees), or
+equivalently <span class="math notranslate nohighlight">\(\cos(\theta)\in [0,1]\)</span>. We impose the condition that if we
+randomly orient this grain, the average opacity becomes the one we computed for
+the randomly oriented grains:</p>
+<div class="math notranslate nohighlight">
+\[\int_0^\infty \frac{1}{2}\left[\kappa_{\mathrm{abs},\nu,h}(\theta)
++\kappa_{\mathrm{abs},\nu,v}(\theta)\right]d\mu = \kappa_{\mathrm{abs},\nu}\]</div>
+<p>This yields the following integration condition on the dimensionless
+<span class="math notranslate nohighlight">\(k_{\nu,h}\)</span> and <span class="math notranslate nohighlight">\(k_{\nu,v}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\int_0^\infty \frac{1}{2}\left[k_{\nu,h}(\theta)+k_{\nu,v}(\theta)\right]d\mu = 1\]</div>
+<p>If we set, for all values of <span class="math notranslate nohighlight">\(\theta\)</span>,
+<span class="math notranslate nohighlight">\(k_{\nu,h}(\theta)=k_{\nu,v}(\theta)=1\)</span> then we retrieve the result for
+spherical grains.</p>
+<p>In RADMC-3D the functions <span class="math notranslate nohighlight">\(k_{\nu,h}(\theta)\)</span> and <span class="math notranslate nohighlight">\(k_{\nu,v}(\theta)\)</span>
+are read in via the file <code class="docutils literal notranslate"><span class="pre">dustkapalignfact_*.inp</span></code>. This file
+has the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Any amount of arbitrary</span>
+<span class="c1"># comment lines that tell which opacity this is.</span>
+<span class="c1"># Each comment line must start with an # or ; or ! character</span>
+<span class="n">iformat</span>                            <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nlam</span>                               <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">wavelengths</span>
+<span class="n">nmu</span>                                <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">angles</span> <span class="n">sampled</span>
+<span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>                          <span class="o">&lt;===</span> <span class="n">Wavelength</span> <span class="n">grid</span> <span class="ow">in</span> <span class="n">micron</span>
+<span class="o">...</span>
+<span class="k">lambda</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
+<span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>                           <span class="o">&lt;===</span> <span class="n">Angle</span> <span class="n">grid</span> <span class="ow">in</span> <span class="n">degrees</span>
+<span class="o">...</span>
+<span class="n">theta</span><span class="p">[</span><span class="n">nmu</span><span class="p">]</span>
+<span class="n">k_orth</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>       <span class="n">k_para</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>      <span class="o">&lt;===</span> <span class="n">The</span> <span class="n">arrays</span> <span class="n">k_orth</span> <span class="ow">and</span> <span class="n">k_para</span>
+<span class="o">...</span>
+<span class="n">k_orth</span><span class="p">[</span><span class="n">nmu</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>     <span class="n">k_para</span><span class="p">[</span><span class="n">nmu</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">k_orth</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>       <span class="n">k_para</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">k_orth</span><span class="p">[</span><span class="n">nmu</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>     <span class="n">k_para</span><span class="p">[</span><span class="n">nmu</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">k_orth</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">nlam</span><span class="p">]</span>    <span class="n">k_para</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">nlam</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">k_orth</span><span class="p">[</span><span class="n">nmu</span><span class="p">,</span><span class="n">nlam</span><span class="p">]</span>  <span class="n">k_para</span><span class="p">[</span><span class="n">nmu</span><span class="p">,</span><span class="n">nlam</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The angles <code class="docutils literal notranslate"><span class="pre">theta</span></code> are in degrees and must start at 0 and end at 90, or vice
+versa.  The <code class="docutils literal notranslate"><span class="pre">nmu</span></code> does not have to be the same (and the angles do not have to
+be the same) as those in the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_*.inp</span></code> file. But the wavelength
+grid must be identical to the one in the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_*.inp</span></code> file.</p>
+<p>In order to make RADMC-3D read this file <code class="docutils literal notranslate"><span class="pre">dustkapalignfact_*.inp</span></code> the
+<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file should, for this particular dust species, have ‘20’ as the
+way in which this dust species is read (instead of 10 which is used for
+polarized scattering with the Z matrix).</p>
+<p>In addition, RADMC-3D also needs to know the orientation direction of the
+grains. This is a vector field <span class="math notranslate nohighlight">\(\vec p_{\mathrm{align}}(\vec x)\)</span>. The
+length of these vectors should be between 0 and 1, where 1 means that the grains
+are perfectly aligned and 0 means they are not aligned at all. The efficiency
+<span class="math notranslate nohighlight">\(\epsilon_{\mathrm{align}}\)</span> is thus given by</p>
+<div class="math notranslate nohighlight">
+\[\epsilon_{\mathrm{align}}(\vec x) =|\vec p_{\mathrm{align}}(\vec x)|\]</div>
+<p>The directional unit-vector of alignment <span class="math notranslate nohighlight">\(\vec n_{\mathrm{align}}(\vec x)\)</span>
+is thus</p>
+<div class="math notranslate nohighlight">
+\[\vec n_{\mathrm{align}}(\vec x) = \big(\epsilon_{\mathrm{align}}(\vec x)\big)^{-1}\vec p_{\mathrm{align}}(\vec x)\]</div>
+<p>The <span class="math notranslate nohighlight">\(\vec p_{\mathrm{align}}(\vec x)\)</span> vector field is in
+the file <code class="docutils literal notranslate"><span class="pre">grainalign_dir.inp</span></code> (or its binary formatted version
+<code class="docutils literal notranslate"><span class="pre">grainalign_dir.binp</span></code>). The format of this file is exactly the
+same as that of the gas velocity file <code class="docutils literal notranslate"><span class="pre">gas_velocity.inp</span></code>. The
+ascii format looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">p_x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>       <span class="n">p_y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>       <span class="n">p_z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="n">p_x</span><span class="p">[</span><span class="n">nrcells</span><span class="p">]</span> <span class="n">p_y</span><span class="p">[</span><span class="n">nrcells</span><span class="p">]</span> <span class="n">p_z</span><span class="p">[</span><span class="n">nrcells</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that <span class="math notranslate nohighlight">\(|\vec p_{\mathrm{align}}(\vec x)|\)</span> should never be
+<span class="math notranslate nohighlight">\(&gt;1\)</span>. If it is found to be significantly <span class="math notranslate nohighlight">\(&gt;1\)</span> at some point in the
+grid, then an error occurs. If it is only a tiny bit above 1, due to rounding
+errors, it will be normalized to 1.</p>
+<p>The way in which partial alignment (<span class="math notranslate nohighlight">\(0&lt;\epsilon_{\mathrm{align}}&lt;1\)</span>) is
+treated in RADMC-3D is to treat the opacities and emissivities as simple
+linear sums of fully aligned and non aligned versions. For instance,
+Eqs.~(<span class="xref std std-ref">eq-align-kappa-k-h</span>, <span class="xref std std-ref">eq-align-kappa-k-v</span>) then become</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+\kappa_{\mathrm{abs},\nu,h}(\theta) &amp;= \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,h}(\theta)+1-\epsilon_{\mathrm{align}}] \\
+\kappa_{\mathrm{abs},\nu,v}(\theta) &amp;= \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,v}(\theta)+1-\epsilon_{\mathrm{align}}]
+\end{split}\end{split}\]</div>
+<p>In order to tell RADMC-3D that it should include the effect of alignment on the
+thermal emission of dust grains one must add a line in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file
+with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alignment_mode</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The example model in <code class="docutils literal notranslate"><span class="pre">examples/run_simple_1_align/</span></code> demonstrates how the input
+files have to be made to have RADMC-3D treat the aligned dust grains for thermal
+emission.</p>
+</div>
+<div class="section" id="effect-of-aligned-grains-on-the-scattering">
+<span id="sec-align-scat"></span><h3>Effect of aligned grains on the scattering<a class="headerlink" href="#effect-of-aligned-grains-on-the-scattering" title="Permalink to this headline">¶</a></h3>
+<p><em>This is, currently, not yet implemented.</em></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lineradtrans.html" class="btn btn-neutral float-right" title="Line radiative transfer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="basicstructure.html" class="btn btn-neutral float-left" title="Basic structure and functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

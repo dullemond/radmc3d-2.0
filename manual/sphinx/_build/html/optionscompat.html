@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Which options are mutually incompatible? &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Acquiring opacities from the WWW" href="opacitieswww.html" />
+    <link rel="prev" title="Command-line options" href="clioptions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Which options are mutually incompatible?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#coordinate-systems">Coordinate systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scattering-off-dust-grains">Scattering off dust grains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-observer-mode">Local observer mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Which options are mutually incompatible?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/optionscompat.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="which-options-are-mutually-incompatible">
+<span id="chap-table-possibilities"></span><h1>Which options are mutually incompatible?<a class="headerlink" href="#which-options-are-mutually-incompatible" title="Permalink to this headline">¶</a></h1>
+<p>For algorithmic reasons not all options / coordinate systems and all grids
+are compatible with each other. Here is an overview of which options/methods
+work when. Note that only options/methods for which this is a possible issue
+are listed.</p>
+<div class="section" id="coordinate-systems">
+<h2>Coordinate systems<a class="headerlink" href="#coordinate-systems" title="Permalink to this headline">¶</a></h2>
+<p>Some coordinate systems exclude certain possibilities. Here is a list.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 9%" />
+<col style="width: 8%" />
+<col style="width: 18%" />
+<col style="width: 8%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Option/Method:</p></td>
+<td><p>Cart 3D</p></td>
+<td><p>Sph 3D</p></td>
+<td><p>Sph 2D (axisymm)</p></td>
+<td><p>Sph 1D</p></td>
+</tr>
+<tr class="row-even"><td><p>Second order ray-tracing</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Isotropic scattering</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>An-isotropic scattering for thermal Monte Carlo</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>An-isotropic scattering for monochromatic Monte Carlo</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>An-isotropic scattering for images and spectra</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>Full Stokes scattering for thermal Monte Carlo</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Full Stokes scattering for monochromatic Monte Carlo</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Full Stokes scattering for images and spectra</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>Gas lines</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gas lines and Doppler-shift line catching</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="scattering-off-dust-grains">
+<h2>Scattering off dust grains<a class="headerlink" href="#scattering-off-dust-grains" title="Permalink to this headline">¶</a></h2>
+<p>The inclusion of the effect of scattering off dust grains in images and spectra
+typically requires a separate Monte Carlo computation for each image. This is
+done automatically by RADMC-3D. But it means that there are some technical
+limitations.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 12%" />
+<col style="width: 19%" />
+<col style="width: 28%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Option/Method:</p></td>
+<td><p>No scattering</p></td>
+<td><p>Isotropic approximation</p></td>
+<td><p>Full anisotropic/Stokes scattering</p></td>
+</tr>
+<tr class="row-even"><td><p>Fast multi-frequency ray tracing for spectra (auto)</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multiple images at different vantage point at once</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Local observer</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="local-observer-mode">
+<h2>Local observer mode<a class="headerlink" href="#local-observer-mode" title="Permalink to this headline">¶</a></h2>
+<p>The local observer mode (Sect.~:ref:<cite>sec-local-observer</cite>) is a special mode
+for putting the observer in the near-field of the object, or even right in
+the middle of the object. It is not meant to be really for science use
+(though it can be used for it, to a certain extent), but instead for
+public outreach stuff. However, it is kept relatively basic, because to
+make this mode compatible with all the functions of RADMC-3D would require
+much more development and that is not worth it at the moment. So here are
+the restrictions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 73%" />
+<col style="width: 27%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Option/Method:</p></td>
+<td><p>Local observer mode</p></td>
+</tr>
+<tr class="row-even"><td><p>Dust isotropic scattering</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dust an-isotropic scattering</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>Multiple images at different vantage point at once</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Second-order ray-tracing</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Doppler-catching of lines</p></td>
+<td><p>no</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="opacitieswww.html" class="btn btn-neutral float-right" title="Acquiring opacities from the WWW" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="clioptions.html" class="btn btn-neutral float-left" title="Command-line options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

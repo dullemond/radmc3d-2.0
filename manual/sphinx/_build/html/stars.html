@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>More information about the treatment of stars &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modifying RADMC-3D: Internal setup and user-specified radiative processes" href="internalsetup.html" />
+    <link rel="prev" title="More information about the gridding" href="gridding.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">More information about the treatment of stars</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stars-treated-as-point-sources">Stars treated as point sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stars-treated-as-spheres">Stars treated as spheres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distributions-of-zillions-of-stars">Distributions of zillions of stars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-interstellar-radiation-field-external-source-of-energy">The interstellar radiation field: external source of energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#role-of-the-external-radiation-field-in-monte-carlo-simulations">Role of the external radiation field in Monte Carlo simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#role-of-the-external-radiation-field-in-images-and-spectra">Role of the external radiation field in images and spectra</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#internal-heat-source">Internal heat source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#slow-performance-of-radmc-3d-with-heat-source">Slow performance of RADMC-3D with heat source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>More information about the treatment of stars</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/stars.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="more-information-about-the-treatment-of-stars">
+<span id="chap-stars"></span><h1>More information about the treatment of stars<a class="headerlink" href="#more-information-about-the-treatment-of-stars" title="Permalink to this headline">¶</a></h1>
+<p>How stars are treated in RADMC-3D is perhaps something that needs some more
+background information. This is the structure:</p>
+<ol class="arabic">
+<li><p><em>Stars as individual objects:</em></p>
+<p>The most standard way of injecting stellar light into the model is by putting
+one or more individual stars in the model. A star can be placed anywhere,
+both inside the grid and outside. The main input file specifying their
+location and properties is: <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code>. The stars can be treated in two
+different ways, depending on the setting of the variable <code class="docutils literal notranslate"><span class="pre">istar_sphere</span></code>
+that can be set to 0 or 1 in the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+<ul class="simple">
+<li><p>The default is to treat stars as zero-size point sources. This is the way
+it is done if (as is the default) <code class="docutils literal notranslate"><span class="pre">istar_sphere=0</span></code>.  The stars are then
+treated as point sources in spite of the fact that their radius is
+specified as non-zero in the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file.  This default mode is the
+easiest and quickest. For most purposes it is perfectly fine. Only if you
+have material very close to a stellar surface it may be important to treat
+the finite size(s) of the star(s).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">istar_sphere=1</span></code> in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, then all stars are
+treated as spheres, their radii being the radii specified in the
+<code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file. This mode can be tricky, so please read Section
+<a class="reference internal" href="#sec-stars-as-spheres"><span class="std std-ref">Stars treated as spheres</span></a>.</p></li>
+</ul>
+</li>
+<li><p><em>Smooth distributions of zillions of stars:</em></p>
+<p>For modeling galaxies or objects of that size scale, it is of course
+impossible and unnecessary to treat each star individually. So <em>in addition
+to the individual stars</em> you can specify spatial distributions of stars,
+assuming that the number of stars is so large that there will always be a
+very large number of them in each cell. Please note that using this
+possibility does <em>not</em> exclude the use of individual stars as well. For
+instance, for a galaxy you may want to have distributions of unresolved
+stars, but one single ‘star’ for the active nucleus and perhaps a few
+individual ‘stars’ for bright star formation regions or O-star clusters or
+so. The distribution of stars is described in Section
+<a class="reference internal" href="#sec-distrib-of-stars"><span class="std std-ref">Distributions of zillions of stars</span></a>.</p>
+</li>
+<li><p><em>An external ‘interstellar radiation field’:</em></p>
+<p>Often an object is affected not only by the stellar radiation from the stars
+inside the object itself, but also by the diffuse radiation from the many
+near and far stars surrounding the object. This ‘Interstellar Radiation
+Field’ can be treated by RADMC-3D as well. This is called the ‘external
+source’ in RADMC-3D. It is described in Section <a class="reference internal" href="#sec-external-source"><span class="std std-ref">The interstellar radiation field: external source of energy</span></a>.</p>
+</li>
+</ol>
+<div class="section" id="stars-treated-as-point-sources">
+<span id="sec-stars-as-points"></span><h2>Stars treated as point sources<a class="headerlink" href="#stars-treated-as-point-sources" title="Permalink to this headline">¶</a></h2>
+<p>By default the stars are treated as point-sources. Even if the radius is
+specified as non-zero in the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file, they are still
+treated as points. The reason for this is that it is much easier and faster
+for the code to treat them as point-sources. Point sources cannot occult
+anything in the background, and nothing can partly occult them (they are
+only fully or not occulted, of course modulo optical depth of the occulting
+object). This approximation is, however, not valid if the spatial scales you
+are interested in are not much larger (or even the same or smaller) than the
+size of the star. For instance, if we are interested in modeling the
+radiative transfer in a disk around a Brown Dwarf, where dust can survive
+perhaps even all the way down to the stellar surface, we must take the
+non-point-like geometry of the star into account. This is because due to its
+size, the star can shine <em>down</em> onto the disk, which would not be
+possible if the star is treated as a point source. However, for a dust disk
+arounda Herbig Ae star, where the dust evaporation radius is at about 0.5
+AU, the star can be treated as a point-source without problems.</p>
+<p>So if you just use RADMC-3D as-is, or if you explicitly set <code class="docutils literal notranslate"><span class="pre">istar_sphere=0</span></code>
+in the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>, then the stars are all treated as point sources.</p>
+</div>
+<div class="section" id="stars-treated-as-spheres">
+<span id="sec-stars-as-spheres"></span><h2>Stars treated as spheres<a class="headerlink" href="#stars-treated-as-spheres" title="Permalink to this headline">¶</a></h2>
+<p>For problems in which the finite geometrical size of the star (or stars)
+is/are important, RADMC-3D has a mode by which the stars are treated as
+spheres. This can be necessary for instance if you model a disk around
+a Brown Dwarf, where the dusty disk goes all the way down to the stellar
+surface. The finite size of the star can thus shine <em>down</em> onto the
+disk, but only if its finite size is treated as such. In the default
+point-source approximation the surface layers of such a disk would be
+too cold, because this ‘shining down onto the disk’ phenomenon is
+not treated.</p>
+<p>You can switch this mode on by setting <code class="docutils literal notranslate"><span class="pre">istar_sphere=1</span></code> in the
+file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>. Note that no limb darkening or brightening is
+included in this mode, and currently RADMC-3D does not have such a mode
+available.</p>
+<p>This mode is, however, somewhat complex. A sphere can partly overlap the
+grid, while being partly outside the grid. A sphere can also overlap
+multiple cells at the same time, engulfing some cells entirely, while only
+partly overlapping others. The correct and fast treatment of this makes
+the code a bit slower, and required some complex programming. So the user
+is at the moment advised to use this mode only if necessary and remain
+aware of possible errors for now (as of version 0.17).</p>
+<p>For the Monte Carlo simulations the finite star size means that photon
+packages are emitted from the surface of the sphere of the star. It also
+means that any photon that re-enters the star during the Monte Carlo
+simulation is assumed to be lost.</p>
+</div>
+<div class="section" id="distributions-of-zillions-of-stars">
+<span id="sec-distrib-of-stars"></span><h2>Distributions of zillions of stars<a class="headerlink" href="#distributions-of-zillions-of-stars" title="Permalink to this headline">¶</a></h2>
+<p>For models of galaxies it is important to be able to have distributed
+stellar sources instead of individual stars. The way to implement this
+in a model for RADMC-3D is to</p>
+<ol class="arabic simple">
+<li><p>Prepare one or more <em>template stellar spectra</em>, for instance, one for each
+stellar type you wish to include. These must be specified in the file
+<code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code> (see Section
+<span class="xref std std-ref">sec-stellarsrc-templates</span>). Of course the more templates you have, the
+more memory consuming it becomes, which is of particular concern for models
+on large grids. You can of course also take a sum of various stellar types as
+a template. For instance, if we wish to include a ‘typical’ bulge stellar
+component, then you do not need to treat each stellar type of bulge stars
+separately. You can take the ‘average spectrum per gram of average star’ as
+the template and thus save memory.</p></li>
+<li><p>For each template you must specify the <em>spatial distribution</em>,
+i.e. how many stars of each template star are there per unit volume in
+each cell. The stellar density is, in fact, given as gram-of-star/cm:math:<cite>^3</cite>
+(i.e. not as number density of stars). The stellar spatial densities
+are specified in the file <code class="docutils literal notranslate"><span class="pre">stellarsrc_density.inp</span></code> (see
+Section <span class="xref std std-ref">sec-stellarsrc-density</span>).</p></li>
+</ol>
+<p>Note that if you have a file <code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code> in your
+model directly, then the stellar sources are automatically switched on.
+If you do not want to use them, then you must delete this file.</p>
+<p>The smooth stellar source distributions are nothing else than source
+functions for the radiative transfer with the spectral shape of the template
+stellar spectra from the <code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code>.  You will
+see that if you make a spectrum of your object, then even if the dust
+temperature etc is zero everywhere, you still see a spectrum: that of the
+stellar template(s). In the Monte Carlo simulations these stellar templates
+act as net sources of photons, that subsequently move through the grid in a
+Monte Carlo way.</p>
+<p>Note that the smooth stellar source distributions assume that the zillions
+of stars that they represent are so small that they do not absorb any
+appreciable amount of radiation. They are therefore pure sources, not sinks.</p>
+</div>
+<div class="section" id="the-interstellar-radiation-field-external-source-of-energy">
+<span id="sec-external-source"></span><h2>The interstellar radiation field: external source of energy<a class="headerlink" href="#the-interstellar-radiation-field-external-source-of-energy" title="Permalink to this headline">¶</a></h2>
+<p>You can include an <em>isotropic</em> interstellar radiation field in
+RADMC-3D. This will take effect both in the making of spectra and images, as
+well as in the Monte Carlo module.</p>
+<p>The way to activate this is to make a file <code class="docutils literal notranslate"><span class="pre">external_source.inp</span></code>
+and fill it with the information needed (see Section <span class="xref std std-ref">sec-ext-src-inp</span>).</p>
+<div class="section" id="role-of-the-external-radiation-field-in-monte-carlo-simulations">
+<h3>Role of the external radiation field in Monte Carlo simulations<a class="headerlink" href="#role-of-the-external-radiation-field-in-monte-carlo-simulations" title="Permalink to this headline">¶</a></h3>
+<p>For the Monte Carlo simulations this means that photons may be launched from
+outside inward. The way that this is done is that RADMC-3D will make a
+sphere around the entire grid, just large enough to fit in the entire grid
+but not larger. Photon packages can freely leave this sphere. But if
+necessary, photon packages can be launched from this sphere inward.
+RADMC-3D will then calculate the total luminosity of this sphere, which is
+<span class="math notranslate nohighlight">\(L=4\pi^2 I r_{\mathrm{sphere}}^2\)</span> where <span class="math notranslate nohighlight">\(I\)</span> is the intensity. For
+monochromatic Monte Carlo it is simply <span class="math notranslate nohighlight">\(I=I_\nu\)</span>, while for the thermal
+Monte Carlo it is <span class="math notranslate nohighlight">\(I=\int_0^\infty I_\nu d\nu\)</span>, where <span class="math notranslate nohighlight">\(I_\nu\)</span> is the
+intensity as specified in the file <code class="docutils literal notranslate"><span class="pre">external_source.inp</span></code>.  Note
+that if the sphere would have been taken larger, then the luminosity of the
+external radiation field would increase. This may seem anti-intuitive. The
+trick, however, is that if the sphere is larger, then also more of these
+interstellar photons never enter the grid and are lost immediately. That is
+why it is so important that RADMC-3D makes the sphere as small as possible,
+so that it limits the number of lost photon packages. It also means that you,
+the user, would make the grid much larger than the object you are interested
+in, then RADMC-3D is forced to make a large sphere, and thus potentially
+many photons will get lost: they may enter the outer parts of the grid, but
+there they will not get absorbed, nor will they do much.</p>
+<p>In fact, this is a potential difficulty of the use of the external sources:
+since the photon packages are lauchned from outside-inward, it may happen that
+only few of them will enter in the regions of the model that you, the user, are
+interested in. For instance, you are modeling a 3-D molecular cloud complex with
+a few dense cold starless cores. Suppose that no stellar sources exist in this
+model, only the interstellar radiation field. The temperature in the centers of
+these starless cores will be determined by the interstellar radiation field. But
+since the cores are very small compared to the total model (e.g. you have used
+AMR to refine the grid around/in these cores), the chance of each external
+photon package to <cite>hit’ the starless core is small. It means that the larger the
+grid or the smaller the starless core, the more photon packages (``nphot`</cite>,
+see Section <a class="reference internal" href="dustradtrans.html#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>) one must use to make sure that
+at least some of them enter the starless cores. If you choose <code class="docutils literal notranslate"><span class="pre">phot</span></code> too small
+in this case, then the temperature in these cores would remain undetermined
+(i.e. they will be zero in the results).</p>
+</div>
+<div class="section" id="role-of-the-external-radiation-field-in-images-and-spectra">
+<h3>Role of the external radiation field in images and spectra<a class="headerlink" href="#role-of-the-external-radiation-field-in-images-and-spectra" title="Permalink to this headline">¶</a></h3>
+<p>The interstellar radiation field also affects the images and spectra that
+you make. Every ray will start at minus-infinity with the intensity given by
+the external radiation field, instead of 0 as it would be if no external
+radiation field is specified. If you make an image, the background of your
+object will then therefore not be black. You can even make silhouette images
+like those of the famous silhouette disks in Orion.</p>
+<p>But there is a danger: if you make spectra, then also the background
+radiation is inside the beam, and will thus contribute to the spectrum.
+In fact, the larger you make the beam the more you will pick up of the
+background. This could thus lead to the spectrum of your source to be
+swamped by the background if you do not specify a beam in the spectrum.</p>
+</div>
+</div>
+<div class="section" id="internal-heat-source">
+<span id="sec-internal-source"></span><h2>Internal heat source<a class="headerlink" href="#internal-heat-source" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes the gas and dust inside the object of interest gets heated up by
+some internal process such as friction, magnetic reconnection, chemical
+reactions, etc. A nice example is the ‘viscous heating’ inside an
+accretion disk. This net heat source can be included in RADMC-3D by creating
+a file <code class="docutils literal notranslate"><span class="pre">heatsource.inp</span></code>. The format of the file is described in
+Section <span class="xref std std-ref">sec-heatsource</span>. It is the same as for other scalar fields.</p>
+<p>With this input file you have to specify in each cell how much energy per
+second per cubic centimeter is released in the form of heat. This energy
+will then be emitted as radiation by the dust. The way the code does this in
+the Bjorkman &amp; Wood algorithm is that it will launch photon packages from
+these cells. The difference with the stellar energy input (see Section
+<a class="reference internal" href="#sec-distrib-of-stars"><span class="std std-ref">Distributions of zillions of stars</span></a>) is that the energy is first injected into the
+dust of the cell, and then emitted as thermal dust emission. The launching
+of the photon package is therefore always a thermal dust emission. In
+contrast, in the stellar energy input method of Section
+<a class="reference internal" href="#sec-distrib-of-stars"><span class="std std-ref">Distributions of zillions of stars</span></a> the photon package is launched directly, with a
+wavelength randomly drawn from the local stellar spectrum shape. The
+difference between these two methods will be most apparent for optically
+thin models. For very optically thick cases, where the heat source is
+released deep inside an optically thick object, both methods will
+presumably yield the same result. Nevertheless, it is recommended to
+use the heat source method for cases such as chemical or viscous heating
+of the gas and dust, even for optically thick cases.</p>
+<p>A note of caution: in spite of the fact that this heat source method allows
+you to add additional energy sources, the object of study must still be in
+local thermodynamic equilibrium (LTE). If the gas+dust mixture is flowing
+and experiences significant adiabatic heating and cooling events, then the
+LTE condition is no longer met and RADMC-3D will not be able to give
+reliable answers. Sometimes one may be able to fudge this in some clever
+way, but one should always be aware that strictly speaking the Bjorkman &amp;
+Wood Monte Carlo method only works if in each cell all energy input (be it
+radiative absorption or an internal heat source) is balanced exactly by the
+same amount of radiative energy output. The algorithm  computes
+the dust temperature on that assumption: it computes how much energy the
+cell gains (by the heat source or by absorbing photons) and then it requires
+that the temperature of the dust is such that precisely the same amount of
+radiative energy is emitted.</p>
+<div class="section" id="slow-performance-of-radmc-3d-with-heat-source">
+<h3>Slow performance of RADMC-3D with heat source<a class="headerlink" href="#slow-performance-of-radmc-3d-with-heat-source" title="Permalink to this headline">¶</a></h3>
+<p>For very optically thick models, such as the inner regions of actively
+accreting dusty protoplanetary disks, the use of this heat source can lead
+to extremely slow performance. The reason is that all photons originating
+from this heat source will start their journey right in the middle of the
+most optically thick regions, requiring these photons to make gazillions of
+absorption/re-emission events before finally diffusing out. It should in
+principle work if the code runs long enough. But one must have some
+patience. The use of the Modified Random Walk method (see Section
+<a class="reference internal" href="dustradtrans.html#sec-modrandwalk"><span class="std std-ref">Modified Random Walk method for high optical depths</span></a>) would then be useful to speed things up, but still it
+can take time.</p>
+<p>A few things might be useful to consider. One is that protoplanetary disks
+only have such insane optical depths (<span class="math notranslate nohighlight">\(\tau\gtrsim 10^5\)</span>) if none of the
+dust has coagulated to bigger grains. This might be the correct assumption,
+especially in the very early phases of protoplanetary disk evolution. But
+dust coagulation is known to be quick, so it might equally well be that,
+say, 90% of the small grain dust has already grown to larger grains, which
+have less opacity. This is of course just a pure guess. Another thing is
+that many MHD models of disk turbulence show that most of the energy is
+not released near the midplane, but instead at one or two scale heights
+above the midplane. Both considerations would lower the optical depth for
+the energy to get out of the disk, speeding up the calculation. And
+the outcoming spectrum or image it will presumably not be affected that
+much, because at the end of the day the effective temperature of the disk
+surface must anyway be such that it radiates away the internal heat,
+independent of how deep inside the disk this heat is released.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="internalsetup.html" class="btn btn-neutral float-right" title="Modifying RADMC-3D: Internal setup and user-specified radiative processes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gridding.html" class="btn btn-neutral float-left" title="More information about the gridding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

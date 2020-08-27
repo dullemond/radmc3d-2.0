@@ -1,0 +1,539 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RADMC-3D Version 2.0, an astrophysics radiative transfer tool &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>RADMC-3D Version 2.0, an astrophysics radiative transfer tool</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="radmc-3d-version-2-0-an-astrophysics-radiative-transfer-tool">
+<h1>RADMC-3D Version 2.0, an astrophysics radiative transfer tool<a class="headerlink" href="#radmc-3d-version-2-0-an-astrophysics-radiative-transfer-tool" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-is-radmc-3d">What is RADMC-3D?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#capabilities">Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#version-tracker">Version tracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#copyright">Copyright</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#contributing-authors">Contributing authors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#contents-of-the-radmc-3d-package">Contents of the RADMC-3D package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#radmc-3d-package-as-a-zip-archive">RADMC-3D package as a .zip archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#radmc-3d-package-from-the-github-repository">RADMC-3D package from the github repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#contents-of-the-package">Contents of the package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#units-radmc-3d-uses-cgs-units">Units: RADMC-3D uses CGS units</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#compiling-the-code-with-make">Compiling the code with ‘make’</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#the-install-perl-script">The install.perl script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#what-to-do-if-this-all-does-not-work">What to do if this all does not work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-the-python-analysis-tools">Installing the Python analysis tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#how-to-install-and-use-the-python-tools">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#how-to-install-and-use-the-python-radmc3dpy-library">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/radmc3dPy</span></code> library</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#making-special-purpose-modified-versions-of-radmc-3d-optional">Making special-purpose modified versions of RADMC-3D (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#basic-dataflow">Basic dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#radiative-processes">Radiative processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#coordinate-systems">Coordinate systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#the-spatial-grid">The spatial grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#computations-that-radmc-3d-can-perform">Computations that RADMC-3D can perform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#how-a-model-is-set-up-and-computed-a-rough-overview">How a model is set up and computed: a rough overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#organization-of-model-directories">Organization of model directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicstructure.html#running-the-example-models">Running the example models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#the-thermal-monte-carlo-simulation-computing-the-dust-temperature">The thermal Monte Carlo simulation: computing the dust temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#modified-random-walk-method-for-high-optical-depths">Modified Random Walk method for high optical depths</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#making-seds-spectra-images-for-dust-continuum">Making SEDs, spectra, images for dust continuum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#openmp-parallelized-monte-carlo">OpenMP parallelized Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#overview-of-input-data-for-dust-radiative-transfer">Overview of input data for dust radiative transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#special-purpose-feature-computing-the-local-radiation-field">Special-purpose feature: Computing the local radiation field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#more-about-scattering-of-photons-off-dust-grains">More about scattering of photons off dust grains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#five-modes-of-treating-scattering">Five modes of treating scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#scattering-phase-functions">Scattering phase functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#scattering-of-photons-in-the-thermal-monte-carlo-run">Scattering of photons in the Thermal Monte Carlo run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#scattering-of-photons-in-the-monochromatic-monte-carlo-run">Scattering of photons in the Monochromatic Monte Carlo run</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#scattered-light-in-images-and-spectra-the-scattering-monte-carlo-computation">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#single-scattering-vs-multiple-scattering">Single-scattering vs. multiple-scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#simplified-single-scattering-mode-spherical-coordinates">Simplified single-scattering mode (spherical coordinates)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#warning-when-using-an-isotropic-scattering">Warning when using an-isotropic scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#for-experts-some-more-background-on-scattering">For experts: Some more background on scattering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#polarization-stokes-vectors-and-full-phase-functions">Polarization, Stokes vectors and full phase-functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#definitions-and-conventions-for-stokes-vectors">Definitions and conventions for Stokes vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#our-conventions-compared-to-other-literature">Our conventions compared to other literature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#defining-orientation-for-non-observed-radiation">Defining orientation for non-observed radiation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#polarized-scattering-off-dust-particles-general-formalism">Polarized scattering off dust particles: general formalism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#polarized-scattering-off-dust-particles-randomly-oriented-particles">Polarized scattering off dust particles: randomly oriented particles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#scattering-and-axially-symmetric-models">Scattering and axially symmetric models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#more-about-photon-packages-in-the-monte-carlo-simulations">More about photon packages in the Monte Carlo simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dustradtrans.html#polarized-emission-and-absorption-by-aligned-grains">Polarized emission and absorption by aligned grains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#implementation-in-radmc-3d">Implementation in RADMC-3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#consistency-with-other-radiative-processes">Consistency with other radiative processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#input-files-for-radmc-3d-for-aligned-grains">Input files for RADMC-3D for aligned grains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dustradtrans.html#effect-of-aligned-grains-on-the-scattering">Effect of aligned grains on the scattering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#some-definitions-for-line-transfer">Some definitions for line transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#line-transfer-modes-and-how-to-activate-the-line-transfer">Line transfer modes and how to activate the line transfer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#two-different-atomic-molecular-data-file-types">Two different atomic/molecular data file types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#the-different-line-modes-the-lines-mode-parameter">The different line modes (the <code class="docutils literal notranslate"><span class="pre">lines_mode</span> <span class="pre">parameter</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#the-various-input-files-for-line-transfer">The various input files for line transfer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-line-transfer-entries-in-the-radmc3d-inp-file">INPUT: The line transfer entries in the radmc3d.inp file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-line-inp-file">INPUT: The line.inp file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-molecular-atomic-data-the-molecule-xxx-inp-file-s">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-molecular-atomic-data-the-linelist-xxx-inp-file-s">INPUT: Molecular/atomic data: The linelist_XXX.inp file(s)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-number-density-of-each-molecular-species">INPUT: The number density of each molecular species</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-gas-temperature">INPUT: The gas temperature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-velocity-field">INPUT: The velocity field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-local-microturbulent-broadening-optional">INPUT: The local microturbulent broadening (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-for-lte-line-transfer-the-partition-function-optional">INPUT for LTE line transfer: The partition function (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#input-the-number-density-of-collision-partners-for-non-lte-transfer">INPUT: The number density of collision partners (for non-LTE transfer)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#making-images-and-spectra-with-line-transfer">Making images and spectra with line transfer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#speed-versus-realism-of-rendering-of-line-images-spectra">Speed versus realism of rendering of line images/spectra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lineradtrans.html#line-emission-scattered-off-dust-grains">Line emission scattered off dust grains</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#non-lte-transfer-the-large-velocity-gradient-lvg-escape-probability-escprob-method">Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#non-lte-transfer-the-optically-thin-line-assumption-method">Non-LTE Transfer: The optically thin line assumption method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#non-lte-transfer-full-non-local-modes-future">Non-LTE Transfer: Full non-local modes (FUTURE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#non-lte-transfer-inspecting-the-level-populations">Non-LTE Transfer: Inspecting the level populations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#non-lte-transfer-reading-the-level-populations-from-file">Non-LTE Transfer: Reading the level populations from file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#what-can-go-wrong-with-line-transfer">What can go wrong with line transfer?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#preventing-doppler-jumps-the-doppler-catching-method">Preventing doppler jumps: The ‘doppler catching method’</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#background-information-calculation-and-storage-of-level-populations">Background information: Calculation and storage of level populations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#in-case-it-is-necessary-on-the-fly-calculation-of-populations">In case it is necessary: On-the-fly calculation of populations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lineradtrans.html#for-experts-selecting-a-subset-of-lines-and-levels-manually">For experts: Selecting a subset of lines and levels ‘manually’</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#basics-of-image-making-with-radmc-3d">Basics of image making with RADMC-3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#making-multi-wavelength-images">Making multi-wavelength images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#making-spectra">Making spectra</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#what-is-in-the-beam-when-the-spectrum-is-made">What is ‘in the beam’ when the spectrum is made?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#can-one-specify-more-realistic-beams">Can one specify more realistic ‘beams’?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#specifying-custom-made-sets-of-wavelength-points-for-the-camera">Specifying custom-made sets of wavelength points for the camera</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#using-lambdarange-and-optionally-nlam">Using <code class="docutils literal notranslate"><span class="pre">lambdarange</span></code> and (optionally) <code class="docutils literal notranslate"><span class="pre">nlam</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#using-allwl">Using <code class="docutils literal notranslate"><span class="pre">allwl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#using-loadcolor">Using <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#using-loadlambda">Using <code class="docutils literal notranslate"><span class="pre">loadlambda</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#using-iline-imolspec-etc-for-when-lines-are-included">Using <code class="docutils literal notranslate"><span class="pre">iline</span></code>, <code class="docutils literal notranslate"><span class="pre">imolspec</span></code> etc (for when lines are included)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#heads-up-in-reality-wavelength-are-actually-wavelength-bands">Heads-up: In reality wavelength are actually wavelength bands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#using-channel-integrated-intensities-to-improve-line-channel-map-quality">Using channel-integrated intensities to improve line channel map quality</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#the-issue-of-flux-conservation-recursive-sub-pixeling">The issue of flux conservation: recursive sub-pixeling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#the-problem-of-flux-conservation-in-images">The problem of flux conservation in images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#the-solution-recursive-sub-pixeling">The solution: recursive sub-pixeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#a-danger-with-recursive-sub-pixeling">A danger with recursive sub-pixeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#recursive-sub-pixeling-in-spherical-coordinates">Recursive sub-pixeling in spherical coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#how-can-i-find-out-which-pixels-radmc-3d-is-recursively-refining">How can I find out which pixels RADMC-3D is recursively refining?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#alternative-to-recursive-sub-pixeling">Alternative to recursive sub-pixeling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#stars-in-the-images-and-spectra">Stars in the images and spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#second-order-ray-tracing-important-information">Second order ray-tracing (Important information!)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="imagesspectra.html#second-order-integration-in-spherical-coordinates-a-subtle-issue">Second order integration in spherical coordinates: a subtle issue</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#visualizing-the-tau-1-surface">Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#for-public-outreach-work-local-observers-inside-the-model">For public outreach work: local observers inside the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagesspectra.html#multiple-vantage-points-the-movie-mode">Multiple vantage points: the ‘Movie’ mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#regular-grids">Regular grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#separable-grid-refinement-in-spherical-coordinates-important">Separable grid refinement in spherical coordinates (important!)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#oct-tree-adaptive-mesh-refinement">Oct-tree Adaptive Mesh Refinement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#layered-adaptive-mesh-refinement">Layered Adaptive Mesh Refinement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gridding.html#on-the-successively-regular-kind-of-data-storage-and-its-slight-redundancy">On the ‘successively regular’ kind of data storage, and its slight redundancy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#unstructured-grids">Unstructured grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#d-plane-parallel-models">1-D Plane-parallel models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gridding.html#making-a-spectrum-of-the-1-d-plane-parallel-atmosphere">Making a spectrum of the 1-D plane-parallel atmosphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gridding.html#in-1-d-plane-parallel-no-star-but-incident-parallel-flux-beams">In 1-D plane-parallel: no star, but incident parallel flux beams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gridding.html#similarity-and-difference-between-1-d-spherical-and-1-d-plane-parallel">Similarity and difference between 1-D spherical and 1-D plane-parallel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gridding.html#thermal-boundaries-in-cartesian-coordinates">Thermal boundaries in Cartesian coordinates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stars.html#stars-treated-as-point-sources">Stars treated as point sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stars.html#stars-treated-as-spheres">Stars treated as spheres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stars.html#distributions-of-zillions-of-stars">Distributions of zillions of stars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stars.html#the-interstellar-radiation-field-external-source-of-energy">The interstellar radiation field: external source of energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="stars.html#role-of-the-external-radiation-field-in-monte-carlo-simulations">Role of the external radiation field in Monte Carlo simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="stars.html#role-of-the-external-radiation-field-in-images-and-spectra">Role of the external radiation field in images and spectra</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="stars.html#internal-heat-source">Internal heat source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="stars.html#slow-performance-of-radmc-3d-with-heat-source">Slow performance of RADMC-3D with heat source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#setting-up-a-model-inside-of-radmc-3d">Setting up a model <em>inside</em> of RADMC-3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#the-pre-defined-subroutines-of-the-userdef-module-f90">The pre-defined subroutines of the userdef_module.f90</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#some-caveats-and-advantages-of-internal-model-setup">Some caveats and advantages of internal model setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#using-the-userdef-module-to-compute-integrals-of-j-nu">Using the userdef module to compute integrals of <span class="math notranslate nohighlight">\(J_\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#some-tips-and-tricks-for-programming-user-defined-subroutines">Some tips and tricks for programming user-defined subroutines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#creating-your-own-emission-and-absorption-processes">Creating your own emission and absorption processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internalsetup.html#using-radmc-3d-as-a-fancy-volume-rendering-tool">Using RADMC-3D as a fancy volume-rendering tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pythontools.html#the-simpleread-py-library">The simpleread.py library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythontools.html#the-radmc3dpy-library">The radmc3dPy library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythontools.html#model-creation-from-within-radmc3dpy">Model creation from within radmc3dPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pythontools.html#diagnostic-tools-in-radmc3dpy">Diagnostic tools in radmc3dPy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythontools.html#read-the-amr-grid-inp-file">Read the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythontools.html#read-all-the-spatial-data">Read all the spatial data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythontools.html#read-the-image-out-file">Read the <code class="docutils literal notranslate"><span class="pre">image.out</span></code> file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythontools.html#read-the-spectrum-out-file">Read the <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="toolsinside.html#making-a-regularly-spaced-datacube-subbox-of-amr-based-models">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsinside.html#creating-and-reading-a-subbox">Creating and reading a subbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsinside.html#format-of-the-subbox-output-files">Format of the subbox output files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsinside.html#alternative-to-subbox-arbitrary-sampling-of-amr-based-models">Alternative to subbox: arbitrary sampling of AMR-based models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tipsandtricks.html#tips-and-tricks">Tips and tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipsandtricks.html#bug-hunting">Bug hunting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipsandtricks.html#some-tips-for-avoiding-troubles-and-for-making-good-models">Some tips for avoiding troubles and for making good models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipsandtricks.html#careful-things-that-might-go-wrong">Careful: Things that might go wrong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipsandtricks.html#common-technical-problems-and-how-to-fix-them">Common technical problems and how to fix them</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-radmc3d-inp">INPUT: radmc3d.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-required-amr-grid-inp">INPUT (required): amr_grid.inp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#regular-grid">Regular grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#oct-tree-style-amr-grid">Oct-tree-style AMR grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#layer-style-amr-grid">Layer-style AMR grid</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-required-for-dust-transfer-dust-density-inp">INPUT (required for dust transfer): dust_density.inp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#example-dust-density-inp-for-a-regular-grid">Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a regular grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#example-dust-density-inp-for-an-oct-tree-refined-grid">Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for an oct-tree refined grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#example-dust-density-inp-for-a-layer-style-refined-grid">Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a layer-style refined grid</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-output-dust-temperature-dat">INPUT/OUTPUT: dust_temperature.dat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-mostly-required-stars-inp">INPUT (mostly required): stars.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-optional-stellarsrc-templates-inp">INPUT (optional): stellarsrc_templates.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-optional-stellarsrc-density-inp">INPUT (optional): stellarsrc_density.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-optional-external-source-inp">INPUT (optional): external_source.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-optional-heatsource-inp">INPUT (optional): heatsource.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-required-wavelength-micron-inp">INPUT (required): wavelength_micron.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-optional-camera-wavelength-micron-inp">INPUT (optional): camera_wavelength_micron.inp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#the-dustopac-inp-file">The dustopac.inp file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#the-dustkappa-inp-files">The dustkappa_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#the-dustkapscatmat-inp-files">The dustkapscatmat_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#the-dustopac-inp-files-backward-compatibility-with-radmc-2d">The dustopac_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files: Backward compatibility with RADMC-2D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#output-spectrum-out">OUTPUT: spectrum.out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#output-image-out-or-image-out">OUTPUT: image.out or image_****.out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#input-minor-input-files">INPUT: (minor input files)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#the-color-inus-inp-file-required-with-comm-line-option-loadcolor">The <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> file (required with comm-line option ‘loadcolor’)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inputoutputfiles.html#input-aperture-info-inp">INPUT: <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inputoutputfiles.html#for-developers-some-details-on-the-internal-workings">For developers: some details on the internal workings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="binaryio.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaryio.html#how-to-switch-to-binary-or-back-to-ascii">How to switch to binary (or back to ascii)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaryio.html#binary-i-o-file-format-of-radmc-3d">Binary I/O file format of RADMC-3D</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clioptions.html#main-commands">Main commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clioptions.html#additional-arguments-general">Additional arguments: general</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clioptions.html#switching-on-off-of-radiation-processes">Switching on/off of radiation processes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="optionscompat.html#coordinate-systems">Coordinate systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optionscompat.html#scattering-off-dust-grains">Scattering off dust grains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optionscompat.html#local-observer-mode">Local observer mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

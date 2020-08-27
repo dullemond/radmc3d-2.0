@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>More information about the gridding &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="More information about the treatment of stars" href="stars.html" />
+    <link rel="prev" title="Making images and spectra" href="imagesspectra.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">More information about the gridding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#regular-grids">Regular grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#separable-grid-refinement-in-spherical-coordinates-important">Separable grid refinement in spherical coordinates (important!)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oct-tree-adaptive-mesh-refinement">Oct-tree Adaptive Mesh Refinement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#layered-adaptive-mesh-refinement">Layered Adaptive Mesh Refinement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#on-the-successively-regular-kind-of-data-storage-and-its-slight-redundancy">On the ‘successively regular’ kind of data storage, and its slight redundancy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#unstructured-grids">Unstructured grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#d-plane-parallel-models">1-D Plane-parallel models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#making-a-spectrum-of-the-1-d-plane-parallel-atmosphere">Making a spectrum of the 1-D plane-parallel atmosphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#in-1-d-plane-parallel-no-star-but-incident-parallel-flux-beams">In 1-D plane-parallel: no star, but incident parallel flux beams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#similarity-and-difference-between-1-d-spherical-and-1-d-plane-parallel">Similarity and difference between 1-D spherical and 1-D plane-parallel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#thermal-boundaries-in-cartesian-coordinates">Thermal boundaries in Cartesian coordinates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>More information about the gridding</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/gridding.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="more-information-about-the-gridding">
+<span id="chap-gridding"></span><h1>More information about the gridding<a class="headerlink" href="#more-information-about-the-gridding" title="Permalink to this headline">¶</a></h1>
+<p>We already discussed the various types of grids in Section
+<a class="reference internal" href="basicstructure.html#sec-spatial-grid"><span class="std std-ref">The spatial grid</span></a>, and the grid input file structure is described in
+Section <span class="xref std std-ref">sec-grid-input</span>. In this chapter let us take a closer look
+at the gridding possibilities and things to take special care of.</p>
+<div class="section" id="regular-grids">
+<span id="sec-regular-grid"></span><h2>Regular grids<a class="headerlink" href="#regular-grids" title="Permalink to this headline">¶</a></h2>
+<p>A regular grid is called ‘grid style 0’ in RADMC-3D. It can be used in
+Cartesian coordinates as well as in spherical coordinates (Section
+<a class="reference internal" href="basicstructure.html#sec-coord-systems"><span class="std std-ref">Coordinate systems</span></a>).</p>
+<p>A regular grid, in our definition, is a multi-dimensional grid which is
+separable in <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> (or in spherical coordinates in
+<span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>). You specify a 1-D monotonically
+increasing array of values <span class="math notranslate nohighlight">\(x_1, x_2,\cdots,x_{\mathrm{nx+1}}\)</span> which
+represent the cell walls in <span class="math notranslate nohighlight">\(x-direction\)</span>.  You do the same for the other
+directions: <span class="math notranslate nohighlight">\(y_1, y_2,\cdots,y_{\mathrm{ny+1}}\)</span> and <span class="math notranslate nohighlight">\(z_1,
+z_2,\cdots,z_{\mathrm{nz+1}}\)</span>.  The value of, say, <span class="math notranslate nohighlight">\(x_2\)</span> is the same for
+every position in <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span>: this is what we mean with
+‘separable’.</p>
+<p>In Cartesian coordinates RADMC-3D enforces perfectly cubic grid cells (i.e.
+linear grids). But that is only to make the image sub-pixeling easier (see
+Section <a class="reference internal" href="imagesspectra.html#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>). For spherical grids this is not
+enforced, and in fact it is strongly encouraged to use non-linear grids in
+spherical coordinates. Please read Section <a class="reference internal" href="#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a>
+if you use spherical coordinates!</p>
+<p>In a regular grid you specify the grids in each direction separately.  For
+instance, the x-grid is given by specifying the cell walls in x-direction. If we
+have, say, 10 cells in x-direction, we must specify 11 cell wall positions. For
+instance: <span class="math notranslate nohighlight">\(x_i=\{-5,-4,-3,-2,-1,0,1,2,3,4,5\}\)</span>.  For the
+<span class="math notranslate nohighlight">\(y\)</span>-direction and <span class="math notranslate nohighlight">\(z\)</span>-direction
+likewise. Fig. <a class="reference internal" href="#fig-regular-grid"><span class="std std-numref">Fig. 17</span></a> shows an example of a 2-D regular grid
+of 4x3 cells.</p>
+<div class="figure align-default" id="id1">
+<span id="fig-regular-grid"></span><a class="reference internal image-reference" href="_images/base_amr_bare.png"><img alt="_images/base_amr_bare.png" src="_images/base_amr_bare.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx=4</span></code> and <code class="docutils literal notranslate"><span class="pre">ny=3</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>In Cartesian coordinates we typically define our model in full 3-D.
+However, if your problem has translational symmetries, you might also want
+to consider the 1-D plane-parallel mode (see Section
+<a class="reference internal" href="#sec-1d-plane-parallel"><span class="std std-ref">1-D Plane-parallel models</span></a>).</p>
+<p>In full 3-D Cartesian coordinates the cell sizes <em>must</em> be perfectly
+cubical, i.e. the spacing in each direction must be the same. If you need a
+finer grid in some location, you can use the AMR capabilities discussed
+below.</p>
+<p>In spherical coordinates you can choose between 1-D spherically symmetric
+models, 2-D axisymmetric models or fully 3-D models. In spherical coordinates
+you do <em>not</em> have restrictions to the cell geometry or grid spacing.
+You can choose any set of numbers <span class="math notranslate nohighlight">\(r_1,\cdots,r_{\mathrm{nr}}\)</span> as radial
+grid, as long as this set of numbers is larger than 0 and monotonically
+increasing. The same is true for the <span class="math notranslate nohighlight">\(\theta\)</span>-grid and the <span class="math notranslate nohighlight">\(\phi\)</span>-grid.</p>
+<p>The precise way how to set up a regular grid using the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file is
+described in Section <span class="xref std std-ref">sec-amr-grid-regular</span>.  The input of any spatial
+variables (such as e.g. the dust density) uses the sequence of grid cells in
+the same order as the cells are specified in that <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file.</p>
+<p>For input and output data to file, for stuff on a regular grid, the order of
+nested loops over coordinates would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">do</span> <span class="n">iz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">amr_grid_nz</span>
+   <span class="n">do</span> <span class="n">iy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">amr_grid_ny</span>
+      <span class="n">do</span> <span class="n">ix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">amr_grid_nx</span>
+         <span class="o">&lt;&lt;</span> <span class="n">read</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">your</span> <span class="n">data</span> <span class="o">&gt;&gt;</span>
+      <span class="n">enddo</span>
+   <span class="n">enddo</span>
+<span class="n">enddo</span>
+</pre></div>
+</div>
+<p>For spherical coordinates we have the following association: <span class="math notranslate nohighlight">\(x\rightarrow r\)</span>,
+<span class="math notranslate nohighlight">\(y\rightarrow \theta\)</span>, <span class="math notranslate nohighlight">\(z\rightarrow \phi\)</span>.</p>
+</div>
+<div class="section" id="separable-grid-refinement-in-spherical-coordinates-important">
+<span id="sec-separable-refinement"></span><h2>Separable grid refinement in spherical coordinates (important!)<a class="headerlink" href="#separable-grid-refinement-in-spherical-coordinates-important" title="Permalink to this headline">¶</a></h2>
+<p>Spherical coordinates are a very powerful way of dealing with
+centrally-concentrated problems. For instance, collapsing protostellar cores,
+protoplanetary disks, disk galaxies, dust tori around active galactic nuclei,
+accretion disks around compact objects, etc. In other words: problems in which a
+single central body dominates the problem, and material at all distances from
+the central body matters. For example a disk around a young star goes all the
+way from 0.01 AU out to 1000 AU, covering 5 orders of magnitude in
+radius. Spherical coordinates are the easiest way of dealing with such a huge
+radial dynamic range: you simply make a radial grid, where the grid spacing
+<span class="math notranslate nohighlight">\(r_{i+1}-r_i\)</span> scales roughly with <span class="math notranslate nohighlight">\(r_i\)</span>.</p>
+<p>This is called a <em>logarithmic radial grid</em>. This is a grid whith a spacing in
+which <span class="math notranslate nohighlight">\((r_{i+1}-r_i)/r_i\)</span> is constant with <span class="math notranslate nohighlight">\(r\)</span>. In this way you
+assure that you have always the right spatial resolution in <span class="math notranslate nohighlight">\(r\)</span> at each
+radius. In spherical coordinates it is highly recomended to use such a log
+spacing. But you can also refine the <span class="math notranslate nohighlight">\(r\)</span> grid even more (in addition to
+the log-spacing). This is also strongly recommended near the inner edge of a
+circumstellar shell, for instance.  Or at the inner dust rim of a disk. There
+you must refine the <span class="math notranslate nohighlight">\(r\)</span> grid (by simply making the spacing smaller as you
+approach the inner edge from the outside) to assure that the first few cells are
+optically thin and that there is a gradual transition from optically thin to
+optically thick as you go outward. This is particularly important for, for
+instance, the inner rim of a dusty disk.</p>
+<p>In spherical coordinates you can vary the spacing in <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span>
+and <span class="math notranslate nohighlight">\(\phi\)</span> completely freely. That means: you could have for instance
+<span class="math notranslate nohighlight">\(r\)</span> to be spaced as <span class="math notranslate nohighlight">\(1.00, 1.01, 1.03, 1.05, 1.1, 1.2, 1.35,
+\cdots\)</span>. There is no restriction, as long as the coordinate points are
+monotonically increasing. In Figs <a class="reference internal" href="#fig-spher-sep-ref-txt"><span class="std std-numref">Fig. 18</span></a> and
+<a class="reference internal" href="#fig-spher-sep-ref-rays"><span class="std std-numref">Fig. 19</span></a> this is illustrated.</p>
+<p><em>Note that in addition to separable refinement, also AMR refinement
+is possible in spherical coordinates. See Section :ref:`sec-oct-tree-amr`.</em></p>
+<div class="figure align-default" id="id2">
+<span id="fig-spher-sep-ref-txt"></span><a class="reference internal image-reference" href="_images/spher_grid_ref_txt.png"><img alt="_images/spher_grid_ref_txt.png" src="_images/spher_grid_ref_txt.png" style="width: 30%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Example of a spherical 2-D grid in which the radial and <span class="math notranslate nohighlight">\(\theta\)</span> grids
+are refined in a ‘separable’ way. In radial direction the inner cells are
+refined (‘B’ in the right figure) and in <span class="math notranslate nohighlight">\(\theta\)</span> direction the cells
+near the equatorial plane are refined (‘C’ in the right figure). This kind of
+grid refinement does not require oct-tree AMR: the grid remains
+separable. For models in which the inner grid edge is also the inner model
+edge (e.g. a simple model of a protoplanetary disk with a sharp inner
+cut-off) this kind of separable grid refinement in <span class="math notranslate nohighlight">\(R\)</span>-direction may be
+essential to avoid problems with optically thick inner cells (see e.g. Fig.
+<a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 26</span></a> for an example of what could go wrong if you do
+not do this). Separable grid refinement in <span class="math notranslate nohighlight">\(\Theta\)</span>-direction is
+typically important for protoplanetary disk models, where the midplane and
+surface layers of the disk need to have sufficient resolution, but any
+possible surrounding spherical nebula may not.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id3">
+<span id="fig-spher-sep-ref-rays"></span><a class="reference internal image-reference" href="_images/spher_grid_ref_rays.png"><img alt="_images/spher_grid_ref_rays.png" src="_images/spher_grid_ref_rays.png" style="width: 65%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">When making an image, RADMC-3D will automatically make ‘sub-pixels’ to ensure
+that all structure of the model as projected on the sky of the observer are
+spatially resolved.  Extreme grid refinement leads thus to extreme
+sub-pixeling. See Section <a class="reference internal" href="imagesspectra.html#sec-rec-subpixel-spher-coord"><span class="std std-ref">Recursive sub-pixeling in spherical coordinates</span></a> for details,
+and ways to prevent excessive sub-pixeling when this is not necessary.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>For models of accretion disks it can, for instance, be useful to make sure that
+there are more grid points of <span class="math notranslate nohighlight">\(\theta\)</span> near the equatorial plane
+<span class="math notranslate nohighlight">\(\theta=\pi/2\)</span>. So the grid spacing between <span class="math notranslate nohighlight">\(\theta=0.0\)</span> and
+<span class="math notranslate nohighlight">\(\theta=1.0\)</span> may be very coarse while between <span class="math notranslate nohighlight">\(\theta=1.0\)</span> and
+<span class="math notranslate nohighlight">\(\theta=\pi/2\)</span> you may put a finer grid. All of this ‘grid refinement’ can
+be done without the ‘AMR’ refinement technique: this is the ‘separable’ grid
+refinement, because you can do this separately for <span class="math notranslate nohighlight">\(r\)</span>, for <span class="math notranslate nohighlight">\(\theta\)</span>
+and for <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+<p>Sometimes, however, separable refinement may not help you to refine the grid
+where necessary. For instance: if you model a disk with a planet in the
+disk, then you may need to refine the grid around the planet. You could
+refine the grid in principle in a separable way, but you would then have a
+large redundancy in cells that are refined by far away from the planet.  Or
+if you have a disk with an inner rim that is not exactly at
+<span class="math notranslate nohighlight">\(r=r_{\mathrm{rim}}\)</span>, but is a rounded-off rim. In these cases you need
+refinement exactly located at the region of interest. For that you need the
+‘AMR’ refinement (Sections <a class="reference internal" href="#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a> and <a class="reference internal" href="#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a>).</p>
+<p><em>Important note:</em> When using strong refinement in one of the coordinates
+<span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> or <span class="math notranslate nohighlight">\(\phi\)</span>, image-rendering and
+spectrum-rendering can become very slow, because of the excessive sub-pixeling
+this causes. There are ways to limit the sub-pixeling for those cases. See the
+Section on sub-pixeling in spherical coordinate: Section
+<a class="reference internal" href="imagesspectra.html#sec-rec-subpixel-spher-coord"><span class="std std-ref">Recursive sub-pixeling in spherical coordinates</span></a>.</p>
+</div>
+<div class="section" id="oct-tree-adaptive-mesh-refinement">
+<span id="sec-oct-tree-amr"></span><h2>Oct-tree Adaptive Mesh Refinement<a class="headerlink" href="#oct-tree-adaptive-mesh-refinement" title="Permalink to this headline">¶</a></h2>
+<p>An oct-tree refinened grid is called ‘grid style 1’ in RADMC-3D. It can be
+used in Cartesian coordinates as well as in spherical coordinates (Section
+<a class="reference internal" href="basicstructure.html#sec-coord-systems"><span class="std std-ref">Coordinate systems</span></a>).</p>
+<p>You start from a normal regular base grid (see Section
+<a class="reference internal" href="#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>), possibly even with ‘separable refinement’ (see
+Section <a class="reference internal" href="#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a>). You can then split some of the cells
+into 2x2x2 subcells (or more precisely: in 1-D 2 subcells, in 2-D 2x2
+subcells and in 3-D 2x2x2 subcells). If necessary, each of these 2x2x2
+subcells can also be split into further subcells. This can be repeated as
+many times as you wish until the desired grid refinement level is reached.
+Each refinement step refines the grid by a factor of 2 in linear dimension,
+which means in 3-D a factor of 8 in volume. In this way you get, for each
+refined cell of the base grid, a tree of refinement. The base grid can have
+any size, as long as the number of cells in each direction is an even
+number. For instance, you can have a 6x4 base grid in 2-D, and refine cell
+(1,2) by one level, so that this cell splits into 2x2 subcells.</p>
+<p>Note that it is important to set which dimensions are ‘active’ and which
+are ‘non-active’. For instance, if you have a 1-D model with 100 cells and
+you tell RADMC-3D (see Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>) to make a base
+grid of 100x1x1 cells, but you still keep all three dimensions ‘active’
+(see Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>), then a refinement of cell 1
+(which is actually cell (1,1,1)) will split that cell into 2x2x2 subcells,
+i.e. it will also refine in y and z direction. Only if you explicitly
+switch the y and z dimensions off the AMR will split it into just 2
+subcells.</p>
+<p>Oct-tree mesh refinement is very powerful, because it allows you to refine
+the grid exactly there where you need it. And because we start from a
+regular base grid like the grid specified in Section <a class="reference internal" href="#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>,
+we can start designing our model on a regular base grid, and then refine
+where needed. See Fig. <a class="reference internal" href="#fig-oct-tree-amr"><span class="std std-numref">Fig. 20</span></a>.</p>
+<div class="figure align-default" id="id4">
+<span id="fig-oct-tree-amr"></span><a class="reference internal image-reference" href="_images/oct_tree_amr_bare.png"><img alt="_images/oct_tree_amr_bare.png" src="_images/oct_tree_amr_bare.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement. The base grid has <code class="docutils literal notranslate"><span class="pre">nx=4</span></code>
+and <code class="docutils literal notranslate"><span class="pre">ny=3</span></code>. Three levels of refinement are added to this base grid.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<p>The AMR stand for ‘Adaptive Mesh Refinement’, which may suggest that
+RADMC-3D will refine internally. At the moment this is not yet the case.
+The ‘adaptive’ aspect is left to the user: he/she will have to ‘adapt’
+the grid such that it is sufficiently refinened where it is needed. In the
+future we may allow on-the-fly adaption of the grid, but that is not yet
+possible now.</p>
+<p>One problem with oct-tree AMR is that it is difficult to handle such grids in
+external plotting programs, or even in programs that set up the grid.  While it
+is highly flexible, it is not very user-friendly. Typically you may use this
+oct-tree refinement either because you import data from a hydrodynamics code
+that works with oct-tree refinement (e.g. FLASH, RAMSES), or when you
+internally refine the grid using the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> (see Chapter
+<a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a>). In the former case you are anyway forced to manage
+the complexities of AMR, while in the latter case you can make use of the AMR
+modules of RADMC-3D internally to handle them. But if you do not need to full
+flexibility of oct-tree refinement and want to use a simpler kind of refinement,
+then you can use RADMC-3D’s alternative refinement mode: the layer-style AMR
+described in Section <a class="reference internal" href="#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a> below.</p>
+<p>The precise way how to set up such an oct-tree grid using the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
+file is described in Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>.  The input of any
+spatial variables (such as e.g. the dust density) uses the sequence of grid
+cells in the same order as the cells are specified in that <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
+file.</p>
+</div>
+<div class="section" id="layered-adaptive-mesh-refinement">
+<span id="sec-layered-amr"></span><h2>Layered Adaptive Mesh Refinement<a class="headerlink" href="#layered-adaptive-mesh-refinement" title="Permalink to this headline">¶</a></h2>
+<p>A layer-style refinened grid is called ‘grid style 10’ in RADMC-3D. It can
+be used in Cartesian coordinates as well as in spherical coordinates
+(Section <a class="reference internal" href="basicstructure.html#sec-coord-systems"><span class="std std-ref">Coordinate systems</span></a>).</p>
+<p>This is an alternative to the full-fledged oct-tree refinement of Section
+<a class="reference internal" href="#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>. The main advantage of the layer-style refinement is
+that it is far easier to handle by the human brain, and thus easier for
+model setup  and the analysis of the results.</p>
+<p>The idea here is that you start again with a regular grid (like that of
+Section <a class="reference internal" href="#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>), but you can now specify a rectangular
+region which you want to refine by a factor of 2. The way you do this is by
+choosing the starting indices of the rectangle and specifying the size of
+the rectangle by setting the number of cells in each direction from that
+starting point onward. For instance, setting the starting point at (2,3,1)
+and the size at (1,1,1) will simply refine just cell (2,3,1) of the base
+grid into a set of 2x2x2 sub-cells. But setting the starting point at
+(2,3,1) and the size at (2,2,2) will split cells (2,3,1), (3,3,1), (2,4,1),
+(3,4,1), (2,3,2), (3,3,2), (2,4,2) and (3,4,2) each into 2x2x2 subcells.
+This in fact is handled as a 4x4x4 regular sub-grid patch. And setting the
+starting point at (2,3,1) and the size at (4,6,8) will make an entire
+regular sub-grid patch of 8x12x16 cells. Such a sub-grid patch is
+called a <em>layer</em>.</p>
+<p>The nice thing of these layers is that each layer (i.e. subgrid patch) is
+handled as a regular sub-grid. The base grid is layer number 0, and the first
+layer is layer number 1, etc. Each layer (including the base grid) can contain
+multiple sub-layers. The only restriction is that each layer fits entirely
+inside its parent layer, and layers with the same parent layer should not
+overlap. Each layer can thus have one or more sub-layers, each of which can
+again be divided into sub-layers. This builds a tree structure, with the base
+layer as the trunk of the tree (this is contrary to the oct-tree structure,
+where each base grid <em>cell</em> forms the trunk of its own tree). In
+Fig. <a class="reference internal" href="#fig-twolayer-amr"><span class="std std-numref">Fig. 21</span></a> an example is shown of two layers with the same
+parent (= layer 0 = base grid), while in Fig. <a class="reference internal" href="#fig-nestedlayer-amr"><span class="std std-numref">Fig. 22</span></a> an
+example is shown of two nested layers.</p>
+<div class="figure align-default" id="id5">
+<span id="fig-twolayer-amr"></span><a class="reference internal image-reference" href="_images/twolayer_bare.png"><img alt="_images/twolayer_bare.png" src="_images/twolayer_bare.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Example of a 2-D base grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3, with two
+AMR-layers added to it. This example has just one level of refinement, as
+the two layers (brown and green) are on the same level (they have the same
+parent layer = layer 0).</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id6">
+<span id="fig-nestedlayer-amr"></span><a class="reference internal image-reference" href="_images/nestedlayer_bare.png"><img alt="_images/nestedlayer_bare.png" src="_images/nestedlayer_bare.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Example of a 2-D base grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3, with two nested
+AMR-layers added to it.  This example has two levels of refinement, as layer
+1 (brown) is the parent of layer 2 (green).</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+<p>If you now want to specify data on this grid, then you simply specify it on
+each layer separately, as if each layer is a separate entity. Each layer is
+treated as a regular grid, irrespective of whether it contains sub-layers
+or not. So if we have a base grid of 4x4x4 grid cells containing two layers:
+one starting at (1,1,1) and having (2,2,2) size and another starting at
+(3,3,3) and having (1,1,2) size, then we first specify the data on the
+4:math:<cite>^3`=64 base grid, then on the (2*2):math:`^3`=64 grid cells of the first
+layer and then on the 2x2x4=16 cells of the second layer. Each of these
+three layers are regular grids, and the data is inputted/outputted in
+the same way as if these are normal regular grids (see Section
+:ref:`sec-regular-grid</cite>). But instead of just one such regular grid, now
+the data file (e.g. <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code>) will contain three
+successive lists of numbers, the first for the base grid, the second for
+the first layer and the last for the second layer. You may realize at this
+point that this will introduce a redundancy. See Subsection
+<a class="reference internal" href="#sec-layer-amr-redundancy"><span class="std std-ref">On the ‘successively regular’ kind of data storage, and its slight redundancy</span></a> for a discussion of this redundancy.</p>
+<p>The precise way how to set up such an oct-tree grid using the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
+file is described in Section <span class="xref std std-ref">sec-amr-grid-layered</span>.  The input of any
+spatial variables (such as e.g. the dust density) uses the sequence of grid
+cells in the same order as the cells are specified in that <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
+file.</p>
+<div class="section" id="on-the-successively-regular-kind-of-data-storage-and-its-slight-redundancy">
+<span id="sec-layer-amr-redundancy"></span><h3>On the ‘successively regular’ kind of data storage, and its slight redundancy<a class="headerlink" href="#on-the-successively-regular-kind-of-data-storage-and-its-slight-redundancy" title="Permalink to this headline">¶</a></h3>
+<p>With the layered grid refinement style there will be <em>redundant</em> data in the
+data files (such as e.g. the <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file. Each layer is a regular
+(sub-)grid and the data will be specified in each of these grid cells of that
+regular (sub-)grid.  If then some of these cells are overwritten by a
+higher-level layer, these data are then redundant. We could of course have
+insistent that only the data in those cells that are not refined by a layer
+should be written to (or read from) the data files. But this would require quite
+some clever programming on the part of the user to a-priori find out where the
+layers are and therefore which cells should be skipped. We have decided that it
+is far easier to just insist that each layer (including the base grid, which is
+layer number 0) is simply written to the data file as a regular block of
+data. The fact that some of this data will be not used (because they reside in
+cells that are refined) means that we write more data to file than really exists
+in the model. This makes the files larger than strictly necessary, but it makes
+the data structure by far easier. Example: suppose you have a base grid of 8x8x8
+cells and you replace the inner 4x4x4 cells with a layer of 8x8x8 cells (each
+cell being half the size of the original cells).  Then you will have for
+instance a <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file containing 1024 values of the density:
+8:math:<cite>^3</cite>=512 values for the base grid and again 8:math:<cite>^3</cite>=512 values for
+the refinement layer. Of the first 8:math:<cite>^3</cite>=512 values 4:math:<cite>^3</cite>=64 values
+are ignored (they could have any value as they will not be used). The file is
+thus 64 values larger than strictly necessary, which is a redundancy of
+64/1024=0.0625. If you would have used the oct-tree refinement style for making
+exactly the same grid, you would have only 1024-64=960 values in your file,
+making the file 6.25% smaller. But since 6.25% is just a very small
+difference, we decided that this is not a major problem and the simplicity of
+our ‘successively regular’ kind of data format is more of an advantage than the
+6.25% redundance is a disadvantage.</p>
+</div>
+</div>
+<div class="section" id="unstructured-grids">
+<span id="sec-unstruct-grids"></span><h2>Unstructured grids<a class="headerlink" href="#unstructured-grids" title="Permalink to this headline">¶</a></h2>
+<p>In a future version of RADMC-3D we will include unstructured gridding as a
+possibility. But at this moment such a gridding is not yet implemented.</p>
+</div>
+<div class="section" id="d-plane-parallel-models">
+<span id="sec-1d-plane-parallel"></span><h2>1-D Plane-parallel models<a class="headerlink" href="#d-plane-parallel-models" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it can be useful to make simple 1-D plane parallel models, for
+instance if you want to make a simple 1-D model of a stellar atmosphere.
+RADMC-3D is, however, by nature a 3-D code. But as of version 0.31 it features a
+genuine 1-D plane-parallel mode as well. This coordinate type has the
+number 10. In this mode the <span class="math notranslate nohighlight">\(x\)</span>- and <span class="math notranslate nohighlight">\(y\)</span>-coordinates are the
+in-plane coordinates, while the <span class="math notranslate nohighlight">\(z\)</span>-coordinate is the 1-D coordinate.  We
+thus have a 1-D grid in the <span class="math notranslate nohighlight">\(z\)</span>-coordinate, but no grid in <span class="math notranslate nohighlight">\(x\)</span>- or
+<span class="math notranslate nohighlight">\(y\)</span>-directions.</p>
+<p>You can make a 1-D plane-parallel model by setting some settings in the
+<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file. Please consult Section <span class="xref std std-ref">sec-grid-input</span> for the
+format of this file. The changes/settings you have to do are (see example
+below): (1) set the coordinate type number to 10, (2) set the <span class="math notranslate nohighlight">\(x\)</span> and
+<span class="math notranslate nohighlight">\(y\)</span> dimensions to non-active and (3) setting the cell interfaces in
+<span class="math notranslate nohighlight">\(x\)</span> to -1d90, +1d90, and likewise for <span class="math notranslate nohighlight">\(y\)</span>. Here is then how it
+looks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>                                     <span class="o">&lt;===</span> <span class="n">Format</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="mi">0</span>                                     <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="mi">0</span><span class="o">=</span><span class="n">regular</span> <span class="n">grid</span><span class="p">)</span>
+<span class="mi">10</span>                                    <span class="o">&lt;===</span> <span class="n">Coordinate</span> <span class="nb">type</span> <span class="p">(</span><span class="mi">10</span><span class="o">=</span><span class="n">plane</span><span class="o">-</span><span class="n">parallel</span><span class="p">)</span>
+<span class="mi">0</span>                                     <span class="o">&lt;===</span> <span class="p">(</span><span class="n">obsolete</span><span class="p">)</span>
+<span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">1</span>                               <span class="o">&lt;===</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">y</span> <span class="n">are</span> <span class="n">non</span><span class="o">-</span><span class="n">active</span><span class="p">,</span> <span class="n">z</span> <span class="ow">is</span> <span class="n">active</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">100</span>                             <span class="o">&lt;===</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">y</span> <span class="n">are</span> <span class="mi">1</span> <span class="n">cell</span><span class="p">,</span> <span class="ow">in</span> <span class="n">z</span> <span class="n">we</span> <span class="n">have</span> <span class="mi">100</span> <span class="n">cells</span>
+<span class="o">-</span><span class="mf">1e90</span> <span class="mf">1e90</span>                            <span class="o">&lt;===</span> <span class="n">cell</span> <span class="n">walls</span> <span class="ow">in</span> <span class="n">x</span> <span class="n">are</span> <span class="n">at</span> <span class="s2">&quot;infinity&quot;</span>
+<span class="o">-</span><span class="mf">1e90</span> <span class="mf">1e90</span>                            <span class="o">&lt;===</span> <span class="n">cell</span> <span class="n">walls</span> <span class="ow">in</span> <span class="n">y</span> <span class="n">are</span> <span class="n">at</span> <span class="s2">&quot;infinity&quot;</span>
+<span class="n">zi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>        <span class="n">zi</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>       <span class="o">........</span>  <span class="n">zi</span><span class="p">[</span><span class="n">nz</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The other input files are for the rest as usual, as in the 3-D case.</p>
+<p>You can now make your 1-D model as usual. For 1-D plane-parallel problems it is
+often useful to put a thermal boundary at the bottom of the model.  For
+instance, if the model is a stellar atmosphere, you may want to cap the grid
+from below with some given temperature. See Section
+<a class="reference internal" href="#sec-thermal-boundaries"><span class="std std-ref">Thermal boundaries in Cartesian coordinates</span></a> for details on how to set up thermal boundaries.</p>
+<p>In the 1-D plane-parallel mode some things work a bit different than in the
+“normal” 3-D mode:</p>
+<ul class="simple">
+<li><p>Images are by default 1x1 pixels, because in a plane-parallel case it
+is useless to have multiple pixels.</p></li>
+<li><p>Spectra cannot be made, because “spectrum” is (in RADMC-3D ‘language’)
+the flux as a function of frequency as seen at a very large distance of
+the object, so that the object is in the “far field”. Since the concept of
+“far-field” is no longer meaningful in a plane-parallel case, it is better
+to make frequency-dependent 1x1 pixel images. This gives you the
+frequence-dependent intensity, which is all you should need.</p></li>
+<li><p>Stars are not allowed, as they have truly 3-D positions, which is
+inconsistent with the plane-parallel assumption.</p></li>
+</ul>
+<p>But for the rest, most stuff works similarly to the 3-D version. For instance,
+you can compute dust temperatures with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">mctherm</span>
+</pre></div>
+</div>
+<p>as usual.</p>
+<div class="section" id="making-a-spectrum-of-the-1-d-plane-parallel-atmosphere">
+<h3>Making a spectrum of the 1-D plane-parallel atmosphere<a class="headerlink" href="#making-a-spectrum-of-the-1-d-plane-parallel-atmosphere" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, the ‘normal’ 3-D way of making a spectrum of the 1-D
+plane-parallel atmosphere is not possible, because formally the atmosphere is
+infinitely extended. Instead you can obtain a spectrum in the form of an
+intensity (erg s:math:<cite>^{-1}</cite> cm:math:<cite>^{-2}</cite> Hz:math:<cite>^{-1}</cite> ster:math:<cite>^{-1}</cite>)
+as a function of wavelength. To do this you ask RADMC-3D to make a
+multi-wavelength image of the atmosphere under a certain inclination
+(inclination 0 meaning face-on), e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">allwl</span> <span class="n">incl</span> <span class="mi">70</span>
+</pre></div>
+</div>
+<p>This make an SED at <span class="math notranslate nohighlight">\(\lambda=10\,\mu\)</span>. The image is, in fact, a 1x1 pixel
+multi-wavelength image. The <code class="docutils literal notranslate"><span class="pre">allwl</span></code> (which stands for ‘all wavelengths’) means
+that the spectral points are the same as those in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>
+file (see Section <span class="xref std std-ref">sec-wavelengths</span>).  You can also specify the wavelengths
+in a different way, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">lambdarange</span> <span class="mi">5</span> <span class="mi">20</span> <span class="n">nlam</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>In fact, see Section <a class="reference internal" href="imagesspectra.html#sec-multi-wavelength-images"><span class="std std-ref">Making multi-wavelength images</span></a> and
+Section <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a> for details.</p>
+</div>
+<div class="section" id="in-1-d-plane-parallel-no-star-but-incident-parallel-flux-beams">
+<h3>In 1-D plane-parallel: no star, but incident parallel flux beams<a class="headerlink" href="#in-1-d-plane-parallel-no-star-but-incident-parallel-flux-beams" title="Permalink to this headline">¶</a></h3>
+<p>In 1-D plane-parallel geometry it is impossible to include meaningful stars as
+sources of photons. This is not a technical issue, but a mathematical truth: a
+point in 1-D is in reality a plane in 3-D. As a replacement RADMC-3D offers
+(only in 1-D plane-parallel geometry) the possibility of illuminating the 1-D
+atmosphere from above with a flux, incident onto the atmosphere in a prescribed
+angle. This allows you to model, e.g., the Earth’s atmosphere being illuminated
+by the sun at a given time of the day.  This is done by providing an ascii file
+called <code class="docutils literal notranslate"><span class="pre">illum.inp</span></code> which has the following form (similar, but not identical,
+to the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file, see Section <span class="xref std std-ref">sec-stars</span>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>iformat                           &lt;=== Put this to 2 !
+nillum     nlam
+theta[1]      phi[1]
+  .             .
+  .             .
+theta[nillum] phi[nillum]
+lambda[1]
+  .
+  .
+lambda[nlam]
+flux[1,illum=1]
+  .
+  .
+flux[nlam,illum=1]
+flux[1,illum=2]
+  .
+  .
+flux[nlam,illum=2]
+  .
+  .
+  .
+  .
+flux[nlam,illum=nstar]
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">nillum</span></code> is the number of illuminating beams you want to
+specify. Normally this is 1, unless you have, e.g., a planet around a double
+star. The <code class="docutils literal notranslate"><span class="pre">theta</span></code> is the angle (in degrees) under which the beam impinges onto
+the atmosphere. If you have <code class="docutils literal notranslate"><span class="pre">theta</span></code>=0, then the flux points vertically
+downward (sun at zenith). If you have <code class="docutils literal notranslate"><span class="pre">theta</span></code>=89, then the flux points
+almost parallel to the atmosphere (sunset). It is not allowed to put <code class="docutils literal notranslate"><span class="pre">theta</span></code>=90.</p>
+<p>You can, if you wish, also put the source behind the slab, i.e. <code class="docutils literal notranslate"><span class="pre">theta</span></code>&gt;90. Please note, however, that if you compute the spectrum of the
+plane-parallel atmosphere the direct flux from these illumination beams does not
+get picked up in the spectrum.</p>
+</div>
+<div class="section" id="similarity-and-difference-between-1-d-spherical-and-1-d-plane-parallel">
+<h3>Similarity and difference between 1-D spherical and 1-D plane-parallel<a class="headerlink" href="#similarity-and-difference-between-1-d-spherical-and-1-d-plane-parallel" title="Permalink to this headline">¶</a></h3>
+<p>Note that this 1-D plane-parallel mode is only available in <span class="math notranslate nohighlight">\(z\)</span>-direction,
+and only for cartesian coordinates! For spherical coordinates, a simple switch
+to 1-D yields spherically symmetric 1-D radiative transfer, which is, however,
+geometrically distinct from 1-D plane-parallel radiative transfer. However, you
+can also use a 1-D spherically symmetric setup to ‘emulate’ 1-D plane parallel
+problems: You can make, for instance, a radial grid in which
+<span class="math notranslate nohighlight">\(r_{\mathrm{nr}}/r_1-1\ll 1\)</span>. An example: <span class="math notranslate nohighlight">\(r=\{10000.0\)</span>,
+<span class="math notranslate nohighlight">\(10000.1\)</span>, <span class="math notranslate nohighlight">\(10000.2\)</span>, <span class="math notranslate nohighlight">\(\cdots,\)</span> <span class="math notranslate nohighlight">\(10001.0\}\)</span>. This is not
+perfectly plane-parallel, but sufficiently much so that the difference is
+presumably indiscernable.  The spectrum is then automatically that of the entire
+large sphere, but by dividing it by the surface area, you can recalculate the
+local flux.  In fact, since a plane-parallel model usually is meant to
+approximate a tiny part of a large sphere, this mode is presumably even more
+realistic than a truly 1-D plane-parallel model.</p>
+</div>
+</div>
+<div class="section" id="thermal-boundaries-in-cartesian-coordinates">
+<span id="sec-thermal-boundaries"></span><h2>Thermal boundaries in Cartesian coordinates<a class="headerlink" href="#thermal-boundaries-in-cartesian-coordinates" title="Permalink to this headline">¶</a></h2>
+<p>By default all boundaries of the computational domain are open, in the sense
+that photons can move out freely. The only photons that move into the domain
+from the outside are those from the interstellar radiation field (see Section
+<a class="reference internal" href="stars.html#sec-external-source"><span class="std std-ref">The interstellar radiation field: external source of energy</span></a>) and from any stars that are located outside of the
+computational domain (see Section <span class="xref std std-ref">sec-stars</span>). For some purposes it might,
+however, be useful to have one or more of the six boundaries in 3-D to be
+closed. RADMC-3D offers the possibility, in cartesian coordinates, to convert
+the boundaries (each of the six separately) to a thermal boundary, i.e. a
+blackbody emitter at some user-secified temperature. If you want that the left
+X-boundary is a thermal wall at T=100 Kelvin, then you add the following line to
+the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">thermal_boundary_xl</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>and similarly for xr (right X-boundary), yl, yr, zl and/or zr. You can set this
+for each boundary separately, and particularly you can choose to set just one or
+just two of the boundaries to thermal boundaries. Note that setting
+<code class="docutils literal notranslate"><span class="pre">thermal_boundary_xl=0</span></code> is equivalent to switching off the thermal boundary.</p>
+<p>Note that if you now make an image of the box, the ray-tracer will show you
+still the inside of the box, through any possible thermal boundary. In other
+words: for the imaging or spectra these thermal boundaries are opaque for
+radiation entering the grid, while they are transparent for radiation exiting
+the grid. In other words, we see the blackbody emission from the backside walls,
+but not of the frontside walls. In this way we can have a look inside the box in
+spite of the thermal walls.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="stars.html" class="btn btn-neutral float-right" title="More information about the treatment of stars" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="imagesspectra.html" class="btn btn-neutral float-left" title="Making images and spectra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

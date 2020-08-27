@@ -1,0 +1,1400 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Making images and spectra &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="More information about the gridding" href="gridding.html" />
+    <link rel="prev" title="Line radiative transfer" href="lineradtrans.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Making images and spectra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basics-of-image-making-with-radmc-3d">Basics of image making with RADMC-3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-multi-wavelength-images">Making multi-wavelength images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-spectra">Making spectra</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-in-the-beam-when-the-spectrum-is-made">What is ‘in the beam’ when the spectrum is made?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-one-specify-more-realistic-beams">Can one specify more realistic ‘beams’?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#specifying-custom-made-sets-of-wavelength-points-for-the-camera">Specifying custom-made sets of wavelength points for the camera</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-lambdarange-and-optionally-nlam">Using <code class="docutils literal notranslate"><span class="pre">lambdarange</span></code> and (optionally) <code class="docutils literal notranslate"><span class="pre">nlam</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-allwl">Using <code class="docutils literal notranslate"><span class="pre">allwl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-loadcolor">Using <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-loadlambda">Using <code class="docutils literal notranslate"><span class="pre">loadlambda</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-iline-imolspec-etc-for-when-lines-are-included">Using <code class="docutils literal notranslate"><span class="pre">iline</span></code>, <code class="docutils literal notranslate"><span class="pre">imolspec</span></code> etc (for when lines are included)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#heads-up-in-reality-wavelength-are-actually-wavelength-bands">Heads-up: In reality wavelength are actually wavelength bands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-channel-integrated-intensities-to-improve-line-channel-map-quality">Using channel-integrated intensities to improve line channel map quality</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-issue-of-flux-conservation-recursive-sub-pixeling">The issue of flux conservation: recursive sub-pixeling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-problem-of-flux-conservation-in-images">The problem of flux conservation in images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-solution-recursive-sub-pixeling">The solution: recursive sub-pixeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-danger-with-recursive-sub-pixeling">A danger with recursive sub-pixeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recursive-sub-pixeling-in-spherical-coordinates">Recursive sub-pixeling in spherical coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-can-i-find-out-which-pixels-radmc-3d-is-recursively-refining">How can I find out which pixels RADMC-3D is recursively refining?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alternative-to-recursive-sub-pixeling">Alternative to recursive sub-pixeling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#stars-in-the-images-and-spectra">Stars in the images and spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#second-order-ray-tracing-important-information">Second order ray-tracing (Important information!)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#second-order-integration-in-spherical-coordinates-a-subtle-issue">Second order integration in spherical coordinates: a subtle issue</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visualizing-the-tau-1-surface">Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#for-public-outreach-work-local-observers-inside-the-model">For public outreach work: local observers inside the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-vantage-points-the-movie-mode">Multiple vantage points: the ‘Movie’ mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Making images and spectra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/imagesspectra.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="making-images-and-spectra">
+<span id="chap-images-spectra"></span><h1>Making images and spectra<a class="headerlink" href="#making-images-and-spectra" title="Permalink to this headline">¶</a></h1>
+<p>Much has already been said about images and spectra in the chapters on
+dust radiative transfer and line radiative transfer. But here we will
+combine all this and go deeper into this material. So presumably you
+do not need to read this chapter if you are a beginning user. But for
+more sophisticated users (or as a reference manual) this chapter may
+be useful and presents many new features and more in-depth insight.</p>
+<div class="section" id="basics-of-image-making-with-radmc-3d">
+<span id="sec-images"></span><h2>Basics of image making with RADMC-3D<a class="headerlink" href="#basics-of-image-making-with-radmc-3d" title="Permalink to this headline">¶</a></h2>
+<p>Images and spectra are typically made after the dust temperature has been
+determined using the thermal Monte Carlo run (see Chapter <a class="reference internal" href="dustradtrans.html#chap-dust-transfer"><span class="std std-ref">Dust continuum radiative transfer</span></a>).
+An image can now be made with a simple call to
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>This makes an image of the model at wavelength <span class="math notranslate nohighlight">\(\lambda=10\mu\)</span>. We refer to Section
+<span class="xref std std-ref">sec-image-out</span> for details of this file and how to interpret the
+content. See Chapter <a class="reference internal" href="pythontools.html#chap-python-analysis-tools"><span class="std std-ref">Python analysis tool set</span></a> for an extensive Python tools
+that make it easy to read and handle these files. The vantage point is
+at infinity at a default inclination of 0, i.e. pole-on view. You can
+change the vantage point:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">80</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>which now makes the image at inclination 80 degrees away from the z-axis
+(i.e. almost edge-on with respect to the x-y plane), and rotates the
+location of the observer by 30 degrees clockwise around the
+z-axis (Here clockwise is defined with the z-axis pointing toward
+you, i.e. with respect to the observer the model is rotated
+counter-clockwise around the z-axis by 30 degrees).</p>
+<div class="figure align-default" id="id1">
+<span id="fig-cameraorient"></span><a class="reference internal image-reference" href="_images/camera_orient.png"><img alt="_images/camera_orient.png" src="_images/camera_orient.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Figure depicting how the angles ‘incl’ and ‘phi’ place the camera for images
+and spectra made with RADMC-3D. The code uses a right-handed coordinate
+system. The figure shows from which direction the observer is looking at the
+system, where <span class="math notranslate nohighlight">\(i_{\mathrm{obs}}\)</span> is the ‘incl’ keyword and
+<span class="math notranslate nohighlight">\(\phi_{\mathrm{obs}}\)</span> is the ‘phi’ keyword. The
+<span class="math notranslate nohighlight">\(x_{\mathrm{image}}\)</span> and <span class="math notranslate nohighlight">\(y_{\mathrm{image}}\)</span> are the horizontal
+(left-to-right) and vertical (bottom-to-top) coordinates of the image. For
+<span class="math notranslate nohighlight">\(i_{\mathrm{obs}}=0\)</span> and <span class="math notranslate nohighlight">\(\phi_{\mathrm{obs}}=0\)</span> the
+<span class="math notranslate nohighlight">\(x_{\mathrm{image}}\)</span> aligns with the 3-D <span class="math notranslate nohighlight">\(x\)</span>-coordinate and
+<span class="math notranslate nohighlight">\(y_{\mathrm{image}}\)</span> aligns with the 3-D <span class="math notranslate nohighlight">\(y\)</span>-coordinate.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id2">
+<span id="fig-posang"></span><a class="reference internal image-reference" href="_images/posang.png"><img alt="_images/posang.png" src="_images/posang.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">This figure shows the way the camera can be rotated in the image plane using
+‘posang’. Positive ‘posang’ means that the camera is rotated clockwise, so
+the object shown is rotated counter-clockwise with respect to the image
+coordinates.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>You can also rotate the camera in the image plane with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">posang</span> <span class="mi">20</span>
+</pre></div>
+</div>
+<p>which rotates the camera by 20 degrees clockwise (i.e. the image rotates
+counter-clockwise). Figures <a class="reference internal" href="#fig-cameraorient"><span class="std std-numref">Fig. 9</span></a> and <a class="reference internal" href="#fig-posang"><span class="std std-numref">Fig. 10</span></a> show
+the definitions of all three angles. Up to now the camera always pointed to one
+single point in space: the point (0,0,0). You can change this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">posang</span> <span class="mi">20</span> <span class="n">pointau</span> <span class="mf">3.2</span> <span class="mf">0.1</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+<p>which now points the camera at the point (3.2,0.1,0.4), where the numbers are in
+units of AU. The same can be done in units of parsec:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">posang</span> <span class="mi">20</span> <span class="n">pointpc</span> <span class="mf">3.2</span> <span class="mf">0.1</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">pointau</span></code> and <code class="docutils literal notranslate"><span class="pre">pointpc</span></code> are always 3-D positions specified in
+cartesian coordinates. This remains also true when the model-grid is in
+spherical coordinates and/or when the model is 2-D (axisymmetric) or 1-D
+(spherically symmetric): 3-D positions are always specified in x,y,z.</p>
+<p>Let’s now drop the pointing again, and also forget about the <code class="docutils literal notranslate"><span class="pre">posang</span></code>, and try
+to change the number of pixels used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">npix</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>This will make an image of 100x100. You can also specify the x- and y- direction
+number of pixels separately:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">npixx</span> <span class="mi">100</span> <span class="n">npixy</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>Now let’s forget again about the number of pixels and change the size of the
+image, i.e. which zooming factor we have:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">sizeau</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>This makes an image which has 30 AU width and 30 AU height (i.e. 15 AU from the
+center in both directions). Same can be done in units of parsec</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">sizepc</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>Although strictly speaking redundant is the possibility to zoom-in right into a
+selected box in this image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">zoomau</span> <span class="o">-</span><span class="mi">10</span> <span class="o">-</span><span class="mf">4.</span> <span class="mi">0</span> <span class="mi">6</span>
+</pre></div>
+</div>
+<p>which means that we zoom in to the box given by <span class="math notranslate nohighlight">\(-10\le x\le-4\)</span> AU and
+<span class="math notranslate nohighlight">\(0\le y\le 6\)</span> AU on the original image (note that <code class="docutils literal notranslate"><span class="pre">zoomau</span> <span class="pre">-15</span> <span class="pre">15</span> <span class="pre">-15</span> <span class="pre">15</span></code>
+gives the identical result as <code class="docutils literal notranslate"><span class="pre">sizeau</span> <span class="pre">30</span></code>). This possibility is strictly
+speaking redundant, because you could also change the <code class="docutils literal notranslate"><span class="pre">pointau</span></code> and <code class="docutils literal notranslate"><span class="pre">sizeau</span></code>
+to achieve the same effect (unless you want to make a non-square image, in which
+case this is the only way). But it is just more convenient to do any zooming-in
+this way. Please note that when you make non-square images with <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> or
+<code class="docutils literal notranslate"><span class="pre">zoompc</span></code>, the code will automatically try to keep the pixels square in shape
+by adapting the number of pixels in x- or y- direction in the image and
+adjusting one of the sizes a tiny bit to assure that both x- and y- size are an
+integer times the pixel size. These are very small adjustments (and only take
+place for non-square zoom-ins).  If you want to force the code to take <em>exactly</em>
+the zoom area, and you don’t care that the pixels then become slightly
+non-square, you can force it with <code class="docutils literal notranslate"><span class="pre">truezoom</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">sizeau</span> <span class="mi">30</span> <span class="n">zoomau</span> <span class="o">-</span><span class="mi">10</span> <span class="o">-</span><span class="mf">4.</span> <span class="mi">0</span> <span class="mf">3.1415</span> <span class="n">truezoom</span>
+</pre></div>
+</div>
+<p>If you do not want the code to adjust the number of pixels in x- and y-
+direction in its attempt to keep the pixels square:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">sizeau</span> <span class="mi">30</span> <span class="n">zoomau</span> <span class="o">-</span><span class="mi">10</span> <span class="o">-</span><span class="mf">4.</span> <span class="mi">0</span> <span class="mf">3.1415</span> <span class="n">npixx</span> <span class="mi">100</span> <span class="n">npixy</span> <span class="mi">4</span> <span class="n">truepix</span>
+</pre></div>
+</div>
+<p>Now here are some special things. Sometimes you would like to see an image of
+just the dust, not including stars (for stars in the image: see Section
+<a class="reference internal" href="#sec-image-stars"><span class="std std-ref">Stars in the images and spectra</span></a>). So blend out the stars in the image, you use the
+<code class="docutils literal notranslate"><span class="pre">nostar</span></code> option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">nostar</span>
+</pre></div>
+</div>
+<p>Another special option is to get a ‘quick image’, in which the code does not
+attempt assure flux conservation in the image (see Section
+<a class="reference internal" href="#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a> for the issue of flux conservation). Doing the image
+with flux conservation is slower than if you make it without flux
+conservation. Making an image without flux conservation can be useful if you
+want to have a ‘quick look’, but is strongly discouraged for actual scientific
+use. But for a quick look you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">nofluxcons</span>
+</pre></div>
+</div>
+<p>If you want to produce images with a smoother look (and which also are more
+accurate), you can ask RADMC-3D to use second order integration for the images:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">secondorder</span>
+</pre></div>
+</div>
+<p>NOTE: The resulting intensities may be slightly different from the case when
+first order integration (default) is used, in particular if the grid is somewhat
+course and the objects of interest are optically thick.  Please consult Section
+<a class="reference internal" href="#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a> for more information.</p>
+<p><em>Important for polarized radiative transfer:</em> If you use polarized scattering,
+then you may want to creat images with polarization information in them. You
+have to tell RADMC-3D to do this by adding <code class="docutils literal notranslate"><span class="pre">stokes</span></code> to the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">stokes</span>
+</pre></div>
+</div>
+<p>The definitions of the Stokes parameters (orientation etc) can be found in
+Section <a class="reference internal" href="dustradtrans.html#sec-definitions-stokes"><span class="std std-ref">Definitions and conventions for Stokes vectors</span></a> and the format of <code class="docutils literal notranslate"><span class="pre">image.out</span></code> in this
+case can be found in Section <span class="xref std std-ref">sec-image-out</span>.</p>
+<p>Note: All the above commands call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> separately. If it needs to load a
+large model (i.e. a model with many cells), then the loading may take a long
+time. If you want to make many images in a row, this may take too much
+time. Then it is better to call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> as a child process and pass the
+above commands through the biway pipe (see Chapter <span class="xref std std-ref">chap-child-mode</span>).</p>
+</div>
+<div class="section" id="making-multi-wavelength-images">
+<span id="sec-multi-wavelength-images"></span><h2>Making multi-wavelength images<a class="headerlink" href="#making-multi-wavelength-images" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you want to have an image of an object at multiple wavelength
+simultaneously. Rather than calling RADMC-3D separately to make an image for
+each wavelength, you can make all images in one command. The only thing you have
+to do is to tell RADMC-3D which wavelengths it should take. There are various
+different ways you can tell RADMC-3D what wavelengths to take. This is described
+in detail in Section <a class="reference internal" href="#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>. Here we will focus as an
+example on just one of these methods. Type, for instance,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>This will create 10 images at once, all with the same viewing perspective, but
+at 10 wavelengths regularly distributed between 5 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m.  All images are written into a single file, <code class="docutils literal notranslate"><span class="pre">image.out</span></code> (See
+Section <span class="xref std std-ref">sec-image-out</span> for its format).</p>
+<p>In Python you simply type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="n">image</span>
+<span class="n">a</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">readImage</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and you will get all images at once. To plot one of them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">image</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">a</span><span class="p">,</span><span class="n">ifreq</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which will plot image number 3 (out of images number 0 to 9). To find out which
+wavelength this image is at:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>which will return 7.9370053 in this example.</p>
+<p>Note that all of the commands in Section <a class="reference internal" href="#sec-images"><span class="std std-ref">Basics of image making with RADMC-3D</span></a> are of course also
+applicable to multi-wavelength images, except for the <code class="docutils literal notranslate"><span class="pre">lambda</span></code> keyword, as
+this conflicts with the other method(s) of specifying the wavlengths of the
+images. Now please turn to Section <a class="reference internal" href="#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a> for more
+information on how to specify the wavelengths for the multiple wavelength
+images.</p>
+</div>
+<div class="section" id="making-spectra">
+<span id="sec-making-spectra"></span><h2>Making spectra<a class="headerlink" href="#making-spectra" title="Permalink to this headline">¶</a></h2>
+<p>The standard way of making a spectrum with <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> is in fact identical to
+making 100x100 pixel images with flux conservation (i.e. recursive sub-pixeling,
+see Section <a class="reference internal" href="#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>) at multiple frequencies. You can ask
+<code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to make a <em>spectral energy distribution (SED)</em> with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>This will put the observer at inclination 45 degrees and angle phi 30 degrees,
+and make a spectrum with wavelength points equal to those listed in the
+<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.</p>
+<p>The output will be a file called <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> (see Section
+<span class="xref std std-ref">sec-output-spectrum-out</span>).</p>
+<p>You can also make a spectrum on a set of wavelength points of your own
+choice. There are multiple ways by which you can specify the set of
+frequencies/wavelength points for which to make the spectrum: they are described
+in Section <a class="reference internal" href="#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>. If you have made your selection in
+such a way, you can make the spectrum at this wavelength grid by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="o">&lt;</span><span class="n">COMMANDS</span> <span class="n">FOR</span> <span class="n">WAVELENGTH</span> <span class="n">SELECTION</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where the last stuff is telling <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> how to select the wavelengths
+(Section <a class="reference internal" href="#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>). An example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>will make a spectrum with a regular wavelength grid between 5 and 20
+<span class="math notranslate nohighlight">\(\mu\)</span> for more details and options.</p>
+<p>The output file <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> will have the same format as for the <code class="docutils literal notranslate"><span class="pre">sed</span></code>
+command.</p>
+<p>Making a spectrum can take RADMC-3D some time, especially in the default mode,
+because it will do its best to shoot its rays to pick up all cells of the model
+(see Section <a class="reference internal" href="#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>). In particularly in spherical
+coordinates RADMC-3D can be perhaps <em>too</em> conservative (and thus slow). For
+spherical coordinates there are ways to tell RADMC-3D to be somewhat less
+careful (and thereby faster): see Section <a class="reference internal" href="#sec-rec-subpixel-spher-coord"><span class="std std-ref">Recursive sub-pixeling in spherical coordinates</span></a>.</p>
+<p>Note that you can adjust the fine-ness of the images from which the spectrum is
+calculated using <code class="docutils literal notranslate"><span class="pre">npix</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">npix</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>What this does is use a 2x2 pixel image instead of a 100x100 pixel image as the
+starting resolution. Of course, if it would really be just a 2x2 pixel image,
+the flux would be entirely unreliable and useless. However, using the above
+mentioned ‘sub-pixeling’ (see Section <a class="reference internal" href="#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>) it will
+automatically try to recursively refine these pixels until the required level of
+refinement is reached. So under normal circumstances even npix=2 is enough, and
+in earlier versions of RADMC-3D this 2x2 top-level image resolution was in fact
+used as a starting point. But for safety reasons this has now been changed to
+the standard 100x100 resolution which is also the default for normal images. If
+100x100 is not enough, try e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">npix</span> <span class="mi">400</span>
+</pre></div>
+</div>
+<p>which may require some patience.</p>
+<div class="section" id="what-is-in-the-beam-when-the-spectrum-is-made">
+<h3>What is ‘in the beam’ when the spectrum is made?<a class="headerlink" href="#what-is-in-the-beam-when-the-spectrum-is-made" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, a spectrum is simply made by making a rectangular image at
+all the wavelengths points, and integrating over these images. The resulting
+fluxes at each wavelength point is then the spectral flux at that wavelength
+point. This means that the integration area of flux for the spectrum is (a)
+rectangular and (b) of the same size at all wavelengths.</p>
+<p>So, what <em>is</em> the size of the image that is integrated over? The answer is: it
+is the same size as the default size of an image. In fact, if you make a
+spectrum with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>then this is the same as if you would type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>and read in the file <code class="docutils literal notranslate"><span class="pre">image.out</span></code> in into Python (see Section
+<a class="reference internal" href="#sec-multi-wavelength-images"><span class="std std-ref">Making multi-wavelength images</span></a>) or your favorite other data language, and
+integrate the images to obtain fluxes. In other words: the command <code class="docutils literal notranslate"><span class="pre">spectrum</span></code>
+is effectively the same as the command <code class="docutils literal notranslate"><span class="pre">image</span></code> but then instead of writing out
+an <code class="docutils literal notranslate"><span class="pre">image.out</span></code> file, it will integrate over all images and write a
+<code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> file.</p>
+<p>If you want to have a quick look at the area over which the spectrum is to be
+computed, but you don’t want to compute all the images, just type e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>then you see an image of your source at <span class="math notranslate nohighlight">\(\lambda=10\mu\)</span>m, and the
+integration area is precisely this area - at all wavelengths. Like with the
+images, you can specify your viewing area, and thus your integration area. For
+instance, by typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">zoomau</span> <span class="o">-</span><span class="mi">2</span> <span class="o">-</span><span class="mi">1</span> <span class="o">-</span><span class="mf">0.5</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+<p>makes an image of your source at <span class="math notranslate nohighlight">\(\lambda=10\mu\)</span>m at inclination 45
+degrees, and orientation 30 degrees, and zooms in at an are from -2 AU to -1 AU
+in x-direction (in the image) and from -0.5 AU to 0.5 AU in y-direction (in the
+image). To make an SED within the same integration area:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">zoomau</span> <span class="o">-</span><span class="mi">2</span> <span class="o">-</span><span class="mi">1</span> <span class="o">-</span><span class="mf">0.5</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+<p>In this case we have an SED with a ‘beam size’ of 1 AU diameter, but keep in
+mind that the ‘beam’ is square, not circular.</p>
+</div>
+<div class="section" id="can-one-specify-more-realistic-beams">
+<span id="sec-aperture"></span><h3>Can one specify more realistic ‘beams’?<a class="headerlink" href="#can-one-specify-more-realistic-beams" title="Permalink to this headline">¶</a></h3>
+<p>Clearly, a wavelength-independent beam size is unrealistic, and also the square
+beam is unrealistic. So is there a way to do this better? In reality one should
+really know exactly how the object is observed and how the flux is measured. If
+you use an interferometer, for instance, maybe your flux is meant to be the flux
+in a single synthesized beam.  For a spectrum obtained with a slit, the precise
+flux is dependent on the slit width: the wider the slit, the more signal you
+pick up, but it is a signal from a larger area.</p>
+<p>So if you really want to be sure that you know exactly what you are doing, then
+the best method is to do this youself by hand. You make multi-wavelength images:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>and integrate over the images in the way you think best mimics the actual
+observing procedure. You can do so, for instance, in Python.  See Section
+<a class="reference internal" href="#sec-multi-wavelength-images"><span class="std std-ref">Making multi-wavelength images</span></a> for more information about multi-wavelength
+images.</p>
+<p>But to get some reasonable estimate of the effect of the wavelength-dependent
+size and circular geometry of a ‘beam’, RADMC-3D allows you to make spectra with
+a simplistic circular mask, the radius of which can be specified as a function
+of wavelength in the file <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code> (see Section
+<span class="xref std std-ref">sec-aperture-info-file</span>).  This file should contain a table of mask radii
+at various wavelengths, and when making a spectrum with the command-line keyword
+<code class="docutils literal notranslate"><span class="pre">useapert</span></code> the mask radii will be found from this table by interpolation. In
+other words: the wavelength points of the <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code> file do not have
+to be the same as those used for the spectrum. But their range <em>must</em> be larger
+or equal than the range of the wavelengths used for the spectrum, because
+otherwise interpolation does not work. In the most extreme simplistic case the
+<code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code> file contains merely two values: one for a very short
+wavelength (shorter than used in the spectrum) and one for a very long
+wavelength (longer than used in the spectrum). The interpolation is then done
+double-logarithmically, so that a powerlaw is used between sampling points. So
+if you use a telescope with a given diameter for the entire range of the
+spectrum, two sampling points would indeed suffice.</p>
+<p>You can now make the spectrum with the aperture in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">useapert</span> <span class="n">dpc</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>The keyword <code class="docutils literal notranslate"><span class="pre">dpc</span> <span class="pre">100</span></code> is the distance of the observer in units of
+parsec, here assumed to be 100. This distance is necessary
+because the aperture information is given in arcseconds, and the distance is
+used to convert this is image size.</p>
+<p><em>Important note:</em> Although you specify the distance of the observer
+here, the <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> file that is produced is still normalized
+to a distance of 1 parsec.</p>
+<p>Note also that in the above example you can add any other keywords as shown
+in the examples before, as long as you add the <code class="docutils literal notranslate"><span class="pre">useapert</span></code> keyword
+and specify <code class="docutils literal notranslate"><span class="pre">dpc</span></code>.</p>
+<p>A final note: the default behavior of RADMC-3D is to use the square field
+approach described before. You can explicitly turn off the use of apertures
+(which may be useful in the child mode of RADMC-3D) with the keyword
+<code class="docutils literal notranslate"><span class="pre">noapert</span></code>, but normally this is not necessary as it is the default.</p>
+</div>
+</div>
+<div class="section" id="specifying-custom-made-sets-of-wavelength-points-for-the-camera">
+<span id="sec-set-camera-frequencies"></span><h2>Specifying custom-made sets of wavelength points for the camera<a class="headerlink" href="#specifying-custom-made-sets-of-wavelength-points-for-the-camera" title="Permalink to this headline">¶</a></h2>
+<p>If you want to make a spectrum at a special grid of wavelengths/frequencies,
+with the <code class="docutils literal notranslate"><span class="pre">spectrum</span></code> command (see Section <a class="reference internal" href="#sec-making-spectra"><span class="std std-ref">Making spectra</span></a>), you must
+tell <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> which wavelengths you want to use. Here is described how to do
+this in various ways.</p>
+<div class="section" id="using-lambdarange-and-optionally-nlam">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">lambdarange</span></code> and (optionally) <code class="docutils literal notranslate"><span class="pre">nlam</span></code><a class="headerlink" href="#using-lambdarange-and-optionally-nlam" title="Permalink to this headline">¶</a></h3>
+<p>The simplest way to choose a set of wavelength for a spectrum is with the
+<code class="docutils literal notranslate"><span class="pre">lambdarange</span></code> and (optionally) <code class="docutils literal notranslate"><span class="pre">nlam</span></code> command line options. Here is how to
+do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span>
+</pre></div>
+</div>
+<p>This will make a spectrum between 5 and 20 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m. You
+can change the number of wavelength points as well:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+<p>This will do the same, but creates a spectrum of 1000 wavelength points.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">lambdarange</span></code> and <code class="docutils literal notranslate"><span class="pre">nlam</span></code> options also for multi-wavelength
+images:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>but it is wise to choose <code class="docutils literal notranslate"><span class="pre">nlam</span></code> small, because otherwise the output file,
+containing all the images, would become too large.</p>
+</div>
+<div class="section" id="using-allwl">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">allwl</span></code><a class="headerlink" href="#using-allwl" title="Permalink to this headline">¶</a></h3>
+<p>You can also tell RADMC-3D to simply make an image at all of the wavelengths in
+the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">allwl</span>
+</pre></div>
+</div>
+<p>The keyword <code class="docutils literal notranslate"><span class="pre">allwl</span></code> stands for ‘all wavelengths’.</p>
+</div>
+<div class="section" id="using-loadcolor">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code><a class="headerlink" href="#using-loadcolor" title="Permalink to this headline">¶</a></h3>
+<p>By giving the command <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code> on the command line, <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will search
+for the file <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code>. This file contains integers selecting the
+wavelengths from the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. The file is described in
+Section <span class="xref std std-ref">sec-color-inus</span>.</p>
+</div>
+<div class="section" id="using-loadlambda">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">loadlambda</span></code><a class="headerlink" href="#using-loadlambda" title="Permalink to this headline">¶</a></h3>
+<p>By giving the command <code class="docutils literal notranslate"><span class="pre">loadlambda</span></code> on the command line, <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will
+search for the file <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code>. This file contains a list
+of wavelengths in micron which constitute the grid in wavelength. This file is
+described in Section <span class="xref std std-ref">sec-camera-wavelengths</span>.</p>
+</div>
+<div class="section" id="using-iline-imolspec-etc-for-when-lines-are-included">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">iline</span></code>, <code class="docutils literal notranslate"><span class="pre">imolspec</span></code> etc (for when lines are included)<a class="headerlink" href="#using-iline-imolspec-etc-for-when-lines-are-included" title="Permalink to this headline">¶</a></h3>
+<p>By adding for instance <code class="docutils literal notranslate"><span class="pre">iline</span> <span class="pre">3</span></code> to the command line you specify a window
+around line number 3 (by default of molecule 1). By also specifying for instance
+<code class="docutils literal notranslate"><span class="pre">imolspec</span> <span class="pre">2</span></code> you select line 3 of molecule 2. By adding <code class="docutils literal notranslate"><span class="pre">widthkms</span> <span class="pre">3</span></code> you
+specify how wide the window around the line should be (3 km/s in this
+example). With <code class="docutils literal notranslate"><span class="pre">vkms</span> <span class="pre">2</span></code> you set the window offset from line center by 2 km/s
+in this example. By adding <code class="docutils literal notranslate"><span class="pre">linenlam</span> <span class="pre">30</span></code> you set the number of wavelength
+points for this spectrum to be 30 in this example. So a complete (though
+different) example is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">iline</span> <span class="mi">2</span> <span class="n">imolspec</span> <span class="mi">1</span> <span class="n">widthkms</span> <span class="mf">6.0</span> <span class="n">vkms</span> <span class="mf">0.0</span> <span class="n">linenlam</span> <span class="mi">40</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="heads-up-in-reality-wavelength-are-actually-wavelength-bands">
+<span id="sec-wavelength-bands"></span><h2>Heads-up: In reality wavelength are actually wavelength bands<a class="headerlink" href="#heads-up-in-reality-wavelength-are-actually-wavelength-bands" title="Permalink to this headline">¶</a></h2>
+<p>In a radiative transfer program like <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> the images or
+spectral fluxes are calculated at <em>exact</em> wavelengths. This would
+correspond to making observations with infinitely narrow filters, i.e.
+filters with <span class="math notranslate nohighlight">\(\Delta\lambda=0\)</span>. This is not how real observations work.
+In reality each wavelength channel has a finite width <span class="math notranslate nohighlight">\(\Delta\lambda\)</span> and
+the measured flux (or image intensity) is an average over this range. To
+be even more precise, each wavelength channel <span class="math notranslate nohighlight">\(i\)</span> has some profile
+<span class="math notranslate nohighlight">\(\Phi_i(\lambda)\)</span> defined such that</p>
+<div class="math notranslate nohighlight">
+\[\int_0^{\infty}\Phi_i(\lambda)d\lambda=1\]</div>
+<p>For wide filters such as the standard photometric systems (e.g. UVBRI in
+the optical and JHK in the near infrared) these profiles span ranges with a
+width of the order of <span class="math notranslate nohighlight">\(\lambda\)</span> itself. Many instruments have their own
+set of filters. Usually one can download these profiles as digital tables.
+It can, under some circumstances, be important to include a treatment of
+these profiles in the model predictions. As an example take the N band. This
+is a band that includes the 10 <span class="math notranslate nohighlight">\(\mu\)</span>lambda_i` for <span class="math notranslate nohighlight">\(1\le i\le n\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of
+wavelength samples, and then compute the filter-averaged flux with:</p>
+<div class="math notranslate nohighlight">
+\[F_{band} = \int_0^{\infty}\Phi_i(\lambda)F(\lambda)d\lambda
+= \sum_{i=1}^{n} \Phi_i F_i \delta\lambda\]</div>
+<p>where <span class="math notranslate nohighlight">\(\delta\lambda\)</span> is the wavelength sampling spacing used. The same is
+true for image intensities. <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> will not do this
+automatically. You have to tell it the <span class="math notranslate nohighlight">\(\lambda_i\)</span> sampling points, let it
+make the images or fluxes, and you will then have to perform this sum
+yourself. <em>Note that this will not always be necessary!</em> In many (most?)
+cases the dust continuum is not expected to change so dramatically over the
+width of the filter that such degree of accuracy is required. So you are
+advised to think carefully: ‘do I need to take care of this or can I make
+do with a single wavelength sample for each filter?’. If the former, then
+do the hard work. If the latter: then you can save time.</p>
+<div class="section" id="using-channel-integrated-intensities-to-improve-line-channel-map-quality">
+<span id="sec-wavelength-bands-subsec"></span><h3>Using channel-integrated intensities to improve line channel map quality<a class="headerlink" href="#using-channel-integrated-intensities-to-improve-line-channel-map-quality" title="Permalink to this headline">¶</a></h3>
+<p>When you make line channel maps you may face a problem that is somehow
+related to the above issue of single-<span class="math notranslate nohighlight">\(\lambda\)</span>-sampling versus
+filter-integrated fluxes/intensities. If the model contains gas motion, then
+doppler shift will shift the line profile around. In your channel map you
+may see regions devoid of emission because the lines have doppler shifted
+out of the channel you are looking at. However, as described in Section
+<a class="reference internal" href="lineradtrans.html#sec-lines-pitfalls"><span class="std std-ref">What can go wrong with line transfer?</span></a>, if the intrinsic line width of the gas is smaller
+than the cell-to-cell velocity differences, then the channel images may look
+very distorted (they will look ‘blocky’, as if there is a bug in the
+code). Please refer to Section <a class="reference internal" href="lineradtrans.html#sec-lines-pitfalls"><span class="std std-ref">What can go wrong with line transfer?</span></a> for more details and
+updates on this important, but difficult issue. It is not a bug, but a
+general problem with ray-tracing of gas lines in models with large velocity
+gradients.</p>
+<p>As one of the <span class="math notranslate nohighlight">\(\beta\)</span>-testers of <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code>, Rahul Shetty, has
+found out, this problem can often be alleviated a lot if you treat the
+finite width of a channel. By taking multiple <span class="math notranslate nohighlight">\(\lambda_i\)</span> points in each
+wavelength channel (i.e. multiple <span class="math notranslate nohighlight">\(v_i\)</span> points in each velocity channel) and
+simply averaging the intensities (i.e. assuming a perfectly square <span class="math notranslate nohighlight">\(\Phi\)</span>
+function) and taking the width of the channels to be not smaller (preferably
+substantially wider) than the cell-to-cell velocity differences, this
+‘blocky noise’ sometimes smoothes out well. However, it is always safer to
+use the ‘doppler catching’ mode (see Section <a class="reference internal" href="lineradtrans.html#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>)
+to automatically prevent such problems (though this mode requires more
+computer memory).</p>
+</div>
+</div>
+<div class="section" id="the-issue-of-flux-conservation-recursive-sub-pixeling">
+<span id="sec-image-refinement"></span><h2>The issue of flux conservation: recursive sub-pixeling<a class="headerlink" href="#the-issue-of-flux-conservation-recursive-sub-pixeling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-problem-of-flux-conservation-in-images">
+<h3>The problem of flux conservation in images<a class="headerlink" href="#the-problem-of-flux-conservation-in-images" title="Permalink to this headline">¶</a></h3>
+<p>If an image of nx<span class="math notranslate nohighlight">\(\times\)</span>ny pixels is made simply by ray-tracing one
+single ray for each pixel, then there is the grave danger that certain regions
+with high refinement (for instance with AMR in cartesian coordinates, or near
+the center of the coordinate system for spherical coordinates) are not properly
+‘picked up’. An example: suppose we start with a circumstellar disk ranging from
+0.1 AU out to 1000 AU. Most of the near infrared flux comes from the very inner
+regions near 0.1 AU. If an image of the disk is made with 100x100 pixels and
+image half-size of 1000 AU, then none of the pixels in fact pass through these
+very bright inner regions, for lack of spatial resolution.  The problem is then
+that the image, when integrated over the entire image, does not have the correct
+flux. What <em>should</em> be is that the centermost pixels contain the flux from this
+innermost region, even if these pixels are much larger than the entire bright
+region. In other words, the intensity of these pixels must represent the average
+intensity, averaged over the entire pixel. Strictly speaking one should trace an
+infinite continuous 2-D series of rays covering the entire pixel and then
+average over all these rays; but this is of course not possible. In practice we
+should find a way to estimate the average intensity with only a finite number of
+rays.</p>
+</div>
+<div class="section" id="the-solution-recursive-sub-pixeling">
+<span id="sec-recursive-subpixeling"></span><h3>The solution: recursive sub-pixeling<a class="headerlink" href="#the-solution-recursive-sub-pixeling" title="Permalink to this headline">¶</a></h3>
+<p>In RADMC-3D what we do is to use some kind of ‘adaptive grid refinement’ of the
+pixels of the image. For each pixel in the image the intensity is computed
+through a call to a subroutine called <code class="docutils literal notranslate"><span class="pre">camera_compute_one_pixel()</span></code>. In this
+subroutine a ray-tracing is performed for a ray that ends right in the middle of
+our pixel. During the ray-tracing, however, we check if we pass regions in the
+model grid that have grid cells with sizes <span class="math notranslate nohighlight">\(S\)</span> that are smaller than the
+pixel size divided by some factor <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> (where pixel size is,
+like the model grid size S itself, measured in centimeters. If this is found
+<em>not</em> to be true, then the pixel size was apparently ok, and the intensity
+resulting from the ray-tracing is now returned as the final intensity of this
+pixel. If, however, this condition <em>is</em> found to be true, then the result of
+this ray is rejected, and instead 2x2 sub-pixels are computed by calling the
+<code class="docutils literal notranslate"><span class="pre">camera_compute_one_pixel()</span></code> subroutine recursively. We thus receive the
+intensity of each of these four sub-pixels, and we return the average of these 4
+intensities.</p>
+<p>Note, by the way, that each of these 2x2 subpixels may be split even further
+into 2x2 sub-pixels etc until the desired resolution is reached, i.e. until
+the condition that <span class="math notranslate nohighlight">\(S\)</span> is larger or equal to the pixel size divided by
+<span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> is met. By this recursive calling, we always end up at
+the top level with the average intesity of the entire top-level pixel.  This
+method is very similar to quad-tree mesh refinement, but instead of
+retaining and returning the entire complex mesh structure to the user, this
+method only returns the final average intensity of each (by definition top
+level) pixel in the image. So the recursive sub-pixeling technique described
+here is all done internally in the RADMC-3D code, and the user will not
+really notice anything except that this sub-pixeling can of course be
+computationally more expensive than if such a method is not used.</p>
+<p>Note that the smaller we choose <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> the more accurate our
+image becomes. In the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file the value of <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span>
+can be set by setting the variable <code class="docutils literal notranslate"><span class="pre">camera_refine_criterion</span></code> to the
+value you want <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> to be. Not setting this variable means
+RADMC-3D will use the default value which is reasonable as a choice (default
+is 1.0). The smaller you set <code class="docutils literal notranslate"><span class="pre">camera_refine_criterion</span></code>, the
+more accurate and reliable the results become (but the heavier the calculation
+becomes, too).</p>
+<p><em>NOTE:</em> The issue of recursive sub-pixeling becomes tricky when stars
+are treated as spheres, i.e. non-point-like (see Section
+<a class="reference internal" href="#sec-image-stars"><span class="std std-ref">Stars in the images and spectra</span></a> and Chapter <a class="reference internal" href="stars.html#chap-stars"><span class="std std-ref">More information about the treatment of stars</span></a>).</p>
+</div>
+<div class="section" id="a-danger-with-recursive-sub-pixeling">
+<h3>A danger with recursive sub-pixeling<a class="headerlink" href="#a-danger-with-recursive-sub-pixeling" title="Permalink to this headline">¶</a></h3>
+<p>It is useful to keep in mind that for each pixel the recursive sub-pixeling
+is triggered if the ray belonging to that pixel encounters a cell that is
+smaller than the pixel size. This <em>normally</em> works well if
+<span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> is chosen small enough. But if there exist regions in the
+model where one big non-refined cell lies adjacent to a cell that is
+refined, say, 4 times (meaning the big cell has neighbors that are 16 times
+smaller!), then if the ray of the pixel just happens to miss the small cells
+and only passes the big cell, it won’t ‘notice’ that it may need to refine
+to correctly capture the tiny neighboring cells accurarely.</p>
+<p>Such a problem only happens if refinement levels jump by more than 1 between
+adjacent cells. If so, then it may be important to make <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span>
+correspondingly smaller (by setting <code class="docutils literal notranslate"><span class="pre">camera_refine_criterion</span></code> in
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> to the desired value). A bit of experimentation may
+be needed here.</p>
+</div>
+<div class="section" id="recursive-sub-pixeling-in-spherical-coordinates">
+<span id="sec-rec-subpixel-spher-coord"></span><h3>Recursive sub-pixeling in spherical coordinates<a class="headerlink" href="#recursive-sub-pixeling-in-spherical-coordinates" title="Permalink to this headline">¶</a></h3>
+<p>In spherical coordinates the recursive sub-pixeling has a few issues that
+you may want to be aware of. First of all, in 1-D spherical coordinates each
+cell is in fact a shell of a certain thickness. In 2-D spherical coordinates
+cells are rings. In both cases the cells are not just local boxes, but have
+2 or 1 (respectively) extended dimensions. RADMC-3D takes care to still
+calculate properly how to define the recursive sub-pixeling scale. But
+for rays that go through the central cavity of the coordinate
+system there is no uniquely defined pixel resolution to take. The
+global variable <code class="docutils literal notranslate"><span class="pre">camera_spher_cavity_relres</span></code> (with default
+value 0.05) defines such a relative scale. You can change this value
+in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
+<p>A second issue is when the user introduces extreme ‘separable refinement’
+(see Section <a class="reference internal" href="gridding.html#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a> and Figure
+<code class="xref std std-numref docutils literal notranslate"><span class="pre">fig-spher-sep-ref</span></code>-right) in the <span class="math notranslate nohighlight">\(R\)</span>, <span class="math notranslate nohighlight">\(\Theta\)</span> or <span class="math notranslate nohighlight">\(\Phi\)</span>
+coordinate. This may, for instance, be necessary near the inner edge of a
+dusty disk model in order to keep the first cell optically thin. This may
+lead, however, to extremely deep sub-pixeling for rays that skim the inner
+edge of the grid. This leads to a huge slow-down of the ray-tracing process
+although it is likely not to give much a different result. By default
+RADMC-3D plays it safe. If you wish to prevent this excessive sub-pixeling
+(at your own risk) then you can set the following variables in the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_min_drr</span></code> which sets a lower limit to the <span class="math notranslate nohighlight">\(\Delta
+R/R\)</span> taken into account for the sub-pixeling (region ‘B’ in Figure
+<code class="xref std std-numref docutils literal notranslate"><span class="pre">fig-spher-sep-ref</span></code>-left). The default is 0.003. By setting this to
+e.g. 0.03 you can already get a strong speed-up for models with strong
+<span class="math notranslate nohighlight">\(R\)</span>-refinement.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code> which sets a lower limit to
+<span class="math notranslate nohighlight">\(\Delta\Theta\)</span> (region ‘C’ in Figure <code class="xref std std-numref docutils literal notranslate"><span class="pre">fig-spher-sep-ref</span></code>-left)
+and/or <span class="math notranslate nohighlight">\(\Delta\Phi\)</span>. The default is 0.05. By setting this to e.g. 0.1 you
+can already get some speed-up for models with e.g. strong
+<span class="math notranslate nohighlight">\(\Theta\)</span>-refinement.</p></li>
+</ul>
+<p>It is important to keep in mind that the smaller you make this number, the
+more accurate and reliable the results. It may be prudent to experiment with
+smaller values of <code class="docutils literal notranslate"><span class="pre">camera_min_drr</span></code> for models with extremely
+optically thick inner edges, e.g. a protoplanetary disk with an abrupt
+inner edge and a high dust surface density. For a disk model with a very
+thin vertical extent it will be important to choose small values of
+<code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code>, perhaps even smaller than the default
+value.</p>
+<p><em>For your convenience:</em> Because it can be sometimes annoying to always have to
+play with the <code class="docutils literal notranslate"><span class="pre">camera_min_drr</span></code>, <code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code> and
+<code class="docutils literal notranslate"><span class="pre">camera_spher_cavity_relres</span></code> values, and since it is usually (!) not really
+necessary to have such extremely careful subpixeling, RADMC-3D now has a new
+command line option called <code class="docutils literal notranslate"><span class="pre">sloppy</span></code>. This command-line option will set:
+<code class="docutils literal notranslate"><span class="pre">camera_min_drr=0.1</span></code>, <code class="docutils literal notranslate"><span class="pre">camera_min_dangle=0.1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">camera_spher_cavity_relres=0.1</span></code>. So if you have an image like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">sloppy</span>
+</pre></div>
+</div>
+<p>then it will make the image with moderate, but not excessive subpixeling.
+This may, under some circumstances, speed up the image-making in spherical
+coordinates by a large factor. Similar for making spectra. For instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">sloppy</span>
+</pre></div>
+</div>
+<p>can be, under some circumstances, very much faster than without the sloppy
+option.</p>
+<p>Note,however, that using the <code class="docutils literal notranslate"><span class="pre">sloppy</span></code> option and/or setting the values of
+<code class="docutils literal notranslate"><span class="pre">camera_min_drr</span></code>, <code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code> and <code class="docutils literal notranslate"><span class="pre">camera_spher_cavity_relres</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file by hand, {bf is all at your own risk!} It is always
+prudent to check your results, now and then, against a non-sloppy calculation.</p>
+</div>
+<div class="section" id="how-can-i-find-out-which-pixels-radmc-3d-is-recursively-refining">
+<h3>How can I find out which pixels RADMC-3D is recursively refining?<a class="headerlink" href="#how-can-i-find-out-which-pixels-radmc-3d-is-recursively-refining" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes you notice that the rendering of an image or spectrum takes much
+more time than you expected. When recursive sub-pixeling is used for
+imaging, RADMC-3D will give diagnostic information about how many more
+pixels it has rendered than the original image resolution. This factor
+can give some insight if extreme amount of sub-pixeling refinement has
+been used. But it does not say where in the image this occurs. If you want
+to see exactly which pixels and subpixels RADMC-3D has rendered for some
+image, you can use the following command-line option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">diag_subpix</span>
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">diag_subpix</span></code> option will tell RADMC-3D to write a
+file called <code class="docutils literal notranslate"><span class="pre">subpixeling_diagnostics.out</span></code> which contains four
+columns: One for the x-coordinate of the (sub-)pixel, one for the
+y-coordinate of the (sub-)pixel, one for the x-width of the (sub-)pixel
+and a final one for the y-width of the (sub-)pixel. In Python you can
+then use, for instance, the Numpy <code class="docutils literal notranslate"><span class="pre">loadtxt</span></code> method to
+read these columns.</p>
+<p>If this diagnostic shows that the subpixeling is excessive (which can
+particularly happen in spherical coordinates) then you might want to
+read Section <a class="reference internal" href="#sec-rec-subpixel-spher-coord"><span class="std std-ref">Recursive sub-pixeling in spherical coordinates</span></a>.</p>
+</div>
+<div class="section" id="alternative-to-recursive-sub-pixeling">
+<h3>Alternative to recursive sub-pixeling<a class="headerlink" href="#alternative-to-recursive-sub-pixeling" title="Permalink to this headline">¶</a></h3>
+<p>As an alternative to using this recursive sub-pixeling technique to ensure
+flux conservation for images, one can simply enhance the spatial resolution
+of the image, for instance</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">npix</span> <span class="mi">400</span>
+</pre></div>
+</div>
+<p>Or even 800 or so. This has the clear advantage that the user gets the complete
+information of the details in the image (while in the recursive sub-pixeling
+technique only the averages are retained). The clear disadvantages are that
+one may need rediculously high-resolution images (i.e. large data sets) to
+resolve all the details and one may waste a lot of time rendering parts of
+the image which do not need that resolution. The latter is typically an
+issue when images are rendered from models that use AMR techniques.</p>
+</div>
+</div>
+<div class="section" id="stars-in-the-images-and-spectra">
+<span id="sec-image-stars"></span><h2>Stars in the images and spectra<a class="headerlink" href="#stars-in-the-images-and-spectra" title="Permalink to this headline">¶</a></h2>
+<p>Per default, stars are still treated as point sources. That means that none of
+the rays of an image can be intercepted by a star. Starlight is included in each
+image as a post-processing step. First the image is rendered without the stars
+(though with of course all the emission of dust, lines etc <em>induced</em> by the
+stars) and then for each star a ray tracing is done from the star to the
+observer (where only extinction is taken into account, because the emission is
+already taken care of) and the flux is then added to the image at the correct
+position. You can switch off the inclusion of the stars in the images or spectra
+with the <code class="docutils literal notranslate"><span class="pre">nostar</span></code> command line option.</p>
+<p>However, as of version 0.17, stars can also be treated as the finite-size
+spheres they are. This is done with setting <code class="docutils literal notranslate"><span class="pre">istar_sphere</span> <span class="pre">=</span> <span class="pre">1</span></code> in
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>. However, this mode can slow down the code a bit or
+even substantially. And it may still be partly under development, so the
+code may stop if it is required to handle a situation it cannot handle yet.
+See Chapter <a class="reference internal" href="stars.html#chap-stars"><span class="std std-ref">More information about the treatment of stars</span></a> for details.</p>
+</div>
+<div class="section" id="second-order-ray-tracing-important-information">
+<span id="sec-second-order"></span><h2>Second order ray-tracing (Important information!)<a class="headerlink" href="#second-order-ray-tracing-important-information" title="Permalink to this headline">¶</a></h2>
+<p>Ideally we would like to assure that the model grid is sufficiently finely
+spaced everywhere. But in many cases of interest one does not have this
+luxury. One must live with the fact that, for memory and/or computing time
+reasons, the grid is perhaps a bit coarser than would be ideal. In such a
+case it becomes important to consider the ‘order’ of integration of the
+transfer equation. By default, for images and spectra, RADMC-3D uses first
+order integration: The source term and the opacity in each cell are assumed
+to be constant over the cell. This is illustrated in
+Fig. <a class="reference internal" href="#fig-cellcenter"><span class="std std-numref">Fig. 11</span></a>.</p>
+<div class="figure align-default" id="id3">
+<span id="fig-cellcenter"></span><a class="reference internal image-reference" href="_images/cellcenter.pdf"><img alt="_images/cellcenter.pdf" src="_images/cellcenter.pdf" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Pictographic representation of the <em>first order</em> integration of the transfer
+equation along a ray (red line with arrow head) through an AMR grid (black
+lines).  The grid cuts the ray into ray segments A, B, C and D. At the bottom
+it is shown how the integrands are assumed to be along these four segments.
+The emissivity function <span class="math notranslate nohighlight">\(j_\nu\)</span> and extinction function
+<span class="math notranslate nohighlight">\(\alpha_\nu\)</span> are constant within each cell and thus constant along each
+ray segment.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>The integration over each cell proceeds according to the following formula:</p>
+<div class="math notranslate nohighlight">
+\[I_{\mathrm{result}} = I_{\mathrm{start}}e^{-\tau} + (1-e^{-\tau})S\]</div>
+<p>where <span class="math notranslate nohighlight">\(S=j/\alpha\)</span> is the source function, assumed constant throughout the
+cell, <span class="math notranslate nohighlight">\(\tau=\alpha\,\Delta s\)</span> is the optical depth along the path that the
+ray makes through the cell, and <span class="math notranslate nohighlight">\(I_{\mathrm{start}}\)</span> is the intensity upon
+entering the cell. This is the default used by RADMC-3D because the Monte
+Carlo methods also treat cells as having constant properties over each
+cell. This type of simple integration is therefore the closest to how the
+Monte Carlo methods (thermal MC, scattering MC and mono MC) ‘see’ the
+grid. However, with first order integration the images look somewhat
+‘blocky’: you can literally see the block structure of the grid cells in
+the image, especially if you make images at angles aligned with the
+grid. For objects with high optical depths you may even see grid patterns in
+the images.</p>
+<p>RADMC-3D can also use second order integration for its images and spectra.
+This is illustrated in Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>.</p>
+<div class="figure align-default" id="id4">
+<span id="fig-cellcorner"></span><a class="reference internal image-reference" href="_images/cellcorner.pdf"><img alt="_images/cellcorner.pdf" src="_images/cellcorner.pdf" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Pictographic representation of the <em>second order</em> integration of the transfer
+equation along a ray (red line with arrow head) through an AMR grid (black
+lines). The grid cuts the ray into ray segments A, B, C and D. At the bottom
+it is shown how the integrands are assumed to be along these four segments.
+The emissivity function <span class="math notranslate nohighlight">\(j_\nu\)</span> and extinction function
+<span class="math notranslate nohighlight">\(\alpha_\nu\)</span> are given at the cell corners (solid blue circles), and
+linearly interpolated from the cell corners to the locations where the ray
+crosses the cell walls (open blue circles).  Then, along each ray segment the
+emissivity and extinction functions are assumed to be linear functions, so
+that the integration result is quadratic.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<p>This is done with a simple <code class="docutils literal notranslate"><span class="pre">secondorder</span></code> option added on the
+command line, for instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">secondorder</span>
+</pre></div>
+</div>
+<p>The integration now follows the formula (Olson et al. 1986):</p>
+<div class="math notranslate nohighlight">
+\[I_{\mathrm{result}} = I_{\mathrm{start}}e^{-\tau} + (1-e^{-\tau}-\beta) S_{\mathrm{start}}
++ \beta S_{\mathrm{end}}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\beta = \frac{\tau-1+e^{-\tau}}{\tau}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\tau = \frac{\alpha_{\mathrm{start}}+\alpha_{\mathrm{end}}}{2}\Delta s\]</div>
+<p>For <span class="math notranslate nohighlight">\(\tau\rightarrow 0\)</span> we have the limit <span class="math notranslate nohighlight">\(\beta\rightarrow \tau/2\)</span>,
+while for <span class="math notranslate nohighlight">\(\tau\rightarrow \infty\)</span> we have the limit
+<span class="math notranslate nohighlight">\(\beta\rightarrow 1\)</span>.</p>
+<p>The values of <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(S\)</span> etc., at the ‘start’ position are
+obtained at the cell interface where the ray enters the cell. The values at the
+‘end’ position are obtained at the cell interface where the ray leaves the cell.
+The above formulas represent the exact solution of the transfer equation along
+this ray-section if we assume that all variables are linear functions between
+the ‘start’ and ‘end’ positions.</p>
+<p>The next question is: How do we determine the physical variables at the
+cell interfaces (‘start’ and ‘end’)? After all, initially all variables
+are stored for each cell, not for each cell interface or cell corner. The
+way that RADMC-3D does this is:</p>
+<ul class="simple">
+<li><p>First create a ‘grid of cell corners’, which we call the <em>vertex
+grid</em> (see the solid blue dots in
+Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>). The cell grid already
+implicitly defines the locations of all the cell corners, but these
+corners are, by default, not explicitly listed in computer memory. When
+the <code class="docutils literal notranslate"><span class="pre">secondorder</span></code> option is given, however, RADMC-3D will
+explicitly find all cell corners and assign an identity (a unique integer
+number) to each one of them. NOTE: Setting up this vertex grid costs
+computer memory!</p></li>
+<li><p>At each vertex (cell corner) the physical variables of the (up to) 8
+cells touching the vertex are averaged with equal weight for each cell.
+This now maps the physical variables from the cells to the vertices.</p></li>
+<li><p>Whenever a ray passes through a cell wall, the physical variables of
+the 4 vertices of the cell wall are interpolated bilinearly onto the point
+where the ray passes through the cell wall (see the open blue circles in
+Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>). This gives the values at the
+‘start’ or ‘end’ points.</p></li>
+<li><p>Since the current ‘end’ point will be the ‘start’ point for the
+next ray segment, the physical variables need only be obtained once per
+cell wall, as they can be recycled for the next ray segment. Each set of
+physical variables will thus be used twice: once for the ‘end’ and once
+for the ‘start’ of a ray segment (except of course at the very beginning
+and very end of the ray).</p></li>
+</ul>
+<div class="figure align-default" id="id5">
+<span id="fig-effect-of-second-order-integration-4-1"></span><a class="reference internal image-reference" href="_images/simple_4_1st.png"><img alt="_images/simple_4_1st.png" src="_images/simple_4_1st.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
+seen at inclination 4 degrees.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id6">
+<span id="fig-effect-of-second-order-integration-60-1"></span><a class="reference internal image-reference" href="_images/simple_60_1st.png"><img alt="_images/simple_60_1st.png" src="_images/simple_60_1st.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
+seen at inclination 60 degrees.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id7">
+<span id="fig-effect-of-second-order-integration-4-2"></span><a class="reference internal image-reference" href="_images/simple_4_2nd.png"><img alt="_images/simple_4_2nd.png" src="_images/simple_4_2nd.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
+seen at inclination 4 degrees.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id8">
+<span id="fig-effect-of-second-order-integration-60-2"></span><a class="reference internal image-reference" href="_images/simple_60_2nd.png"><img alt="_images/simple_60_2nd.png" src="_images/simple_60_2nd.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
+seen at inclination 60 degrees.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p>If you compare the images or spectra obtained with first order integration
+(default, see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 15</span></a> and
+<a class="reference internal" href="#fig-effect-of-second-order-integration-60-2"><span class="std std-numref">Fig. 16</span></a>) or second order integration
+(see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 15</span></a> and
+<a class="reference internal" href="#fig-effect-of-second-order-integration-60-2"><span class="std std-numref">Fig. 16</span></a>) you see that with the first
+order method you still see the cell structure of the grid very much.  Also
+numerical noise in the temperature due to the Monte Carlo statistics is much
+more prominent in the first order method. The second order method makes much
+smoother results.</p>
+<p>For line transfer the second order mode can be even improved with the
+‘doppler catching method’, see Section <a class="reference internal" href="lineradtrans.html#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>.</p>
+<p><em>WARNING:</em> Second order integration for the images and spectra from dust
+continuum emission can in some cases lead to overestimation of the fluxes.
+This is because the dust temperature calculated using the thermal Monte
+Carlo algorithm assumes the temperature to be constant over each cell. The
+second order integration for the images and spectra will, however, smear the
+sources a bit out. This then leads to ‘leaking’ of emissivity from
+optically thick cells into optically thin cells. These optically thin cells
+can then become too bright.</p>
+<div class="section" id="second-order-integration-in-spherical-coordinates-a-subtle-issue">
+<span id="sec-secord-spher"></span><h3>Second order integration in spherical coordinates: a subtle issue<a class="headerlink" href="#second-order-integration-in-spherical-coordinates-a-subtle-issue" title="Permalink to this headline">¶</a></h3>
+<p>The second order integration (as well as the doppler-catching method, see
+Section <a class="reference internal" href="lineradtrans.html#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>) work in cartesian coordinates as well as
+in spherical coordinates. In spherical coordinates in 1-D (spherical
+symmetry) or 2-D (axial symmetry) there is, however, a very subtle issue
+that can lead to inaccuracies, in particular with line transfer. The problem
+arises in the cell where a ray reaches its closest approach to the origin of
+the coordinate system (or closest approach to the symmetry axis). There the
+ray segment can become fairly long, and its angle with respect to the
+symmetry axis and/or the origin can drastically change within this single
+ray-segment. This can sometimes lead to inaccuracies.</p>
+<p>As of version 0.41 of <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> a new global variable is
+introduced, <code class="docutils literal notranslate"><span class="pre">camera_maxdphi</span></code>, which has as default the value 0.1,
+but which can be set to another value in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.
+It sets the maximum angle (in radian) which a ray segment in spherical
+coordinates is allowed to span with respect to the origin of the coordinate
+system. If a ray segment spans an angle larger than that, the ray-segment
+is cut into smaller segments. This means that in that cell the ray will
+consist of more than one segment.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">camera_maxdphi=0</span></code> this segment cutting is switched off (for
+backward compatibility to earlier versions of <code class="docutils literal notranslate"><span class="pre">RADMC-3d</span></code>).</p>
+</div>
+</div>
+<div class="section" id="visualizing-the-tau-1-surface">
+<span id="sec-tausurf"></span><h2>Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface<a class="headerlink" href="#visualizing-the-tau-1-surface" title="Permalink to this headline">¶</a></h2>
+<p>To be able to interpret the outcome of the radiative transfer calculations it is
+often useful to find the spatial location of the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface (or, for
+that matter, the <span class="math notranslate nohighlight">\(\tau=0.1\)</span> surface or any <span class="math notranslate nohighlight">\(\tau=\tau_s\)</span> surface) as
+seen from the vantage point of the observer. This makes it easier to understand
+where the emission comes from that you are seeing. RADMC-3D makes this
+possible. Thanks to Peter Schilke and his team, for suggesting this useful
+option.</p>
+<p>The idea is to simply replace the command-line keyword <code class="docutils literal notranslate"><span class="pre">image</span></code> with <code class="docutils literal notranslate"><span class="pre">tausurf</span>
+<span class="pre">1.0</span></code>. The <span class="math notranslate nohighlight">\(1.0\)</span> stands for <span class="math notranslate nohighlight">\(\tau_s=1.0\)</span>, meaning we will find the
+<span class="math notranslate nohighlight">\(\tau=1.0\)</span> surface. Example: Normally you might make an image with
+e.g. the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>Now you make a <span class="math notranslate nohighlight">\(\tau=1\)</span> surface with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">tausurf</span> <span class="mf">1.0</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>or a <span class="math notranslate nohighlight">\(\tau=0.2\)</span> surface with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">tausurf</span> <span class="mf">0.2</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>The image output file <code class="docutils literal notranslate"><span class="pre">image.out</span></code> will now contain, for each pixel, the
+position along the ray in centimeters where <span class="math notranslate nohighlight">\(\tau=\tau_s\)</span>. The zero point
+is the surface perpendicular to the direction of observation, going through the
+pointing position (which is, by default <span class="math notranslate nohighlight">\((0,0,0)\)</span>, but see the description
+of <code class="docutils literal notranslate"><span class="pre">pointau</span></code> in Section <a class="reference internal" href="#sec-images"><span class="std std-ref">Basics of image making with RADMC-3D</span></a>). Positive values mean that the
+surface is closer to the observer than the plane, while negative values mean
+that the surface is behind the plane.</p>
+<p>If, for some pixel, there exists no <span class="math notranslate nohighlight">\(\tau=\tau_s\)</span> point because the total
+optical depth of the object for the ray belonging to that pixel is less than
+<span class="math notranslate nohighlight">\(\tau_s\)</span>, then the value will be -1e91.</p>
+<p>You can also get the 3-D (i.e. <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>) positions of
+each of these points on the <span class="math notranslate nohighlight">\(\tau=\tau_s\)</span> surface. They are stored in the
+file <code class="docutils literal notranslate"><span class="pre">tausurface_3d.out</span></code>.</p>
+<p>Note that if you make multi-frequency images, you will also get multi-frequency
+<span class="math notranslate nohighlight">\(\tau=\tau_s\)</span> surfaces. This can be particularly useful if you want to
+understand the sometimes complex origins of the shapes of molecular/atomic
+lines.</p>
+<p>You can also use this option in the local observer mode, though I am not sure
+how useful it is. Note, however, that in that mode the value stored in the
+<code class="docutils literal notranslate"><span class="pre">image.out</span></code> file will describe the distance in centimeter to the local
+observer. The larger the value, the farther away from the observer (contrary to
+the case of observer-at-infinity).</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">tausurf</span> <span class="mi">1</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-public-outreach-work-local-observers-inside-the-model">
+<span id="sec-local-observer"></span><h2>For public outreach work: local observers inside the model<a class="headerlink" href="#for-public-outreach-work-local-observers-inside-the-model" title="Permalink to this headline">¶</a></h2>
+<p>While it may not be very useful for scientific purposes (though there may be
+exceptions), it is very nice for public outreach to be able to view a model
+from the inside, as if you, as the observer, were standing right in the
+middle of the model cloud or object. One can then use physical or
+semi-physical or even completely ad-hoc opacities to create the right
+‘visual effects’. RADMC-3D has a viewing mode for this purpose. You can use
+different projections:</p>
+<ul>
+<li><p><em>Projection onto flat screen:</em></p>
+<p>The simplest one is a projection onto a screen in front (or behind) the
+point-location of the observer. This gives an image that is good for viewing
+in a normal screen. This is the default (<code class="docutils literal notranslate"><span class="pre">camera_localobs_projection=1</span></code>).</p>
+</li>
+<li><p><em>Projection onto a sphere:</em></p>
+<p>Another projection is a projection onto a sphere, which allow fields of view
+that are equal or larger than <span class="math notranslate nohighlight">\(2\pi\)</span> of the sky. It may be useful for
+projection onto an OMNIMAX dome. This is projection mode
+<code class="docutils literal notranslate"><span class="pre">camera_localobs_projection=2</span></code>.</p>
+</li>
+</ul>
+<p>You can set the variable <code class="docutils literal notranslate"><span class="pre">camera_localobs_projection</span></code> to 1 or 2 by adding on
+the command line <code class="docutils literal notranslate"><span class="pre">projection</span> <span class="pre">2</span></code> (or 1), or by setting it in the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> as a line <code class="docutils literal notranslate"><span class="pre">camera_localobs_projection</span> <span class="pre">=</span> <span class="pre">2</span></code> (or 1).</p>
+<p>To use the local projection mode you must specify the following variables
+on the command line:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sizeradian</span></code>:
+This sets the size of the image in radian (i.e. the entire width of the
+image). Setting this will make the image width and height the same (like
+setting <code class="docutils literal notranslate"><span class="pre">sizeau</span></code> in the observer-at-infinity mode, see Section
+<a class="reference internal" href="#sec-images"><span class="std std-ref">Basics of image making with RADMC-3D</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zoomradian</span></code>:
+<em>Instead</em> of <code class="docutils literal notranslate"><span class="pre">sizeradian</span></code> you can also specify <code class="docutils literal notranslate"><span class="pre">zoomradian</span></code>, which is the
+local-observer version of <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> or``zoompc`` (see Section
+<a class="reference internal" href="#sec-images"><span class="std std-ref">Basics of image making with RADMC-3D</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">posang</span></code>:
+The position angle of the camera. Has the same meaning as in the
+observer-at-infinity mode.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">locobsau</span></code> or <code class="docutils literal notranslate"><span class="pre">locobspc</span></code>:
+Specify the 3-D location of the local observer inside the model in units
+of AU or parsec. This requires 3 numbers which are the x, y and z
+positions (also when using spherical coordinates for the model setup:
+these are still the cartesian coordinates).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pointau</span></code> or <code class="docutils literal notranslate"><span class="pre">pointpc</span></code>:
+These have the same meaning as in the observer-at-infinity model.  They
+specify the 3-D location of the point of focus for the camera (to which
+point in space is the camera pointing) in units of AU or parsec. This
+requires 3 numbers which are the x, y and z positions (also when using
+spherical coordinates for the model setup: these are still the cartesian
+coordinates).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zenith</span></code> (optional):
+For Planetarium Dome projection (<code class="docutils literal notranslate"><span class="pre">camera_localobs_projection=2</span></code>) it is
+useful to make the pointing direction not at the zenith (because then the
+audience will always have to look straight up) but at, say, 45 degrees. You
+can facilitate this (optionally) by adding the command line option <code class="docutils literal notranslate"><span class="pre">zenith</span>
+<span class="pre">45</span></code> for a 45 degrees offset. This means that if you are sitting under the
+OMNIMAX dome, then the camera pointing (see <code class="docutils literal notranslate"><span class="pre">pointau</span></code> above) is 45 degrees
+in front of you rather than at the zenith. This option is highly recommended
+for dome projections, but you may need to play with the angle to see which
+gives the best effect.</p></li>
+</ul>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">sizeradian</span></code>, <code class="docutils literal notranslate"><span class="pre">zoomradian</span></code>, <code class="docutils literal notranslate"><span class="pre">locobsau</span></code> or <code class="docutils literal notranslate"><span class="pre">locobspc</span></code> on the
+command line automatically switches to the local observer mode (i.e. there is no
+need for an extra keyword setting the local observer mode on). To switch back to
+observer-at-infinity mode, you specify e.g. <code class="docutils literal notranslate"><span class="pre">incl</span></code> or <code class="docutils literal notranslate"><span class="pre">phi</span></code> (the direction
+toward which the observer is located in the observer-at-infinity mode). Note
+that if you accidently specify both e.g. <code class="docutils literal notranslate"><span class="pre">sizeradian</span></code> and <code class="docutils literal notranslate"><span class="pre">incl</span></code>, you might
+end up with the wrong mode, because the mode is set by the last relevant entry
+on the command line.</p>
+<p>The images that are produced using the local observer mode will have the x- and
+y- pixel size specifications in radian instead of cm. The first line of an image
+(the format number of the file) contains then the value 2 (indicating local
+observer image with pixel sizes in radian) instead of 1 (which indicates
+observer-at-infinity image with pixel sizes in cm).</p>
+<p><em>NOTE: For technical reasons dust scattering is (at least for now) not included
+in the local observer mode! It is discouraged to use the local observer mode for
+scientific purposes.</em></p>
+</div>
+<div class="section" id="multiple-vantage-points-the-movie-mode">
+<span id="sec-movie-mode"></span><h2>Multiple vantage points: the ‘Movie’ mode<a class="headerlink" href="#multiple-vantage-points-the-movie-mode" title="Permalink to this headline">¶</a></h2>
+<p>It can be useful, both scientifically and for public outreach, to make movies of
+your model, for instance by showing your model from different vantage points or
+by ‘travelling’ through the model using the local observer mode (Section
+<a class="reference internal" href="#sec-local-observer"><span class="std std-ref">For public outreach work: local observers inside the model</span></a>). For a movie one must make many frames, each frame
+being an image created by RADMC-3D’s image capabilities. If you call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>
+separately for each image, then often the reading of all the large input files
+takes up most of the time. One way to solve this is to call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in
+‘child mode’ (see Chapter <span class="xref std std-ref">chap-child-mode</span>). But this is somewhat
+complicated and cumbersome. A better way is to use RADMC-3D’s ‘movie mode’. This
+allows you to ask RADMC-3D to make a sequence of images in a single call. The
+way to do this is to call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> with the <code class="docutils literal notranslate"><span class="pre">movie</span></code> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">movie</span>
+</pre></div>
+</div>
+<p>This will make <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to look for a file called <code class="docutils literal notranslate"><span class="pre">movie.inp</span></code> which
+contains the information about each image it should make. The structure of the
+<code class="docutils literal notranslate"><span class="pre">movie.inp</span></code> file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>
+<span class="n">nframes</span>
+<span class="o">&lt;&lt;</span><span class="n">information</span> <span class="k">for</span> <span class="n">frame</span> <span class="mi">1</span><span class="o">&gt;&gt;</span>
+<span class="o">&lt;&lt;</span><span class="n">information</span> <span class="k">for</span> <span class="n">frame</span> <span class="mi">2</span><span class="o">&gt;&gt;</span>
+<span class="o">&lt;&lt;</span><span class="n">information</span> <span class="k">for</span> <span class="n">frame</span> <span class="mi">3</span><span class="o">&gt;&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;&lt;</span><span class="n">information</span> <span class="k">for</span> <span class="n">frame</span> <span class="n">nframes</span><span class="o">&gt;&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">iformat</span></code> is an integer that is described below.  The <code class="docutils literal notranslate"><span class="pre">nframes</span></code> is the
+number of frames. The <code class="docutils literal notranslate"><span class="pre">:math:`&lt;&lt;`information</span> <span class="pre">for</span> <span class="pre">frame</span> <span class="pre">xx:math:`&gt;&gt;`</span></code> are lines
+containing the information of how the camera should be positioned for each frame
+of the movie (i.e. for each imag). It is also described below.</p>
+<p>There are multiple ways to tell RADMC-3D how to make
+this sequence of images. Which if these ways RADMC-3D should use is specified
+by the <code class="docutils literal notranslate"><span class="pre">iformat</span></code> number. Currently there are 2, but later we may add
+further possibilities. Here are the current possibilities</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat=1</span></code>:
+The observer is at infinity (as usual) and the <code class="docutils literal notranslate"><span class="pre">:math:`&lt;&lt;`information</span>
+<span class="pre">for</span> <span class="pre">frame</span> <span class="pre">xx:math:`&gt;&gt;`</span></code> consists of the following numbers (separated by
+spaces):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pntx</span> <span class="n">pnty</span> <span class="n">pntz</span> <span class="n">hsx</span> <span class="n">hsy</span> <span class="n">pa</span> <span class="n">incl</span> <span class="n">phi</span>
+</pre></div>
+</div>
+<p>These 8 numbers have the following meaning:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pntx,pnty,pntz</span></code>:
+These are the x, y and z coordinates (in units of cm) of the point toward
+which the camera is pointing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hsx,hsy</span></code>:
+These are the image half-size in horizontal and vertical direction on the
+image (in units of cm).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pa</span></code>:
+This is the position angle of the camera in degrees.
+This has the same meaning as for a single image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">incl,phi</span></code>:
+These are the inclination and phi angle toward the observer in degrees.
+These have the same meaning as for a single image.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat=-1</span></code>:
+The observer is local (see Section
+<a class="reference internal" href="#sec-local-observer"><span class="std std-ref">For public outreach work: local observers inside the model</span></a>) and the <code class="docutils literal notranslate"><span class="pre">:math:`&lt;&lt;`information</span> <span class="pre">for</span> <span class="pre">frame</span>
+<span class="pre">xx:math:`&gt;&gt;`</span></code> consists of the following numbers (separated by spaces):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pntx</span> <span class="n">pnty</span> <span class="n">pntz</span> <span class="n">hsx</span> <span class="n">hsy</span> <span class="n">pa</span> <span class="n">obsx</span> <span class="n">obsy</span> <span class="n">obsz</span>
+</pre></div>
+</div>
+<p>These 9 numbers have the following meaning:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pntx,pnty,pntz,hsx,hsy,pa</span></code>:
+Same meaning as for iformat=1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obsx,obsy,obsz</span></code>:
+These are the x, y and z position of the local observer (in units of cm).</p></li>
+</ul>
+</li>
+</ul>
+<p>Apart from the quantities that are thus set for each image separately, all other
+command-line options still remain valid.</p>
+<p>Example, let us make a movie of 360 frames of a model seen at infinity while
+rotating the object 360 degrees, and as seen at a wavelength of
+<span class="math notranslate nohighlight">\(\lambda=10\mu\)</span> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
+<span class="mi">360</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">1.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">2.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">3.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">358.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">359.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">360.</span>
+</pre></div>
+</div>
+<p>We now call RADMC-3D in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">movie</span> <span class="k">lambda</span> <span class="mf">10.</span> <span class="n">npix</span> <span class="mi">200</span>
+</pre></div>
+</div>
+<p>This will create image files <code class="docutils literal notranslate"><span class="pre">image_0001.out</span></code>, <code class="docutils literal notranslate"><span class="pre">image_0002.out</span></code>, all the way
+to <code class="docutils literal notranslate"><span class="pre">image_0360.out</span></code>.  The images will have a full width and height of
+<span class="math notranslate nohighlight">\(2\times 10^{15}\)</span>phi`-angle.</p>
+<p>Another example: let us move through the object (local observer mode),
+approaching the center very closely, but not precisely:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">101</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span> <span class="o">-</span><span class="mf">1.0000e15</span> <span class="mf">0.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span> <span class="o">-</span><span class="mf">0.9800e15</span> <span class="mf">0.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span> <span class="o">-</span><span class="mf">0.9600e15</span> <span class="mf">0.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span> <span class="o">-</span><span class="mf">0.0200e15</span> <span class="mf">0.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span>  <span class="mf">0.0000e15</span> <span class="mf">0.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span>  <span class="mf">0.0200e15</span> <span class="mf">0.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span>  <span class="mf">0.9600e15</span> <span class="mf">0.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span>  <span class="mf">0.9800e15</span> <span class="mf">0.</span>
+<span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.8</span> <span class="mf">0.8</span> <span class="mf">0.</span> <span class="mf">6.e13</span>  <span class="mf">1.0000e15</span> <span class="mf">0.</span>
+</pre></div>
+</div>
+<p>Here the camera automatically rotates such that the focus remains on the center,
+as the camera flies by the center of the object at a closest-approach to the
+center of <span class="math notranslate nohighlight">\(6\times 10^{13}\)</span> cm. The half-width of the image is 0.8 radian.</p>
+<p><em>Important note:</em> If you have scattering switched on, then every rendering of an
+image makes a new scattering Monte Carlo run. Since Monte Carlo produces noise,
+this would lead to a movie that is very jittery (every frame has a new noise
+set). It is of course best to avoid this by using so many photon packages that
+this is not a concern. But in practice this may be very CPU-time consuming. You
+can also fix the noise in the following way: add <code class="docutils literal notranslate"><span class="pre">resetseed</span></code> to the
+command-line call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">movie</span> <span class="n">resetseed</span>
+</pre></div>
+</div>
+<p>and it will force each new scattering Monte Carlo computation to start with the
+same seed, so that the photons will exactly move along the same
+trajectories. Now only the scattering phase function will change because of the
+different vantage points, but not the Monte Carlo noise. You can in fact set the
+actual value of the initial seed in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file by adding a line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iseed</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5415</span>
+</pre></div>
+</div>
+<p>(where -5415 is to be replaced by the value you want) to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>
+file. Note also that if your movie goes through different wavelengths, the
+resetseed will likely not help fixing the noisiness, because the paths of
+photons will change for different wavelengths, even with the same initial seed.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="gridding.html" class="btn btn-neutral float-right" title="More information about the gridding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lineradtrans.html" class="btn btn-neutral float-left" title="Line radiative transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

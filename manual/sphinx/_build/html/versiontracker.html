@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Version tracker: Development history &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Acquiring opacities from the WWW" href="opacitieswww.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Version tracker: Development history</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/versiontracker.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="version-tracker-development-history">
+<span id="chap-development-history"></span><h1>Version tracker: Development history<a class="headerlink" href="#version-tracker-development-history" title="Permalink to this headline">¶</a></h1>
+<p>This version overview is very rough, and has only been started as of version
+0.25.</p>
+<ul>
+<li><p><em>Version 0.25</em></p>
+<ul class="simple">
+<li><p>Second order integration, based on a vertex-based grid (as opposed to
+the usual cell-based grid), implemented. This gives much smoother images,
+and you don’t see the blocky cell structure anymore in the images. It
+requires extra memory, though. See Section <a class="reference internal" href="imagesspectra.html#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a>.</p></li>
+<li><p>The number of photons for scattering Monte Carlo (i.e. the small MC
+run done before each image, if dust scattering is active) can now be
+chosen to be smaller for when you make a spectrum instead of an
+image. Reason: Since you anyway integrate over the images for a
+spectrum, you do not need the image to ‘look nice’, i.e. you can
+afford more photon noise. You can set this in <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> by
+setting <code class="docutils literal notranslate"><span class="pre">nphot_spec=10000</span></code>, for instance. See Section
+<a class="reference internal" href="dustradtrans.html#sec-scat-monte-carlo"><span class="std std-ref">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</span></a>.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.26</em></p>
+<ul class="simple">
+<li><p>For line transfer: Added the ‘doppler catching’ method to the
+code. This prevents bad numerical artifacts in images/spectra of regions
+with large velocity gradients, where the doppler-shift between two
+neighboring cells exceeds the intrinsic line width of the material in
+the cell. See Section <a class="reference internal" href="lineradtrans.html#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>.</p></li>
+<li><p>NOTE: Up to, and including, version <code class="docutils literal notranslate"><span class="pre">0.26_23.02.11</span></code> this
+method (and for that matter any second order integration of line
+transfer) was not stable when strong shocks or contact discontinuities
+were encountered. This was because interpolation of the source function
+<span class="math notranslate nohighlight">\(S_\nu\equiv j_\nu/\alpha_\nu\)</span> was done. Experimentation showed that
+interpolation of the emissivity <span class="math notranslate nohighlight">\(j_\nu\)</span> is much more stable. As of
+version <code class="docutils literal notranslate"><span class="pre">0.26_27.02.11</span></code> this is fixed.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.27</em></p>
+<ul>
+<li><p>For line transfer: Implemented the possibility to use a Voigt line
+profile instead of just a Gaussian. This was implemented by Thomas
+Peters, and slightly modified by CPD. It uses the Voigt approximation by
+Humlicek JQSRT 27, 437 (1982) as programmed by Schreier, JQSRT 48, 743
+(1992). It requires a user-defined subroutine <code class="docutils literal notranslate"><span class="pre">userdef_compute_lorentz_delta()</span></code>
+that sets the value of the Lorentz
+profile delta. This implementation is not yet documented, and may still
+be subject to modification.</p></li>
+<li><p>Implemented the ‘Large Velocity Gradient’ (LVG) method (also
+called the Sobolev method) of approximate non-LTE line transfer.</p></li>
+<li><p>Implemented the optically thin populations method.</p></li>
+<li><p>Implemented the possibility of reading linelist molecular data
+instead of full molecular data. <em>Still needs testing.</em></p></li>
+<li><p>Finally implemented the positive <code class="docutils literal notranslate"><span class="pre">lines_mode</span></code> modes,
+i.e. in which the level populations are computed and stored globally
+before the ray-tracing. This has been latently in the code somewhat, but
+unfinished. Now it is implemented. The advantage is: it may be under
+some conditions much faster than the on-the-fly computation of the
+populations during the ray-tracing (the negative <code class="docutils literal notranslate"><span class="pre">lines_mode</span></code>
+modes). Also it allows you to write the populations to file, so that you
+can examine them. Disadvantage: It is memory hungry.</p></li>
+<li><p>The level subset capacilities are now limited to only the storage of
+the levels in the global arrays (for positive <code class="docutils literal notranslate"><span class="pre">lines_mode</span></code> modes),
+and to the lines that will appear in
+images/spectra. For the rest, the full set of levels are always used
+from now on.</p></li>
+<li><p>Added a directory ‘<code class="docutils literal notranslate"><span class="pre">opac/</span></code>’ which contains programs
+for generating your own dust opacities using optical constants from the
+web, and for generating your own molecular/atomic input data files using
+data from several web pages. The data from the web are not included, but
+there are README files that point you to the web sites.</p></li>
+<li><p>Tested the ‘fisheye’ fulldome (OMNIMAX) projection. It seems to
+work! Thanks to Mario Flock.</p></li>
+<li><p>Several small (and bigger) bugfixes</p>
+<ul class="simple">
+<li><p>Fixed bug that showed up when no dust is included.</p></li>
+<li><p>Fixed bug that caused RADMC-3D to crash when using no stars.</p></li>
+<li><p>Fixed bug that caused RADMC-3D to crash when making images at very
+short wavelengths with nearly zero thermal emission.</p></li>
+<li><p>Fixed bug in the AMR module when using second order integration or
+the doppler catching method with certain kinds of AMR-arrangements of
+cells.</p></li>
+<li><p>Fixed many bugs when using a ‘piece of a cake’ model, i.e.
+using spherical coordinates in 3-D, but having the <span class="math notranslate nohighlight">\(\phi\)</span>-grid going
+not over the full <span class="math notranslate nohighlight">\(0-2\pi\)</span> range but e.g. just from 0 to <span class="math notranslate nohighlight">\(\pi/4\)</span>. It
+is rather rare that one really wants to use such grids (certainly not
+for real physical models, I presume), but for visualization of data it
+might be useful: for instance for visualizing a 3-D disk MHD model,
+which is cut open so you can see also to the midplane. Now it
+works. Thanks to Mario Flock.</p></li>
+<li><p>Fixed bug with the aperture mode for spectra. Thanks to Daniel Harsono.</p></li>
+<li><p>Fixed many bugs in linelist mode; now it works. Thanks to Attila
+Juhasz.</p></li>
+<li><p>Fixed a bug in LVG mode that caused it to fail when AMR was used.
+Thanks to Anika Schmiedeke.</p></li>
+<li><p>Fixed a tiny bug in <code class="docutils literal notranslate"><span class="pre">idl/radmc3dfits.pro</span></code>: filename was
+unused. Thanks to Stella Offner.</p></li>
+<li><p>Retroactive bugfix from version 0.28 (see below): LVG and AMR mode.</p></li>
+</ul>
+<p>For details and for smaller bugfixes, read the <code class="docutils literal notranslate"><span class="pre">src/Radmc_3D_LOG.txt</span></code> document.</p>
+</li>
+</ul>
+</li>
+<li><p><em>Version 0.28</em></p>
+<ul class="simple">
+<li><p>A number of people complained that even without AMR the code
+requires a huge amount of memory. That is because even if no AMR is
+used, the cells are connected via the AMR tree. Since the AMR cells
+contain information about which are the neighboring cells, and each cell
+has 6 neighbors, and slots for 8 child-cells (which are unused in case
+of a regular grid) this wastes a lot of memory space. The first big
+improvement in version 0.28 is that, from now on, the AMR tree is only
+set up and used if the grid indeed has refinement. If RADMC-3D notices
+that the grid is regular, it will not allocate space for the AMR tree,
+and everywhere in the code where the cell-management is done the code
+will switch to regular grid mode. There is now a flag <code class="docutils literal notranslate"><span class="pre">amr_tree_present</span></code>
+that says whether the AMR tree is present or
+not. Throughout the code there are now if-statements to switch between
+using or not-using the AMR tree. This may make the code a tiny bit
+slower, but this is only a minor reduction of speed. But as a result it
+should now be much easier to load huge regular grid models into memory.</p></li>
+<li><p>A small (but potentially nasty) bug was found and fixed for the case
+when you use LVG mode on a grid with AMR-refinements. For the regular
+grid case (even in version 0.27, when it still used the AMR tree) this
+bug should not have caused problems, but perhaps you might want to check
+nevertheless. Note: This bug is now also retroactively fixed in version
+0.27. See, as always, <code class="docutils literal notranslate"><span class="pre">src/Radmc_3D_LOG.txt</span></code> for details.</p></li>
+<li><p>Added the possibility to visualize the location (along the line of
+sight) of the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface (or any <span class="math notranslate nohighlight">\(\tau=\tau_s\)</span> surface for that
+matter). See new Section <a class="reference internal" href="imagesspectra.html#sec-tausurf"><span class="std std-ref">Visualizing the \tau=1 surface</span></a>. This can be very useful
+for getting a 3-D feeling for <em>where</em> certain emission comes from.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.29</em></p>
+<ul class="simple">
+<li><p>The big change in this version is that the whole stuff with the
+global storage of level populations has been improved. In earlier
+versions of RADMC-3D, either the populations of <em>all</em> levels of a
+molecule were stored globally (potentially requiring huge amounts of
+memory), or you would have to select a ‘subset’ of levels to store
+globally. This subset selection had to be done by the user
+(‘manually’, so to speak). You would have had to think a-priori which
+lines you wish to model, and which levels they connect, and then, in the
+<code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> file you would have to select these levels by
+hand. That was cumbersome and prone to error. To avoid having to do this
+you could use ‘on-the-fly’ calculation of populations (by making the
+<code class="docutils literal notranslate"><span class="pre">lines_mode</span></code> negative), but that sometimes caused the code to
+become terribly slow. <em>Now this is dramatically improved:</em> From now
+on you can forget about the ‘on-the-fly’ calculation of populations.
+Just use the ‘normal’ way by which RADMC-3D first calculates the
+populations and then starts the ray-tracing. The subset-selection is now
+done automatically by RADMC-3D, based on which wavelengths you want to
+make the image(s) or spectra for (see Section
+<a class="reference internal" href="lineradtrans.html#sec-calcstore-levpop"><span class="std std-ref">Background information: Calculation and storage of level populations</span></a>). Now the on-the-fly methods are no longer
+default and should not be used, unless absolutely necessary. Also the
+‘manual’ subset selection is no longer necessary (though still
+possible if absolutely desired).</p></li>
+<li><p>Added the subbox and sample capabilities to the level populations.
+See Sections <a class="reference internal" href="toolsinside.html#sec-subbox"><span class="std std-ref">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</span></a> and <a class="reference internal" href="toolsinside.html#sec-sampling"><span class="std std-ref">Alternative to subbox: arbitrary sampling of AMR-based models</span></a>. Note that, in
+order to make it easier to identify which levels were written to file,
+the file formats of <code class="docutils literal notranslate"><span class="pre">***_subbox.out</span></code> and <code class="docutils literal notranslate"><span class="pre">***_sample.out</span></code> have been
+slightly modified: A list of identification
+numbers is added before the main data. For the dust temperature and dust
+density this list is simply 1 2 3 4 …  (dust species 1, dust species
+2, dust species 3 …), which is trivial. For the level populations
+(e.g. the file <code class="docutils literal notranslate"><span class="pre">levelpop_co_subbox.out</span></code> and <code class="docutils literal notranslate"><span class="pre">levelpop_co_sample.out</span></code>
+for the CO molecule) this list is, however,
+essential when not all levels were computed (see Section
+<a class="reference internal" href="lineradtrans.html#sec-calcstore-levpop"><span class="std std-ref">Background information: Calculation and storage of level populations</span></a>). So if only level 4 and level 8 are stored,
+then the identification list is 4 8.</p></li>
+<li><p>Fixed a bug which caused the code to crash when you put a star
+substantially far outside of the domain and try to make an image or
+spectrum. Thanks, Erika Hamden, for the bug report.</p></li>
+<li><p>Fixed a bug that prevented the <code class="docutils literal notranslate"><span class="pre">lines_mode=50</span></code> mode from
+working. Now it works, and we can ask RADMC-3D to read the level
+populations from file (rather than calculating them internally).  Also a
+new section was added to this manual describing this option (Section
+<a class="reference internal" href="lineradtrans.html#sec-nonlte-read-levelpop"><span class="std std-ref">Non-LTE Transfer: Reading the level populations from file</span></a>).</p></li>
+<li><p>Added VTK output options (see chapter <a class="reference internal" href="vtkoutput.html#chap-vtk-output"><span class="std std-ref">Visualization with VTK tools (e.g. Paraview or VisIt)</span></a>) for
+allowing 3-D visualization of your model setups using e.g. Paraview, a
+freely available visualization tool.</p></li>
+<li><p>Fixed a bug that occurred sometimes if a spectrum was made at
+inclination 90 and phi 90. Thanks Stella Offner for reporting this bug.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.30</em></p>
+<ul class="simple">
+<li><p>Fixed bugs in the Henyey-Greenstein scattering mode.</p></li>
+<li><p>Introduced the new binary I/O feature: No more hassle with
+f77-unformatted records! The new binary mode is much simpler and more
+straightforward. This will help reducing the file sizes for large models.
+See Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.31</em></p>
+<ul class="simple">
+<li><p>Added the possibility, in cartesian coordinates, to ‘close the
+box’, in the sense of making the domain boundaries thermal walls.
+Each of the 6 boundaries can be set separately, so you can also have
+just one thermall wall. Also the temperatures can be set separately
+for each of the 6 boundaries. See Section <a class="reference internal" href="gridding.html#sec-thermal-boundaries"><span class="std std-ref">Thermal boundaries in Cartesian coordinates</span></a>.</p></li>
+<li><p>Added two new coordinate systems:</p>
+<ul>
+<li><p>Cartesian 1-D plane-parallel (the only remaining active coordinate
+is <span class="math notranslate nohighlight">\(z\)</span>). The <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> dimensions are infinitely extended and
+have translational symmetry. The photons can, however, travel in
+full 3-D as always. See Section <a class="reference internal" href="gridding.html#sec-1d-plane-parallel"><span class="std std-ref">1-D Plane-parallel models</span></a>.</p></li>
+<li><p>Cartesian 2-D pencil-parallel (the two remaining active coordinate
+are <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span>). The <span class="math notranslate nohighlight">\(x\)</span> dimension is infinitely extended and
+has translational symmetry. The photons can, however, travel in
+full 3-D as always.</p></li>
+<li><p>For the 1-D plane-parallel mode it is possible to include parallel
+beams of radiative flux impinging on the 1-D atmosphere.</p></li>
+<li><p>Attila Juhasz has improved the VTK output: Now it also supports
+3-D spherical coordinates. Thanks, Attila!</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><em>Version 0.32</em></p>
+<p>This is an intermediate version in which some stuff for the near-future
+modus of polarization is implemented.</p>
+</li>
+<li><p><em>Version 0.33</em></p>
+<ul class="simple">
+<li><p>Some minor technical changes to the doppler-catching integration of
+lines (storing the upper and lower level population instead of the
+jnubase and anubase variables).</p></li>
+<li><p>Added the classical escape probability to the LVG mode (see Section
+<a class="reference internal" href="lineradtrans.html#sec-lvg"><span class="std std-ref">Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method</span></a> for details).</p></li>
+<li><p>Sped up the filling of the matrix of the statistical equilibrium
+equation.</p></li>
+<li><p>Vastly improved the LVG (and esc prob) method: Instead of the simple
+‘lambda iteration style’ iteration as it was before, the <span class="math notranslate nohighlight">\(A_{ik}\)</span> is
+now multiplied with <span class="math notranslate nohighlight">\(\beta_{ik}\)</span> (the escape probability of the line
+i-&gt;k) and the <span class="math notranslate nohighlight">\(J_{ik}\)</span> is replaced by
+<span class="math notranslate nohighlight">\(J_{ik}^{\mathrm{background}}\)</span>. This means that the solution is almost
+instant, requiring only 2 or 3 iterations.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.34</em></p>
+<p>Implemented the Modified Random Walk method, based on Min, Dullemond,
+Dominik, de Koter &amp; Hovenier (2009) A&amp;A 497, 155, and simplified by
+Robitaille (2010) A&amp;A 520, 70. But beware: Still in the testing
+phase! By default it is switched off.</p>
+</li>
+<li><p><em>Version 0.35</em></p>
+<ul class="simple">
+<li><p>Implemented polarized scattering off randomly oriented
+particles. But beware: Still in the testing phase!</p></li>
+<li><p>Fixed a bug in the modified random walk method (thanks to Daniel
+Harsono for spotting the problem and thanks to Attila Juhasz for
+finding the fix!)</p></li>
+<li><p>Fixed two bugs that made it impossible to use second order
+integration with axially symmetric spherical coordinates and/or
+a finite-size star (thanks to Rolf Kuiper for reporting the bug).</p></li>
+<li><p>Added the <code class="docutils literal notranslate"><span class="pre">sloppy</span></code> command line option to spectrum and
+image making in spherical coordinates. This was necessary because
+RADMC-3D is always trying to make 100% sure that all cells are picked
+up by the subpixels. In spherical coordinates these cells can be
+extremely non-cubic (they can be extremely flat or needle-like), which
+means that under some projections RADMC-3D feels obliged to do extreme
+sub-pixeling, which can make image- and spectrum-making extremely slow.
+By adding the <code class="docutils literal notranslate"><span class="pre">sloppy</span></code>  keyword on the command line, RADMC-3D
+will limit it’s pubpixeling which could speed up the calculation very
+much (but of course at your own risk!).</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.38</em></p>
+<ul class="simple">
+<li><p>Implemented OpenMP parallellization of the thermal Monte Carlo (by
+Adriana Pohl). Still beta-version.</p></li>
+<li><p>Bugfix in the mean intensity computation (mcmono) mode (thanks to Gwendoline Stephan).</p></li>
+<li><p>Bugfix in the mean intensity computation (mcmono) mode (thanks to Seokho Lee).</p></li>
+<li><p>Major bugfix in aperture mode (thanks to So ren Frimann).</p></li>
+<li><p>Unformatted image format is from now on C-style binary instead of
+F77-style unformatted.</p></li>
+<li><p>The viewimage tool is now ported to Qt by Farzin Sereshti, meaning
+that you can now use viewimage without having an IDL license. Viewimage
+is a very powerful tool to interactively make and view images of your
+model at different wavelengths and viewing angles. It can be found
+in the directory <code class="docutils literal notranslate"><span class="pre">viewimage_QT_GUI/</span></code>.</p></li>
+<li><p>A Python package for RADMC-3D was developed by Attila Juhasz. It is
+included as of RADMC-3D version 0.38 in the directory <code class="docutils literal notranslate"><span class="pre">python/</span></code>.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.39</em></p>
+<ul class="simple">
+<li><p>Polarization mode is incompatible with mirror mode (in spherical
+coordinates). An error message is now included to catch this.</p></li>
+<li><p>Minor bugfix in <code class="docutils literal notranslate"><span class="pre">pick_randomfreq_db()</span></code> (thanks to Seokho Lee).</p></li>
+<li><p>Optimization of the OpenMP parallellization and extension of the
+OpenMP parallellization to the Scattering Monte Carlo computation (both
+by Farzin Sereshti).</p></li>
+<li><p>Bugfix in <code class="docutils literal notranslate"><span class="pre">amrray_module.f90</span></code>: Sometimes one got ‘Photon
+outside of cell’ error due to a numerical precision round-off
+error. This bug is now (mostly?) fixed.</p></li>
+<li><p>Bugfix in <code class="docutils literal notranslate"><span class="pre">sources_module.f90</span></code>: When using second order
+integration (or doppler catching) for line transfer in spherical
+coordinates, the line doppler shift was not transformed to spherical
+coordinates. This is now fixed.</p></li>
+<li><p>Several bugfixes in the modified random walk method by
+John Ramsey. The method crashed for extreme optical depth problems
+due to out-of-cell events. Still not 100% perfect, but better.</p></li>
+<li><p>John Ramsey also proposed two small fixes to the Planck function
+routines so that the events of overflow are caught. Note: This might
+change the results (in a tiny way: at the machine precision level) to
+the extent that a model run by an old version might not yield the same
+values to machine precision, but the differences should not matter in
+any meaningful way.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.40</em></p>
+<ul class="simple">
+<li><p>The RADMC-3D package is now ‘officially’ converting from IDL to
+Python wrappers. The Python modules were already there since a long time
+(thanks to Attila Juhasz!). But as of version 0.40 we will no longer
+update/maintain the IDL scripts (though they remain there and should
+remain working), and instead use python as the main setup and analysis
+tools for RADMC-3D. The full conversion will still take some time, but
+should be finished by the end of version 0.40.</p></li>
+<li><p>Under some circumstances the simple 2x2 pixel plus sub-pixeling
+method for making spectra (default method) can be dangerous. For some
+grid geometries this can lead to under-resolving of the images that are
+integrated to obtain the flux, leading to a too low flux.  So as of now
+15.09.2016 the spectra and SEDs are always by default made with 100x100
+images (and sub-pixeling of course). One can set the number of pixels
+with npix. So if you do <code class="docutils literal notranslate"><span class="pre">radmc3dsednostarnpix2</span></code> you get
+the original behavior again.</p></li>
+<li><p>Bugfix in <code class="docutils literal notranslate"><span class="pre">montecarlo_module.f90</span></code>:
+The internal heat source method (which is still being tested)
+had a bug. The bug manifested itself for optically thin cells with
+non-negligible internal heat production. The energy was not immediately
+added to the cell. It only got added upon re-absorption of that photon
+package. Now this is fixed.</p></li>
+<li><p>I now added some documentation for the heat source method, which
+is useful for e.g. disk viscous accretion heating.</p></li>
+<li><p>Bugfix in <code class="docutils literal notranslate"><span class="pre">montecarlo_module.f90</span></code>: When using mirror
+symmetry in spherical coordinates in the <span class="math notranslate nohighlight">\(\theta\)</span>-coordinate
+(i.e. modeling only the upper part of the disk and letting RADMC-3D
+assume that the lower part is identical), the distributed source
+luminosity was computed only for the top quadrant, and wasn’t multiplied
+by 2. For most applications this does not cause problems, but for the
+heat source (see above), for continuous stellar sources and for the
+thermal origin of the isotropic scattering luminosity (for non-isotropic
+scattering, mirror symmetry was not allowed anyway), this could lead to
+a factor of 2 underestimation (only if mirror symmetry was used, i.e.
+if the <span class="math notranslate nohighlight">\(\theta\)</span> coordinate was going only up to <span class="math notranslate nohighlight">\(\pi/2\)</span>). This is now
+fixed. To test if the fix works one can simply make the same model
+again, but now without using mirror symmetry (and thus using twice as
+many cells in <span class="math notranslate nohighlight">\(\theta\)</span>, to cover both the upper and lower half of the
+object). This should yield (apart from some Monte Carlo noise) the same
+results.</p></li>
+<li><p>Improved the stability of the Modified Random Walk (MRW) method
+a bit further.</p></li>
+<li><p>Bug fix: scattering mode 3 (tabulated phase function, but not full
+polarization) had a bug which caused images of scattered light to be
+multiplied by some arbitrary number. Reason: as a phase function it
+returned <span class="math notranslate nohighlight">\(Z_{11}\)</span> instead of <span class="math notranslate nohighlight">\(4\pi Z_{11}/\kappa_{\mathrm{scat}}\)</span>. Most
+people use either isotropic scattering (scattering mode 1), or
+Henyey-Greenstein (scattering mode 2) or full polarization (scattering
+mode 5), all of which are ok. At any rate: the problem is now fixed,
+so scattering mode 3 should now also work.</p></li>
+</ul>
+</li>
+<li><p><em>Version 0.41</em></p>
+<ul class="simple">
+<li><p>Implemented a first testing version of the aligned grains:
+only polarized thermal emission so far. Still very much a testing
+version.</p></li>
+<li><p>Implemented a method to also allow full Stokes vector polarized
+scattering in the 2-D axisymmetric mode in spherical
+coordinates. Until now the full scattering mode (scattering mode 5)
+was only possible in full 3-D. Note however that anisotropic
+scattering in 2-D axisymmetric models requires scattering mode 5,
+which is the full scattering mode.  It is still not possible to use
+intermediate scattering modes (like henyey-greenstein or any
+scattering mode between 2 and 4) in 2-D axisymmetry. But those
+intermediate modes are anyway more for testing than for real models,
+so that should be ok.</p></li>
+<li><p>Bugfixes to the OpenMP stuff. In particular the OpenMP
+parallellization of the scattering MC crashed. This is now fixed.
+In general the OpenMP stuff was a bit cleaned up.</p></li>
+<li><p>Bugfix in thermal Monte Carlo with full polarization mode: needed
+to reset the photon package after each thermal absorption/re-emission
+event. Usually the effect is subtle, but had to be fixed.</p></li>
+<li><p>Bugfix in reading the <code class="docutils literal notranslate"><span class="pre">scattering_angular_grid.inp</span></code>:
+the <code class="docutils literal notranslate"><span class="pre">theta</span></code> angles should be converted into radian. But
+this file was not officially offered before anyway.</p></li>
+<li><p>Attila Juhasz has made a large improvement of his python package
+for RADMC-3D. See the <code class="docutils literal notranslate"><span class="pre">python/</span></code> directory. This is version
+0.29 of his package. This package now also supports reading and
+writing AMR grids.</p></li>
+<li><p>Bugfix in VTK for 3-D spherical coordinates (thanks Attila Juhasz!).
+Now it should work.</p></li>
+</ul>
+</li>
+<li><p><em>Version 2.0</em></p>
+<p>Version 2.0 is the version after 0.41. We skip version 1.0, because
+version 1.0 could be mistaken for the first version of the code. Version
+2.0 is mostly the same as 0.41, but with a few differences.</p>
+<ul class="simple">
+<li><p>IDL support is removed permanently. From now on, the front-end
+functionality is only in Python. We assume Python 3.</p></li>
+<li><p>Version 0.30.2 of the <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> Python package (written by
+Attila Juhasz) has been implemented. It is also being improved, mainly to
+make its use easier (i.e. with more automatic default behavior).</p></li>
+<li><p>A very simple <code class="docutils literal notranslate"><span class="pre">simpleread.py</span></code> reading library is provided
+as a ‘light version’ of radmc3dPy. It contains only some basic reading
+functions, and only for ascii output (no binary files).</p></li>
+<li><p>Some of the standard-output is shortened. You can also call a
+Monte Carlo run with <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> with the command line
+options <code class="docutils literal notranslate"><span class="pre">countwrite</span> <span class="pre">100000</span></code> to make RADMC-3D write a
+message only every <span class="math notranslate nohighlight">\(10^5\)</span> photon packages instead of every thousand.</p></li>
+<li><p>We removed the fortran-unformatted data format from the manual,
+and will remove it from the code in later versions. Use either text
+(ascii) format or binary format.</p></li>
+<li><p>The manual is now converted to Sphinx, from which the LaTeX version
+and the HTML version can be automatically created.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="opacitieswww.html" class="btn btn-neutral float-left" title="Acquiring opacities from the WWW" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

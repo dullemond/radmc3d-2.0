@@ -1,0 +1,528 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Binary I/O files &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command-line options" href="clioptions.html" />
+    <link rel="prev" title="Main input and output files of RADMC-3D" href="inputoutputfiles.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Binary I/O files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-switch-to-binary-or-back-to-ascii">How to switch to binary (or back to ascii)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#binary-i-o-file-format-of-radmc-3d">Binary I/O file format of RADMC-3D</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Binary I/O files</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/binaryio.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="binary-i-o-files">
+<span id="chap-binary-io"></span><h1>Binary I/O files<a class="headerlink" href="#binary-i-o-files" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<span id="sec-unformatted-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>By default all input and output files of RADMC-3D are in ASCII (i.e.text)
+form. This makes it easier to verify if the files are ok. Also, it is easier
+to produce files with the right format and read the output of RADMC-3D. The
+disadvantage is that ASCII files are substantially larger than strictly
+required to store their information content. For large models, i.e.models
+with many grid points, this may lead to unpractically large files.</p>
+<p>RADMC-3D supports a more compact data format: binary data. In this form, a
+double precision variable occupies just 8 bytes, while a single precision
+variable occupies just 4 bytes.</p>
+<p>Unfortunately, Fortran-90 and Fortran-95 did, for a long time, not support true
+binary files. Instead they offered ‘f77-unformatted’ files, which uses
+‘records’, and is harder to read than true binary files. Recently, however, many
+Fortran-90 and Fortran-95 compilers have introduced a true binary format, which
+is called ‘streaming access’. It is, actually, a Fortran-2003 feature, but has
+been retroactively implemented into Fortran-90 and Fortran-95. The gfortran and
+g95 compilers have it. Also the ifort compiler has it. Presumably others as
+well.</p>
+<p>RADMC-3D offers a binary I/O capability. A file containing three double
+precision variables will have a length of exactly 24 bytes. Files with this
+format will have extensions such as <code class="docutils literal notranslate"><span class="pre">.binp</span></code>, <code class="docutils literal notranslate"><span class="pre">.bdat</span></code> or <code class="docutils literal notranslate"><span class="pre">.bout</span></code>.</p>
+<p>Here is a (presumably incomplete) list of files that have binary versions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Name</p></td>
+<td><p>ascii</p></td>
+<td><p>binary</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dust_density</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dust_temperature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dust_temperature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.dat</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.bdat</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gas_density</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gas_temperature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">electron_numdens</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ion_numdens</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">levelpop_***</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.dat</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.bdat</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">numberdens_***</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gas_velocity</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">microturbulence</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stellarsrc_density</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mean_intensity</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.out</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.bout</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">heatsource</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.binp</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="how-to-switch-to-binary-or-back-to-ascii">
+<span id="sec-switch-to-binary"></span><h2>How to switch to binary (or back to ascii)<a class="headerlink" href="#how-to-switch-to-binary-or-back-to-ascii" title="Permalink to this headline">¶</a></h2>
+<p>Specifying whether RADMC-3D should use ASCII or binary <em>input</em> is easy: It will
+simply look which extension each input file has, and read it accordingly. If you
+present RADMC-3D file input files with extension <code class="docutils literal notranslate"><span class="pre">.binp</span></code>, it will read these
+files as binaries.</p>
+<p>More tricky is how to tell RADMC-3D to use binary files on <em>output</em>. By default,
+RADMC-3D will always write ASCII style (<code class="docutils literal notranslate"><span class="pre">.out</span></code> and <code class="docutils literal notranslate"><span class="pre">.dat</span></code>). However, if
+you add the following line to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rto_style</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>it will instead use binary output (<code class="docutils literal notranslate"><span class="pre">.bout</span></code> and <code class="docutils literal notranslate"><span class="pre">.bdat</span></code>). And, for
+completeness (though it is the default anyway), if you set <code class="docutils literal notranslate"><span class="pre">rto_style=1</span></code>
+RADMC-3D will write output in ASCII form. Note that <code class="docutils literal notranslate"><span class="pre">rto_style</span> <span class="pre">=</span> <span class="pre">2</span></code> is
+the old Fortran unformatted data format, which is deprecated.</p>
+<p>For the binary form of output you can also tell RADMC-3D to use single-precision
+for the main data, to produce smaller output files. This is done by adding the
+following line to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rto_single</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>By default RADMC-3D will always output double precision in the binary format.</p>
+<p><em>Note:</em> Images are still outputted in ascii even if you have <code class="docutils literal notranslate"><span class="pre">rto_style=3</span></code>. This is because images are rarely files of huge size, and ascii files are
+easier to analyze and check. However, sometimes images can be still quite big
+(e.g.if you make multi-frequency images). Then it might still be useful to
+output binary. If you want to also have the images in binary format, you must
+set</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">writeimage_unformatted</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, <em>or</em> you add a keyword <em>imageunform</em>.</p>
+</div>
+<div class="section" id="binary-i-o-file-format-of-radmc-3d">
+<span id="sec-binary-io"></span><h2>Binary I/O file format of RADMC-3D<a class="headerlink" href="#binary-i-o-file-format-of-radmc-3d" title="Permalink to this headline">¶</a></h2>
+<p>The general format of the files listed in Section
+<a class="reference internal" href="#sec-unformatted-overview"><span class="std std-ref">Overview</span></a> is similar to the ASCII versions, just binary
+this time. There is <em>one</em> additional number in the binary version: Right after
+the format number comes an integer that gives the precision of the main
+data. This number is either 4, meaning that the main data consists of 4-byte
+floating point numbers (i.e.single precision), or 8, meaning that the main
+data consists of 8-byte floating point numbers (i.e.double precision). Other
+than that additional number, the order of the data is the same.</p>
+<p>The following rules apply:</p>
+<ul class="simple">
+<li><p>With the exception of the <code class="docutils literal notranslate"><span class="pre">amr_grid.binp</span></code> file (see below),
+all integers are 8-byte integers.</p></li>
+<li><p>Floating point numbers for the main data (i.e.the data that
+represents the space-dependent variables) are either 4-byte (single) or
+8-byte (double) precision numbers. Which of the two is specified in the
+second integer of the file (the integer right after the format number,
+see above).</p></li>
+<li><p>All other floating point numbers are double precision (i.e.8-byte
+floats).</p></li>
+<li><p>For AMR-grids the <code class="docutils literal notranslate"><span class="pre">amr_grid.binp</span></code> file contains a huge list
+of 0 or 1 numbers (see Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a>). Since it is
+silly to use 8-byte integers for numbers that are either 0 or 1, the
+numbers in this list are 1-byte integers (bytes).</p></li>
+</ul>
+<p>Example: According to Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a> the ASCII file
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file has the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">nrspec</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>According to the above listed rules the binary file <code class="docutils literal notranslate"><span class="pre">dust_density.binp</span></code> file
+then has the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">iformat</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">precis</span><span class="o">=</span><span class="mi">8</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrcells</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrspec</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where the <code class="docutils literal notranslate"><span class="pre">&lt;int8:precis=8&gt;</span></code> means that this is an 8-byte integer that we call
+‘precis’ (the name is irrelevant here), and it has value 8, and
+<code class="docutils literal notranslate"><span class="pre">&lt;dbl8:density[1,ispec=1]&gt;</span></code> means that this is a double-precision number
+(8-byte float). In other words: the first 8 bytes of the file contain the format
+number (which is 1 at present). The second 8 bytes contain the number 8, telling
+that the main data (i.e.the <code class="docutils literal notranslate"><span class="pre">density</span></code> data) are double precision
+variables. The third set of 8 bytes gives the number of cells, while the fourth
+set gives the number of dust species. The data of <code class="docutils literal notranslate"><span class="pre">density</span></code> starts as of the
+33rd byte of the file. If you want to compress the file even further, and you
+are satisfied with single-precision data, then the file would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">iformat</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">precis</span><span class="o">=</span><span class="mi">4</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrcells</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrspec</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Another example: According to Section <a class="reference internal" href="dustradtrans.html#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>
+RADMC-3D can compute the mean intensity of radiation at each grid point at a set
+of pre-defined frequencies, and write this out to an ASCII file called
+<code class="docutils literal notranslate"><span class="pre">mean_intensity.out</span></code>. The contents of this file are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">2</span> <span class="n">at</span> <span class="n">present</span>
+<span class="n">nrcells</span>
+<span class="n">nfreq</span>                                    <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">frequencies</span>
+<span class="n">freq_1</span> <span class="n">freq_2</span> <span class="o">...</span> <span class="n">freq_nfreq</span>             <span class="o">&lt;===</span> <span class="n">List</span> <span class="n">of</span> <span class="n">frequencies</span> <span class="ow">in</span> <span class="n">Hz</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">rto_style=3</span></code> in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, however, RADMC-3D will
+instead produce a binary file called <code class="docutils literal notranslate"><span class="pre">mean_intensity.bout</span></code>, which has the
+contents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">iformat</span><span class="o">=</span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">precis</span><span class="o">=</span><span class="mi">8</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrcells</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nfreq</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">freq_1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">freq_2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">freq_nfreq</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>If you also set <code class="docutils literal notranslate"><span class="pre">rto_single=1</span></code> in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, then you
+will get:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">iformat</span><span class="o">=</span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">precis</span><span class="o">=</span><span class="mi">4</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrcells</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nfreq</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">freq_1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">freq_2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">freq_nfreq</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">flt4</span><span class="p">:</span><span class="n">meanint</span><span class="p">[</span><span class="n">nfreq</span><span class="p">,</span><span class="n">icell</span><span class="o">=</span><span class="n">nrcells</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Note that only the mean intensity data (the main data) are single precision
+floats.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="clioptions.html" class="btn btn-neutral float-right" title="Command-line options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="inputoutputfiles.html" class="btn btn-neutral float-left" title="Main input and output files of RADMC-3D" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

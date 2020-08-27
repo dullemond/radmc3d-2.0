@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Visualization with VTK tools (e.g. Paraview or VisIt) &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tips, tricks and problem hunting" href="tipsandtricks.html" />
+    <link rel="prev" title="Analysis tools inside of radmc3d" href="toolsinside.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Visualization with VTK tools (e.g. Paraview or VisIt)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/vtkoutput.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="visualization-with-vtk-tools-e-g-paraview-or-visit">
+<span id="chap-vtk-output"></span><h1>Visualization with VTK tools (e.g. Paraview or VisIt)<a class="headerlink" href="#visualization-with-vtk-tools-e-g-paraview-or-visit" title="Permalink to this headline">¶</a></h1>
+<p>Since 3-D models can be very hard to visualize, and since RADMC-3D is not
+made for quick rendering, it can be very useful to make use of a number of
+freely available 3-D rendering tools, for example:</p>
+<ul class="simple">
+<li><p>Paraview www.paraview.org</p></li>
+<li><p>VisIt visit.llnl.gov</p></li>
+</ul>
+<p>RADMC-3D can create data files for use with these tools. The file format is
+VTK (Visual Tool Kit), which is a simple ascii file format which is used by
+various programs. Those tools are not only useful for visualizing the
+3-D structure of the model, but also for visualizing the structure of the
+grid which can be, when using AMR, rather complex.</p>
+<p>The file that RADMC-3D writes is called <code class="docutils literal notranslate"><span class="pre">model.vtk</span></code>. You should be able to
+open it directly from within e.g. paraview. Figures <a class="reference internal" href="#fig-disk-with-vtk"><span class="std std-numref">Fig. 24</span></a>
+and <a class="reference internal" href="#fig-modeljuhasz-with-vtk"><span class="std std-numref">Fig. 25</span></a> gives an example of how you can analyze a
+complex geometry with AMR refinement with Paraview. The file {em always}
+includes the information about the grid. In addition you can also make RADMC-3D
+add scalar fields or vector fields.</p>
+<p>To create a VTK file for viewing the grid only, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_grid</span>
+</pre></div>
+</div>
+<p>To create a VTK file for viewing the gas density (this file then also
+includes the grid of course) type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_gas_density</span>
+</pre></div>
+</div>
+<p>Since density can span a huge range, the 10-log of the density (in units of
+gram/cm:math:<cite>^3</cite>) is written instead. For the gas temperature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_gas_temperature</span>
+</pre></div>
+</div>
+<p>which is written in Kelvin (and linearly, not log). For the dust density of
+dust species 1:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_dust_density</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>and for dust species 2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_dust_density</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>Also these densities are 10-log. RADMC-3D typically computes the dust
+temperature using a Monte Carlo approach. By typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_dust_temperature</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>RADMC-3D will try to read the dust temperature from the file
+<code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> (if this file has been created
+earlier by a <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">mctherm</span></code> call) and then create
+the VTK file. You can also let RADMC-3D compute the temperature
+directly and write it out to VTK right afterward:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">mctherm</span> <span class="n">vtk_dust_temperature</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>If you are doing line transfer you may wish to visualize the number density
+of the molecules (or atoms):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_molspec</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>(for molecular species 1). This number density (in cm:math:<cite>^{-3}</cite>) is also
+written in 10-log form.  You may also wish to visualize the polulations of
+level 1 (ground state) of molecule 2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_levelpop</span> <span class="mi">2</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The gas velocity field can be written to VTK file by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">vtk_velocity</span>
+</pre></div>
+</div>
+<p>This is a vector field.</p>
+<p>Note: The VTK mode works for 3-D cartesian and 3-D spherical coordinates
+(thanks, Attila Juhasz, for the 3-D spherical mode!).</p>
+<div class="figure align-default" id="id1">
+<span id="fig-disk-with-vtk"></span><img alt="_images/disk_rosenfeld.png" src="_images/disk_rosenfeld.png" />
+<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Example of image created with Paraview, using the VTK output of RADMC-3D.
+The model shown here is a warped disk model by Katherine Rosenfeld, in 3-D
+cartesian coordinates with oct-tree AMR refinement.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id2">
+<span id="fig-modeljuhasz-with-vtk"></span><img alt="_images/model_juhasz_vtk_lowres.png" src="_images/model_juhasz_vtk_lowres.png" />
+<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">Example of image created with Paraview, using the VTK output of RADMC-3D.
+The model shown here is a warped disk model by Attila Juhasz, in 3-D
+spherical coordinates with separable refinement, but without AMR refinement.
+The model is kept low-resolution on purpose, to show the grid structure
+better.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tipsandtricks.html" class="btn btn-neutral float-right" title="Tips, tricks and problem hunting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="toolsinside.html" class="btn btn-neutral float-left" title="Analysis tools inside of radmc3d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

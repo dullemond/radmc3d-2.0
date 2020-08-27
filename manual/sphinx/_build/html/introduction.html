@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstarting with RADMC-3D" href="quickstart.html" />
+    <link rel="prev" title="RADMC-3D Version 2.0, an astrophysics radiative transfer tool" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-radmc-3d">What is RADMC-3D?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#capabilities">Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-tracker">Version tracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copyright">Copyright</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-authors">Contributing authors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-radmc-3d">
+<h2>What is RADMC-3D?<a class="headerlink" href="#what-is-radmc-3d" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D is a software package for astrophysical radiative transfer calculations
+in arbitrary 1-D, 2-D or 3-D geometries. It is mainly written for continuum
+radiative transfer in dusty media, but also includes modules for gas line
+transfer. Typical applications would be protoplanetary disks, pre- and
+proto-stellar molecular cloud cores, and similar objects. It does not treat
+photoionization of gas, nor does it treat chemistry. It can self-consistently
+compute dust temperatures for the radiative transfer, but it is not equipped for
+self-consistent gas temperature computations (as this requires detailed coupling
+to photochemistry). The main strength of RADMC-3D lies in the flexibility of the
+spatial setup of the models: One can create or use parameterized dust and/or gas
+density distributions, or one can import these from snapshots of hydrodynamic
+simulations.</p>
+</div>
+<div class="section" id="capabilities">
+<h2>Capabilities<a class="headerlink" href="#capabilities" title="Permalink to this headline">¶</a></h2>
+<p>Here is a list of current and planned features. Those features that are now
+already working are marked with [+], while those which are not yet (!!) built in
+are marked with [-]. Those that are currently being developed are marked with
+[.] and those that are ready, but are still in the testing phase are marked with
+[t].</p>
+<ol class="arabic simple">
+<li><p>Coordinate systems:</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] Cartesian coordinates (3-D)</p></li>
+<li><p>[+] Spherical coordinates (1-D, 2-D and 3-D)</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>Gridding systems (regular and adaptive mesh refinement grids are
+available for cartesian {em and} spherical coordinates):</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] Regular</p></li>
+<li><p>[+] Adaptive Mesh Refinement: oct-tree style</p></li>
+<li><p>[+] Adaptive Mesh Refinement: layered (‘patch’) style</p></li>
+<li><p>[-] Voronoi gridding {em [To be implemented on request]}</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Radiation mechanisms:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] Dust continuum, thermal emission</p></li>
+<li><p>[+] Dust continuum scattering:</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] …in isotropic approximation</p></li>
+<li><p>[+] …with full anisotropy</p></li>
+<li><p>[+] …with full Stokes and Polarization</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>[-] Dust quantum heated grains {em [To be implemented on request]}</p></li>
+<li><p>[t] Polarized dust emission by aligned grains {em [first test version]}</p></li>
+<li><p>[+] Gas line transfer (LTE)</p></li>
+<li><p>[+] Gas line transfer (non-LTE: LVG)</p></li>
+<li><p>[+] Gas line transfer (non-LTE: LVG + Escape Probability)</p></li>
+<li><p>[-] Gas line transfer (non-LTE: full transfer)</p></li>
+<li><p>[+] Gas line transfer with user-defined populations</p></li>
+<li><p>[+] Gas continuum opacity and emissivity sources</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Radiation netto sources for continuum:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] Discrete stars positioned at will</p></li>
+<li><p>[t] Continuous ‘starlike’ source</p></li>
+<li><p>[t] Continuous ‘dissipation’ source</p></li>
+<li><p>[t] External ‘interstellar radiation field’</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Imaging options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] Observer from ‘infinite’ distance</p></li>
+<li><p>[+] Zoom-in at will</p></li>
+<li><p>[+] Flux-conserving imaging, i.e. pixels are recursively refined</p></li>
+<li><p>[+] A movie-making tool</p></li>
+<li><p>[+] Multiple wavelengths in a single image</p></li>
+<li><p>[+] Local observer with perspective view (for PR movies!)</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Spectrum options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] SED spectrum (spectrum on ‘standard’ wavelength grid)</p></li>
+<li><p>[+] Spectrum on any user-specified wavelength grid</p></li>
+<li><p>[+] Spectrum of user-specified sub-region (pointing)</p></li>
+<li><p>[t] Specification of size and shape of a primary ‘beam’ for spectra</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>User flexibility:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>[+] Free model specification via tabulated input files</p></li>
+<li><p>[+] Easy special-purpose compilations of the code (optional)</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Front-end Python packages:</p>
+<ol class="arabic simple">
+<li><p>[+] Python simple tools for RADMC-3D</p></li>
+<li><p>[+] Python RADMC-3D library {smalltt radmc3dPy} (author: A.~Juhasz)</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple">
+<li><p>[+] Stars can be treated as point-sources or as spheres</p></li>
+<li><p>[+] Option to calculate the mean intensity $J_nu(vec x)$ in the model</p></li>
+<li><p>[+] OpenMP parallellization of the Monte Carlo</p></li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="version-tracker">
+<h2>Version tracker<a class="headerlink" href="#version-tracker" title="Permalink to this headline">¶</a></h2>
+<p>The RADMC-3D software package in under continuous development. A very
+detailed development log-book is found in the git repository.
+A more user-friendly overview of the development history can be
+found in this manual, in appendix ref{chap-development-history}.</p>
+</div>
+<div class="section" id="copyright">
+<h2>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D was developed from 2007 to 2010/2011 at the Max Planck Institute
+for Astronomy in Heidelberg, funded by a Max Planck Research Group grant
+from the Max Planck Society. As of 2011 the development continues at the
+Institute for Theoretical Astrophysics (ITA) of the Zentrum für Astronomy
+(ZAH) at the University of Heidelberg.</p>
+<p><strong>The use of this software is free of charge. However, it is not allowed
+to distribute this package without prior consent of the lead author
+(C.P. Dullemond). Please refer any interested user to the web site of this
+software where the package is available, which is currently:</strong></p>
+<p><a class="reference external" href="http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d">http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d</a></p>
+<p>or the github repository:</p>
+<p><a class="reference external" href="https://github.com/dullemond/radmc3d-2.0">https://github.com/dullemond/radmc3d-2.0</a></p>
+<p>The github repository will always have the latest version, but it may
+not be always the most stable version (though usually it is).</p>
+</div>
+<div class="section" id="contributing-authors">
+<h2>Contributing authors<a class="headerlink" href="#contributing-authors" title="Permalink to this headline">¶</a></h2>
+<p>The main author of RADMC-3D is Cornelis P. Dullemond. However, the main
+author of the <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> Python package is Attila Juhasz.</p>
+<p>Numerous people have made contributions to RADMC-3D. Major contributions
+are from:</p>
+<ul class="simple">
+<li><p>Michiel Min</p></li>
+<li><p>Attila Juhasz</p></li>
+<li><p>Adriana Pohl</p></li>
+<li><p>Rahul Shetty</p></li>
+<li><p>Farzin Sereshti</p></li>
+<li><p>Thomas Peters</p></li>
+<li><p>Benoit Commercon</p></li>
+<li><p>Alexandros Ziampras</p></li>
+</ul>
+<p>The code profited from testing, feedback and bug reports from (incomplete list):</p>
+<ul class="simple">
+<li><p>Daniel Harsono</p></li>
+<li><p>Rainer Rolffs</p></li>
+<li><p>Laszlo Szucs</p></li>
+<li><p>Sean Andrews</p></li>
+<li><p>Stella Offner</p></li>
+<li><p>Chris Beaumont</p></li>
+<li><p>Katrin Rosenfeld</p></li>
+<li><p>Soren Frimann</p></li>
+<li><p>Jon Ramsey</p></li>
+<li><p>Seokho Lee</p></li>
+<li><p>Blake Hord</p></li>
+<li><p>Tilman Birnstiel</p></li>
+</ul>
+<p>and others.</p>
+</div>
+<div class="section" id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h2>
+<p><strong>IMPORTANT NOTICE 1: I/We reject all responsibility for the use of this
+package. The package is provided as-is, and we are not responsible for any
+damage to hardware or software, nor for incorrect results that may result
+from the software. The user is fully responsible for any results from this
+code, and we strongly recommend thorough testing of the code before using
+its results in any scientific papers.</strong></p>
+<p><strong>IMPORTANT NOTICE 2: Any publications which involve the use of this
+software must mention the name of this software package and cite the
+accompanying paper once it is published (Dullemond et al.in prep), or
+before that the above mentioned web site.</strong></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstarting with RADMC-3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="RADMC-3D Version 2.0, an astrophysics radiative transfer tool" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

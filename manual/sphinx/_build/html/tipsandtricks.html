@@ -1,0 +1,566 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tips, tricks and problem hunting &mdash; radmc3d 2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Main input and output files of RADMC-3D" href="inputoutputfiles.html" />
+    <link rel="prev" title="Visualization with VTK tools (e.g. Paraview or VisIt)" href="vtkoutput.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview of the RADMC-3D package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagesspectra.html">Making images and spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stars.html">More information about the treatment of stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internalsetup.html">Modifying RADMC-3D: Internal setup and user-specified radiative processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolsinside.html">Analysis tools inside of radmc3d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtkoutput.html">Visualization with VTK tools (e.g. Paraview or VisIt)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tips, tricks and problem hunting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tips-and-tricks">Tips and tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bug-hunting">Bug hunting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#some-tips-for-avoiding-troubles-and-for-making-good-models">Some tips for avoiding troubles and for making good models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#careful-things-that-might-go-wrong">Careful: Things that might go wrong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-technical-problems-and-how-to-fix-them">Common technical problems and how to fix them</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inputoutputfiles.html">Main input and output files of RADMC-3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="binaryio.html">Binary I/O files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optionscompat.html">Which options are mutually incompatible?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="opacitieswww.html">Acquiring opacities from the WWW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">radmc3d</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Tips, tricks and problem hunting</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tipsandtricks.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tips-tricks-and-problem-hunting">
+<span id="chap-problem-hunting"></span><h1>Tips, tricks and problem hunting<a class="headerlink" href="#tips-tricks-and-problem-hunting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tips-and-tricks">
+<h2>Tips and tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D is a large software package, and the user will in all
+likelihood not understand all its internal workings. In this section we will
+discuss some issues that might be useful to know when you do modeling.</p>
+<ul>
+<li><p><em>Things that can drastically slow down ray-tracing:</em></p>
+<p>When you create images or spectra, <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will perform a ray-tracing
+calculation. You may notice that sometimes this can be very fast, but for
+other problems it can be very slow. This is because, depending on which
+physics is switched on, different ray-tracing strategies must be followed. For
+instance, if you use a dust opacity without scattering opacity (or if you
+switch dust scattering off by setting <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> to 0 in the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file), and you make dust continuum images, or make SEDs, this
+may go very rapidly: less than a minute on a modern computer for grids of
+256x256x256. However, when you include scattering, it may go slower. Why is
+that? That is because at each wavelength <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will now have to make a
+quick Monte Carlo scattering model to compute the dust scattering source
+function. This costs time. And it will cost more time if you have
+<code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> set to a high value in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, although it
+will create better images. Furthermore, if you <em>also</em> include gas lines using
+the simple LTE or simple LVG methods, then things become even slower, because
+each wavelength channel image is done after each other, and each time all the
+populations of the molecular levels have to be re-computed. If dust scattering
+would be switched off (which is for some wavelength domains presumably not a
+bad approximation; in particular for the millimeter domain), then no
+scattering Monte Carlo runs have to be done for each wavelength. Then the code
+can ray-trace all wavelength simultaneously: each ray is traced only once, for
+all wavelength simultaneously. Then the LTE/LVG level populations have to be
+computed only once at each location along the ray.  So if you use dust and
+lines simultaneously, it can be advantageous for speed if you can afford to
+switch off the dust scattering, for instance, if you model sub-millimeter
+lines in regions with dust grains smaller than 10 micron or so. If you must
+include scattering, but your model is not so big that you may get memory
+limitation problems, then you may also try the fast LTE or fast LVG modes: in
+those modes the level populations are pre-computed before the ray-tracing
+starts, which saves time. But that may require much memory.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="bug-hunting">
+<h2>Bug hunting<a class="headerlink" href="#bug-hunting" title="Permalink to this headline">¶</a></h2>
+<p>Although we of course hope that <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will not run into
+troubles or crash, it is nevertheless possible that it will. There are
+several ways by which one can hunt for bugs, and we list here a few
+obvious ones:</p>
+<ul class="simple">
+<li><p>In principle the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> should make sure that all dependencies of all
+modules are correct, so that the most dependent modules are compiled last. But
+during the further development of the code perhaps this may be not 100%
+guaranteed. So try do <code class="docutils literal notranslate"><span class="pre">makeclean</span></code> followed by <code class="docutils literal notranslate"><span class="pre">make</span></code> (or <code class="docutils literal notranslate"><span class="pre">makeinstall</span></code>) to assure a clean make.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> you can add (or uncomment) the line
+<code class="docutils literal notranslate"><span class="pre">BCHECK=-fbounds-check</span></code>, if you use <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>.  Find the array
+boundary check switch on your own compiler if it is not <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>.</p></li>
+<li><p>Make sure that in the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> code the variable <code class="docutils literal notranslate"><span class="pre">debug_check_all</span></code> is
+set to 1. This will do some on-the-fly checks in the code.</p></li>
+</ul>
+</div>
+<div class="section" id="some-tips-for-avoiding-troubles-and-for-making-good-models">
+<h2>Some tips for avoiding troubles and for making good models<a class="headerlink" href="#some-tips-for-avoiding-troubles-and-for-making-good-models" title="Permalink to this headline">¶</a></h2>
+<p>Here is a set of tips that we recommend you to follow, in order to avoid
+troubles with the code and to make sure that the models you make are OK.
+This list is far from complete! It will be updated as we continue to
+develop the code.</p>
+<ol class="arabic simple">
+<li><p>Make a separate directory for each model. This avoids confusion with
+the many input and output files from the models.</p></li>
+<li><p>When experimenting: regularly keep models that work, and continue
+experimenting with a fresh model directory. If things go wrong later, you
+can always fall back on an older model that <em>did</em> work well.</p></li>
+<li><p>Keep model directories within a parent directory of the code, just
+like it is currently organized. This ensures that each model is always
+associated to the version of the code for which it was developed.  If you
+update to a new version of the code, it is recommended to simply copy the
+models you want to continue with to the new code directory (and edit the
+<code class="docutils literal notranslate"><span class="pre">SRC</span></code> variable in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> if you use the
+techniques described in Section <a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a> and
+Chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a>).</p></li>
+<li><p>If you make a new model, try to start with as clean a directory as
+possible. This avoids that you accidently have a old files hanging around,
+their presence of which may cause troubles in your new model.  So if you
+make a model update, make a new directory and then copy only the files
+that are necesary (for instance, <code class="docutils literal notranslate"><span class="pre">problem_setup.pro</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code>, <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> and other
+necessary files). One way of doing this easily is to write a little perl
+script or csh script that does this for you.</p></li>
+<li><p>In the example model directories there is always a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>
+present, even if no local <code class="docutils literal notranslate"><span class="pre">*.f90</span></code> files are present. The idea
+is that by typing {small make cleanall} you can safely clean up the
+model directory and restore it to pre-model status. This can be useful
+for safely cleaning model directories so that only the model setup files
+remain there. It may save enormous amounts of disk space. But of course,
+it means that if you revisit the model later, you would need to redo
+the Monte Carlo simulations again, for instance. It is a matter of
+choice between speed of access to results on the one hand and disk space
+on the other hand.</p></li>
+<li><p>If you use LVG or escape probability to compute the level populations
+of molecules, please be aware that you must include all levels that could
+be populated, not only the levels belonging to the line you are interested
+in.</p></li>
+</ol>
+</div>
+<div class="section" id="careful-things-that-might-go-wrong">
+<span id="sec-things-going-wrong"></span><h2>Careful: Things that might go wrong<a class="headerlink" href="#careful-things-that-might-go-wrong" title="Permalink to this headline">¶</a></h2>
+<p>In principle RADMC-3D should be fine-tuned such that it produced reliable
+results in most circumstances. But radiative transfer modeling, like all
+kinds of modeling, is not an entirely trivial issue. Extreme circumstances
+can lead to wrong results, if the user is not careful in doing various
+sanity checks. This section gives some tips that you, the user, may wish
+to do to check that the results are ok. This is not an exhaustive list!
+So please remain creative yourself in coming up with good tests and checks.</p>
+<ol class="arabic">
+<li><p><em>Too low number of photon packages for thermal Monte Carlo</em></p>
+<p>If the number of photon packages for the thermal Monte Carlo simulation
+(Section <a class="reference internal" href="dustradtrans.html#sec-dust-thermal-monte-carlo"><span class="std std-ref">The thermal Monte Carlo simulation: computing the dust temperature</span></a>) is too low, the dust
+temperatures are going to be very noisy. Some cells may even have temperature
+zero. This may not only lead to noisy images and spectra, but also simply
+wrong results. However, deep inside optically thick clouds (or protoplanetary
+disks) it will be hard to avoid this problem.  Since those regions are very
+deep below the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface, it might not be always too critical in
+that case. A bit of experimenting might be necessary.</p>
+</li>
+<li><p><em>Too low number of photon packages for scattering</em></p>
+<p>When making images or spectra in which dust scattering is important, the
+scattered light emissivity is computed by a quick Monte Carlo simulation
+before the ray-tracing (see Section <a class="reference internal" href="dustradtrans.html#sec-scat-monte-carlo"><span class="std std-ref">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</span></a>). This
+requires the setting of the number of photon packages used for this (the
+variable <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> for images and equivalently <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> for
+spectra, both can be set in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file). If you see too much
+‘noise’ in your scattering image, you can improve this by setting
+<code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> to a larger value (default = 100000). If your spectrum
+contains too much noise, try setting <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> to a larger value
+(default = 10000).</p>
+</li>
+<li><p><em>Too optically thick cells at the surface or inner edge</em></p>
+<p>You may want to experiment with grid resolution and refinement. Strictly
+speaking the transition from optically thin to optically thick, as seen both
+by the radiation entering the object and by the observer, has to occur over
+more than one cell. That is for very optically thick models, one may need to
+introduce grid refinement in various regions. As an example: an optically
+thick protoplanetary disk may have an extremely sharp thin-thick transition
+near the inner edge. To get the spectra and images right, it is important
+that these regions are resolved by the grid (note: once well inside the
+optically thick interior, it is no longer necessary to resolve individual
+optical mean free paths, thankfully). It should be said that in practice it
+is often impossible to do this in full strictness. But you may want to at
+least experiment a bit with refining the grid (using either ‘separable
+refinement’, see Section <a class="reference internal" href="gridding.html#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a>, or AMR refinement,
+see Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>). An example how wrong things can go
+at the inner edge of a protoplanetary disk, if the inner cells are not
+assured to be optically thin through grid refinement (and possibly
+additionally a bit of smoothing of the density profile too) is given in
+Fig.~:numref:<cite>fig-innerrim-lowres</cite>.</p>
+<div class="figure align-default" id="id1">
+<span id="fig-innerrim-lowres"></span><img alt="_images/innerrim.png" src="_images/innerrim.png" />
+<p class="caption"><span class="caption-number">Fig. 26 </span><span class="caption-text">Example of what can go wrong with radiative transfer if the inner cells of
+a model are optically thick (i.e.if no grid refinement is used, see
+Section <a class="reference internal" href="gridding.html#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a>). Shown here are scattered light
+images at <span class="math notranslate nohighlight">\(\lambda=0.7\mu\)</span>Delta R/R=0.04`.  Left image: the
+inner cells are marginally optically thin <span class="math notranslate nohighlight">\(\Delta\tau\simeq 1\)</span>,
+creating a bright inner ring, as is expected. Right image: ten times
+higher optical depth, making the inner cells optically thick with roughly
+<span class="math notranslate nohighlight">\(\Delta\tau\simeq 10\)</span>, resulting in a wrong image in which the
+emission near the midplane is strongly reduced.  The reason for that is
+that the scattering source function, due to photons scattering at the
+inner 10% of the inner cell, is diluted over the entire cell, making the
+scattered light brighness 10x lower than it should be.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</li>
+<li><p><em>Model does not fit onto the grid (or onto the refined part of the grid)</em></p>
+<p>The grid must be large enough to contain the entire <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span>
+surface of a model at all relevant wavelengths. If you use grid refinement,
+the same is true for the <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span> surface being within the
+refinened part of the grid. This is not trivial!  If you, for instance,
+import a 3-D hydrodynamic model into RADMC-3D, then it is a common problem
+that the <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span> surface ‘wants’ to be outside of the grid (or
+outside of the higher-resolution part of the <span class="math notranslate nohighlight">\(\theta\)</span>-grid if you use
+separable grid refinement: see Fig.~:ref:<cite>fig-spher-sep-ref</cite>). For example:
+if you make a * hydrodynamic* model of a protoplanetary disk in <span class="math notranslate nohighlight">\(R\)</span>,
+<span class="math notranslate nohighlight">\(\Theta\)</span> and <span class="math notranslate nohighlight">\(\Phi\)</span> coordinates, you typically want to model only
+the lower 2 pressure scale heights of the disk, since that contains 99.5% of
+the mass of the disk. However, for <em>radiative transfer</em> this may not be
+enough, since if the disk has an optical depth of <span class="math notranslate nohighlight">\(\tau=10^3\)</span>, the
+optically thin surface layer is less than <span class="math notranslate nohighlight">\(0.1\%\)</span> of the disk mass,
+meaning that you need to model the lower 3 (not 2!) pressure scale
+heights. Simply inserting the hydrodynamics model with the first 2 scale
+heights would lead to an artifical cut-off of the disk. In other words, the
+real <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span> surface ‘wants’ to be outside of the grid (or
+outside of the refined part of the grid). This leads to wrong results.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="common-technical-problems-and-how-to-fix-them">
+<h2>Common technical problems and how to fix them<a class="headerlink" href="#common-technical-problems-and-how-to-fix-them" title="Permalink to this headline">¶</a></h2>
+<p>When using a complex code such as RADMC-3D there are many ways you might
+encounter a problem. Here is a list of common issues and tips how to fix them.</p>
+<ol class="arabic">
+<li><p><em>After updating RADMC-3D to a new version, some setups don’t work anymore.</em></p>
+<p>This problem can be due to several things:</p>
+<ul class="simple">
+<li><p>When your model makes a local <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> executable (see Section
+<a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a>), for instance when you use the
+<code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> to set up the model, then you may need to edit the
+<code class="docutils literal notranslate"><span class="pre">SRC</span></code> variable in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> again to point to the new code
+directory, and type <code class="docutils literal notranslate"><span class="pre">makeclean</span></code> followed by <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p></li>
+<li><p>Are you sure to have recompiled <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> again <em>and</em> installed it (by
+going in <code class="docutils literal notranslate"><span class="pre">src/</span></code> and typing <code class="docutils literal notranslate"><span class="pre">makeinstall</span></code>)?</p></li>
+<li><p>Try going back to the old version and recheck that the model works well
+there. If that works, and the above tricks don’t fix the problem, then it
+may be a bug. Please contact the author.</p></li>
+</ul>
+</li>
+<li><p><em>After updating RADMC-3D to a new version: the new features are not present/working.</em></p>
+<p>Maybe again the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> issue above.</p>
+</li>
+<li><p><em>After updating RADMC-3D to a new version: model based on userdef_module fails to compile</em></p>
+<p>If you switch to a new version of the code and try to ‘make’ an earlier model
+that uses the userdef_module.f90, it might sometimes happen that the
+compilation fails because some subroutine <code class="docutils literal notranslate"><span class="pre">userdef_***</span></code> is not known (here
+<code class="docutils literal notranslate"><span class="pre">***</span></code> is some name). Presumably what happened is that a new user-defined
+functionality has been added to the code, and the corresponding subroutine
+<code class="docutils literal notranslate"><span class="pre">userdef_***</span></code> has been added to the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>. If, however,
+in your own <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> this subroutine is not yet built in, then
+the compiler can’t find this subroutine and complains. Solution: just add a
+dummy subroutine to your <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> with that name (have a look
+at the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory).  Then recompile and
+it should now work.</p>
+</li>
+<li><p><em>While reading an input file, RADMC-3D says ‘Fortran runtime error: End of file’</em></p>
+<p>This can of course have many reasons. Some common mistakes are:</p>
+<ul class="simple">
+<li><p>In <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> you may have specified the coordinates of the nx*ny*nz
+grid centers instead of (nx+1)*(ny+1)*(nz+1) grid cell interfaces.</p></li>
+<li><p>You may have no line feed at the end of one of the ascii input files.  Some
+fortran compilers can read only lines that are officially ended with a
+return or line feed. Solution: Just write an empty line at the end of such
+a file.</p></li>
+</ul>
+</li>
+<li><p><em>My changes to the main code do not take effect</em></p>
+<p>Did you type, in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory, the full <code class="docutils literal notranslate"><span class="pre">makeinstall</span></code>? If you
+type just <code class="docutils literal notranslate"><span class="pre">make</span></code>, then the code is compiled but not installed as the
+default code.</p>
+</li>
+<li><p><em>My userdef_module.f90 stuff does not work</em></p>
+<p>If you run <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> with own userdefined stuff, then you must make sure to
+run the right executable. Just typing <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> in the shell might cause
+you to run the standard compilation instead of your special-purpose one. Try
+typing <code class="docutils literal notranslate"><span class="pre">./radmc3d</span></code> instead, which forces the shell to use the local
+executable.</p>
+</li>
+<li><p><em>When I make images from the command line, they take very long</em></p>
+<p>If you make images with <code class="docutils literal notranslate"><span class="pre">radmc3dimage</span></code> (plus some keywords) from the
+command line, the default is that a flux-conserving method of ray-tracing is
+used, which is called recursive sub-pixeling (see Section
+<a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>). You can make an image without sub-pixeling with
+the command-line option <code class="docutils literal notranslate"><span class="pre">nofluxcons</span></code>. That goes much faster, and also
+gives nice images, but the flux (the integral over the entire image) may
+not be accurate.</p>
+</li>
+<li><p><em>My line channel maps (images) look bad</em></p>
+<p>If you have a model with non-zero gas velocities, and if these gas velocities
+have cell-to-cell differences that are larger than or equal to the intrinsic
+(thermal+microturbulent) line width, then the ray-tracing will not be able to
+pick up signals from intermediate velocities. In other words, because of the
+discrete gridding of the model, only discrete velocities are present, which
+can cause numerical problems. There are two possible solutions to this
+problem. One is the wavelength band method described in Section
+<a class="reference internal" href="imagesspectra.html#sec-wavelength-bands"><span class="std std-ref">Heads-up: In reality wavelength are actually wavelength bands</span></a>.  But a more systematic method is the ‘doppler
+catching’ method described in Section <a class="reference internal" href="lineradtrans.html#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a> (which can
+be combined with the wavelength band method of Section
+<a class="reference internal" href="imagesspectra.html#sec-wavelength-bands"><span class="std std-ref">Heads-up: In reality wavelength are actually wavelength bands</span></a> to make it even more perfect).</p>
+</li>
+<li><p><em>My line spectra look somewhat noisy</em></p>
+<p>If you include dust continuum scattering (Section <a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a>) then
+the ray-tracer will perform a scattering Monte Carlo simulation at each
+wavelength. If you look at lines where dust scattering is still a strong
+source of emission, and if <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> (Section
+<a class="reference internal" href="dustradtrans.html#sec-scat-monte-carlo"><span class="std std-ref">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</span></a>) is set to a low value, then the different random
+walks of the photon packages in each wavelength channel may cause slightly
+different resulting fluxes, hence the noise.</p>
+</li>
+<li><p><em>My dust continuum images look very noisy/streaky: many ‘lines’ in the image</em></p>
+<p>There are two possible reasons:</p>
+<ol class="arabic simple">
+<li><p><em>Photon noise in the thermal Monte Carlo run:</em> If you have too few photon
+packages for the thermal Monte Carlo computation (see Chapter
+<a class="reference internal" href="dustradtrans.html#chap-dust-transfer"><span class="std std-ref">Dust continuum radiative transfer</span></a>), then the dust temperatures are simply not well
+computed. This may give these effects. You must then increase <code class="docutils literal notranslate"><span class="pre">nphot</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file to increase the photon statistics for the thermal
+Monte Carlo run.</p></li>
+<li><p><em>Photon noise in the scattering Monte Carlo run:</em> If you are making an
+image at a wavelength at which the disk is not emitting much thermal
+radiation, then what you will see in the image is scattered light.
+<code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> makes a special Monte Carlo run for scattered light before
+each image. This Monte Carlo run has its own variable for setting the
+number of photon packages: <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>. If this value is set too low,
+then you can see individual ‘photon’-trajectories in the image, making the
+image look bad. It is important to note that this can only be remedied by
+increasing <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> (in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file, see Section
+<a class="reference internal" href="dustradtrans.html#sec-scat-monte-carlo"><span class="std std-ref">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</span></a>), not by setting <code class="docutils literal notranslate"><span class="pre">nphot</span></code> (which is the
+number of photon packages for the thermal Monte Carlo computation). Please
+also read Section <a class="reference internal" href="dustradtrans.html#sec-single-multiple-scattering"><span class="std std-ref">Single-scattering vs. multiple-scattering</span></a> for a detailed
+discussion about the effects of multiple scattering and the possibility of
+it leading to streaks in the images.</p></li>
+</ol>
+<p>However, it might also mean that something is wrong with the setup. A few
+common setup-errors that could cause these issues are:</p>
+<ul class="simple">
+<li><p>Accidently created a way too massive object. Let us discuss this with an
+example of a protoplanetary disk: suppose you created, in spherical
+coordinates, not a protoplanetary disk with
+<span class="math notranslate nohighlight">\(M_{\mathrm{disk}}=0.01\,M_{\odot}\)</span> but accidently one with
+<span class="math notranslate nohighlight">\(M_{\mathrm{disk}}=10\,M_{\odot}\)</span>. In such a case a lot of things
+will go wrong. First of all the inner edge of the disk will almost
+certainly behave strangely (see Fig.~:ref:<cite>fig-innerrim-lowres</cite>). Secondly,
+the surface of the disk will almost certainly be cut-off in the way
+decribed in Section <a class="reference internal" href="#sec-things-going-wrong"><span class="std std-ref">Careful: Things that might go wrong</span></a>, in which case the
+surface of the disk will be hardly illuminated by the star, because the
+disk surface is then exactly conical (i.e.starlight will not be able to
+impinge on the surface). This will lead to very low photon statistics at
+the surface.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="inputoutputfiles.html" class="btn btn-neutral float-right" title="Main input and output files of RADMC-3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="vtkoutput.html" class="btn btn-neutral float-left" title="Visualization with VTK tools (e.g. Paraview or VisIt)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Cornelis Dullemond
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
