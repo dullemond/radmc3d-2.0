@@ -392,7 +392,7 @@ Here is how this problem is solved in RADMC-3D:
      in which you have your paths set (in tcsh or bash) typing just 
      ``radmc3d`` *may* instead use the global version (that you
      may have created in the ``src/`` directory with ``make
-     install``). So to be sure to use the {\em local} version, just put the
+     install``). So to be sure to use the *local* version, just put the
      ``./`` in front of the ``radmc3d``.
 
 Note: In chapter :ref:`chap-internal-setup` there is more information on how to

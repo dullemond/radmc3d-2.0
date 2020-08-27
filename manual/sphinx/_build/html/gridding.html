@@ -218,11 +218,11 @@ instance, the x-grid is given by specifying the cell walls in x-direction. If we
 have, say, 10 cells in x-direction, we must specify 11 cell wall positions. For
 instance: <span class="math notranslate nohighlight">\(x_i=\{-5,-4,-3,-2,-1,0,1,2,3,4,5\}\)</span>.  For the
 <span class="math notranslate nohighlight">\(y\)</span>-direction and <span class="math notranslate nohighlight">\(z\)</span>-direction
-likewise. Fig. <a class="reference internal" href="#fig-regular-grid"><span class="std std-numref">Fig. 20</span></a> shows an example of a 2-D regular grid
+likewise. Fig. <a class="reference internal" href="#fig-regular-grid"><span class="std std-numref">Fig. 21</span></a> shows an example of a 2-D regular grid
 of 4x3 cells.</p>
 <div class="figure align-default" id="id1">
 <span id="fig-regular-grid"></span><a class="reference internal image-reference" href="_images/base_amr_bare.png"><img alt="_images/base_amr_bare.png" src="_images/base_amr_bare.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx=4</span></code> and <code class="docutils literal notranslate"><span class="pre">ny=3</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx=4</span></code> and <code class="docutils literal notranslate"><span class="pre">ny=3</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>In Cartesian coordinates we typically define our model in full 3-D.
 However, if your problem has translational symmetries, you might also want
@@ -284,13 +284,13 @@ instance, the inner rim of a dusty disk.</p>
 and <span class="math notranslate nohighlight">\(\phi\)</span> completely freely. That means: you could have for instance
 <span class="math notranslate nohighlight">\(r\)</span> to be spaced as <span class="math notranslate nohighlight">\(1.00, 1.01, 1.03, 1.05, 1.1, 1.2, 1.35,
 \cdots\)</span>. There is no restriction, as long as the coordinate points are
-monotonically increasing. In Figs <a class="reference internal" href="#fig-spher-sep-ref-txt"><span class="std std-numref">Fig. 21</span></a> and
-<a class="reference internal" href="#fig-spher-sep-ref-rays"><span class="std std-numref">Fig. 22</span></a> this is illustrated.</p>
+monotonically increasing. In Figs <a class="reference internal" href="#fig-spher-sep-ref-txt"><span class="std std-numref">Fig. 22</span></a> and
+<a class="reference internal" href="#fig-spher-sep-ref-rays"><span class="std std-numref">Fig. 23</span></a> this is illustrated.</p>
 <p><em>Note that in addition to separable refinement, also AMR refinement
 is possible in spherical coordinates. See Section :ref:`sec-oct-tree-amr`.</em></p>
 <div class="figure align-default" id="id2">
 <span id="fig-spher-sep-ref-txt"></span><a class="reference internal image-reference" href="_images/spher_grid_ref_txt.png"><img alt="_images/spher_grid_ref_txt.png" src="_images/spher_grid_ref_txt.png" style="width: 30%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Example of a spherical 2-D grid in which the radial and <span class="math notranslate nohighlight">\(\theta\)</span> grids
+<p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Example of a spherical 2-D grid in which the radial and <span class="math notranslate nohighlight">\(\theta\)</span> grids
 are refined in a ‘separable’ way. In radial direction the inner cells are
 refined (‘B’ in the right figure) and in <span class="math notranslate nohighlight">\(\theta\)</span> direction the cells
 near the equatorial plane are refined (‘C’ in the right figure). This kind of
@@ -299,7 +299,7 @@ separable. For models in which the inner grid edge is also the inner model
 edge (e.g. a simple model of a protoplanetary disk with a sharp inner
 cut-off) this kind of separable grid refinement in <span class="math notranslate nohighlight">\(R\)</span>-direction may be
 essential to avoid problems with optically thick inner cells (see e.g. Fig.
-<a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 29</span></a> for an example of what could go wrong if you do
+<a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 30</span></a> for an example of what could go wrong if you do
 not do this). Separable grid refinement in <span class="math notranslate nohighlight">\(\Theta\)</span>-direction is
 typically important for protoplanetary disk models, where the midplane and
 surface layers of the disk need to have sufficient resolution, but any
@@ -307,7 +307,7 @@ possible surrounding spherical nebula may not.</span><a class="headerlink" href=
 </div>
 <div class="figure align-default" id="id3">
 <span id="fig-spher-sep-ref-rays"></span><a class="reference internal image-reference" href="_images/spher_grid_ref_rays.png"><img alt="_images/spher_grid_ref_rays.png" src="_images/spher_grid_ref_rays.png" style="width: 65%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">When making an image, RADMC-3D will automatically make ‘sub-pixels’ to ensure
+<p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">When making an image, RADMC-3D will automatically make ‘sub-pixels’ to ensure
 that all structure of the model as projected on the sky of the observer are
 spatially resolved.  Extreme grid refinement leads thus to extreme
 sub-pixeling. See Section <a class="reference internal" href="imagesspectra.html#sec-rec-subpixel-spher-coord"><span class="std std-ref">Recursive sub-pixeling in spherical coordinates</span></a> for details,
@@ -368,10 +368,10 @@ subcells.</p>
 the grid exactly there where you need it. And because we start from a
 regular base grid like the grid specified in Section <a class="reference internal" href="#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>,
 we can start designing our model on a regular base grid, and then refine
-where needed. See Fig. <a class="reference internal" href="#fig-oct-tree-amr"><span class="std std-numref">Fig. 23</span></a>.</p>
+where needed. See Fig. <a class="reference internal" href="#fig-oct-tree-amr"><span class="std std-numref">Fig. 24</span></a>.</p>
 <div class="figure align-default" id="id4">
 <span id="fig-oct-tree-amr"></span><a class="reference internal image-reference" href="_images/oct_tree_amr_bare.png"><img alt="_images/oct_tree_amr_bare.png" src="_images/oct_tree_amr_bare.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement. The base grid has <code class="docutils literal notranslate"><span class="pre">nx=4</span></code>
+<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement. The base grid has <code class="docutils literal notranslate"><span class="pre">nx=4</span></code>
 and <code class="docutils literal notranslate"><span class="pre">ny=3</span></code>. Three levels of refinement are added to this base grid.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>The AMR stand for ‘Adaptive Mesh Refinement’, which may suggest that
@@ -430,19 +430,19 @@ overlap. Each layer can thus have one or more sub-layers, each of which can
 again be divided into sub-layers. This builds a tree structure, with the base
 layer as the trunk of the tree (this is contrary to the oct-tree structure,
 where each base grid <em>cell</em> forms the trunk of its own tree). In
-Fig. <a class="reference internal" href="#fig-twolayer-amr"><span class="std std-numref">Fig. 24</span></a> an example is shown of two layers with the same
-parent (= layer 0 = base grid), while in Fig. <a class="reference internal" href="#fig-nestedlayer-amr"><span class="std std-numref">Fig. 25</span></a> an
+Fig. <a class="reference internal" href="#fig-twolayer-amr"><span class="std std-numref">Fig. 25</span></a> an example is shown of two layers with the same
+parent (= layer 0 = base grid), while in Fig. <a class="reference internal" href="#fig-nestedlayer-amr"><span class="std std-numref">Fig. 26</span></a> an
 example is shown of two nested layers.</p>
 <div class="figure align-default" id="id5">
 <span id="fig-twolayer-amr"></span><a class="reference internal image-reference" href="_images/twolayer_bare.png"><img alt="_images/twolayer_bare.png" src="_images/twolayer_bare.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Example of a 2-D base grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3, with two
+<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">Example of a 2-D base grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3, with two
 AMR-layers added to it. This example has just one level of refinement, as
 the two layers (brown and green) are on the same level (they have the same
 parent layer = layer 0).</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id6">
 <span id="fig-nestedlayer-amr"></span><a class="reference internal image-reference" href="_images/nestedlayer_bare.png"><img alt="_images/nestedlayer_bare.png" src="_images/nestedlayer_bare.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">Example of a 2-D base grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3, with two nested
+<p class="caption"><span class="caption-number">Fig. 26 </span><span class="caption-text">Example of a 2-D base grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3, with two nested
 AMR-layers added to it.  This example has two levels of refinement, as layer
 1 (brown) is the parent of layer 2 (green).</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
@@ -487,8 +487,8 @@ the data structure by far easier. Example: suppose you have a base grid of 8x8x8
 cells and you replace the inner 4x4x4 cells with a layer of 8x8x8 cells (each
 cell being half the size of the original cells).  Then you will have for
 instance a <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file containing 1024 values of the density:
-8:math:<cite>^3</cite>=512 values for the base grid and again 8:math:<cite>^3</cite>=512 values for
-the refinement layer. Of the first 8:math:<cite>^3</cite>=512 values 4:math:<cite>^3</cite>=64 values
+<span class="math notranslate nohighlight">\(8^3\)</span>=512 values for the base grid and again <span class="math notranslate nohighlight">\(8^3\)</span>=512 values for
+the refinement layer. Of the first <span class="math notranslate nohighlight">\(8^3\)</span>=512 values <span class="math notranslate nohighlight">\(4^3\)</span>=64 values
 are ignored (they could have any value as they will not be used). The file is
 thus 64 values larger than strictly necessary, which is a redundancy of
 64/1024=0.0625. If you would have used the oct-tree refinement style for making
@@ -563,14 +563,16 @@ you can compute dust temperatures with</p>
 <p>As mentioned above, the ‘normal’ 3-D way of making a spectrum of the 1-D
 plane-parallel atmosphere is not possible, because formally the atmosphere is
 infinitely extended. Instead you can obtain a spectrum in the form of an
-intensity (erg s:math:<cite>^{-1}</cite> cm:math:<cite>^{-2}</cite> Hz:math:<cite>^{-1}</cite> ster:math:<cite>^{-1}</cite>)
+intensity (<span class="math notranslate nohighlight">\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\)</span>)
 as a function of wavelength. To do this you ask RADMC-3D to make a
 multi-wavelength image of the atmosphere under a certain inclination
 (inclination 0 meaning face-on), e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">allwl</span> <span class="n">incl</span> <span class="mi">70</span>
 </pre></div>
 </div>
-<p>This make an SED at <span class="math notranslate nohighlight">\(\lambda=10\,\mu\)</span>. The image is, in fact, a 1x1 pixel
+<p>This make an SED at <span class="math notranslate nohighlight">\(\lambda=10\,\mu\)</span>m for the observer seeing the
+atmosphere at an inclination of 70 degrees. This produces a file image.out,
+described in Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a>. The image is, in fact, a 1x1 pixel
 multi-wavelength image. The <code class="docutils literal notranslate"><span class="pre">allwl</span></code> (which stands for ‘all wavelengths’) means
 that the spectral points are the same as those in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>
 file (see Section <a class="reference internal" href="inputoutputfiles.html#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).  You can also specify the wavelengths

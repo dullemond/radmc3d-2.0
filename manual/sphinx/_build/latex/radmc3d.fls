@@ -309,6 +309,9 @@ INPUT dataflow-twostage-python.pdf
 INPUT ./dataflow-twostage-python.pdf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmri8c.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmri8c.vf
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
@@ -323,15 +326,12 @@ INPUT ./stokes_and_angles_iaudef.pdf
 INPUT stokes_and_angles_iaudef.pdf
 INPUT ./stokes_and_angles_iaudef.pdf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/courier/pcrro8t.tfm
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/courier/pcrro8t.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/courier/pcrro8r.tfm
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/courier/pcrr8c.tfm
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/courier/pcrr8c.vf
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT line_doppjump.pdf
@@ -354,6 +354,11 @@ INPUT ./posang.pdf
 INPUT ./posang.pdf
 INPUT posang.pdf
 INPUT ./posang.pdf
+INPUT Subpixeling.pdf
+INPUT ./Subpixeling.pdf
+INPUT ./Subpixeling.pdf
+INPUT Subpixeling.pdf
+INPUT ./Subpixeling.pdf
 INPUT cellcenter.pdf
 INPUT ./cellcenter.pdf
 INPUT ./cellcenter.pdf
@@ -400,6 +405,7 @@ INPUT ./spher2dim10mic.pdf
 INPUT spher2dim10mic.pdf
 INPUT ./spher2dim10mic.pdf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmb8c.tfm
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmb8c.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
@@ -407,7 +413,6 @@ INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmb8c.vf
 INPUT base_amr_bare.pdf
 INPUT ./base_amr_bare.pdf
 INPUT ./base_amr_bare.pdf

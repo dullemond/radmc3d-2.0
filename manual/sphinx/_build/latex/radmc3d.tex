@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Aug 27, 2020}
+\date{Aug 28, 2020}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -135,7 +135,7 @@ Coordinate systems:
 \sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
 \item {} 
 Gridding systems (regular and adaptive mesh refinement grids are
-available for cartesian \{em and\} spherical coordinates):
+available for cartesian \sphinxstyleemphasis{and} spherical coordinates):
 
 \end{enumerate}
 \begin{enumerate}
@@ -150,7 +150,7 @@ available for cartesian \{em and\} spherical coordinates):
 {[}+{]} Adaptive Mesh Refinement: layered (‘patch’) style
 
 \item {} 
-{[}\sphinxhyphen{}{]} Voronoi gridding \{em {[}To be implemented on request{]}\}
+{[}\sphinxhyphen{}{]} Voronoi gridding \sphinxstyleemphasis{{[}To be implemented on request{]}}
 
 \end{enumerate}
 \begin{enumerate}
@@ -182,10 +182,10 @@ Radiation mechanisms:
 \begin{enumerate}
 \sphinxsetlistlabels{\arabic}{enumii}{enumiii}{}{.}%
 \item {} 
-{[}\sphinxhyphen{}{]} Dust quantum heated grains \{em {[}To be implemented on request{]}\}
+{[}\sphinxhyphen{}{]} Dust quantum heated grains \sphinxstyleemphasis{{[}To be implemented on request{]}}
 
 \item {} 
-{[}t{]} Polarized dust emission by aligned grains \{em {[}first test version{]}\}
+{[}t{]} Polarized dust emission by aligned grains \sphinxstyleemphasis{{[}first test version{]}}
 
 \item {} 
 {[}+{]} Gas line transfer (LTE)
@@ -298,7 +298,7 @@ Front\sphinxhyphen{}end Python packages:
 {[}+{]} Stars can be treated as point\sphinxhyphen{}sources or as spheres
 
 \item {} 
-{[}+{]} Option to calculate the mean intensity \$J\_nu(vec x)\$ in the model
+{[}+{]} Option to calculate the mean intensity \(J_\nu(\vec x)\) in the model
 
 \item {} 
 {[}+{]} OpenMP parallellization of the Monte Carlo
@@ -522,18 +522,18 @@ have to write his/her own pre\sphinxhyphen{} and post\sphinxhyphen{}processing s
 
 
 \section{Requirements}
-\label{\detokenize{overview:requirements}}
+\label{\detokenize{overview:requirements}}\label{\detokenize{overview:sec-requirements}}
 The following pre\sphinxhyphen{}installed software is required:
 \begin{enumerate}
 \sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
 \item {} 
-\sphinxstyleemphasis{Operating system: Unix\sphinxhyphen{}like (e.g.\textasciitilde{}Linux or MacOSX)}
+\sphinxstyleemphasis{Operating system: Unix\sphinxhyphen{}like (e.g. Linux or MacOSX)}
 
-This package runs under Unix\sphinxhyphen{}like environment (e.g.\textasciitilde{}Linux or MacOSX), but has
+This package runs under Unix\sphinxhyphen{}like environment (e.g. Linux or MacOSX), but has
 not been tested under Windows. There is no particular reason why it should not
 also run under Windows, but it would require different ways of file
-handling. \{em In this manual we always assume a Unix\sphinxhyphen{}like environment,
-in which we will make use of a bash command\sphinxhyphen{}line interface (CLI).\} We will
+handling. \sphinxstyleemphasis{In this manual we always assume a Unix\sphinxhyphen{}like environment,
+in which we will make use of a bash command\sphinxhyphen{}line interface (CLI).} We will
 call this the \sphinxstyleemphasis{shell}.
 
 \item {} 
@@ -547,7 +547,8 @@ systems.
 
 This is a standard scripting language available on most or all
 Unix/Linux\sphinxhyphen{}based systems. If you are in doubt: type \sphinxcode{\sphinxupquote{which perl}}
-to find the location of the \sphinxcode{\sphinxupquote{perl}} executable. See \sphinxurl{http://www.perl.org/} for details on perl, should you have any
+to find the location of the \sphinxcode{\sphinxupquote{perl}} executable. See \sphinxurl{http://www.perl.org/}
+for details on perl, should you have any
 problems. But on current\sphinxhyphen{}day Unix\sphinxhyphen{}type operating systems perl is nearly
 always installed in the \sphinxcode{\sphinxupquote{/usr/bin/}} directory. If you do not
 have Perl installed, you can also do without. Its sole use is to copy
@@ -612,9 +613,9 @@ infrastructure is provided in Python.
 \label{\detokenize{overview:radmc-3d-package-as-a-zip-archive}}
 If you obtain RADMC\sphinxhyphen{}3D from its website, it will be
 packed in a zip archive called
-\sphinxcode{\sphinxupquote{radmc\sphinxhyphen{}3d\textbackslash{}\_v*.*\textbackslash{}\_\textbackslash{}\#\textbackslash{}\#.\textbackslash{}\#\textbackslash{}\#.\textbackslash{}\#\textbackslash{}\#.zip}} where the \sphinxcode{\sphinxupquote{*.*}} is the version
-number and \sphinxcode{\sphinxupquote{\textbackslash{}\#\textbackslash{}\#.\textbackslash{}\#\textbackslash{}\#.\textbackslash{}\#\textbackslash{}\#}} is the date of this version in dd.mm.yy
-format. To unpack on a linux, unix or Mac OS X machine you type:
+\sphinxcode{\sphinxupquote{radmc\sphinxhyphen{}3d\_v*.*\_dd.mm.yy.zip}} where the \sphinxcode{\sphinxupquote{*.*}} is the version
+number and \sphinxcode{\sphinxupquote{dd.mm.yy}} is the date of this version.
+To unpack on a linux, unix or Mac OS X machine you type:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{unzip} \PYG{o}{\PYGZlt{}}\PYG{n}{this} \PYG{n}{archive} \PYG{n}{file}\PYG{o}{\PYGZgt{}}
@@ -1206,7 +1207,7 @@ command\sphinxhyphen{}line options you like. Just beware that, depending on the 
 in which you have your paths set (in tcsh or bash) typing just
 \sphinxcode{\sphinxupquote{radmc3d}} \sphinxstyleemphasis{may} instead use the global version (that you
 may have created in the \sphinxcode{\sphinxupquote{src/}} directory with \sphinxcode{\sphinxupquote{make
-install}}). So to be sure to use the \{em local\} version, just put the
+install}}). So to be sure to use the \sphinxstyleemphasis{local} version, just put the
 \sphinxcode{\sphinxupquote{./}} in front of the \sphinxcode{\sphinxupquote{radmc3d}}.
 
 \end{enumerate}
@@ -1331,8 +1332,8 @@ needs. However, if you prefer to use another language, you can use the examples
 to see how the input files were generated and then program this in another
 programming language.
 
-\{em Note: The Python files called \sphinxcode{\sphinxupquote{problem\_\textbackslash{}*.py}} are meant to be edited and
-changed by you! They are templates from which you can create your own models.\}
+\sphinxstyleemphasis{Note: The Python files called} \sphinxcode{\sphinxupquote{problem\_*.py}} \sphinxstyleemphasis{are meant to be edited and
+changed by you! They are templates from which you can create your own models.}
 
 For the analysis of the output files created by RADMC\sphinxhyphen{}3D you can use your own
 favorite plotting or data\sphinxhyphen{}analysis software. But also here we provide some tools
@@ -1458,7 +1459,7 @@ systems:
 Cartesian coordinates: 3\sphinxhyphen{}D
 
 The simplest coordinate system is the Cartesian coordinate system
-\$(x,y,z)\$. For now each model must be 3\sphinxhyphen{}D (i.e. you must specify the
+\((x,y,z)\). For now each model must be 3\sphinxhyphen{}D (i.e. you must specify the
 densities and other quantities as a function of \(x\), \(y\) and \(z\)).
 
 \item {} 
@@ -1655,7 +1656,7 @@ wavelengths that you specify in the file
 function of the \((x,y,z)\) (cartesian) or \((r,\theta,\phi)\)
 (spherical) coordinates at the frequencies \(\nu_i\equiv
 10^4c/\lambda_i\) where \(\lambda_i\) are the wavelengths (in
-\(\mu\). The
+\(\mu\)m) specified in the file \sphinxcode{\sphinxupquote{mcmono\_wavelength\_micron.inp}}. The
 results of this computation can be interesting for, for instance, models of
 photochemistry. But if you use RADMC\sphinxhyphen{}3D only for computing spectra and
 images, then you will not use this.
@@ -1719,7 +1720,7 @@ files. Since you don’t want to make large tables by hand, you will have to wri
 a little computer program that generates these tables automatically.  You can do
 this in any programming language you want. But in the example models (see
 Section {\hyperref[\detokenize{basicstructure:sec-example-models}]{\sphinxcrossref{\DUrole{std,std-ref}{Running the example models}}}}) we use the programming language Python (see
-Section \DUrole{xref,std,std-ref}{sec\sphinxhyphen{}requirements}) for this. It is easiest to indeed have a look
+Section {\hyperref[\detokenize{overview:sec-requirements}]{\sphinxcrossref{\DUrole{std,std-ref}{Requirements}}}}) for this. It is easiest to indeed have a look
 at the example models to see how this is (or better: can be) done.
 
 We will explain all these things in much more detail below, and we will discuss
@@ -1746,8 +1747,8 @@ follow is this:
 \begin{enumerate}
 \sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
 \item {} 
-The best thing to do (to avoid a mess) is to make a directory for *
-each model*: one model, one directory. Since \sphinxcode{\sphinxupquote{radmc3d}} reads
+The best thing to do (to avoid a mess) is to make a directory for
+\sphinxstyleemphasis{each model}: one model, one directory. Since \sphinxcode{\sphinxupquote{radmc3d}} reads
 multiple input files, and also outputs a number of files, this is a good
 way to keep organized and we recommend it strongly.  So if we wish to make
 a new model, we make a new directory, or copy an old directory to a new
@@ -1810,7 +1811,7 @@ input files are created using a Python script called \sphinxcode{\sphinxupquote{
 To execute this script, this is what you do on the shell:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{python} \PYG{n}{problem\PYGZus{}setup}\PYG{o}{.}\PYG{n}{pro}
+\PYG{n}{python} \PYG{n}{problem\PYGZus{}setup}\PYG{o}{.}\PYG{n}{py}
 \end{sphinxVerbatim}
 
 This Python script has now created a whole series
@@ -1866,7 +1867,7 @@ Let us now do for instance model \sphinxcode{\sphinxupquote{run\_simple\_1\_user
 \end{sphinxVerbatim}
 
 This is the same model as above, but now the grid and the dust density are set
-up \{em inside\} \sphinxcode{\sphinxupquote{radmc3d}}, using the file \sphinxcode{\sphinxupquote{userdef\_module.f90}} which is
+up \sphinxstyleemphasis{inside} \sphinxcode{\sphinxupquote{radmc3d}}, using the file \sphinxcode{\sphinxupquote{userdef\_module.f90}} which is
 present in this directory.  See Chapter {\hyperref[\detokenize{internalsetup:chap-internal-setup}]{\sphinxcrossref{\DUrole{std,std-ref}{Modifying RADMC\sphinxhyphen{}3D: Internal setup and user\sphinxhyphen{}specified radiative processes}}}} for details
 and follow the directions in the \sphinxcode{\sphinxupquote{README}} file. In short: first edit the
 variable \sphinxcode{\sphinxupquote{SRC}} in the \sphinxcode{\sphinxupquote{Makefile}} to point to the \sphinxcode{\sphinxupquote{src/}} directory. Then
@@ -1902,7 +1903,7 @@ your own plotting software.
 
 Some expert users may wish to use RADMC\sphinxhyphen{}3D for something entirely different:
 to compute the local radiation field \{em inside\} a model, and use this
-for e.g.computing photochemistry rates of a chemical model or so.
+for e.g. computing photochemistry rates of a chemical model or so.
 This is described in Section {\hyperref[\detokenize{dustradtrans:sec-dust-monochromatic-monte-carlo}]{\sphinxcrossref{\DUrole{std,std-ref}{Special\sphinxhyphen{}purpose feature: Computing the local radiation field}}}}.
 
 You may also use the thermal Monte Carlo computation of the dust temperature
@@ -2228,7 +2229,7 @@ This computes the mean intensity
 \begin{split}J_\nu = \frac{1}{4\pi}\oint I_\nu(\Omega)d\Omega\end{split}
 \end{equation*}
 (in units of
-erg:math:\sphinxtitleref{,\textasciigrave{}s:math:\textasciigrave{}\textasciicircum{}\{\sphinxhyphen{}1\}}\(\,\)\(\,\)\(\,\))
+\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\))
 as a function of the \((x,y,z)\) (cartesian) or \((r,\theta,\phi)\)
 (spherical) coordinates at frequencies \(\nu_i\equiv 10^4c/\lambda_i\) where
 \(\lambda_i\) are the wavelengths (in \(\mu\) (same format as the file
@@ -2280,7 +2281,7 @@ There is an important parameter for this Monochromatic Monte Carlo that you
 may wish to play with:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{nphot\_mono}}\textbackslash{}
+\sphinxcode{\sphinxupquote{nphot\_mono}}
 The parameter \sphinxcode{\sphinxupquote{nphot\_mono}} sets the number of photon packages
 that are used for the Monochromatic Monte Carlo simulation. It has as
 default 100000, but that may be too little for 3\sphinxhyphen{}D models. You can set
@@ -2461,8 +2462,9 @@ scattering source function \(j_\nu^{\mathrm{scat}}\) is given by
 where the integral is the integral over solid angle. In this case
 \(j_\nu^{\mathrm{scat}}\) does not depend on solid angle.
 
-For \sphinxstyleemphasis{anisotropic} scattering (\sphinxcode{\sphinxupquote{scattering\_mode}}\(\ge\)Phi(\{bf n\}\_\{mathrm\{in\}\},
-\{bf n\}\_\{mathrm\{out\}\})\textasciigrave{}, where
+For \sphinxstyleemphasis{anisotropic} scattering (\sphinxcode{\sphinxupquote{scattering\_mode\textgreater{}1}}) we
+must introduce the scattering phase function
+\(\Phi({\bf n}_{\mathrm{in}}, {\bf n}_{\mathrm{out}})\), where
 \({\bf n}_{\mathrm{in}}\) is the unit direction vector for incoming radiation
 and \({\bf n}_{\mathrm{out}}\) is the unit direction vector for the scattered
 radiation. The
@@ -2579,7 +2581,7 @@ monochromatic Monte Carlo runs. The reason is that the scattered radiation will
 eventually end up on your images and spectra.
 
 If we want to make an image or a spectrum, then for each pixel we must integrate
-Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}ray\sphinxhyphen{}tracing\sphinxhyphen{}rt}) along the 1\sphinxhyphen{}D ray belonging to that pixel. If we
+Eq. (\sphinxcode{\sphinxupquote{eq\sphinxhyphen{}ray\sphinxhyphen{}tracing\sphinxhyphen{}rt}}) along the 1\sphinxhyphen{}D ray belonging to that pixel. If we
 performed the thermal Monte Carlo simulation beforehand (or if we specified the
 dust temperatures by hand) we know the thermal source function through
 Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}thermal\sphinxhyphen{}source\sphinxhyphen{}function}). But we have, at that point, no
@@ -2653,7 +2655,7 @@ scattered light improves when increasing \sphinxcode{\sphinxupquote{nphot\_scat}
 
 The parameter \sphinxcode{\sphinxupquote{nphot\_spec}} is actually exactly the same as
 \sphinxcode{\sphinxupquote{nphot\_scat}}, but is used (and used only!) for the creation of
-spectra. The default is 10000, i.e.\textasciitilde{}substantially smaller than \sphinxcode{\sphinxupquote{nphot\_scat}}.
+spectra. The default is 10000, i.e. substantially smaller than \sphinxcode{\sphinxupquote{nphot\_scat}}.
 The reason for this separate parameter is that if you make
 spectra, you integrate over the image to obtain the flux (i.e. the value of
 the spectrum at that wavelength). Even if the scattered light image may
@@ -2769,11 +2771,16 @@ out the effect of single\sphinxhyphen{} and double\sphinxhyphen{}scattering (but
 order scattering) with: \sphinxcode{\sphinxupquote{maxnrscat 2}}, etc.
 
 Note that multiple scattering may require a very high number of photon packages
-(i.e.\textasciitilde{}setting \sphinxcode{\sphinxupquote{nphot\_scat}} to a very high number). For single scattering with
+(i.e. setting \sphinxcode{\sphinxupquote{nphot\_scat}} to a very high number). For single scattering with
 too low \sphinxcode{\sphinxupquote{nphot\_scat}} you typically see radial ‘rays’ in the image emanating
 from each stellar source of photons. For multiple scattering, when taking too
 low \sphinxcode{\sphinxupquote{nphot\_scat}} small you would see strange non\sphinxhyphen{}radial ‘scratches’ in the
-image (see Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}polscat}, top two images). It looks as if someone has
+image (see Fig. {\hyperref[\detokenize{dustradtrans:fig-polscat}]{\sphinxcrossref{\DUrole{std,std-ref}{The effect of nphot\_scat on the image quality when the image is dominated
+by scattered light. The images show the result of model
+examples/run\_simple\_2\_scatmat at \textbackslash{}lambda=0.84\textbackslash{}mu about the
+scattering matrices for polarized scattering. See Section
+sec\sphinxhyphen{}single\sphinxhyphen{}multiple\sphinxhyphen{}scattering for a discussion about the ‘scratches’
+seen in the top two panels.}}}}, top two images). It looks as if someone has
 used a pen and randomly added some streaks. These streaks are the
 double\sphinxhyphen{}scattering events which, in that case, apparently are rare enough that
 they show up as individual streaks. To test whether these streaks are indeed
@@ -2801,7 +2808,7 @@ unimportant. If so, and if you are using spherical coordinates, a single star at
 the center which is point\sphinxhyphen{}like, and if you are confident that at the wavelength
 you are interested in the thermal dust emission is not strong enough to be a
 considerable source of light that can be scattered into the line\sphinxhyphen{}of\sphinxhyphen{}sight
-(i.e.\textasciitilde{}all scattered light is scattered \sphinxstyleemphasis{star} light), then you can use the
+(i.e. all scattered light is scattered \sphinxstyleemphasis{star} light), then you can use the
 simplified single\sphinxhyphen{}scattering mode.
 
 This mode does not use the Monte Carlo method to compute the scattering source
@@ -2872,7 +2879,7 @@ performance of RADMC\sphinxhyphen{}3D in various cases.
 If no scattering is present in the model (see Section
 {\hyperref[\detokenize{dustradtrans:sec-modes-of-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{Five modes of treating scattering}}}}), then RADMC\sphinxhyphen{}3D can save time when making
 spectra and/or multi\sphinxhyphen{}wavelength images. I will then do each integration of
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}ray\sphinxhyphen{}tracing\sphinxhyphen{}rt}) directly for all wavelengths at once before
+Eq. (\sphinxcode{\sphinxupquote{eq\sphinxhyphen{}ray\sphinxhyphen{}tracing\sphinxhyphen{}rt}}) directly for all wavelengths at once before
 going to the next pixel. This saves some time because RADMC\sphinxhyphen{}3D then has to
 calculate the geometric stuff (how the ray moves through the model) just once
 for each ray. If, however, scattering is included, the scattering source
@@ -2918,7 +2925,7 @@ available on\sphinxhyphen{}line). Another good book (and a classic!)  is the boo
 Huffman ‘Absorption and scattering of light by small particles’,
 Wiley\sphinxhyphen{}VCH. Finally, the ultimate classic is the book by van de Hulst ‘Light
 scattering by small particles’, 1981. For some discussions on how polarization
-can be built in into radiative transfer codes, see e.g.Wolf, Voshchinnikov \&
+can be built in into radiative transfer codes, see e.g. Wolf, Voshchinnikov \&
 Henning (2002, A\&A 385, 365).
 
 When we wish to include polarization in our model we must follow not just the
@@ -3068,11 +3075,11 @@ direction, while \(Q=0\), \(U=-I\), \(V=0\) the E\sphinxhyphen{}field points in
 the \(x'=-y'\) direction (see Figure 1 of Hamaker \& Bregman 1996).
 
 The \((V)\) definition (circular polarization) is such that (quoting
-directly from the Hamaker \& Bregman paper): \sphinxstyleemphasis{For \{em right\}\sphinxhyphen{}handed circularly
+directly from the Hamaker \& Bregman paper): \sphinxstyleemphasis{For right\sphinxhyphen{}handed circularly
 polarized radiation, the position angle of the electric vector at any point
-increases with time; this implies that the :math:\textasciigrave{}y’\textasciigrave{} component of the field
-lags the :math:\textasciigrave{}x’\textasciigrave{} component. Also the electric vectors along the line of sight
-form a \{em left\}\sphinxhyphen{}handed screw. The Stokes :math:\textasciigrave{}V\textasciigrave{} is positive for
+increases with time; this implies that the} \(y'\) \sphinxstyleemphasis{component of the field
+lags the} \(x'\) \sphinxstyleemphasis{component. Also the electric vectors along the line of sight
+form a left\sphinxhyphen{}handed screw. The Stokes} \(V\) \sphinxstyleemphasis{is positive for
 right\sphinxhyphen{}handed circular polarization.}
 
 \begin{figure}[htbp]
@@ -3090,7 +3097,16 @@ reader. We call the second panel (\(Q=+I\)) ‘horizontally polarized’, the
 third panel (\(U=+I\)) ‘diagonally polarized by +45 degrees’ and the
 fourth panel (\(V=+I\)) ‘right\sphinxhyphen{}handed circularly polarized’. In the
 images produced by RADMC\sphinxhyphen{}3D (\sphinxcode{\sphinxupquote{image.out}}, see Section {\hyperref[\detokenize{inputoutputfiles:sec-image-out}]{\sphinxcrossref{\DUrole{std,std-ref}{OUTPUT: image.out or image\_****.out}}}}
-and Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}cameraorient}) the \(x'\) direction is the horizontal
+and Fig. {\hyperref[\detokenize{imagesspectra:fig-cameraorient}]{\sphinxcrossref{\DUrole{std,std-ref}{Figure depicting how the angles ‘incl’ and ‘phi’ place the camera for images
+and spectra made with RADMC\sphinxhyphen{}3D. The code uses a right\sphinxhyphen{}handed coordinate
+system. The figure shows from which direction the observer is looking at the
+system, where i\_\{\textbackslash{}mathrm\{obs\}\} is the ‘incl’ keyword and
+\textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\} is the ‘phi’ keyword. The
+x\_\{\textbackslash{}mathrm\{image\}\} and y\_\{\textbackslash{}mathrm\{image\}\} are the horizontal
+(left\sphinxhyphen{}to\sphinxhyphen{}right) and vertical (bottom\sphinxhyphen{}to\sphinxhyphen{}top) coordinates of the image. For
+i\_\{\textbackslash{}mathrm\{obs\}\}=0 and \textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\}=0 the
+x\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D x\sphinxhyphen{}coordinate and
+y\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D y\sphinxhyphen{}coordinate.}}}}) the \(x'\) direction is the horizontal
 direction and the \(y'\) direction is the vertical direction.}\label{\detokenize{dustradtrans:id2}}\label{\detokenize{dustradtrans:fig-stokes-definition}}\end{figure}
 
 We can put these definitions into the standard formulae:
@@ -3190,12 +3206,21 @@ Compared to Mishchenko, Travis \& Lacis book, what we call \(x'\) they call
 \(\theta\) and what we call \(y'\) they call \(\phi\). In their
 Figure 1.3 (which describes the definition of the Stokes parameters) they have
 the \(\theta\) direction pointing downward, rather than toward the right,
-i.e.rotated by 90 degrees clockwise compared to RADMC\sphinxhyphen{}3D. However, since
+i.e. rotated by 90 degrees clockwise compared to RADMC\sphinxhyphen{}3D. However, since
 RADMC\sphinxhyphen{}3D does not know what ‘right’ or ‘down’ are (only what \(x'\) and
 \(y'\) are) this rotation is merely a difference in how we plot things in a
 figure, and has no consequences for the results, as long as we define how
 \(x'\) and \(y'\) are oriented compared to our model (see
-Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}cameraorient} where \(x_{\mathrm{image}}\) is our \(x'\)
+Fig. {\hyperref[\detokenize{imagesspectra:fig-cameraorient}]{\sphinxcrossref{\DUrole{std,std-ref}{Figure depicting how the angles ‘incl’ and ‘phi’ place the camera for images
+and spectra made with RADMC\sphinxhyphen{}3D. The code uses a right\sphinxhyphen{}handed coordinate
+system. The figure shows from which direction the observer is looking at the
+system, where i\_\{\textbackslash{}mathrm\{obs\}\} is the ‘incl’ keyword and
+\textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\} is the ‘phi’ keyword. The
+x\_\{\textbackslash{}mathrm\{image\}\} and y\_\{\textbackslash{}mathrm\{image\}\} are the horizontal
+(left\sphinxhyphen{}to\sphinxhyphen{}right) and vertical (bottom\sphinxhyphen{}to\sphinxhyphen{}top) coordinates of the image. For
+i\_\{\textbackslash{}mathrm\{obs\}\}=0 and \textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\}=0 the
+x\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D x\sphinxhyphen{}coordinate and
+y\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D y\sphinxhyphen{}coordinate.}}}} where \(x_{\mathrm{image}}\) is our \(x'\)
 here and likewise for \(y'\)).
 
 Bohren \& Huffman have the two unit vectors plotted in the following way:
@@ -3204,7 +3229,7 @@ e}_{\perp}\) is plotted vertically upward. Compared to us, our \(x'\) points
 toward \{em minus\} their \({\bf e}_{\parallel}\), while our \(y'\)
 points toward their \({\bf e}_{\perp}\), but since they plot their
 \({\bf e}_{\parallel}\) to the left, the orientation of our plot and their
-plots are consistent (i.e.if they say ‘pointing to the right’, they mean the
+plots are consistent (i.e. if they say ‘pointing to the right’, they mean the
 same direction as we). But their definition of ‘right\sphinxhyphen{}handed circular
 polarization’ (clockwise when seen toward the source of the radiation) is our
 ‘left handed’.
@@ -3226,7 +3251,7 @@ the German version of the page (on 2 January 2013) has the same Q and U
 definitions, but has the sign of V flipped.
 
 Note that in RADMC\sphinxhyphen{}3D we have no global definition of the orientation of
-\(x'\) and \(y'\) (see e.g.Section
+\(x'\) and \(y'\) (see e.g. Section
 {\hyperref[\detokenize{dustradtrans:sec-orientation-vector-stokes}]{\sphinxcrossref{\DUrole{std,std-ref}{Defining orientation for non\sphinxhyphen{}observed radiation}}}}). If we make an image with RADMC\sphinxhyphen{}3D, then
 the horizontal (x\sphinxhyphen{}) direction in the image corresponds to \(x'\) and the
 vertical (y\sphinxhyphen{}) direction corresponds to \(y'\), just as one would expect. So
@@ -3364,8 +3389,8 @@ F_{V,\mathrm{in}}
 \end{matrix}\right)\end{split}
 \end{equation*}
 The values \(Z_{ij}\) depend on the direction into which the radiation is
-scattered (i.e.\({\bf e}_r\)) and on the direction of the incoming flux
-(i.e.\({\bf n}\)), but not on \(r\): the radial dependence of the
+scattered (i.e. \({\bf e}_r\)) and on the direction of the incoming flux
+(i.e. \({\bf n}\)), but not on \(r\): the radial dependence of the
 outgoing flux is taken care of through the \(1/r^2\) factor in the above
 formula.
 
@@ -3376,7 +3401,8 @@ particular direction: \({\bf n}=(0,0,1)\). In this manual and in the RADMC\sphin
 code, however, we will always write \(Z_{ij}\), because the symbol \(F\) can be
 confused with flux. The normalization of these matrix elements is also
 different in different books. In our case it has the dimension
-cm:math:\sphinxtitleref{\textasciicircum{}2}/gram/steradian. The conversion from the conventions of other books is
+\(\mathrm{cm}^2\;\mathrm{gram}^{-1}\;\mathrm{ster}^{-1}\).
+The conversion from the conventions of other books is
 (where \(k=2\pi/\lambda\) is the wave number in units of 1/cm):
 \begin{equation*}
 \begin{split}Z_{ij,\mathrm{RADMC-3D}} = \frac{Z_{ij,\mathrm{Mishchenko}}}{m_{\mathrm{grain}}}
@@ -3397,17 +3423,18 @@ from the famous \sphinxcode{\sphinxupquote{BHMIE.F}} code from the Bohren \& Huf
 \label{\detokenize{dustradtrans:polarized-scattering-off-dust-particles-randomly-oriented-particles}}
 In the special case in which we either have spherical particles or we
 average over a large number of randomly oriented particles, the \(Z_{ij}\)
-elements are no longer dependent on \{em both\} \({\bf e}_r\) and \{bf n\} but
+elements are no longer dependent on \sphinxstyleemphasis{both} \({\bf e}_r\) and \({\bf n}\) but
 only on the angle between them:
 \begin{equation*}
 \begin{split}\cos\theta = {\bf n}\cdot{\bf e}_r\end{split}
 \end{equation*}
-So we go from \(Z_{ij}({\bf n},{\bf e}_r)\), i.e.a four\sphinxhyphen{}angle dependence, to
-\(Z_{ij}(\theta)\), i.e.a one\sphinxhyphen{}angle dependence.
+So we go from \(Z_{ij}({\bf n},{\bf e}_r)\), i.e. a four\sphinxhyphen{}angle dependence, to
+\(Z_{ij}(\theta)\), i.e. a one\sphinxhyphen{}angle dependence.
 
 Now let us also assume that there is no netto helicity of the particles
 (they are either axisymmetric or there exist equal amounts of particles
-as their mirror symmetric counterparts). In that case (see e.g.Mishchenko book) of the 16 matrix elements only 6 are non\sphinxhyphen{}zero and independent:
+as their mirror symmetric counterparts). In that case (see e.g.
+Mishchenko book) of the 16 matrix elements only 6 are non\sphinxhyphen{}zero and independent:
 
 \phantomsection\label{\detokenize{dustradtrans:eq-scatmat-for-randorient-nohelic}}\begin{equation*}
 \begin{split}F_{\mathrm{out}} = \left(\begin{matrix}
@@ -3439,7 +3466,7 @@ calculations.
 
 Now, as described above, the Stokes vectors only have meaning if the directions
 of \(x'\) and \(y'\) are well\sphinxhyphen{}defined. For
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}scatmat\sphinxhyphen{}for\sphinxhyphen{}randorient\sphinxhyphen{}nohelic}) to be valid (and for the correct
+Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}scatmat\sphinxhyphen{}for\sphinxhyphen{}randorient\sphinxhyphen{}nohelic}) to be valid (and for the correct
 meaning of the \(Z_{ij}\) elements) the following definition is used: Before
 the scattering, the \({\bf S}\)\sphinxhyphen{}vector of the photon package is rotated (and
 the Stokes vectors accordingly transformed) such that the new \({\bf
@@ -3452,7 +3479,7 @@ that
 \end{equation*}
 In other words, if we look into the incoming light (with \(z'\) pointing
 toward us), then for \(\sin(\theta)>0\) the photon is scattered into the
-\(x'>0\), \(y'=0\) direction (i.e.for us it is scattered to the
+\(x'>0\), \(y'=0\) direction (i.e. for us it is scattered to the
 right).  The \({\bf S}\) vector for the outgoing photon remains unchanged,
 since the new \({\bf n}\) is also perpendicular to it.
 
@@ -3491,11 +3518,12 @@ I_I\\I_Q\\I_U\\I_V
 \right)\end{split}
 \end{equation*}
 where \(I_I\), \(I_Q\), \(I_U\), \(I_V\) are the intensities
-(erg/s/cm:math:\sphinxtitleref{\textasciicircum{}2}/Hz/ster) for the four Stokes parameters, and likewise for
+(\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\))
+for the four Stokes parameters, and likewise for
 \(j_{\mathrm{emis}}\) and \(j_{\mathrm{scat}}\), and finally, \(s\)
 the path length along the ray under consideration. Note that if we would allow
 for fixed\sphinxhyphen{}orientation dust particles (which we don’t),
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}radtrans\sphinxhyphen{}randomorient}) would become considerably more complex,
+Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}radtrans\sphinxhyphen{}randomorient}) would become considerably more complex,
 with extinction being matrix\sphinxhyphen{}valued and thermal emission being polarized.
 
 Since \(\kappa_{\mathrm{scat}}\) converts incoming radiation into outgoing
@@ -3616,12 +3644,8 @@ model. Also here the ‘weighted photon package mode’ solves the problem: It w
 focus the photon packages toward the model grid, and lower their energy to
 compensate for their favorable focusing toward the grid.
 
-\sphinxstyleemphasis{NOTE:} Since RADMC\sphinxhyphen{}3D is still in beta\sphinxhyphen{}phase, and both aspects of the ‘weighted
-photon package mode’ meddle with the standard equal\sphinxhyphen{}weighting procedure, it
-might be useful to sometimes check the results against a run without this mode
-but with a huge number of photon packages to compensate \sphinxhyphen{} just to check if there
-are no bugs or other subtleties. You can switch the mode off by setting
-\sphinxcode{\sphinxupquote{mc\_weighted\_photons=0}} in the \sphinxcode{\sphinxupquote{radmc3d.inp}} file.
+\sphinxstyleemphasis{NOTE:} You can switch the mode off by setting \sphinxcode{\sphinxupquote{mc\_weighted\_photons=0}} in the
+\sphinxcode{\sphinxupquote{radmc3d.inp}} file.
 
 
 \section{Polarized emission and absorption by aligned grains}
@@ -3680,14 +3704,14 @@ U &= 2E_{x,0}E_{y,0}\cos\Delta\\
 V &= 2E_{x,0}E_{y,0}\sin\Delta
 \end{split}\end{split}
 \end{equation*}
-Note that for \(V=I\) (\(\Delta=\pi/2\), i.e.the \(E_y\) lags
+Note that for \(V=I\) (\(\Delta=\pi/2\), i.e. the \(E_y\) lags
 \(\pi/2\) behind \(E_x\)) we have \sphinxstyleemphasis{right\sphinxhyphen{}handed} circularly polarized
 light, meaning that the tip of the \(\vec E\) field at a fixed point in
 space, when looking into the light (the propagation of light is toward the
 reader) rotates counter\sphinxhyphen{}clockwise (when the \(x\)\sphinxhyphen{}coordinate points right,
 and the \(y\)\sphinxhyphen{}coordinate points up). The 3\sphinxhyphen{}D helix of his field will be \{em
 left\sphinxhyphen{}handed\} (when the z\sphinxhyphen{}coordinate points into the propagation direction of the
-light, i.e. toward the reader, i.e.a right\sphinxhyphen{}handed coordinate system). For
+light, i.e. toward the reader, i.e. a right\sphinxhyphen{}handed coordinate system). For
 \(Q=I\) we have linearly polarized light in which the \(\vec E\)\sphinxhyphen{}field
 lies in the \(x\)\sphinxhyphen{}direction. For \(U=I\) we have linearly polarized
 light in which \(\vec E\) lies along the \(x=y\) line (when looking into
@@ -3733,7 +3757,7 @@ I_{\mathrm{h}}' &= I_{\mathrm{h}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{h}}s}\\
 I_{\mathrm{v}}' &= I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
 \end{split}\end{split}
 \end{equation*}
-How do \(U\) and \(V\) extinct? If we use Eqs.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}def\sphinxhyphen{}stokes\sphinxhyphen{}u},
+How do \(U\) and \(V\) extinct? If we use Eqs. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}def\sphinxhyphen{}stokes\sphinxhyphen{}u},
 \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}def\sphinxhyphen{}stokes\sphinxhyphen{}v}), and assume that the phase lag \(\Delta\) will not
 change during the extinction, then
 \begin{equation*}
@@ -3970,9 +3994,9 @@ Stokes vector is defined with respect to the vector \(\vec S\) which is
 perpendicular to the line\sphinxhyphen{}of\sphinxhyphen{}sight direction vector \(\vec n_{\mathrm{los}}\)
 and defines the direction in which the \(y\)\sphinxhyphen{}coordinate of the image plane
 points. We must now express this incoming radiation (at the start of the
-segment) in the new \((x',y')\) image plane coordinates, i.e.\textasciitilde{}with respect to
+segment) in the new \((x',y')\) image plane coordinates, i.e. with respect to
 the new vector \(\vec S'\) that points along \(\vec n_{\mathrm{align,proj}}\)
-(i.e.\textasciitilde{}:math:\sphinxtitleref{vec S’} is the normalized version of \(\vec
+(i.e. \(\vec S'\) is the normalized version of \(\vec
 n_{\mathrm{align,proj}}\)). This rotation is performed using
 
 \phantomsection\label{\detokenize{dustradtrans:eq-rot-stokes-align}}\begin{equation*}
@@ -4008,14 +4032,14 @@ image coordinate plane such that \(y'\) points along the orientation vector
 does no longer work, and the integration of the formal transfer equation would
 become much more complex, involving the full Müller matrix formulation. We will
 not do this, so we will stick to first order integration of
-Eq.\textasciitilde{}:ref:\sphinxtitleref{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system}.
+Eq. \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system}.
 
 For convenience we will leave out the primes (‘) from here on, so while we write
 \((I,Q,U,V)\) we mean in fact \((I',Q',U',V')\). We now compute
 \(I_{\mathrm{h}}\) and \(I_{\mathrm{v}}\) using
-Eqs.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}modif\sphinxhyphen{}stokes\sphinxhyphen{}h}, \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}modif\sphinxhyphen{}stokes\sphinxhyphen{}v}). Now, along this
+Eqs. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}modif\sphinxhyphen{}stokes\sphinxhyphen{}h}, \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}modif\sphinxhyphen{}stokes\sphinxhyphen{}v}). Now, along this
 segment of the ray, we can write
-Eq.\textasciitilde{}:ref:\sphinxtitleref{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system} in the following form:
+Eq. \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system} in the following form:
 
 \phantomsection\label{\detokenize{dustradtrans:eq-firstorder-int-emisabs}}\begin{equation*}
 \begin{split}\frac{d}{ds}
@@ -4065,9 +4089,9 @@ ray segment (which becomes the start of the next ray segment), and
 length of the segment.
 
 We now compute \(I_{\mathrm{end}}\) and \(Q_{\mathrm{end}}\), and rotate
-back to the \((x,y)\) image plane coordinate system (i.e.\textasciitilde{}using \(\vec
+back to the \((x,y)\) image plane coordinate system (i.e. using \(\vec
 S\) instead of \(\vec S'\) to define the Stokes parameters) by applying
-Eq.\textasciitilde{}:ref:\sphinxtitleref{eq\sphinxhyphen{}rot\sphinxhyphen{}stokes\sphinxhyphen{}align} but now with \(\alpha\rightarrow -\alpha\),
+Eq. \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}rot\sphinxhyphen{}stokes\sphinxhyphen{}align} but now with \(\alpha\rightarrow -\alpha\),
 and we have the values of the Stokes parameter at the end of the ray
 segment. Now we repeat this whole procedure for the next ray segment.
 
@@ -4120,12 +4144,12 @@ process included. However, in practice we also have other processes involved,
 such as line emission/absorption or the scattering source function. The way this
 can be treated here is to simply add these additional opacities to all four
 components of the extinction matrix of
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system}) and to add the additional
+Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system}) and to add the additional
 emissivities to the vector with the Planck functions in
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system}). For the scattered light
+Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}formal\sphinxhyphen{}rt\sphinxhyphen{}emisabs\sphinxhyphen{}in\sphinxhyphen{}rotated\sphinxhyphen{}system}). For the scattered light
 emissivity (which is a Stokes vector) we must also first perform a rotation from
 \(\vec S\) to \(\vec S'\) using the Stokes rotation formula of
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}rot\sphinxhyphen{}stokes\sphinxhyphen{}align}) before we add this emissivity to the
+Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}rot\sphinxhyphen{}stokes\sphinxhyphen{}align}) before we add this emissivity to the
 equation. If we include the effect of alignment on the scattering (see Section
 {\hyperref[\detokenize{dustradtrans:sec-align-scat}]{\sphinxcrossref{\DUrole{std,std-ref}{Effect of aligned grains on the scattering}}}}) then also the scattering extinction will be different for
 the orthogonal (horizontal) and parallel (vertical) Stokes components. That is
@@ -4244,7 +4268,7 @@ errors, it will be normalized to 1.
 The way in which partial alignment (\(0<\epsilon_{\mathrm{align}}<1\)) is
 treated in RADMC\sphinxhyphen{}3D is to treat the opacities and emissivities as simple
 linear sums of fully aligned and non aligned versions. For instance,
-Eqs.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}align\sphinxhyphen{}kappa\sphinxhyphen{}k\sphinxhyphen{}h}, \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}align\sphinxhyphen{}kappa\sphinxhyphen{}k\sphinxhyphen{}v}) then become
+Eqs. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}align\sphinxhyphen{}kappa\sphinxhyphen{}k\sphinxhyphen{}h}, \DUrole{xref,std,std-ref}{eq\sphinxhyphen{}align\sphinxhyphen{}kappa\sphinxhyphen{}k\sphinxhyphen{}v}) then become
 \begin{equation*}
 \begin{split}\begin{split}
 \kappa_{\mathrm{abs},\nu,h}(\theta) &= \kappa_{\mathrm{abs},\nu}\,[\epsilon_{\mathrm{align}}k_{\nu,h}(\theta)+1-\epsilon_{\mathrm{align}}] \\
@@ -4282,7 +4306,9 @@ ray\sphinxhyphen{}tracing in the slow but memory efficient way: the \sphinxstyle
 (see Section {\hyperref[\detokenize{lineradtrans:sec-line-trans-modes}]{\sphinxcrossref{\DUrole{std,std-ref}{Line transfer modes and how to activate the line transfer}}}}). Since this is the default mode,
 you do not need to specify anything to have this selected.
 
-section\{Quick start for adding line transfer to images and spectra\}
+
+\section{Quick start for adding line transfer to images and spectra}
+\label{\detokenize{lineradtrans:quick-start-for-adding-line-transfer-to-images-and-spectra}}
 Do properly model line transfer requires dedication and experimentation.
 This is \sphinxstyleemphasis{not} a simple task. See Section {\hyperref[\detokenize{lineradtrans:sec-lines-pitfalls}]{\sphinxcrossref{\DUrole{std,std-ref}{What can go wrong with line transfer?}}}} for an
 analysis of several pitfalls one may encounter. However, nothing is better
@@ -4306,7 +4332,7 @@ containing properties of the molecule or atom.
 \item {} 
 \sphinxcode{\sphinxupquote{numberdens\_co.inp}} (or its binary version, see Chapter
 {\hyperref[\detokenize{binaryio:chap-binary-io}]{\sphinxcrossref{\DUrole{std,std-ref}{Binary I/O files}}}}) or that of another molecule: The number density of
-that molecule in units of cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}3\}}.
+that molecule in units of \(\mathrm{cm}^{-3}\).
 
 \item {} 
 \sphinxcode{\sphinxupquote{gas\_temperature.inp}} (or its binary version, see Chapter
@@ -4346,7 +4372,7 @@ B_{ji}g_j  = B_{ij} g_i\end{split}
 where \(g\) are the statistical weights of the levels, \(h\) the Planck constant
 and \(c\) the light speed. The symbol \(\varphi_{ij}(\omega,\nu)\) is the line
 profile function. For zero velocity field
-\(\varphi_{ij}(\omega,\nu)=\tilde\varphi_{ij}(\nu)\), i.e.the line profile
+\(\varphi_{ij}(\omega,\nu)=\tilde\varphi_{ij}(\nu)\), i.e. the line profile
 function is independent of direction. The tilde is to say that this is
 the comoving line profile. It is given by
 \begin{equation*}
@@ -4491,7 +4517,7 @@ lines. Try it out, and you will see how it works.
 or optically thin populations, you can also ask RADMC\sphinxhyphen{}3D to \sphinxstyleemphasis{not} precalculate
 the level populations before the rendering, but instead compute them
 on\sphinxhyphen{}the\sphinxhyphen{}fly. This makes the code slower, but requires less memory.  You can do
-this by choosing e.g.\sphinxcode{\sphinxupquote{lines\_mode=\sphinxhyphen{}3}} instead of \sphinxcode{\sphinxupquote{lines\_mode=3}} (for
+this by choosing e.g. \sphinxcode{\sphinxupquote{lines\_mode=\sphinxhyphen{}3}} instead of \sphinxcode{\sphinxupquote{lines\_mode=3}} (for
 LVG+EscProb).
 
 
@@ -4716,14 +4742,15 @@ CO
 
 The first few lines are self\sphinxhyphen{}explanatory. The first of the two tables is about
 the levels. Column one is simply a numbering. Column 2 is the energy of the
-level \(E_k\), specified in units of \(1/\) where \(h\) is the Planck
+level \(E_k\), specified in units of \(1/\mathrm{cm}\). To get the energy in erg
+you multiply this number with \(hc/k\) where \(h\) is the Planck
 constant, \(c\) the light speed and \(k\) the Boltzmann constant. Column
-3 is the degeneration number, i.e.the the \(g\) parameter of the
+3 is the degeneration number, i.e. the the \(g\) parameter of the
 level. Column 4 is redundant information, not used by the code.
 
 The second table is the line list. Column 1 is again a simple counter.  Column 2
 and 3 specify which two levels the line connects. Column 4 is the radiative
-decay rate in units of \(1/\)
+decay rate in units of \(1/\mathrm{s}\), i.e. the Einstein \(A\)
 coefficient. The last two columns are redundant information that can be easily
 derived from the other information.
 
@@ -4805,12 +4832,12 @@ the number of temperature points at which these collisional rates are
 tabulated. Then follows this list of temperatures.  Finally we have the table of
 collisional transitions. Each line consists of, first, the ID of the transition
 (dummy), then the upper level, then the lower level, and then the
-\(K_{\mathrm{up,low}}\) collisional rates in units of {[}cm:math:\sphinxtitleref{\textasciicircum{}3}/s{]}. The
+\(K_{\mathrm{up,low}}\) collisional rates in units of {[}\(\mathrm{cm}^3/s\){]}. The
 same is again repeated (because in this example we have two collision partners:
 the para\sphinxhyphen{}H:math:\sphinxtitleref{\_2} molecule and the ortho\sphinxhyphen{}H:math:\sphinxtitleref{\_2} molecule).
 
 To get the collision rate \(C_{\mathrm{up,low}}\) per molecule (in units of
-{[}1/sec{]}) for the molecule of interest, we must multiply
+{[}1/s{]}) for the molecule of interest, we must multiply
 \(K_{\mathrm{up,low}}\) with the number density of the collision partner
 (see Section {\hyperref[\detokenize{lineradtrans:sec-collpartner}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: The number density of collision partners (for non\sphinxhyphen{}LTE transfer)}}}}).  So in this example, the
 \(C_{\mathrm{up,low}}\) becomes:
@@ -4854,8 +4881,8 @@ Section {\hyperref[\detokenize{lineradtrans:sec-collpartner}]{\sphinxcrossref{\D
 
 \subsection{INPUT: Molecular/atomic data: The linelist\_XXX.inp file(s)}
 \label{\detokenize{lineradtrans:input-molecular-atomic-data-the-linelist-xxx-inp-file-s}}\label{\detokenize{lineradtrans:sec-linelist-xxx-inp}}
-In many cases molecular data are merely given as lists of lines (e.g.the
-HITRAN database, the Kurucz database, the Jorgensen et al.\textasciitilde{}databases
+In many cases molecular data are merely given as lists of lines (e.g. the
+HITRAN database, the Kurucz database, the Jorgensen et al. databases
 etc.). These line lists contain information about the line wavelength
 \(\lambda_0\), the line strength \(A_{\mathrm{ud}}\), the statistical
 weights of the lower and upper level and the energy of the lower or upper
@@ -4933,9 +4960,9 @@ function (necessary for LTE transfer) and a table with all the lines (or any
 subset you wish to select). The lines table columns are as follows: first column
 is just a dummy index. Second column is the wavelength in micron. Third is the
 Einstein\sphinxhyphen{}A\sphinxhyphen{}coefficient (spontaneous downward rate) in units of
-sec:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}}. Fourth and fifth are the energies above the ground state of
+\(\mathrm{s}^{-1}\). Fourth and fifth are the energies above the ground state of
 the lower and upper levels belonging to this line in units of
-cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}}. Sixth and seventh are the statistical weights (degenracies) of
+\(\mathrm{cm}^{-1}\). Sixth and seventh are the statistical weights (degenracies) of
 the lower and upper levels belonging to this line.
 
 Note that you can tell RADMC\sphinxhyphen{}3D to read \sphinxcode{\sphinxupquote{linelist\_h2o.inp}} (instead of search
@@ -5076,7 +5103,7 @@ this list, and that it is the first level (\sphinxcode{\sphinxupquote{ilevel=1}}
 
 \subsection{INPUT: The number density of collision partners (for non\sphinxhyphen{}LTE transfer)}
 \label{\detokenize{lineradtrans:input-the-number-density-of-collision-partners-for-non-lte-transfer}}\label{\detokenize{lineradtrans:sec-collpartner}}
-For non\sphinxhyphen{}LTE line transfer (see e.g.\textasciitilde{}Sections {\hyperref[\detokenize{lineradtrans:sec-lvg}]{\sphinxcrossref{\DUrole{std,std-ref}{Non\sphinxhyphen{}LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method}}}},
+For non\sphinxhyphen{}LTE line transfer (see e.g. Sections {\hyperref[\detokenize{lineradtrans:sec-lvg}]{\sphinxcrossref{\DUrole{std,std-ref}{Non\sphinxhyphen{}LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method}}}},
 {\hyperref[\detokenize{lineradtrans:sec-optthinpop}]{\sphinxcrossref{\DUrole{std,std-ref}{Non\sphinxhyphen{}LTE Transfer: The optically thin line assumption method}}}}) the molecules can be collisionally excited. The collision
 rates for each pair of molecule + collision partner are given in the molecular
 input data files (Section {\hyperref[\detokenize{lineradtrans:sec-molecule-xxx-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}}). To find how often a
@@ -5235,7 +5262,7 @@ simultaneously (each ray doing all wavelength at the same time), and the
 local level populations along each ray can now be computed once, and be used
 for all wavelengths. \sphinxstyleemphasis{This may speed up things drastically, and for most
 purposes virtually perfectly correct}. Just beware that when you render
-short\sphinxhyphen{}wavelength lines (optical) or you use large grains, i.e.when the
+short\sphinxhyphen{}wavelength lines (optical) or you use large grains, i.e. when the
 scattering albedo at the wavelength of the line is not negligible, this may
 result in a mis\sphinxhyphen{}estimation of the continuum around the line.
 
@@ -5278,7 +5305,7 @@ method, also called the ‘Sobolev approximation’.  Please read for instance
 the paper by Ossenkopf (1997) ‘The Sobolev approximation in molecular
 clouds’, New Astronomy, 2, 365 for more explanation, and a study how it
 works in the context of molecular clouds. The LVG mode of RADMC\sphinxhyphen{}3D has been
-used for the first time by Shetty et al.\textasciitilde{}(2011, MNRAS 412, 1686), and a
+used for the first time by Shetty et al. (2011, MNRAS 412, 1686), and a
 description of the method is included in that paper.  The nice aspect of
 this method is that it is, for most part, local. The only slightly non\sphinxhyphen{}local
 aspect is that a velocity gradient has to be computed by comparing the gas
@@ -5318,12 +5345,12 @@ For the LVG method this optical depth is given by the velocity gradient:
 {1.064\,|\nabla \vec v|}\left[\frac{g_i}{g_j}n_j-n_i\right]
 \end{split}\end{split}
 \end{equation*}
-(see e.g.van der Tak et al.\textasciitilde{}2007, A\&A 468, 627), where \(n_i\) is the
+(see e.g. van der Tak et al. 2007, A\&A 468, 627), where \(n_i\) is the
 fractional level population of level \(i\), \(N_{\mathrm{molec}}\) the
 total number density of the molecule, \(|\nabla \vec v|\) the absolute value
 of the velocity gradient, \(g_i\) the statistical weight of level \(i\)
 and \(\nu_{ij}\) the line frequency for transition \(i\rightarrow
-j\). In comparing to Eq.\textasciitilde{}21 of van der Tak’s paper, note that their
+j\). In comparing to Eq. 21 of van der Tak’s paper, note that their
 \(N_{\mathrm{mol}}\) is a column density (cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}2\}}) and their
 \(\Delta V\) is the line width (cm/s), while our \(N_{\mathrm{molec}}\)
 is the number density (cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}3\}}) and \(|\nabla \vec v|\) is the
@@ -5367,7 +5394,7 @@ equilibrium equation:
 \end{split}\end{split}
 \end{equation*}
 Replacing \(J_{ij}\) (and similarly \(J_{ji}\)) with the expression of
-Eq.\textasciitilde{}(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}linemeanint\sphinxhyphen{}escp}) and subsequently replacing \(S_{ij}\) with
+Eq. (\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}linemeanint\sphinxhyphen{}escp}) and subsequently replacing \(S_{ij}\) with
 the well\sphinxhyphen{}known expression for the line source function
 \begin{equation*}
 \begin{split}S_{ij} = \frac{n_iA_{ij}}{n_jB_{ji}-n_iB_{ij}}\end{split}
@@ -5392,7 +5419,7 @@ collision rate tables (see Section {\hyperref[\detokenize{lineradtrans:sec-molec
 
 \item {} 
 Make sure to provide file(s) containing the number densities
-of the collision partners, e.g.\textasciitilde{}\textasciigrave{}\textasciigrave{}numberdens\_p\sphinxhyphen{}h2.inp\textasciigrave{}\textasciigrave{}
+of the collision partners, e.g. \sphinxcode{\sphinxupquote{numberdens\_p\sphinxhyphen{}h2.inp}}
 (see Section {\hyperref[\detokenize{lineradtrans:sec-collpartner}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: The number density of collision partners (for non\sphinxhyphen{}LTE transfer)}}}}).
 
 \item {} 
@@ -5467,7 +5494,7 @@ collision rate tables (see Section {\hyperref[\detokenize{lineradtrans:sec-molec
 
 \item {} 
 Make sure to provide file(s) containing the number densities
-of the collision partners, e.g.\textasciitilde{}\textasciigrave{}\textasciigrave{}numberdens\_p\sphinxhyphen{}h2.inp\textasciigrave{}\textasciigrave{}
+of the collision partners, e.g. \sphinxcode{\sphinxupquote{numberdens\_p\sphinxhyphen{}h2.inp}}
 (see Section {\hyperref[\detokenize{lineradtrans:sec-collpartner}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: The number density of collision partners (for non\sphinxhyphen{}LTE transfer)}}}}).
 
 \item {} 
@@ -5568,7 +5595,7 @@ Then follows the number of levels (written as \sphinxcode{\sphinxupquote{nrlevel
 that this is \sphinxstyleemphasis{not necessarily} equal to the number of levels found in the
 \sphinxcode{\sphinxupquote{molecule\_co.inp}} file (for our CO example). It will only be equal to that if
 the file has been produced by the command \sphinxcode{\sphinxupquote{radmc3d calcpop}}. If, however, the
-file was produced after making an image or spectrum (e.g.through the command
+file was produced after making an image or spectrum (e.g. through the command
 \sphinxcode{\sphinxupquote{radmc3d image lambda 2300 writepop}}), then RADMC\sphinxhyphen{}3D will only write out those
 levels that have been used to make the image or spectrum. See Section
 {\hyperref[\detokenize{lineradtrans:sec-calcstore-levpop}]{\sphinxcrossref{\DUrole{std,std-ref}{Background information: Calculation and storage of level populations}}}} for more information about this. It is for this
@@ -5576,7 +5603,7 @@ reason that the file in fact contains a list of levels that are included (the
 \sphinxcode{\sphinxupquote{level1 level 2 ...}} in the above file format example).
 
 After these header lines follows the actual data. Each line contains the
-populations at a spatial cell in units of cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}3\}}.
+populations at a spatial cell in units of \(\mathrm{cm}^{-3}\).
 
 This file format is a generalization of the standard format which is
 described for the example of dust density in Section {\hyperref[\detokenize{inputoutputfiles:sec-dustdens}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required for dust transfer): dust\_density.inp}}}}.
@@ -5619,13 +5646,14 @@ worthwhile to make sure to reduce the number of levels of the
 \section{What can go wrong with line transfer?}
 \label{\detokenize{lineradtrans:what-can-go-wrong-with-line-transfer}}\label{\detokenize{lineradtrans:sec-lines-pitfalls}}
 Even the simple task of performing a ray\sphinxhyphen{}tracing line transfer calculation
-with given level populations (i.e.the so\sphinxhyphen{}called \sphinxstyleemphasis{formal transfer
+with given level populations (i.e. the so\sphinxhyphen{}called \sphinxstyleemphasis{formal transfer
 equation}) is a non\sphinxhyphen{}trivial task in complex 3\sphinxhyphen{}D AMR models with possibly
 highly supersonic motions. I recommend the user to do extensive and critical
 experimentation with the code and make many simple tests to check if the
 results are as they are expected to be. In the end a result must be
 understandable in terms of simple argumentation. If weird effects show up,
-please do some detective work until you understand why they show up, i.e.that they are either a \sphinxstyleemphasis{real} effect or a numerical issue. There are
+please do some detective work until you understand why they show up, i.e.
+that they are either a \sphinxstyleemphasis{real} effect or a numerical issue. There are
 many numerical artifacts that can show up that are \sphinxstyleemphasis{not} a bug in the
 code. The code simply does a numerical integration of the equations on some
 spatial\sphinxhyphen{} and wavelength\sphinxhyphen{}grid. If the user chooses these grids unwisely, the
@@ -5675,7 +5703,12 @@ the intrinsic (thermal+microturbulent) line width, then the ray\sphinxhyphen{}tr
 will not be able to pick up signals from intermediate velocities. In other
 words, because of the discrete gridding of the model, only discrete
 velocities are present, which can cause numerical problems. See
-Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}doppler\sphinxhyphen{}catch}\sphinxhyphen{}Left for a pictographic representation of
+Fig. {\hyperref[\detokenize{lineradtrans:fig-doppler-catch}]{\sphinxcrossref{\DUrole{std,std-ref}{Right: Pictographic representation of the doppler catching method to
+prevent this problem: First of all, second order integration is done
+instead of first order. Secondly, the method automatically detects a
+possibly dangerous doppler jump and makes sub\sphinxhyphen{}steps to neatly integrate
+over the line that shifts in\sphinxhyphen{} and out of the wavelength channel of
+interest.}}}}\sphinxhyphen{}Left for a pictographic representation of
 this problem. There are two possible solutions. One is the wavelength band
 method described in Section {\hyperref[\detokenize{imagesspectra:sec-wavelength-bands}]{\sphinxcrossref{\DUrole{std,std-ref}{Heads\sphinxhyphen{}up: In reality wavelength are actually wavelength bands}}}}.  But a more
 systematic method is the ‘doppler catching’ method described in Section
@@ -5697,7 +5730,8 @@ the line can then have a doppler shift substantially to the blue of the
 wavelength\sphinxhyphen{}of\sphinxhyphen{}sight, while in the next cell the line suddenly shifted to the
 red side. If the intrinsic (= thermal + microturbulent) line width is
 smaller than these shifts, neither cell gives a contribution to the emission
-in the ray. See Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}doppler\sphinxhyphen{}jump} for a pictographic
+in the ray. See Fig. {\hyperref[\detokenize{lineradtrans:fig-doppler-jump}]{\sphinxcrossref{\DUrole{std,std-ref}{Pictographic representation of the doppler jumping problem with
+ray\sphinxhyphen{}tracing through a model with strong cell\sphinxhyphen{}to\sphinxhyphen{}cell velocity differences.}}}} for a pictographic
 representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength\sphinxhyphen{}of\sphinxhyphen{}sight, and thus make a contribution. Therefore the numerical
@@ -5732,11 +5766,16 @@ it detects one, to make sub\sphinxhyphen{}steps in the integration of the formal
 equation so that the smooth passing of the line through the
 wavelength\sphinxhyphen{}of\sphinxhyphen{}sight can be properly accounted for. Here this is called
 ‘doppler catching’, for lack of a better name. The technique was discussed
-in great detail in Pontoppidan et al.\textasciitilde{}(2009, ApJ 704, 1482). The idea is
+in great detail in Pontoppidan et al. (2009, ApJ 704, 1482). The idea is
 that the method automatically tests if a line might ‘doppler jump’ over
 the current wavelength channel. If so, it will insert substeps in the
 integration at the location where this danger is present. See
-Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}doppler\sphinxhyphen{}catch} for a pictographic representation of this
+Fig. {\hyperref[\detokenize{lineradtrans:fig-doppler-catch}]{\sphinxcrossref{\DUrole{std,std-ref}{Right: Pictographic representation of the doppler catching method to
+prevent this problem: First of all, second order integration is done
+instead of first order. Secondly, the method automatically detects a
+possibly dangerous doppler jump and makes sub\sphinxhyphen{}steps to neatly integrate
+over the line that shifts in\sphinxhyphen{} and out of the wavelength channel of
+interest.}}}} for a pictographic representation of this
 method. Note that this method can only be used with the second order
 ray\sphinxhyphen{}tracing (see Section {\hyperref[\detokenize{imagesspectra:sec-second-order}]{\sphinxcrossref{\DUrole{std,std-ref}{Second order ray\sphinxhyphen{}tracing (Important information!)}}}}); in fact, as soon as you
 switch the doppler catching on, RADMC\sphinxhyphen{}3D will automatically also switch on
@@ -5768,12 +5807,12 @@ ensure that smaller steps are taken. By adding a line:
 to the \sphinxcode{\sphinxupquote{radmc3d.inp}} file you will ensure that steps are small
 enough that the doppler shift is at most 0.05 times the local line width.
 
-So why is doppler catching an \sphinxstyleemphasis{option}, i.e.why would this not be standard?
+So why is doppler catching an \sphinxstyleemphasis{option}, i.e. why would this not be standard?
 The reason is that doppler catching requires second order integration, which
 requires RADMC\sphinxhyphen{}3D to first map all the cell\sphinxhyphen{}based quantities to the
 cell\sphinxhyphen{}corners. This requires extra memory, which for very large models can be
 problematic. It also requires more CPU time to calculate images/spectra with
-second order integration. So if you do not need it, i.e.if your velocity
+second order integration. So if you do not need it, i.e. if your velocity
 gradients are not very steep compared to the intrinsic line width, then it saves
 time and memory to not use doppler catching.
 
@@ -5781,12 +5820,13 @@ It is, however, important to realize that doppler catching is not the golden
 bullet. Even with doppler catching it might happen that some line flux is lost,
 but this time as a result of too low \sphinxstyleemphasis{image resolution}. This is less likely to
 happen in problems like ISM turbulence, but it is pretty likely to happen in
-models of rotating disks. Suppose we have a very thin local line width (i.e.low gas temperature and no microturbulence) in a rotating thin disk around a
-star. In a given velocity channel (i.e.at a given observer\sphinxhyphen{}frame frequency) a
+models of rotating disks. Suppose we have a very thin local line width (i.e.
+low gas temperature and no microturbulence) in a rotating thin disk around a
+star. In a given velocity channel (i.e. at a given observer\sphinxhyphen{}frame frequency) a
 molecular line in the disk emits only in a very thin ‘ear\sphinxhyphen{}shaped’ ring or band
 in the image. The thinner the intrinsic line width, the thinner the band on the
-image. See Pontoppidan et al.\textasciitilde{}(2009, ApJ 704, 1482) and Pavlyuchenkov et
-al.\textasciitilde{}(2007, ApJ 669, 1262) for example. If the pixel\sphinxhyphen{}resolution of the image is
+image. See Pontoppidan et al. (2009, ApJ 704, 1482) and Pavlyuchenkov et
+al. (2007, ApJ 669, 1262) for example. If the pixel\sphinxhyphen{}resolution of the image is
 smaller than that of this band, the image is simply underresolved.  This has
 nothing to do with the doppler jumping problem, but can be equally devastating
 for the results if the user is unaware of this. There appears to be only one
@@ -5794,7 +5834,7 @@ proper solution: assure that the pixel\sphinxhyphen{}resolution of the image is 
 fine for the problem at hand. This is easy to find out: The image would simply
 look terribly noisy if the resolution is insufficient. However, if you are not
 interested in the images, but only in the spectra, then some amount of noisiness
-in the image (i.e.marginally sufficient resolution) is OK, since the total
+in the image (i.e. marginally sufficient resolution) is OK, since the total
 flux is an integral over the entire image, smearing out much of the noise.  It
 requires some experimentation, though.
 
@@ -5808,8 +5848,8 @@ inside the computational domain this amounts to linear interpolation. But
 at the edges of the domain it would require \sphinxstyleemphasis{extra} polation.
 In 1\sphinxhyphen{}D this is more easily illustrated, because
 there the cell corners are in fact cell interfaces. Cells \(i\) and \(i+1\)
-share cell interface \(i+1/2\). If we have \(N\) cells, i.e.cells
-\(i=1,\cdots,N\), then we have \(N+1\) interfaces, i.e.interfaces
+share cell interface \(i+1/2\). If we have \(N\) cells, i.e. cells
+\(i=1,\cdots,N\), then we have \(N+1\) interfaces, i.e. interfaces
 \(i=\tfrac{1}{2},\cdots,N+\tfrac{1}{2}\). To get physical quantities from
 the cell centers to cell interfaces
 \(i=\tfrac{3}{2},\cdots,N-\tfrac{1}{2}\) requires just interpolation. But
@@ -5911,7 +5951,7 @@ and \(C_{\mathrm{margin}}\) is a constant. By default
 \begin{split}C_{\mathrm{margin}} = 12\end{split}
 \end{equation*}
 But you can change this to another value, say 24, by adding in the
-\sphinxcode{\sphinxupquote{radmc3d.inp}} file a line containing, e.g.\sphinxcode{\sphinxupquote{lines\_widthmargin = 24}}.
+\sphinxcode{\sphinxupquote{radmc3d.inp}} file a line containing, e.g. \sphinxcode{\sphinxupquote{lines\_widthmargin = 24}}.
 
 You can in fact get a dump of the level populations that have been computed and
 used for the image(s)/spectrum you created, by adding \sphinxcode{\sphinxupquote{writepop}} on the
@@ -5960,7 +6000,8 @@ populations mode use \sphinxcode{\sphinxupquote{lines\_mode=\sphinxhyphen{}2}}, 
 \sphinxcode{\sphinxupquote{lines\_mode=\sphinxhyphen{}4}}.
 
 \sphinxstyleemphasis{NOTE: The drawback of this method is that, under certain circumstances, it can
-slow down the code dramatically.} This slow\sphinxhyphen{}down happens if you use e.g.second\sphinxhyphen{}order integration (Section {\hyperref[\detokenize{imagesspectra:sec-second-order}]{\sphinxcrossref{\DUrole{std,std-ref}{Second order ray\sphinxhyphen{}tracing (Important information!)}}}}) and/or doppler
+slow down the code dramatically.} This slow\sphinxhyphen{}down happens if you use e.g.
+second\sphinxhyphen{}order integration (Section {\hyperref[\detokenize{imagesspectra:sec-second-order}]{\sphinxcrossref{\DUrole{std,std-ref}{Second order ray\sphinxhyphen{}tracing (Important information!)}}}}) and/or doppler
 catching (Section {\hyperref[\detokenize{lineradtrans:sec-doppler-catching}]{\sphinxcrossref{\DUrole{std,std-ref}{Preventing doppler jumps: The ‘doppler catching method’}}}}) together with non\sphinxhyphen{}trivial
 population solving methods like LVG. So please use the on\sphinxhyphen{}the\sphinxhyphen{}fly method only
 when you are forced to do so (for memory reasons).
@@ -6310,7 +6351,8 @@ where the last stuff is telling \sphinxcode{\sphinxupquote{radmc3d}} how to sele
 \end{sphinxVerbatim}
 
 will make a spectrum with a regular wavelength grid between 5 and 20
-\(\mu\) for more details and options.
+\(\mu\mathrm{m}\) and 100 wavelength points. But see Section
+{\hyperref[\detokenize{imagesspectra:sec-set-camera-frequencies}]{\sphinxcrossref{\DUrole{std,std-ref}{Specifying custom\sphinxhyphen{}made sets of wavelength points for the camera}}}} for more details and options.
 
 The output file \sphinxcode{\sphinxupquote{spectrum.out}} will have the same format as for the \sphinxcode{\sphinxupquote{sed}}
 command.
@@ -6664,7 +6706,12 @@ intensities.
 Note, by the way, that each of these 2x2 subpixels may be split even further
 into 2x2 sub\sphinxhyphen{}pixels etc until the desired resolution is reached, i.e. until
 the condition that \(S\) is larger or equal to the pixel size divided by
-\(f_{\mathrm{ref}}\) is met. By this recursive calling, we always end up at
+\(f_{\mathrm{ref}}\) is met. This is illustrated in Fig.
+{\hyperref[\detokenize{imagesspectra:fig-recursive-subpixeling}]{\sphinxcrossref{\DUrole{std,std-ref}{Pictographic representation of how the recursive sub\sphinxhyphen{}pixeling for images
+works. Pixels are recursively split in 2x2 subpixels as far as needed
+to resolve the 3\sphinxhyphen{}D grid structure of the model. But at the end, the
+fluxes of all subpixels are summed up such that the resulting image
+has a regular grid again.}}}}. By this recursive calling, we always end up at
 the top level with the average intesity of the entire top\sphinxhyphen{}level pixel.  This
 method is very similar to quad\sphinxhyphen{}tree mesh refinement, but instead of
 retaining and returning the entire complex mesh structure to the user, this
@@ -6673,6 +6720,17 @@ level) pixel in the image. So the recursive sub\sphinxhyphen{}pixeling technique
 here is all done internally in the RADMC\sphinxhyphen{}3D code, and the user will not
 really notice anything except that this sub\sphinxhyphen{}pixeling can of course be
 computationally more expensive than if such a method is not used.
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics{{Subpixeling}.pdf}
+\caption{Pictographic representation of how the recursive sub\sphinxhyphen{}pixeling for images
+works. Pixels are recursively split in 2x2 subpixels as far as needed
+to resolve the 3\sphinxhyphen{}D grid structure of the model. But at the end, the
+fluxes of all subpixels are summed up such that the resulting image
+has a regular grid again.}\label{\detokenize{imagesspectra:id5}}\label{\detokenize{imagesspectra:fig-recursive-subpixeling}}\end{figure}
 
 Note that the smaller we choose \(f_{\mathrm{ref}}\) the more accurate our
 image becomes. In the \sphinxcode{\sphinxupquote{radmc3d.inp}} file the value of \(f_{\mathrm{ref}}\)
@@ -6723,7 +6781,7 @@ in the \sphinxcode{\sphinxupquote{radmc3d.inp}} file.
 
 A second issue is when the user introduces extreme ‘separable refinement’
 (see Section {\hyperref[\detokenize{gridding:sec-separable-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{Separable grid refinement in spherical coordinates (important!)}}}} and Figure
-\sphinxcode{\sphinxupquote{fig\sphinxhyphen{}spher\sphinxhyphen{}sep\sphinxhyphen{}ref}}\sphinxhyphen{}right) in the \(R\), \(\Theta\) or \(\Phi\)
+\hyperref[\detokenize{gridding:fig-spher-sep-ref-rays}]{Fig.\@ \ref{\detokenize{gridding:fig-spher-sep-ref-rays}}}) in the \(R\), \(\Theta\) or \(\Phi\)
 coordinate. This may, for instance, be necessary near the inner edge of a
 dusty disk model in order to keep the first cell optically thin. This may
 lead, however, to extremely deep sub\sphinxhyphen{}pixeling for rays that skim the inner
@@ -6736,13 +6794,13 @@ RADMC\sphinxhyphen{}3D plays it safe. If you wish to prevent this excessive sub\
 \item {} 
 \sphinxcode{\sphinxupquote{camera\_min\_drr}} which sets a lower limit to the \(\Delta
 R/R\) taken into account for the sub\sphinxhyphen{}pixeling (region ‘B’ in Figure
-\sphinxcode{\sphinxupquote{fig\sphinxhyphen{}spher\sphinxhyphen{}sep\sphinxhyphen{}ref}}\sphinxhyphen{}left). The default is 0.003. By setting this to
+\hyperref[\detokenize{gridding:fig-spher-sep-ref-txt}]{Fig.\@ \ref{\detokenize{gridding:fig-spher-sep-ref-txt}}}). The default is 0.003. By setting this to
 e.g. 0.03 you can already get a strong speed\sphinxhyphen{}up for models with strong
 \(R\)\sphinxhyphen{}refinement.
 
 \item {} 
 \sphinxcode{\sphinxupquote{camera\_min\_dangle}} which sets a lower limit to
-\(\Delta\Theta\) (region ‘C’ in Figure \sphinxcode{\sphinxupquote{fig\sphinxhyphen{}spher\sphinxhyphen{}sep\sphinxhyphen{}ref}}\sphinxhyphen{}left)
+\(\Delta\Theta\) (region ‘C’ in Figure \hyperref[\detokenize{gridding:fig-spher-sep-ref-txt}]{Fig.\@ \ref{\detokenize{gridding:fig-spher-sep-ref-txt}}})
 and/or \(\Delta\Phi\). The default is 0.05. By setting this to e.g. 0.1 you
 can already get some speed\sphinxhyphen{}up for models with e.g. strong
 \(\Theta\)\sphinxhyphen{}refinement.
@@ -6877,7 +6935,7 @@ lines).  The grid cuts the ray into ray segments A, B, C and D. At the bottom
 it is shown how the integrands are assumed to be along these four segments.
 The emissivity function \(j_\nu\) and extinction function
 \(\alpha_\nu\) are constant within each cell and thus constant along each
-ray segment.}\label{\detokenize{imagesspectra:id5}}\label{\detokenize{imagesspectra:fig-cellcenter}}\end{figure}
+ray segment.}\label{\detokenize{imagesspectra:id6}}\label{\detokenize{imagesspectra:fig-cellcenter}}\end{figure}
 
 The integration over each cell proceeds according to the following formula:
 \begin{equation*}
@@ -6913,7 +6971,7 @@ The emissivity function \(j_\nu\) and extinction function
 linearly interpolated from the cell corners to the locations where the ray
 crosses the cell walls (open blue circles).  Then, along each ray segment the
 emissivity and extinction functions are assumed to be linear functions, so
-that the integration result is quadratic.}\label{\detokenize{imagesspectra:id6}}\label{\detokenize{imagesspectra:fig-cellcorner}}\end{figure}
+that the integration result is quadratic.}\label{\detokenize{imagesspectra:id7}}\label{\detokenize{imagesspectra:fig-cellcorner}}\end{figure}
 
 This is done with a simple \sphinxcode{\sphinxupquote{secondorder}} option added on the
 command line, for instance:
@@ -6990,7 +7048,7 @@ and very end of the ray).
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_4_1st}.pdf}
 \caption{First\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id7}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-1}}\end{figure}
+seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id8}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-1}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -6998,7 +7056,7 @@ seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id7}}\label{\det
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_60_1st}.pdf}
 \caption{First\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id8}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-1}}\end{figure}
+seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id9}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-1}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -7006,7 +7064,7 @@ seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id8}}\label{\de
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_4_2nd}.pdf}
 \caption{Second\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id9}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}}\end{figure}
+seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id10}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -7014,7 +7072,7 @@ seen at inclination 4 degrees.}\label{\detokenize{imagesspectra:id9}}\label{\det
 
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{simple_60_2nd}.pdf}
 \caption{Second\sphinxhyphen{}order integration of transfer equation in ray\sphinxhyphen{}tracing
-seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id10}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-2}}\end{figure}
+seen at inclination 60 degrees.}\label{\detokenize{imagesspectra:id11}}\label{\detokenize{imagesspectra:fig-effect-of-second-order-integration-60-2}}\end{figure}
 
 If you compare the images or spectra obtained with first order integration
 (default, see Figs. \hyperref[\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-effect-of-second-order-integration-4-2}}} and
@@ -7129,7 +7187,7 @@ The result will look like shown in Fig. \hyperref[\detokenize{imagesspectra:fig-
 
 \noindent\sphinxincludegraphics{{circularimage}.pdf}
 \caption{Example of a circular image of a 1\sphinxhyphen{}D spherical model (the model in the
-\sphinxcode{\sphinxupquote{examples/run\_spher1d\_1/}} directory).}\label{\detokenize{imagesspectra:id11}}\label{\detokenize{imagesspectra:fig-circ-image}}\end{figure}
+\sphinxcode{\sphinxupquote{examples/run\_spher1d\_1/}} directory).}\label{\detokenize{imagesspectra:id12}}\label{\detokenize{imagesspectra:fig-circ-image}}\end{figure}
 
 If you have 2\sphinxhyphen{}D or 3\sphinxhyphen{}D models in spherical coordinates, the circular images
 (should) have not only a grid in \(r\), but also \(\phi\) grid points.
@@ -7153,7 +7211,7 @@ is shown as a ‘normal’ image in Fig. \hyperref[\detokenize{imagesspectra:fig
 
 \noindent\sphinxincludegraphics{{circim2d}.pdf}
 \caption{Example of a circular image of a 2\sphinxhyphen{}D spherical model (the model in the
-\sphinxcode{\sphinxupquote{examples/run\_spher2d\_1/}} directory).}\label{\detokenize{imagesspectra:id12}}\label{\detokenize{imagesspectra:fig-circ-image-2d}}\end{figure}
+\sphinxcode{\sphinxupquote{examples/run\_spher2d\_1/}} directory).}\label{\detokenize{imagesspectra:id13}}\label{\detokenize{imagesspectra:fig-circ-image-2d}}\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -7161,7 +7219,7 @@ is shown as a ‘normal’ image in Fig. \hyperref[\detokenize{imagesspectra:fig
 
 \noindent\sphinxincludegraphics{{spher2dim10mic}.pdf}
 \caption{The rectangular (‘normal’) version of the image of Fig. \hyperref[\detokenize{imagesspectra:fig-circ-image-2d}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-circ-image-2d}}}.
-As one can see: the inner regions of this image are not well\sphinxhyphen{}resolved.}\label{\detokenize{imagesspectra:id13}}\label{\detokenize{imagesspectra:fig-rect-circ-image-2d}}\end{figure}
+As one can see: the inner regions of this image are not well\sphinxhyphen{}resolved.}\label{\detokenize{imagesspectra:id14}}\label{\detokenize{imagesspectra:fig-rect-circ-image-2d}}\end{figure}
 
 With a bit of “getting used to” one will find that the circular images will
 reveal a lot of information.
@@ -7878,8 +7936,8 @@ the data structure by far easier. Example: suppose you have a base grid of 8x8x8
 cells and you replace the inner 4x4x4 cells with a layer of 8x8x8 cells (each
 cell being half the size of the original cells).  Then you will have for
 instance a \sphinxcode{\sphinxupquote{dust\_density.inp}} file containing 1024 values of the density:
-8:math:\sphinxtitleref{\textasciicircum{}3}=512 values for the base grid and again 8:math:\sphinxtitleref{\textasciicircum{}3}=512 values for
-the refinement layer. Of the first 8:math:\sphinxtitleref{\textasciicircum{}3}=512 values 4:math:\sphinxtitleref{\textasciicircum{}3}=64 values
+\(8^3\)=512 values for the base grid and again \(8^3\)=512 values for
+the refinement layer. Of the first \(8^3\)=512 values \(4^3\)=64 values
 are ignored (they could have any value as they will not be used). The file is
 thus 64 values larger than strictly necessary, which is a redundancy of
 64/1024=0.0625. If you would have used the oct\sphinxhyphen{}tree refinement style for making
@@ -7971,7 +8029,7 @@ as usual.
 As mentioned above, the ‘normal’ 3\sphinxhyphen{}D way of making a spectrum of the 1\sphinxhyphen{}D
 plane\sphinxhyphen{}parallel atmosphere is not possible, because formally the atmosphere is
 infinitely extended. Instead you can obtain a spectrum in the form of an
-intensity (erg s:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}2\}} Hz:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} ster:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}})
+intensity (\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\))
 as a function of wavelength. To do this you ask RADMC\sphinxhyphen{}3D to make a
 multi\sphinxhyphen{}wavelength image of the atmosphere under a certain inclination
 (inclination 0 meaning face\sphinxhyphen{}on), e.g.:
@@ -7980,7 +8038,9 @@ multi\sphinxhyphen{}wavelength image of the atmosphere under a certain inclinati
 \PYG{n}{radmc3d} \PYG{n}{image} \PYG{n}{allwl} \PYG{n}{incl} \PYG{l+m+mi}{70}
 \end{sphinxVerbatim}
 
-This make an SED at \(\lambda=10\,\mu\). The image is, in fact, a 1x1 pixel
+This make an SED at \(\lambda=10\,\mu\)m for the observer seeing the
+atmosphere at an inclination of 70 degrees. This produces a file image.out,
+described in Section {\hyperref[\detokenize{inputoutputfiles:sec-image-out}]{\sphinxcrossref{\DUrole{std,std-ref}{OUTPUT: image.out or image\_****.out}}}}. The image is, in fact, a 1x1 pixel
 multi\sphinxhyphen{}wavelength image. The \sphinxcode{\sphinxupquote{allwl}} (which stands for ‘all wavelengths’) means
 that the spectral points are the same as those in the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}}
 file (see Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}).  You can also specify the wavelengths
@@ -8297,8 +8357,8 @@ model, only the interstellar radiation field. The temperature in the centers of
 these starless cores will be determined by the interstellar radiation field. But
 since the cores are very small compared to the total model (e.g. you have used
 AMR to refine the grid around/in these cores), the chance of each external
-photon package to \sphinxtitleref{hit’ the starless core is small. It means that the larger the
-grid or the smaller the starless core, the more photon packages (\textasciigrave{}\textasciigrave{}nphot\textasciigrave{}},
+photon package to ‘hit’ the starless core is small. It means that the larger the
+grid or the smaller the starless core, the more photon packages (\sphinxcode{\sphinxupquote{nphot}},
 see Section {\hyperref[\detokenize{dustradtrans:sec-dust-thermal-monte-carlo}]{\sphinxcrossref{\DUrole{std,std-ref}{The thermal Monte Carlo simulation: computing the dust temperature}}}}) one must use to make sure that
 at least some of them enter the starless cores. If you choose \sphinxcode{\sphinxupquote{phot}} too small
 in this case, then the temperature in these cores would remain undetermined

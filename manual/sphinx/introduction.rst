@@ -33,12 +33,12 @@ are marked with [-]. Those that are currently being developed are marked with
   #. [+] Spherical coordinates (1-D, 2-D and 3-D)
 
 #. Gridding systems (regular and adaptive mesh refinement grids are
-   available for cartesian {\em and} spherical coordinates):
+   available for cartesian *and* spherical coordinates):
 
   #. [+] Regular
   #. [+] Adaptive Mesh Refinement: oct-tree style
   #. [+] Adaptive Mesh Refinement: layered ('patch') style
-  #. [-] Voronoi gridding {\em [To be implemented on request]}
+  #. [-] Voronoi gridding *[To be implemented on request]*
 
 #. Radiation mechanisms:
 
@@ -49,8 +49,8 @@ are marked with [-]. Those that are currently being developed are marked with
       #. [+] ...with full anisotropy
       #. [+] ...with full Stokes and Polarization
 
-    #. [-] Dust quantum heated grains {\em [To be implemented on request]}
-    #. [t] Polarized dust emission by aligned grains {\em [first test version]}
+    #. [-] Dust quantum heated grains *[To be implemented on request]*
+    #. [t] Polarized dust emission by aligned grains *[first test version]*
     #. [+] Gas line transfer (LTE)
     #. [+] Gas line transfer (non-LTE: LVG)
     #. [+] Gas line transfer (non-LTE: LVG + Escape Probability)
@@ -94,7 +94,7 @@ are marked with [-]. Those that are currently being developed are marked with
 #.
 
     #. [+] Stars can be treated as point-sources or as spheres
-    #. [+] Option to calculate the mean intensity $J_\nu(\vec x)$ in the model
+    #. [+] Option to calculate the mean intensity :math:`J_\nu(\vec x)` in the model
     #. [+] OpenMP parallellization of the Monte Carlo
 
 

@@ -103,8 +103,8 @@ needs. However, if you prefer to use another language, you can use the examples
 to see how the input files were generated and then program this in another
 programming language.
 
-{\em Note: The Python files called ``problem_\*.py`` are meant to be edited and
-changed by you! They are templates from which you can create your own models.}
+*Note: The Python files called* ``problem_*.py`` *are meant to be edited and
+changed by you! They are templates from which you can create your own models.*
 
 For the analysis of the output files created by RADMC-3D you can use your own
 favorite plotting or data-analysis software. But also here we provide some tools
@@ -214,7 +214,7 @@ systems:
 * Cartesian coordinates: 3-D
   
   The simplest coordinate system is the Cartesian coordinate system
-  $(x,y,z)$. For now each model must be 3-D (i.e. you must specify the
+  :math:`(x,y,z)`. For now each model must be 3-D (i.e. you must specify the
   densities and other quantities as a function of :math:`x`, :math:`y` and :math:`z`).
   
 * Cartesian coordinates: 1-D plane-parallel
@@ -397,7 +397,7 @@ various actions. Here is a list:
    function of the :math:`(x,y,z)` (cartesian) or :math:`(r,\theta,\phi)`
    (spherical) coordinates at the frequencies :math:`\nu_i\equiv
    10^4c/\lambda_i` where :math:`\lambda_i` are the wavelengths (in
-   :math:`\mu`m) specified in the file ``mcmono_wavelength_micron.inp``. The
+   :math:`\mu`\ m) specified in the file ``mcmono_wavelength_micron.inp``. The
    results of this computation can be interesting for, for instance, models of
    photochemistry. But if you use RADMC-3D only for computing spectra and
    images, then you will not use this.
@@ -488,8 +488,8 @@ So how to set up a model? The trick is to present ``radmc3d`` with a set of
 input files in which the model is described in all its details. The procedure to
 follow is this:
 
-#. The best thing to do (to avoid a mess) is to make a directory for *
-   each model*: one model, one directory. Since ``radmc3d`` reads
+#. The best thing to do (to avoid a mess) is to make a directory for 
+   *each model*: one model, one directory. Since ``radmc3d`` reads
    multiple input files, and also outputs a number of files, this is a good
    way to keep organized and we recommend it strongly.  So if we wish to make
    a new model, we make a new directory, or copy an old directory to a new
@@ -547,7 +547,7 @@ all described in chapter :ref:`chap-input-files`, but let us here just
 input files are created using a Python script called ``problem_setup.py``.
 To execute this script, this is what you do on the shell::
 
-  python problem_setup.pro 
+  python problem_setup.py
 
 This Python script has now created a whole series
 of input files, all ending with the extension ``.inp``. To see which
@@ -592,7 +592,7 @@ Let us now do for instance model ``run_simple_1_userdef/``::
   cd examples/run_simple_1_userdef
 
 This is the same model as above, but now the grid and the dust density are set
-up {\em inside} ``radmc3d``, using the file ``userdef_module.f90`` which is
+up *inside* ``radmc3d``, using the file ``userdef_module.f90`` which is
 present in this directory.  See Chapter :ref:`chap-internal-setup` for details
 and follow the directions in the ``README`` file. In short: first edit the
 variable ``SRC`` in the ``Makefile`` to point to the ``src/`` directory. Then

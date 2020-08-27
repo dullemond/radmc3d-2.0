@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="basicstructure.html">Basic structure and functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dustradtrans.html">Dust continuum radiative transfer</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Line radiative transfer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-for-adding-line-transfer-to-images-and-spectra">Quick start for adding line transfer to images and spectra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#some-definitions-for-line-transfer">Some definitions for line transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#line-transfer-modes-and-how-to-activate-the-line-transfer">Line transfer modes and how to activate the line transfer</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#two-different-atomic-molecular-data-file-types">Two different atomic/molecular data file types</a></li>
@@ -218,8 +219,9 @@ demanding. The default mode (and certainly recommended initially) is LTE
 ray-tracing in the slow but memory efficient way: the <em>simple LTE mode</em>
 (see Section <a class="reference internal" href="#sec-line-trans-modes"><span class="std std-ref">Line transfer modes and how to activate the line transfer</span></a>). Since this is the default mode,
 you do not need to specify anything to have this selected.</p>
-<p>section{Quick start for adding line transfer to images and spectra}
-Do properly model line transfer requires dedication and experimentation.
+<div class="section" id="quick-start-for-adding-line-transfer-to-images-and-spectra">
+<h2>Quick start for adding line transfer to images and spectra<a class="headerlink" href="#quick-start-for-adding-line-transfer-to-images-and-spectra" title="Permalink to this headline">¶</a></h2>
+<p>Do properly model line transfer requires dedication and experimentation.
 This is <em>not</em> a simple task. See Section <a class="reference internal" href="#sec-lines-pitfalls"><span class="std std-ref">What can go wrong with line transfer?</span></a> for an
 analysis of several pitfalls one may encounter. However, nothing is better
 than experimenting and thus gaining hands-on experience. So the easiest and
@@ -236,12 +238,13 @@ radiative transfer:</p>
 containing properties of the molecule or atom.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">numberdens_co.inp</span></code> (or its binary version, see Chapter
 <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>) or that of another molecule: The number density of
-that molecule in units of cm:math:<cite>^{-3}</cite>.</p></li>
+that molecule in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^{-3}\)</span>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gas_temperature.inp</span></code> (or its binary version, see Chapter
 <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>): The gas temperature at each grid cell. You do not
 need to specify this file if you add the keyword <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust</span> <span class="pre">=</span> <span class="pre">1</span></code>
 into the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p></li>
 </ul>
+</div>
 <div class="section" id="some-definitions-for-line-transfer">
 <span id="sec-line-trans-definitions"></span><h2>Some definitions for line transfer<a class="headerlink" href="#some-definitions-for-line-transfer" title="Permalink to this headline">¶</a></h2>
 <p>The formal transfer equation is:</p>
@@ -267,7 +270,7 @@ B_{ji}g_j  = B_{ij} g_i\]</div>
 <p>where <span class="math notranslate nohighlight">\(g\)</span> are the statistical weights of the levels, <span class="math notranslate nohighlight">\(h\)</span> the Planck constant
 and <span class="math notranslate nohighlight">\(c\)</span> the light speed. The symbol <span class="math notranslate nohighlight">\(\varphi_{ij}(\omega,\nu)\)</span> is the line
 profile function. For zero velocity field
-<span class="math notranslate nohighlight">\(\varphi_{ij}(\omega,\nu)=\tilde\varphi_{ij}(\nu)\)</span>, i.e.the line profile
+<span class="math notranslate nohighlight">\(\varphi_{ij}(\omega,\nu)=\tilde\varphi_{ij}(\nu)\)</span>, i.e. the line profile
 function is independent of direction. The tilde is to say that this is
 the comoving line profile. It is given by</p>
 <div class="math notranslate nohighlight">
@@ -379,7 +382,7 @@ lines. Try it out, and you will see how it works.</p>
 or optically thin populations, you can also ask RADMC-3D to <em>not</em> precalculate
 the level populations before the rendering, but instead compute them
 on-the-fly. This makes the code slower, but requires less memory.  You can do
-this by choosing e.g.<code class="docutils literal notranslate"><span class="pre">lines_mode=-3</span></code> instead of <code class="docutils literal notranslate"><span class="pre">lines_mode=3</span></code> (for
+this by choosing e.g. <code class="docutils literal notranslate"><span class="pre">lines_mode=-3</span></code> instead of <code class="docutils literal notranslate"><span class="pre">lines_mode=3</span></code> (for
 LVG+EscProb).</p>
 </div>
 </div>
@@ -574,13 +577,14 @@ CO
 </div>
 <p>The first few lines are self-explanatory. The first of the two tables is about
 the levels. Column one is simply a numbering. Column 2 is the energy of the
-level <span class="math notranslate nohighlight">\(E_k\)</span>, specified in units of <span class="math notranslate nohighlight">\(1/\)</span> where <span class="math notranslate nohighlight">\(h\)</span> is the Planck
+level <span class="math notranslate nohighlight">\(E_k\)</span>, specified in units of <span class="math notranslate nohighlight">\(1/\mathrm{cm}\)</span>. To get the energy in erg
+you multiply this number with <span class="math notranslate nohighlight">\(hc/k\)</span> where <span class="math notranslate nohighlight">\(h\)</span> is the Planck
 constant, <span class="math notranslate nohighlight">\(c\)</span> the light speed and <span class="math notranslate nohighlight">\(k\)</span> the Boltzmann constant. Column
-3 is the degeneration number, i.e.the the <span class="math notranslate nohighlight">\(g\)</span> parameter of the
+3 is the degeneration number, i.e. the the <span class="math notranslate nohighlight">\(g\)</span> parameter of the
 level. Column 4 is redundant information, not used by the code.</p>
 <p>The second table is the line list. Column 1 is again a simple counter.  Column 2
 and 3 specify which two levels the line connects. Column 4 is the radiative
-decay rate in units of <span class="math notranslate nohighlight">\(1/\)</span>
+decay rate in units of <span class="math notranslate nohighlight">\(1/\mathrm{s}\)</span>, i.e. the Einstein <span class="math notranslate nohighlight">\(A\)</span>
 coefficient. The last two columns are redundant information that can be easily
 derived from the other information.</p>
 <p>If you are interested in LTE line transfer, this is enough information.
@@ -659,11 +663,11 @@ the number of temperature points at which these collisional rates are
 tabulated. Then follows this list of temperatures.  Finally we have the table of
 collisional transitions. Each line consists of, first, the ID of the transition
 (dummy), then the upper level, then the lower level, and then the
-<span class="math notranslate nohighlight">\(K_{\mathrm{up,low}}\)</span> collisional rates in units of [cm:math:<cite>^3</cite>/s]. The
+<span class="math notranslate nohighlight">\(K_{\mathrm{up,low}}\)</span> collisional rates in units of [<span class="math notranslate nohighlight">\(\mathrm{cm}^3/s\)</span>]. The
 same is again repeated (because in this example we have two collision partners:
 the para-H:math:<cite>_2</cite> molecule and the ortho-H:math:<cite>_2</cite> molecule).</p>
 <p>To get the collision rate <span class="math notranslate nohighlight">\(C_{\mathrm{up,low}}\)</span> per molecule (in units of
-[1/sec]) for the molecule of interest, we must multiply
+[1/s]) for the molecule of interest, we must multiply
 <span class="math notranslate nohighlight">\(K_{\mathrm{up,low}}\)</span> with the number density of the collision partner
 (see Section <a class="reference internal" href="#sec-collpartner"><span class="std std-ref">INPUT: The number density of collision partners (for non-LTE transfer)</span></a>).  So in this example, the
 <span class="math notranslate nohighlight">\(C_{\mathrm{up,low}}\)</span> becomes:</p>
@@ -697,8 +701,8 @@ Section <a class="reference internal" href="#sec-collpartner"><span class="std s
 </div>
 <div class="section" id="input-molecular-atomic-data-the-linelist-xxx-inp-file-s">
 <span id="sec-linelist-xxx-inp"></span><h3>INPUT: Molecular/atomic data: The linelist_XXX.inp file(s)<a class="headerlink" href="#input-molecular-atomic-data-the-linelist-xxx-inp-file-s" title="Permalink to this headline">¶</a></h3>
-<p>In many cases molecular data are merely given as lists of lines (e.g.the
-HITRAN database, the Kurucz database, the Jorgensen et al.~databases
+<p>In many cases molecular data are merely given as lists of lines (e.g. the
+HITRAN database, the Kurucz database, the Jorgensen et al. databases
 etc.). These line lists contain information about the line wavelength
 <span class="math notranslate nohighlight">\(\lambda_0\)</span>, the line strength <span class="math notranslate nohighlight">\(A_{\mathrm{ud}}\)</span>, the statistical
 weights of the lower and upper level and the energy of the lower or upper
@@ -772,9 +776,9 @@ function (necessary for LTE transfer) and a table with all the lines (or any
 subset you wish to select). The lines table columns are as follows: first column
 is just a dummy index. Second column is the wavelength in micron. Third is the
 Einstein-A-coefficient (spontaneous downward rate) in units of
-sec:math:<cite>^{-1}</cite>. Fourth and fifth are the energies above the ground state of
+<span class="math notranslate nohighlight">\(\mathrm{s}^{-1}\)</span>. Fourth and fifth are the energies above the ground state of
 the lower and upper levels belonging to this line in units of
-cm:math:<cite>^{-1}</cite>. Sixth and seventh are the statistical weights (degenracies) of
+<span class="math notranslate nohighlight">\(\mathrm{cm}^{-1}\)</span>. Sixth and seventh are the statistical weights (degenracies) of
 the lower and upper levels belonging to this line.</p>
 <p>Note that you can tell RADMC-3D to read <code class="docutils literal notranslate"><span class="pre">linelist_h2o.inp</span></code> (instead of search
 for <code class="docutils literal notranslate"><span class="pre">molecule_h2o.inp</span></code>) by specifying <code class="docutils literal notranslate"><span class="pre">linelist</span></code> instead of <code class="docutils literal notranslate"><span class="pre">leiden</span></code> in
@@ -898,7 +902,7 @@ this list, and that it is the first level (<code class="docutils literal notrans
 </div>
 <div class="section" id="input-the-number-density-of-collision-partners-for-non-lte-transfer">
 <span id="sec-collpartner"></span><h3>INPUT: The number density of collision partners (for non-LTE transfer)<a class="headerlink" href="#input-the-number-density-of-collision-partners-for-non-lte-transfer" title="Permalink to this headline">¶</a></h3>
-<p>For non-LTE line transfer (see e.g.~Sections <a class="reference internal" href="#sec-lvg"><span class="std std-ref">Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method</span></a>,
+<p>For non-LTE line transfer (see e.g. Sections <a class="reference internal" href="#sec-lvg"><span class="std std-ref">Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method</span></a>,
 <a class="reference internal" href="#sec-optthinpop"><span class="std std-ref">Non-LTE Transfer: The optically thin line assumption method</span></a>) the molecules can be collisionally excited. The collision
 rates for each pair of molecule + collision partner are given in the molecular
 input data files (Section <a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a>). To find how often a
@@ -1022,7 +1026,7 @@ simultaneously (each ray doing all wavelength at the same time), and the
 local level populations along each ray can now be computed once, and be used
 for all wavelengths. <em>This may speed up things drastically, and for most
 purposes virtually perfectly correct</em>. Just beware that when you render
-short-wavelength lines (optical) or you use large grains, i.e.when the
+short-wavelength lines (optical) or you use large grains, i.e. when the
 scattering albedo at the wavelength of the line is not negligible, this may
 result in a mis-estimation of the continuum around the line.</p>
 </div>
@@ -1062,7 +1066,7 @@ method, also called the ‘Sobolev approximation’.  Please read for instance
 the paper by Ossenkopf (1997) ‘The Sobolev approximation in molecular
 clouds’, New Astronomy, 2, 365 for more explanation, and a study how it
 works in the context of molecular clouds. The LVG mode of RADMC-3D has been
-used for the first time by Shetty et al.~(2011, MNRAS 412, 1686), and a
+used for the first time by Shetty et al. (2011, MNRAS 412, 1686), and a
 description of the method is included in that paper.  The nice aspect of
 this method is that it is, for most part, local. The only slightly non-local
 aspect is that a velocity gradient has to be computed by comparing the gas
@@ -1094,12 +1098,12 @@ for line <span class="math notranslate nohighlight">\(i\rightarrow j\)</span>. T
 &amp;= \frac{c^3}{8\pi \nu_{ij}^3}\frac{A_{ij}N_{\mathrm{molec}}}
 {1.064\,|\nabla \vec v|}\left[\frac{g_i}{g_j}n_j-n_i\right]
 \end{split}\end{split}\]</div>
-<p>(see e.g.van der Tak et al.~2007, A&amp;A 468, 627), where <span class="math notranslate nohighlight">\(n_i\)</span> is the
+<p>(see e.g. van der Tak et al. 2007, A&amp;A 468, 627), where <span class="math notranslate nohighlight">\(n_i\)</span> is the
 fractional level population of level <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(N_{\mathrm{molec}}\)</span> the
 total number density of the molecule, <span class="math notranslate nohighlight">\(|\nabla \vec v|\)</span> the absolute value
 of the velocity gradient, <span class="math notranslate nohighlight">\(g_i\)</span> the statistical weight of level <span class="math notranslate nohighlight">\(i\)</span>
 and <span class="math notranslate nohighlight">\(\nu_{ij}\)</span> the line frequency for transition <span class="math notranslate nohighlight">\(i\rightarrow
-j\)</span>. In comparing to Eq.~21 of van der Tak’s paper, note that their
+j\)</span>. In comparing to Eq. 21 of van der Tak’s paper, note that their
 <span class="math notranslate nohighlight">\(N_{\mathrm{mol}}\)</span> is a column density (cm:math:<cite>^{-2}</cite>) and their
 <span class="math notranslate nohighlight">\(\Delta V\)</span> is the line width (cm/s), while our <span class="math notranslate nohighlight">\(N_{\mathrm{molec}}\)</span>
 is the number density (cm:math:<cite>^{-3}</cite>) and <span class="math notranslate nohighlight">\(|\nabla \vec v|\)</span> is the
@@ -1136,7 +1140,7 @@ equilibrium equation:</p>
 &amp; + \sum_{j\neq i}\big[n_jC_{ji}-n_iC_{ij}\big]=0
 \end{split}\end{split}\]</div>
 <p>Replacing <span class="math notranslate nohighlight">\(J_{ij}\)</span> (and similarly <span class="math notranslate nohighlight">\(J_{ji}\)</span>) with the expression of
-Eq.~(<span class="xref std std-ref">eq-linemeanint-escp</span>) and subsequently replacing <span class="math notranslate nohighlight">\(S_{ij}\)</span> with
+Eq. (<span class="xref std std-ref">eq-linemeanint-escp</span>) and subsequently replacing <span class="math notranslate nohighlight">\(S_{ij}\)</span> with
 the well-known expression for the line source function</p>
 <div class="math notranslate nohighlight">
 \[S_{ij} = \frac{n_iA_{ij}}{n_jB_{ji}-n_iB_{ij}}\]</div>
@@ -1155,7 +1159,7 @@ weak dependence, the iteration should converge rapidly.</p>
 <li><p>Make sure that you use a molecular data file that contains
 collision rate tables (see Section <a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a>).</p></li>
 <li><p>Make sure to provide file(s) containing the number densities
-of the collision partners, e.g.~``numberdens_p-h2.inp``
+of the collision partners, e.g. <code class="docutils literal notranslate"><span class="pre">numberdens_p-h2.inp</span></code>
 (see Section <a class="reference internal" href="#sec-collpartner"><span class="std std-ref">INPUT: The number density of collision partners (for non-LTE transfer)</span></a>).</p></li>
 <li><p>Make sure to link the rate tables to the number density
 files in <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> (see Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a>).</p></li>
@@ -1209,7 +1213,7 @@ this, the following has to be done:</p>
 <li><p>Make sure that you use a molecular data file that contains
 collision rate tables (see Section <a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a>).</p></li>
 <li><p>Make sure to provide file(s) containing the number densities
-of the collision partners, e.g.~``numberdens_p-h2.inp``
+of the collision partners, e.g. <code class="docutils literal notranslate"><span class="pre">numberdens_p-h2.inp</span></code>
 (see Section <a class="reference internal" href="#sec-collpartner"><span class="std std-ref">INPUT: The number density of collision partners (for non-LTE transfer)</span></a>).</p></li>
 <li><p>Make sure to link the rate tables to the number density
 files in <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> (see Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a>).</p></li>
@@ -1289,14 +1293,14 @@ file format. The nrcells is the number of cells.</p>
 that this is <em>not necessarily</em> equal to the number of levels found in the
 <code class="docutils literal notranslate"><span class="pre">molecule_co.inp</span></code> file (for our CO example). It will only be equal to that if
 the file has been produced by the command <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">calcpop</span></code>. If, however, the
-file was produced after making an image or spectrum (e.g.through the command
+file was produced after making an image or spectrum (e.g. through the command
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">image</span> <span class="pre">lambda</span> <span class="pre">2300</span> <span class="pre">writepop</span></code>), then RADMC-3D will only write out those
 levels that have been used to make the image or spectrum. See Section
 <a class="reference internal" href="#sec-calcstore-levpop"><span class="std std-ref">Background information: Calculation and storage of level populations</span></a> for more information about this. It is for this
 reason that the file in fact contains a list of levels that are included (the
 <code class="docutils literal notranslate"><span class="pre">level1</span> <span class="pre">level</span> <span class="pre">2</span> <span class="pre">...</span></code> in the above file format example).</p>
 <p>After these header lines follows the actual data. Each line contains the
-populations at a spatial cell in units of cm:math:<cite>^{-3}</cite>.</p>
+populations at a spatial cell in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^{-3}\)</span>.</p>
 <p>This file format is a generalization of the standard format which is
 described for the example of dust density in Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>.
 Please read that section for more details, and also on how the format
@@ -1331,13 +1335,14 @@ worthwhile to make sure to reduce the number of levels of the
 <div class="section" id="what-can-go-wrong-with-line-transfer">
 <span id="sec-lines-pitfalls"></span><h2>What can go wrong with line transfer?<a class="headerlink" href="#what-can-go-wrong-with-line-transfer" title="Permalink to this headline">¶</a></h2>
 <p>Even the simple task of performing a ray-tracing line transfer calculation
-with given level populations (i.e.the so-called <em>formal transfer
+with given level populations (i.e. the so-called <em>formal transfer
 equation</em>) is a non-trivial task in complex 3-D AMR models with possibly
 highly supersonic motions. I recommend the user to do extensive and critical
 experimentation with the code and make many simple tests to check if the
 results are as they are expected to be. In the end a result must be
 understandable in terms of simple argumentation. If weird effects show up,
-please do some detective work until you understand why they show up, i.e.that they are either a <em>real</em> effect or a numerical issue. There are
+please do some detective work until you understand why they show up, i.e.
+that they are either a <em>real</em> effect or a numerical issue. There are
 many numerical artifacts that can show up that are <em>not</em> a bug in the
 code. The code simply does a numerical integration of the equations on some
 spatial- and wavelength-grid. If the user chooses these grids unwisely, the
@@ -1380,7 +1385,12 @@ the intrinsic (thermal+microturbulent) line width, then the ray-tracing
 will not be able to pick up signals from intermediate velocities. In other
 words, because of the discrete gridding of the model, only discrete
 velocities are present, which can cause numerical problems. See
-Fig.~:ref:<cite>fig-doppler-catch</cite>-Left for a pictographic representation of
+Fig. <a class="reference internal" href="#fig-doppler-catch"><span class="std std-ref">Right: Pictographic representation of the doppler catching method to
+prevent this problem: First of all, second order integration is done
+instead of first order. Secondly, the method automatically detects a
+possibly dangerous doppler jump and makes sub-steps to neatly integrate
+over the line that shifts in- and out of the wavelength channel of
+interest.</span></a>-Left for a pictographic representation of
 this problem. There are two possible solutions. One is the wavelength band
 method described in Section <a class="reference internal" href="imagesspectra.html#sec-wavelength-bands"><span class="std std-ref">Heads-up: In reality wavelength are actually wavelength bands</span></a>.  But a more
 systematic method is the ‘doppler catching’ method described in Section
@@ -1400,7 +1410,8 @@ the line can then have a doppler shift substantially to the blue of the
 wavelength-of-sight, while in the next cell the line suddenly shifted to the
 red side. If the intrinsic (= thermal + microturbulent) line width is
 smaller than these shifts, neither cell gives a contribution to the emission
-in the ray. See Fig.~:ref:<cite>fig-doppler-jump</cite> for a pictographic
+in the ray. See Fig. <a class="reference internal" href="#fig-doppler-jump"><span class="std std-ref">Pictographic representation of the doppler jumping problem with
+ray-tracing through a model with strong cell-to-cell velocity differences.</span></a> for a pictographic
 representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength-of-sight, and thus make a contribution. Therefore the numerical
@@ -1427,11 +1438,16 @@ it detects one, to make sub-steps in the integration of the formal transfer
 equation so that the smooth passing of the line through the
 wavelength-of-sight can be properly accounted for. Here this is called
 ‘doppler catching’, for lack of a better name. The technique was discussed
-in great detail in Pontoppidan et al.~(2009, ApJ 704, 1482). The idea is
+in great detail in Pontoppidan et al. (2009, ApJ 704, 1482). The idea is
 that the method automatically tests if a line might ‘doppler jump’ over
 the current wavelength channel. If so, it will insert substeps in the
 integration at the location where this danger is present. See
-Fig.~:ref:<cite>fig-doppler-catch</cite> for a pictographic representation of this
+Fig. <a class="reference internal" href="#fig-doppler-catch"><span class="std std-ref">Right: Pictographic representation of the doppler catching method to
+prevent this problem: First of all, second order integration is done
+instead of first order. Secondly, the method automatically detects a
+possibly dangerous doppler jump and makes sub-steps to neatly integrate
+over the line that shifts in- and out of the wavelength channel of
+interest.</span></a> for a pictographic representation of this
 method. Note that this method can only be used with the second order
 ray-tracing (see Section <a class="reference internal" href="imagesspectra.html#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a>); in fact, as soon as you
 switch the doppler catching on, RADMC-3D will automatically also switch on
@@ -1456,24 +1472,25 @@ ensure that smaller steps are taken. By adding a line:</p>
 </div>
 <p>to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file you will ensure that steps are small
 enough that the doppler shift is at most 0.05 times the local line width.</p>
-<p>So why is doppler catching an <em>option</em>, i.e.why would this not be standard?
+<p>So why is doppler catching an <em>option</em>, i.e. why would this not be standard?
 The reason is that doppler catching requires second order integration, which
 requires RADMC-3D to first map all the cell-based quantities to the
 cell-corners. This requires extra memory, which for very large models can be
 problematic. It also requires more CPU time to calculate images/spectra with
-second order integration. So if you do not need it, i.e.if your velocity
+second order integration. So if you do not need it, i.e. if your velocity
 gradients are not very steep compared to the intrinsic line width, then it saves
 time and memory to not use doppler catching.</p>
 <p>It is, however, important to realize that doppler catching is not the golden
 bullet. Even with doppler catching it might happen that some line flux is lost,
 but this time as a result of too low <em>image resolution</em>. This is less likely to
 happen in problems like ISM turbulence, but it is pretty likely to happen in
-models of rotating disks. Suppose we have a very thin local line width (i.e.low gas temperature and no microturbulence) in a rotating thin disk around a
-star. In a given velocity channel (i.e.at a given observer-frame frequency) a
+models of rotating disks. Suppose we have a very thin local line width (i.e.
+low gas temperature and no microturbulence) in a rotating thin disk around a
+star. In a given velocity channel (i.e. at a given observer-frame frequency) a
 molecular line in the disk emits only in a very thin ‘ear-shaped’ ring or band
 in the image. The thinner the intrinsic line width, the thinner the band on the
-image. See Pontoppidan et al.~(2009, ApJ 704, 1482) and Pavlyuchenkov et
-al.~(2007, ApJ 669, 1262) for example. If the pixel-resolution of the image is
+image. See Pontoppidan et al. (2009, ApJ 704, 1482) and Pavlyuchenkov et
+al. (2007, ApJ 669, 1262) for example. If the pixel-resolution of the image is
 smaller than that of this band, the image is simply underresolved.  This has
 nothing to do with the doppler jumping problem, but can be equally devastating
 for the results if the user is unaware of this. There appears to be only one
@@ -1481,7 +1498,7 @@ proper solution: assure that the pixel-resolution of the image is sufficiently
 fine for the problem at hand. This is easy to find out: The image would simply
 look terribly noisy if the resolution is insufficient. However, if you are not
 interested in the images, but only in the spectra, then some amount of noisiness
-in the image (i.e.marginally sufficient resolution) is OK, since the total
+in the image (i.e. marginally sufficient resolution) is OK, since the total
 flux is an integral over the entire image, smearing out much of the noise.  It
 requires some experimentation, though.</p>
 <p>Here are some additional issues to keep in mind:</p>
@@ -1493,8 +1510,8 @@ inside the computational domain this amounts to linear interpolation. But
 at the edges of the domain it would require <em>extra</em> polation.
 In 1-D this is more easily illustrated, because
 there the cell corners are in fact cell interfaces. Cells <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(i+1\)</span>
-share cell interface <span class="math notranslate nohighlight">\(i+1/2\)</span>. If we have <span class="math notranslate nohighlight">\(N\)</span> cells, i.e.cells
-<span class="math notranslate nohighlight">\(i=1,\cdots,N\)</span>, then we have <span class="math notranslate nohighlight">\(N+1\)</span> interfaces, i.e.interfaces
+share cell interface <span class="math notranslate nohighlight">\(i+1/2\)</span>. If we have <span class="math notranslate nohighlight">\(N\)</span> cells, i.e. cells
+<span class="math notranslate nohighlight">\(i=1,\cdots,N\)</span>, then we have <span class="math notranslate nohighlight">\(N+1\)</span> interfaces, i.e. interfaces
 <span class="math notranslate nohighlight">\(i=\tfrac{1}{2},\cdots,N+\tfrac{1}{2}\)</span>. To get physical quantities from
 the cell centers to cell interfaces
 <span class="math notranslate nohighlight">\(i=\tfrac{3}{2},\cdots,N-\tfrac{1}{2}\)</span> requires just interpolation. But
@@ -1583,7 +1600,7 @@ and <span class="math notranslate nohighlight">\(C_{\mathrm{margin}}\)</span> is
 <div class="math notranslate nohighlight">
 \[C_{\mathrm{margin}} = 12\]</div>
 <p>But you can change this to another value, say 24, by adding in the
-<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file a line containing, e.g.<code class="docutils literal notranslate"><span class="pre">lines_widthmargin</span> <span class="pre">=</span> <span class="pre">24</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file a line containing, e.g. <code class="docutils literal notranslate"><span class="pre">lines_widthmargin</span> <span class="pre">=</span> <span class="pre">24</span></code>.</p>
 <p>You can in fact get a dump of the level populations that have been computed and
 used for the image(s)/spectrum you created, by adding <code class="docutils literal notranslate"><span class="pre">writepop</span></code> on the
 command line. Example:</p>
@@ -1622,7 +1639,8 @@ populations mode use <code class="docutils literal notranslate"><span class="pre
 <code class="docutils literal notranslate"><span class="pre">lines_mode=-3</span></code> and for on-the-fly optically thin populations use
 <code class="docutils literal notranslate"><span class="pre">lines_mode=-4</span></code>.</p>
 <p><em>NOTE: The drawback of this method is that, under certain circumstances, it can
-slow down the code dramatically.</em> This slow-down happens if you use e.g.second-order integration (Section <a class="reference internal" href="imagesspectra.html#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a>) and/or doppler
+slow down the code dramatically.</em> This slow-down happens if you use e.g.
+second-order integration (Section <a class="reference internal" href="imagesspectra.html#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a>) and/or doppler
 catching (Section <a class="reference internal" href="#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>) together with non-trivial
 population solving methods like LVG. So please use the on-the-fly method only
 when you are forced to do so (for memory reasons).</p>

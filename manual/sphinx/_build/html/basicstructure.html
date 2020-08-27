@@ -267,8 +267,8 @@ easiest to start from one of these examples and modify the Python code to your
 needs. However, if you prefer to use another language, you can use the examples
 to see how the input files were generated and then program this in another
 programming language.</p>
-<p>{em Note: The Python files called <code class="docutils literal notranslate"><span class="pre">problem_\*.py</span></code> are meant to be edited and
-changed by you! They are templates from which you can create your own models.}</p>
+<p><em>Note: The Python files called</em> <code class="docutils literal notranslate"><span class="pre">problem_*.py</span></code> <em>are meant to be edited and
+changed by you! They are templates from which you can create your own models.</em></p>
 <p>For the analysis of the output files created by RADMC-3D you can use your own
 favorite plotting or data-analysis software. But also here we provide some tools
 in Python. These Python routines are in the <code class="docutils literal notranslate"><span class="pre">python/</span></code> directory. Typically you
@@ -364,7 +364,7 @@ systems:</p>
 <ul>
 <li><p>Cartesian coordinates: 3-D</p>
 <p>The simplest coordinate system is the Cartesian coordinate system
-$(x,y,z)$. For now each model must be 3-D (i.e. you must specify the
+<span class="math notranslate nohighlight">\((x,y,z)\)</span>. For now each model must be 3-D (i.e. you must specify the
 densities and other quantities as a function of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span>).</p>
 </li>
 <li><p>Cartesian coordinates: 1-D plane-parallel</p>
@@ -526,7 +526,7 @@ wavelengths that you specify in the file
 function of the <span class="math notranslate nohighlight">\((x,y,z)\)</span> (cartesian) or <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span>
 (spherical) coordinates at the frequencies <span class="math notranslate nohighlight">\(\nu_i\equiv
 10^4c/\lambda_i\)</span> where <span class="math notranslate nohighlight">\(\lambda_i\)</span> are the wavelengths (in
-<span class="math notranslate nohighlight">\(\mu\)</span>. The
+<span class="math notranslate nohighlight">\(\mu\)</span>m) specified in the file <code class="docutils literal notranslate"><span class="pre">mcmono_wavelength_micron.inp</span></code>. The
 results of this computation can be interesting for, for instance, models of
 photochemistry. But if you use RADMC-3D only for computing spectra and
 images, then you will not use this.</p>
@@ -583,7 +583,7 @@ files. Since you don’t want to make large tables by hand, you will have to wri
 a little computer program that generates these tables automatically.  You can do
 this in any programming language you want. But in the example models (see
 Section <a class="reference internal" href="#sec-example-models"><span class="std std-ref">Running the example models</span></a>) we use the programming language Python (see
-Section <span class="xref std std-ref">sec-requirements</span>) for this. It is easiest to indeed have a look
+Section <a class="reference internal" href="overview.html#sec-requirements"><span class="std std-ref">Requirements</span></a>) for this. It is easiest to indeed have a look
 at the example models to see how this is (or better: can be) done.</p>
 <p>We will explain all these things in much more detail below, and we will discuss
 also many other radiative transfer problem types. The above example is really
@@ -605,8 +605,8 @@ and using it for all models.</p>
 input files in which the model is described in all its details. The procedure to
 follow is this:</p>
 <ol class="arabic simple">
-<li><p>The best thing to do (to avoid a mess) is to make a directory for *
-each model*: one model, one directory. Since <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> reads
+<li><p>The best thing to do (to avoid a mess) is to make a directory for
+<em>each model</em>: one model, one directory. Since <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> reads
 multiple input files, and also outputs a number of files, this is a good
 way to keep organized and we recommend it strongly.  So if we wish to make
 a new model, we make a new directory, or copy an old directory to a new
@@ -655,7 +655,7 @@ all described in chapter <a class="reference internal" href="inputoutputfiles.ht
 ‘blindly’ follow the example. In this example most (all except one) of the
 input files are created using a Python script called <code class="docutils literal notranslate"><span class="pre">problem_setup.py</span></code>.
 To execute this script, this is what you do on the shell:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">problem_setup</span><span class="o">.</span><span class="n">pro</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">problem_setup</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>This Python script has now created a whole series
@@ -698,7 +698,7 @@ basics.</p>
 </pre></div>
 </div>
 <p>This is the same model as above, but now the grid and the dust density are set
-up {em inside} <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>, using the file <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> which is
+up <em>inside</em> <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>, using the file <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> which is
 present in this directory.  See Chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a> for details
 and follow the directions in the <code class="docutils literal notranslate"><span class="pre">README</span></code> file. In short: first edit the
 variable <code class="docutils literal notranslate"><span class="pre">SRC</span></code> in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> to point to the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory. Then

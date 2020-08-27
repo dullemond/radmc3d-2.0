@@ -206,8 +206,8 @@ model, only the interstellar radiation field. The temperature in the centers of
 these starless cores will be determined by the interstellar radiation field. But
 since the cores are very small compared to the total model (e.g. you have used
 AMR to refine the grid around/in these cores), the chance of each external
-photon package to `hit' the starless core is small. It means that the larger the
-grid or the smaller the starless core, the more photon packages (``nphot``\ ,
+photon package to 'hit' the starless core is small. It means that the larger the
+grid or the smaller the starless core, the more photon packages (``nphot``,
 see Section :ref:`sec-dust-thermal-monte-carlo`) one must use to make sure that
 at least some of them enter the starless cores. If you choose ``phot`` too small
 in this case, then the temperature in these cores would remain undetermined

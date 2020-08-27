@@ -262,7 +262,7 @@ where the last stuff is telling ``radmc3d`` how to select the wavelengths
   radmc3d spectrum incl 45 phi 30 lambdarange 5. 20. nlam 100
 
 will make a spectrum with a regular wavelength grid between 5 and 20
-:math:`\mu`m and 100 wavelength points. But see Section
+:math:`\mu\mathrm{m}` and 100 wavelength points. But see Section
 :ref:`sec-set-camera-frequencies` for more details and options.
 
 The output file ``spectrum.out`` will have the same format as for the ``sed``
@@ -633,7 +633,8 @@ intensities.
 Note, by the way, that each of these 2x2 subpixels may be split even further
 into 2x2 sub-pixels etc until the desired resolution is reached, i.e. until
 the condition that :math:`S` is larger or equal to the pixel size divided by
-:math:`f_{\mathrm{ref}}` is met. By this recursive calling, we always end up at
+:math:`f_{\mathrm{ref}}` is met. This is illustrated in Fig.
+:ref:`fig-recursive-subpixeling`. By this recursive calling, we always end up at
 the top level with the average intesity of the entire top-level pixel.  This
 method is very similar to quad-tree mesh refinement, but instead of
 retaining and returning the entire complex mesh structure to the user, this
@@ -642,6 +643,16 @@ level) pixel in the image. So the recursive sub-pixeling technique described
 here is all done internally in the RADMC-3D code, and the user will not
 really notice anything except that this sub-pixeling can of course be 
 computationally more expensive than if such a method is not used. 
+
+.. _fig-recursive-subpixeling:
+
+.. figure:: Powerpoint/Subpixeling.*
+
+   Pictographic representation of how the recursive sub-pixeling for images
+   works. Pixels are recursively split in 2x2 subpixels as far as needed
+   to resolve the 3-D grid structure of the model. But at the end, the
+   fluxes of all subpixels are summed up such that the resulting image
+   has a regular grid again. 
 
 Note that the smaller we choose :math:`f_{\mathrm{ref}}` the more accurate our
 image becomes. In the ``radmc3d.inp`` file the value of :math:`f_{\mathrm{ref}}`
@@ -698,7 +709,7 @@ in the ``radmc3d.inp`` file.
 
 A second issue is when the user introduces extreme 'separable refinement'
 (see Section :ref:`sec-separable-refinement` and Figure
-:numref:`fig-spher-sep-ref`-right) in the :math:`R`, :math:`\Theta` or :math:`\Phi`
+:numref:`fig-spher-sep-ref-rays`) in the :math:`R`, :math:`\Theta` or :math:`\Phi`
 coordinate. This may, for instance, be necessary near the inner edge of a
 dusty disk model in order to keep the first cell optically thin. This may
 lead, however, to extremely deep sub-pixeling for rays that skim the inner
@@ -710,11 +721,11 @@ RADMC-3D plays it safe. If you wish to prevent this excessive sub-pixeling
 
 * ``camera_min_drr`` which sets a lower limit to the :math:`\Delta
   R/R` taken into account for the sub-pixeling (region 'B' in Figure
-  :numref:`fig-spher-sep-ref`-left). The default is 0.003. By setting this to
+  :numref:`fig-spher-sep-ref-txt`). The default is 0.003. By setting this to
   e.g. 0.03 you can already get a strong speed-up for models with strong
   :math:`R`-refinement. 
 * ``camera_min_dangle`` which sets a lower limit to
-  :math:`\Delta\Theta` (region 'C' in Figure :numref:`fig-spher-sep-ref`-left)
+  :math:`\Delta\Theta` (region 'C' in Figure :numref:`fig-spher-sep-ref-txt`)
   and/or :math:`\Delta\Phi`. The default is 0.05. By setting this to e.g. 0.1 you
   can already get some speed-up for models with e.g. strong
   :math:`\Theta`-refinement.

@@ -19,7 +19,7 @@ your own plotting software.
 
 Some expert users may wish to use RADMC-3D for something entirely different:
 to compute the local radiation field {\em inside} a model, and use this
-for e.g.\ computing photochemistry rates of a chemical model or so. 
+for e.g. computing photochemistry rates of a chemical model or so. 
 This is described in Section :ref:`sec-dust-monochromatic-monte-carlo`.
 
 You may also use the thermal Monte Carlo computation of the dust temperature
@@ -34,7 +34,7 @@ The thermal Monte Carlo simulation: computing the dust temperature
 
 RADMC-3D can compute the dust temperature using the Monte Carlo method of
 Bjorkman & Wood (2001, ApJ 554, 615) with various improvements such as the
-continuous absorption method of Lucy (1999, A\&A 344, 282). Once a model is
+continuous absorption method of Lucy (1999, A&A 344, 282). Once a model is
 entirely set up, you can ask ``radmc3d`` to do the Monte Carlo
 run for you by typing in a shell::
 
@@ -317,7 +317,7 @@ This computes the mean intensity
   J_\nu = \frac{1}{4\pi}\oint I_\nu(\Omega)d\Omega
 
 (in units of
-erg:math:`\,`s:math:`^{-1}`:math:`\,`cm:math:`^{-2}`:math:`\,`Hz:math:`^{-1}`:math:`\,`ster:math:`^{-1}`)
+:math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}`)
 as a function of the :math:`(x,y,z)` (cartesian) or :math:`(r,\theta,\phi)`
 (spherical) coordinates at frequencies :math:`\nu_i\equiv 10^4c/\lambda_i` where
 :math:`\lambda_i` are the wavelengths (in :math:`\mu`m) specified in the file ``mcmono_wavelength_micron.inp`` (same format as the file
@@ -366,7 +366,7 @@ for you in a memory-saving way.
 There is an important parameter for this Monochromatic Monte Carlo that you
 may wish to play with:
 
-* ``nphot_mono``\\
+* ``nphot_mono``
   The parameter ``nphot_mono`` sets the number of photon packages
   that are used for the Monochromatic Monte Carlo simulation. It has as
   default 100000, but that may be too little for 3-D models. You can set
@@ -545,9 +545,9 @@ scattering source function :math:`j_\nu^{\mathrm{scat}}` is given by
 where the integral is the integral over solid angle. In this case
 :math:`j_\nu^{\mathrm{scat}}` does not depend on solid angle.
 
-For *anisotropic* scattering (``scattering_mode``:math:`\ge`2) we
-must introduce the scattering phase function :math:`\Phi({\bf n}_{\mathrm{in}},
-{\bf n}_{\mathrm{out}})`, where
+For *anisotropic* scattering (``scattering_mode>1``) we
+must introduce the scattering phase function
+:math:`\Phi({\bf n}_{\mathrm{in}}, {\bf n}_{\mathrm{out}})`, where
 :math:`{\bf n}_{\mathrm{in}}` is the unit direction vector for incoming radiation
 and :math:`{\bf n}_{\mathrm{out}}` is the unit direction vector for the scattered
 radiation. The 
@@ -687,7 +687,7 @@ monochromatic Monte Carlo runs. The reason is that the scattered radiation will
 eventually end up on your images and spectra.
 
 If we want to make an image or a spectrum, then for each pixel we must integrate
-Eq. (:ref:`eq-ray-tracing-rt`) along the 1-D ray belonging to that pixel. If we
+Eq. (:eq:`eq-ray-tracing-rt`) along the 1-D ray belonging to that pixel. If we
 performed the thermal Monte Carlo simulation beforehand (or if we specified the
 dust temperatures by hand) we know the thermal source function through
 Eq. (:ref:`eq-thermal-source-function`). But we have, at that point, no
@@ -749,7 +749,7 @@ may wish to play with:
   
   The parameter ``nphot_spec`` is actually exactly the same as
   ``nphot_scat``, but is used (and used only!) for the creation of
-  spectra. The default is 10000, i.e.~substantially smaller than ``nphot_scat``.
+  spectra. The default is 10000, i.e. substantially smaller than ``nphot_scat``.
   The reason for this separate parameter is that if you make
   spectra, you integrate over the image to obtain the flux (i.e. the value of
   the spectrum at that wavelength). Even if the scattered light image may
@@ -858,11 +858,11 @@ out the effect of single- and double-scattering (but excluding triple and higher
 order scattering) with: ``maxnrscat 2``, etc.
 
 Note that multiple scattering may require a very high number of photon packages
-(i.e.~setting ``nphot_scat`` to a very high number). For single scattering with
+(i.e. setting ``nphot_scat`` to a very high number). For single scattering with
 too low ``nphot_scat`` you typically see radial 'rays' in the image emanating
 from each stellar source of photons. For multiple scattering, when taking too
 low ``nphot_scat`` small you would see strange non-radial 'scratches' in the
-image (see Fig.~:ref:`fig-polscat`, top two images). It looks as if someone has
+image (see Fig. :ref:`fig-polscat`, top two images). It looks as if someone has
 used a pen and randomly added some streaks. These streaks are the
 double-scattering events which, in that case, apparently are rare enough that
 they show up as individual streaks. To test whether these streaks are indeed
@@ -892,7 +892,7 @@ unimportant. If so, and if you are using spherical coordinates, a single star at
 the center which is point-like, and if you are confident that at the wavelength
 you are interested in the thermal dust emission is not strong enough to be a
 considerable source of light that can be scattered into the line-of-sight
-(i.e.~all scattered light is scattered *star* light), then you can use the
+(i.e. all scattered light is scattered *star* light), then you can use the
 simplified single-scattering mode.
 
 This mode does not use the Monte Carlo method to compute the scattering source
@@ -959,7 +959,7 @@ performance of RADMC-3D in various cases.
   If no scattering is present in the model (see Section
   :ref:`sec-modes-of-scattering`), then RADMC-3D can save time when making
   spectra and/or multi-wavelength images. I will then do each integration of
-  Eq.~(:ref:`eq-ray-tracing-rt`) directly for all wavelengths at once before
+  Eq. (:eq:`eq-ray-tracing-rt`) directly for all wavelengths at once before
   going to the next pixel. This saves some time because RADMC-3D then has to
   calculate the geometric stuff (how the ray moves through the model) just once
   for each ray. If, however, scattering is included, the scattering source
@@ -1005,7 +1005,7 @@ available on-line). Another good book (and a classic!)  is the book by Bohren &
 Huffman 'Absorption and scattering of light by small particles',
 Wiley-VCH. Finally, the ultimate classic is the book by van de Hulst 'Light
 scattering by small particles', 1981. For some discussions on how polarization
-can be built in into radiative transfer codes, see e.g.\ Wolf, Voshchinnikov \&
+can be built in into radiative transfer codes, see e.g. Wolf, Voshchinnikov &
 Henning (2002, A&A 385, 365).
  
 When we wish to include polarization in our model we must follow not just the
@@ -1137,11 +1137,11 @@ direction, while :math:`Q=0`, :math:`U=-I`, :math:`V=0` the E-field points in
 the :math:`x'=-y'` direction (see Figure 1 of Hamaker & Bregman 1996).
 
 The :math:`(V)` definition (circular polarization) is such that (quoting
-directly from the Hamaker \& Bregman paper): *For {\em right}-handed circularly
+directly from the Hamaker & Bregman paper): *For right-handed circularly
 polarized radiation, the position angle of the electric vector at any point
-increases with time; this implies that the :math:`y'` component of the field
-lags the :math:`x'` component. Also the electric vectors along the line of sight
-form a {\em left}-handed screw. The Stokes :math:`V` is positive for
+increases with time; this implies that the* :math:`y'` *component of the field
+lags the* :math:`x'` *component. Also the electric vectors along the line of sight
+form a left-handed screw. The Stokes* :math:`V` *is positive for
 right-handed circular polarization.*
 
 .. _fig-stokes-definition:
@@ -1159,7 +1159,7 @@ right-handed circular polarization.*
    third panel (:math:`U=+I`) 'diagonally polarized by +45 degrees' and the
    fourth panel (:math:`V=+I`) 'right-handed circularly polarized'. In the
    images produced by RADMC-3D (``image.out``, see Section :ref:`sec-image-out`
-   and Fig.~:ref:`fig-cameraorient`) the :math:`x'` direction is the horizontal
+   and Fig. :ref:`fig-cameraorient`) the :math:`x'` direction is the horizontal
    direction and the :math:`y'` direction is the vertical direction.
 
 We can put these definitions into the standard formulae:
@@ -1274,12 +1274,12 @@ Compared to Mishchenko, Travis & Lacis book, what we call :math:`x'` they call
 :math:`\theta` and what we call :math:`y'` they call :math:`\phi`. In their
 Figure 1.3 (which describes the definition of the Stokes parameters) they have
 the :math:`\theta` direction pointing downward, rather than toward the right,
-i.e.\ rotated by 90 degrees clockwise compared to RADMC-3D. However, since
+i.e. rotated by 90 degrees clockwise compared to RADMC-3D. However, since
 RADMC-3D does not know what 'right' or 'down' are (only what :math:`x'` and
 :math:`y'` are) this rotation is merely a difference in how we plot things in a
 figure, and has no consequences for the results, as long as we define how
 :math:`x'` and :math:`y'` are oriented compared to our model (see
-Fig.~:ref:`fig-cameraorient` where :math:`x_{\mathrm{image}}` is our :math:`x'`
+Fig. :ref:`fig-cameraorient` where :math:`x_{\mathrm{image}}` is our :math:`x'`
 here and likewise for :math:`y'`).
 
 Bohren & Huffman have the two unit vectors plotted in the following way:
@@ -1288,13 +1288,13 @@ e}_{\perp}` is plotted vertically upward. Compared to us, our :math:`x'` points
 toward {\em minus} their :math:`{\bf e}_{\parallel}`, while our :math:`y'`
 points toward their :math:`{\bf e}_{\perp}`, but since they plot their
 :math:`{\bf e}_{\parallel}` to the left, the orientation of our plot and their
-plots are consistent (i.e.\ if they say 'pointing to the right', they mean the
+plots are consistent (i.e. if they say 'pointing to the right', they mean the
 same direction as we). But their definition of 'right-handed circular
 polarization' (clockwise when seen toward the source of the radiation) is our
 'left handed'.
 
 The book by Wendisch & Yang 'Theory of Atmospheric Radiative Transfer' uses the
-same conventions as Bohren \& Huffman, but their basis vector :math:`{\bf
+same conventions as Bohren & Huffman, but their basis vector :math:`{\bf
 e}_{\parallel}` is plotted vertically and :math:`{\bf e}_{\perp}` is plotted
 horizontally to the right. This only affects what they call 'horizontal' and
 'vertical' but the math stays the same.
@@ -1310,7 +1310,7 @@ the German version of the page (on 2 January 2013) has the same Q and U
 definitions, but has the sign of V flipped.
 
 Note that in RADMC-3D we have no global definition of the orientation of
-:math:`x'` and :math:`y'` (see e.g.\ Section
+:math:`x'` and :math:`y'` (see e.g. Section
 :ref:`sec-orientation-vector-stokes`). If we make an image with RADMC-3D, then
 the horizontal (x-) direction in the image corresponds to :math:`x'` and the
 vertical (y-) direction corresponds to :math:`y'`, just as one would expect. So
@@ -1473,19 +1473,20 @@ define the {\em scattering matrix elements} :math:`Z_{ij}` (with :math:`i,j` =
    \end{matrix}\right)
 
 The values :math:`Z_{ij}` depend on the direction into which the radiation is
-scattered (i.e.\ :math:`{\bf e}_r`) and on the direction of the incoming flux
-(i.e.\ :math:`{\bf n}`), but not on :math:`r`: the radial dependence of the
+scattered (i.e. :math:`{\bf e}_r`) and on the direction of the incoming flux
+(i.e. :math:`{\bf n}`), but not on :math:`r`: the radial dependence of the
 outgoing flux is taken care of through the :math:`1/r^2` factor in the above
 formula.
 
 Some notes about our conventions are useful at this place. In many books the
 'scattering matrix' is written as :math:`F_{ij}` instead of :math:`Z_{ij}`, and is
 defined as the :math:`Z_{ij}` for the case when radiation comes from one
-particular direction: :math:`{\bf n}=(0,0,1)`. In this manual and in the RADMC-3D
+particular direction: :math:`{\bf n}=(0,0,1)`\ . In this manual and in the RADMC-3D
 code, however, we will always write :math:`Z_{ij}`, because the symbol :math:`F` can be
 confused with flux. The normalization of these matrix elements is also
 different in different books. In our case it has the dimension
-cm:math:`^2`/gram/steradian. The conversion from the conventions of other books is
+:math:`\mathrm{cm}^2\;\mathrm{gram}^{-1}\;\mathrm{ster}^{-1}`\ .
+The conversion from the conventions of other books is
 (where :math:`k=2\pi/\lambda` is the wave number in units of 1/cm):
 
 .. math::
@@ -1500,7 +1501,7 @@ elements (if non-zero) there must be a minus sign before the
 sign conventions (see Section :ref:`sec-stokes-convent-differences`).
 
 Note that the :math:`S_{ij,\mathrm{BohrenH}}` are the matrix elements obtained
-from the famous ``BHMIE.F`` code from the Bohren \& Huffman book
+from the famous ``BHMIE.F`` code from the Bohren & Huffman book
 (see Chapter :ref:`chap-acquiring-opacities`). 
 
 Polarized scattering off dust particles: randomly oriented particles
@@ -1508,19 +1509,19 @@ Polarized scattering off dust particles: randomly oriented particles
 
 In the special case in which we either have spherical particles or we
 average over a large number of randomly oriented particles, the :math:`Z_{ij}`
-elements are no longer dependent on {\em both} :math:`{\bf e}_r` and {\bf n} but
+elements are no longer dependent on *both* :math:`{\bf e}_r` and :math:`{\bf n}` but
 only on the angle between them:
 
 .. math::
 
    \cos\theta = {\bf n}\cdot{\bf e}_r
 
-So we go from :math:`Z_{ij}({\bf n},{\bf e}_r)`, i.e.\ a four-angle dependence, to
-:math:`Z_{ij}(\theta)`, i.e.\ a one-angle dependence. 
+So we go from :math:`Z_{ij}({\bf n},{\bf e}_r)`, i.e. a four-angle dependence, to
+:math:`Z_{ij}(\theta)`, i.e. a one-angle dependence. 
 
 Now let us also assume that there is no netto helicity of the particles
 (they are either axisymmetric or there exist equal amounts of particles
-as their mirror symmetric counterparts). In that case (see e.g.\ 
+as their mirror symmetric counterparts). In that case (see e.g. 
 Mishchenko book) of the 16 matrix elements only 6 are non-zero and independent:
 
 .. _eq-scatmat-for-randorient-nohelic:
@@ -1556,7 +1557,7 @@ calculations.
 
 Now, as described above, the Stokes vectors only have meaning if the directions
 of :math:`x'` and :math:`y'` are well-defined. For
-Eq.~(:ref:`eq-scatmat-for-randorient-nohelic`) to be valid (and for the correct
+Eq. (:ref:`eq-scatmat-for-randorient-nohelic`) to be valid (and for the correct
 meaning of the :math:`Z_{ij}` elements) the following definition is used: Before
 the scattering, the :math:`{\bf S}`-vector of the photon package is rotated (and
 the Stokes vectors accordingly transformed) such that the new :math:`{\bf
@@ -1571,7 +1572,7 @@ that
 
 In other words, if we look into the incoming light (with :math:`z'` pointing
 toward us), then for :math:`\sin(\theta)>0` the photon is scattered into the
-:math:`x'>0`, :math:`y'=0` direction (i.e.\ for us it is scattered to the
+:math:`x'>0`, :math:`y'=0` direction (i.e. for us it is scattered to the
 right).  The :math:`{\bf S}` vector for the outgoing photon remains unchanged,
 since the new :math:`{\bf n}` is also perpendicular to it.
 
@@ -1613,11 +1614,12 @@ transfer equation the extinction remains simple:
    \right)
 
 where :math:`I_I`, :math:`I_Q`, :math:`I_U`, :math:`I_V` are the intensities
-(erg/s/cm:math:`^2`/Hz/ster) for the four Stokes parameters, and likewise for
+(:math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}`)
+for the four Stokes parameters, and likewise for
 :math:`j_{\mathrm{emis}}` and :math:`j_{\mathrm{scat}}`, and finally, :math:`s`
 the path length along the ray under consideration. Note that if we would allow
 for fixed-orientation dust particles (which we don't),
-Eq.~(:ref:`eq-radtrans-randomorient`) would become considerably more complex,
+Eq. (:ref:`eq-radtrans-randomorient`) would become considerably more complex,
 with extinction being matrix-valued and thermal emission being polarized.
 
 Since :math:`\kappa_{\mathrm{scat}}` converts incoming radiation into outgoing
@@ -1660,7 +1662,7 @@ will result.
 
 One more note: As mentioned in Section :ref:`sec-definitions-stokes`, the sign
 conventions of the Stokes vector components we use (the IAU 1974 definition) are
-different from the Bohren \& Huffman and Mishchenko books. For randomly oriented
+different from the Bohren & Huffman and Mishchenko books. For randomly oriented
 particles, however, the sign conventions of the :math:`Z`-matrix elements are
 not affected, because those matrix elements that would be affected are those
 that are in the upper-right and lower-left quadrants of the matrix, and these
@@ -1746,12 +1748,8 @@ model. Also here the 'weighted photon package mode' solves the problem: It will
 focus the photon packages toward the model grid, and lower their energy to
 compensate for their favorable focusing toward the grid.
 
-*NOTE:* Since RADMC-3D is still in beta-phase, and both aspects of the 'weighted
-photon package mode' meddle with the standard equal-weighting procedure, it
-might be useful to sometimes check the results against a run without this mode
-but with a huge number of photon packages to compensate - just to check if there
-are no bugs or other subtleties. You can switch the mode off by setting
-``mc_weighted_photons=0`` in the ``radmc3d.inp`` file.
+*NOTE:* You can switch the mode off by setting ``mc_weighted_photons=0`` in the
+``radmc3d.inp`` file.
 
 
 .. _sec-polarized-thermal-emission:
@@ -1822,14 +1820,14 @@ define the Stokes components as:
    V &= 2E_{x,0}E_{y,0}\sin\Delta
    \end{split}
    
-Note that for :math:`V=I` (:math:`\Delta=\pi/2`, i.e.\ the :math:`E_y` lags
+Note that for :math:`V=I` (:math:`\Delta=\pi/2`, i.e. the :math:`E_y` lags
 :math:`\pi/2` behind :math:`E_x`) we have *right-handed* circularly polarized
 light, meaning that the tip of the :math:`\vec E` field at a fixed point in
 space, when looking into the light (the propagation of light is toward the
 reader) rotates counter-clockwise (when the :math:`x`-coordinate points right,
 and the :math:`y`-coordinate points up). The 3-D helix of his field will be {\em
 left-handed} (when the z-coordinate points into the propagation direction of the
-light, i.e. toward the reader, i.e.\ a right-handed coordinate system). For
+light, i.e. toward the reader, i.e. a right-handed coordinate system). For
 :math:`Q=I` we have linearly polarized light in which the :math:`\vec E`-field
 lies in the :math:`x`-direction. For :math:`U=I` we have linearly polarized
 light in which :math:`\vec E` lies along the :math:`x=y` line (when looking into
@@ -1886,7 +1884,7 @@ With this we get the following extinction law:
    I_{\mathrm{v}}' &= I_{\mathrm{v}} e^{-\alpha_{\mathrm{abs},\nu,\mathrm{v}}s}
    \end{split}
 
-How do :math:`U` and :math:`V` extinct? If we use Eqs.~(:ref:`eq-def-stokes-u`,
+How do :math:`U` and :math:`V` extinct? If we use Eqs. (:ref:`eq-def-stokes-u`,
 :ref:`eq-def-stokes-v`), and assume that the phase lag :math:`\Delta` will not
 change during the extinction, then 
 
@@ -2150,9 +2148,9 @@ Stokes vector is defined with respect to the vector :math:`\vec S` which is
 perpendicular to the line-of-sight direction vector :math:`\vec n_{\mathrm{los}}`
 and defines the direction in which the :math:`y`-coordinate of the image plane
 points. We must now express this incoming radiation (at the start of the
-segment) in the new :math:`(x',y')` image plane coordinates, i.e.~with respect to
+segment) in the new :math:`(x',y')` image plane coordinates, i.e. with respect to
 the new vector :math:`\vec S'` that points along :math:`\vec n_{\mathrm{align,proj}}`
-(i.e.~:math:`\vec S'` is the normalized version of :math:`\vec
+(i.e. :math:`\vec S'` is the normalized version of :math:`\vec
 n_{\mathrm{align,proj}}`). This rotation is performed using
 
 .. _eq-rot-stokes-align:
@@ -2191,14 +2189,14 @@ image coordinate plane such that :math:`y'` points along the orientation vector
 does no longer work, and the integration of the formal transfer equation would
 become much more complex, involving the full Müller matrix formulation. We will
 not do this, so we will stick to first order integration of
-Eq.~:ref:`eq-formal-rt-emisabs-in-rotated-system`.
+Eq. :ref:`eq-formal-rt-emisabs-in-rotated-system`.
 
 For convenience we will leave out the primes (') from here on, so while we write
 :math:`(I,Q,U,V)` we mean in fact :math:`(I',Q',U',V')`. We now compute
 :math:`I_{\mathrm{h}}` and :math:`I_{\mathrm{v}}` using
-Eqs.~(:ref:`eq-modif-stokes-h`, :ref:`eq-modif-stokes-v`). Now, along this
+Eqs. (:ref:`eq-modif-stokes-h`, :ref:`eq-modif-stokes-v`). Now, along this
 segment of the ray, we can write
-Eq.~:ref:`eq-formal-rt-emisabs-in-rotated-system` in the following form:
+Eq. :ref:`eq-formal-rt-emisabs-in-rotated-system` in the following form:
 
 .. _eq-firstorder-int-emisabs:
 
@@ -2253,9 +2251,9 @@ ray segment (which becomes the start of the next ray segment), and
 length of the segment.
 
 We now compute :math:`I_{\mathrm{end}}` and :math:`Q_{\mathrm{end}}`, and rotate
-back to the :math:`(x,y)` image plane coordinate system (i.e.~using :math:`\vec
+back to the :math:`(x,y)` image plane coordinate system (i.e. using :math:`\vec
 S` instead of :math:`\vec S'` to define the Stokes parameters) by applying
-Eq.~:ref:`eq-rot-stokes-align` but now with :math:`\alpha\rightarrow -\alpha`,
+Eq. :ref:`eq-rot-stokes-align` but now with :math:`\alpha\rightarrow -\alpha`,
 and we have the values of the Stokes parameter at the end of the ray
 segment. Now we repeat this whole procedure for the next ray segment.
 
@@ -2310,12 +2308,12 @@ process included. However, in practice we also have other processes involved,
 such as line emission/absorption or the scattering source function. The way this
 can be treated here is to simply add these additional opacities to all four
 components of the extinction matrix of
-Eq.~(:ref:`eq-formal-rt-emisabs-in-rotated-system`) and to add the additional
+Eq. (:ref:`eq-formal-rt-emisabs-in-rotated-system`) and to add the additional
 emissivities to the vector with the Planck functions in
-Eq.~(:ref:`eq-formal-rt-emisabs-in-rotated-system`). For the scattered light
+Eq. (:ref:`eq-formal-rt-emisabs-in-rotated-system`). For the scattered light
 emissivity (which is a Stokes vector) we must also first perform a rotation from
 :math:`\vec S` to :math:`\vec S'` using the Stokes rotation formula of
-Eq.~(:ref:`eq-rot-stokes-align`) before we add this emissivity to the
+Eq. (:ref:`eq-rot-stokes-align`) before we add this emissivity to the
 equation. If we include the effect of alignment on the scattering (see Section
 :ref:`sec-align-scat`) then also the scattering extinction will be different for
 the orthogonal (horizontal) and parallel (vertical) Stokes components. That is
@@ -2442,7 +2440,7 @@ errors, it will be normalized to 1.
 The way in which partial alignment (:math:`0<\epsilon_{\mathrm{align}}<1`) is
 treated in RADMC-3D is to treat the opacities and emissivities as simple
 linear sums of fully aligned and non aligned versions. For instance,
-Eqs.~(:ref:`eq-align-kappa-k-h`, :ref:`eq-align-kappa-k-v`) then become
+Eqs. (:ref:`eq-align-kappa-k-h`, :ref:`eq-align-kappa-k-v`) then become
 
 .. math::
 

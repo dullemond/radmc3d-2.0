@@ -434,7 +434,8 @@ such a way, you can make the spectrum at this wavelength grid by</p>
 </pre></div>
 </div>
 <p>will make a spectrum with a regular wavelength grid between 5 and 20
-<span class="math notranslate nohighlight">\(\mu\)</span> for more details and options.</p>
+<span class="math notranslate nohighlight">\(\mu\mathrm{m}\)</span> and 100 wavelength points. But see Section
+<a class="reference internal" href="#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a> for more details and options.</p>
 <p>The output file <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> will have the same format as for the <code class="docutils literal notranslate"><span class="pre">sed</span></code>
 command.</p>
 <p>Making a spectrum can take RADMC-3D some time, especially in the default mode,
@@ -732,7 +733,12 @@ intensities.</p>
 <p>Note, by the way, that each of these 2x2 subpixels may be split even further
 into 2x2 sub-pixels etc until the desired resolution is reached, i.e. until
 the condition that <span class="math notranslate nohighlight">\(S\)</span> is larger or equal to the pixel size divided by
-<span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> is met. By this recursive calling, we always end up at
+<span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> is met. This is illustrated in Fig.
+<a class="reference internal" href="#fig-recursive-subpixeling"><span class="std std-ref">Pictographic representation of how the recursive sub-pixeling for images
+works. Pixels are recursively split in 2x2 subpixels as far as needed
+to resolve the 3-D grid structure of the model. But at the end, the
+fluxes of all subpixels are summed up such that the resulting image
+has a regular grid again.</span></a>. By this recursive calling, we always end up at
 the top level with the average intesity of the entire top-level pixel.  This
 method is very similar to quad-tree mesh refinement, but instead of
 retaining and returning the entire complex mesh structure to the user, this
@@ -741,6 +747,14 @@ level) pixel in the image. So the recursive sub-pixeling technique described
 here is all done internally in the RADMC-3D code, and the user will not
 really notice anything except that this sub-pixeling can of course be
 computationally more expensive than if such a method is not used.</p>
+<div class="figure align-default" id="id5">
+<span id="fig-recursive-subpixeling"></span><img alt="_images/Subpixeling.png" src="_images/Subpixeling.png" />
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Pictographic representation of how the recursive sub-pixeling for images
+works. Pixels are recursively split in 2x2 subpixels as far as needed
+to resolve the 3-D grid structure of the model. But at the end, the
+fluxes of all subpixels are summed up such that the resulting image
+has a regular grid again.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
 <p>Note that the smaller we choose <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> the more accurate our
 image becomes. In the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file the value of <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span>
 can be set by setting the variable <code class="docutils literal notranslate"><span class="pre">camera_refine_criterion</span></code> to the
@@ -785,7 +799,7 @@ value 0.05) defines such a relative scale. You can change this value
 in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
 <p>A second issue is when the user introduces extreme ‘separable refinement’
 (see Section <a class="reference internal" href="gridding.html#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a> and Figure
-<code class="xref std std-numref docutils literal notranslate"><span class="pre">fig-spher-sep-ref</span></code>-right) in the <span class="math notranslate nohighlight">\(R\)</span>, <span class="math notranslate nohighlight">\(\Theta\)</span> or <span class="math notranslate nohighlight">\(\Phi\)</span>
+<a class="reference internal" href="gridding.html#fig-spher-sep-ref-rays"><span class="std std-numref">Fig. 23</span></a>) in the <span class="math notranslate nohighlight">\(R\)</span>, <span class="math notranslate nohighlight">\(\Theta\)</span> or <span class="math notranslate nohighlight">\(\Phi\)</span>
 coordinate. This may, for instance, be necessary near the inner edge of a
 dusty disk model in order to keep the first cell optically thin. This may
 lead, however, to extremely deep sub-pixeling for rays that skim the inner
@@ -797,11 +811,11 @@ RADMC-3D plays it safe. If you wish to prevent this excessive sub-pixeling
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_min_drr</span></code> which sets a lower limit to the <span class="math notranslate nohighlight">\(\Delta
 R/R\)</span> taken into account for the sub-pixeling (region ‘B’ in Figure
-<code class="xref std std-numref docutils literal notranslate"><span class="pre">fig-spher-sep-ref</span></code>-left). The default is 0.003. By setting this to
+<a class="reference internal" href="gridding.html#fig-spher-sep-ref-txt"><span class="std std-numref">Fig. 22</span></a>). The default is 0.003. By setting this to
 e.g. 0.03 you can already get a strong speed-up for models with strong
 <span class="math notranslate nohighlight">\(R\)</span>-refinement.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code> which sets a lower limit to
-<span class="math notranslate nohighlight">\(\Delta\Theta\)</span> (region ‘C’ in Figure <code class="xref std std-numref docutils literal notranslate"><span class="pre">fig-spher-sep-ref</span></code>-left)
+<span class="math notranslate nohighlight">\(\Delta\Theta\)</span> (region ‘C’ in Figure <a class="reference internal" href="gridding.html#fig-spher-sep-ref-txt"><span class="std std-numref">Fig. 22</span></a>)
 and/or <span class="math notranslate nohighlight">\(\Delta\Phi\)</span>. The default is 0.05. By setting this to e.g. 0.1 you
 can already get some speed-up for models with e.g. strong
 <span class="math notranslate nohighlight">\(\Theta\)</span>-refinement.</p></li>
@@ -906,16 +920,16 @@ case it becomes important to consider the ‘order’ of integration of the
 transfer equation. By default, for images and spectra, RADMC-3D uses first
 order integration: The source term and the opacity in each cell are assumed
 to be constant over the cell. This is illustrated in
-Fig. <a class="reference internal" href="#fig-cellcenter"><span class="std std-numref">Fig. 11</span></a>.</p>
-<div class="figure align-default" id="id5">
+Fig. <a class="reference internal" href="#fig-cellcenter"><span class="std std-numref">Fig. 12</span></a>.</p>
+<div class="figure align-default" id="id6">
 <span id="fig-cellcenter"></span><a class="reference internal image-reference" href="_images/cellcenter.pdf"><img alt="_images/cellcenter.pdf" src="_images/cellcenter.pdf" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Pictographic representation of the <em>first order</em> integration of the transfer
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Pictographic representation of the <em>first order</em> integration of the transfer
 equation along a ray (red line with arrow head) through an AMR grid (black
 lines).  The grid cuts the ray into ray segments A, B, C and D. At the bottom
 it is shown how the integrands are assumed to be along these four segments.
 The emissivity function <span class="math notranslate nohighlight">\(j_\nu\)</span> and extinction function
 <span class="math notranslate nohighlight">\(\alpha_\nu\)</span> are constant within each cell and thus constant along each
-ray segment.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+ray segment.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
 <p>The integration over each cell proceeds according to the following formula:</p>
 <div class="math notranslate nohighlight">
@@ -933,10 +947,10 @@ the image, especially if you make images at angles aligned with the
 grid. For objects with high optical depths you may even see grid patterns in
 the images.</p>
 <p>RADMC-3D can also use second order integration for its images and spectra.
-This is illustrated in Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>.</p>
-<div class="figure align-default" id="id6">
+This is illustrated in Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 13</span></a>.</p>
+<div class="figure align-default" id="id7">
 <span id="fig-cellcorner"></span><a class="reference internal image-reference" href="_images/cellcorner.pdf"><img alt="_images/cellcorner.pdf" src="_images/cellcorner.pdf" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Pictographic representation of the <em>second order</em> integration of the transfer
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Pictographic representation of the <em>second order</em> integration of the transfer
 equation along a ray (red line with arrow head) through an AMR grid (black
 lines). The grid cuts the ray into ray segments A, B, C and D. At the bottom
 it is shown how the integrands are assumed to be along these four segments.
@@ -945,7 +959,7 @@ The emissivity function <span class="math notranslate nohighlight">\(j_\nu\)</sp
 linearly interpolated from the cell corners to the locations where the ray
 crosses the cell walls (open blue circles).  Then, along each ray segment the
 emissivity and extinction functions are assumed to be linear functions, so
-that the integration result is quadratic.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+that the integration result is quadratic.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
 </div>
 <p>This is done with a simple <code class="docutils literal notranslate"><span class="pre">secondorder</span></code> option added on the
 command line, for instance:</p>
@@ -978,7 +992,7 @@ way that RADMC-3D does this is:</p>
 <ul class="simple">
 <li><p>First create a ‘grid of cell corners’, which we call the <em>vertex
 grid</em> (see the solid blue dots in
-Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>). The cell grid already
+Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 13</span></a>). The cell grid already
 implicitly defines the locations of all the cell corners, but these
 corners are, by default, not explicitly listed in computer memory. When
 the <code class="docutils literal notranslate"><span class="pre">secondorder</span></code> option is given, however, RADMC-3D will
@@ -991,7 +1005,7 @@ This now maps the physical variables from the cells to the vertices.</p></li>
 <li><p>Whenever a ray passes through a cell wall, the physical variables of
 the 4 vertices of the cell wall are interpolated bilinearly onto the point
 where the ray passes through the cell wall (see the open blue circles in
-Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 12</span></a>). This gives the values at the
+Fig. <a class="reference internal" href="#fig-cellcorner"><span class="std std-numref">Fig. 13</span></a>). This gives the values at the
 ‘start’ or ‘end’ points.</p></li>
 <li><p>Since the current ‘end’ point will be the ‘start’ point for the
 next ray segment, the physical variables need only be obtained once per
@@ -1000,31 +1014,31 @@ physical variables will thus be used twice: once for the ‘end’ and once
 for the ‘start’ of a ray segment (except of course at the very beginning
 and very end of the ray).</p></li>
 </ul>
-<div class="figure align-default" id="id7">
-<span id="fig-effect-of-second-order-integration-4-1"></span><a class="reference internal image-reference" href="_images/simple_4_1st.png"><img alt="_images/simple_4_1st.png" src="_images/simple_4_1st.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
-seen at inclination 4 degrees.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
-</div>
 <div class="figure align-default" id="id8">
-<span id="fig-effect-of-second-order-integration-60-1"></span><a class="reference internal image-reference" href="_images/simple_60_1st.png"><img alt="_images/simple_60_1st.png" src="_images/simple_60_1st.png" style="width: 50%;" /></a>
+<span id="fig-effect-of-second-order-integration-4-1"></span><a class="reference internal image-reference" href="_images/simple_4_1st.png"><img alt="_images/simple_4_1st.png" src="_images/simple_4_1st.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
-seen at inclination 60 degrees.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+seen at inclination 4 degrees.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id9">
-<span id="fig-effect-of-second-order-integration-4-2"></span><a class="reference internal image-reference" href="_images/simple_4_2nd.png"><img alt="_images/simple_4_2nd.png" src="_images/simple_4_2nd.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
-seen at inclination 4 degrees.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+<span id="fig-effect-of-second-order-integration-60-1"></span><a class="reference internal image-reference" href="_images/simple_60_1st.png"><img alt="_images/simple_60_1st.png" src="_images/simple_60_1st.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">First-order integration of transfer equation in ray-tracing
+seen at inclination 60 degrees.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id10">
-<span id="fig-effect-of-second-order-integration-60-2"></span><a class="reference internal image-reference" href="_images/simple_60_2nd.png"><img alt="_images/simple_60_2nd.png" src="_images/simple_60_2nd.png" style="width: 50%;" /></a>
+<span id="fig-effect-of-second-order-integration-4-2"></span><a class="reference internal image-reference" href="_images/simple_4_2nd.png"><img alt="_images/simple_4_2nd.png" src="_images/simple_4_2nd.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
-seen at inclination 60 degrees.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+seen at inclination 4 degrees.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id11">
+<span id="fig-effect-of-second-order-integration-60-2"></span><a class="reference internal image-reference" href="_images/simple_60_2nd.png"><img alt="_images/simple_60_2nd.png" src="_images/simple_60_2nd.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Second-order integration of transfer equation in ray-tracing
+seen at inclination 60 degrees.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
 </div>
 <p>If you compare the images or spectra obtained with first order integration
-(default, see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 15</span></a> and
-<a class="reference internal" href="#fig-effect-of-second-order-integration-60-2"><span class="std std-numref">Fig. 16</span></a>) or second order integration
-(see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 15</span></a> and
-<a class="reference internal" href="#fig-effect-of-second-order-integration-60-2"><span class="std std-numref">Fig. 16</span></a>) you see that with the first
+(default, see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 16</span></a> and
+<a class="reference internal" href="#fig-effect-of-second-order-integration-60-2"><span class="std std-numref">Fig. 17</span></a>) or second order integration
+(see Figs. <a class="reference internal" href="#fig-effect-of-second-order-integration-4-2"><span class="std std-numref">Fig. 16</span></a> and
+<a class="reference internal" href="#fig-effect-of-second-order-integration-60-2"><span class="std std-numref">Fig. 17</span></a>) you see that with the first
 order method you still see the cell structure of the grid very much.  Also
 numerical noise in the temperature due to the Monte Carlo statistics is much
 more prominent in the first order method. The second order method makes much
@@ -1109,15 +1123,15 @@ you can create a circular image as follows:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$I_\nu [erg\, cm^{-2}\, s^{-1}\, Hz^{-1}\, ster^{-1}]$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The result will look like shown in Fig. <a class="reference internal" href="#fig-circ-image"><span class="std std-numref">Fig. 17</span></a> .</p>
-<div class="figure align-default" id="id11">
+<p>The result will look like shown in Fig. <a class="reference internal" href="#fig-circ-image"><span class="std std-numref">Fig. 18</span></a> .</p>
+<div class="figure align-default" id="id12">
 <span id="fig-circ-image"></span><img alt="_images/circularimage.png" src="_images/circularimage.png" />
-<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Example of a circular image of a 1-D spherical model (the model in the
-<code class="docutils literal notranslate"><span class="pre">examples/run_spher1d_1/</span></code> directory).</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Example of a circular image of a 1-D spherical model (the model in the
+<code class="docutils literal notranslate"><span class="pre">examples/run_spher1d_1/</span></code> directory).</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
 </div>
 <p>If you have 2-D or 3-D models in spherical coordinates, the circular images
 (should) have not only a grid in <span class="math notranslate nohighlight">\(r\)</span>, but also <span class="math notranslate nohighlight">\(\phi\)</span> grid points.
-A simple plot such as Fig. <a class="reference internal" href="#fig-circ-image"><span class="std std-numref">Fig. 17</span></a> will only show the intensity
+A simple plot such as Fig. <a class="reference internal" href="#fig-circ-image"><span class="std std-numref">Fig. 18</span></a> will only show the intensity
 for a single <span class="math notranslate nohighlight">\(phi\)</span> choice. There is no “right” or “wrong” way of displaying
 such an image. It depends on your taste. You could, of course, remap onto a
 “normal” image, but that would defeat the purpose of circular images. You could
@@ -1126,23 +1140,23 @@ which simply puts the <span class="math notranslate nohighlight">\(r\)</span> ax
 <span class="math notranslate nohighlight">\(\phi\)</span> axis vertically, essentially creating a ‘heat map’ of the
 intensity as a function of <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
 <p>This is illustrated in the model <code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code>.
-Fig. <a class="reference internal" href="#fig-circ-image-2d"><span class="std std-numref">Fig. 18</span></a> shows the circular image (as a ‘heat map’)
+Fig. <a class="reference internal" href="#fig-circ-image-2d"><span class="std std-numref">Fig. 19</span></a> shows the circular image (as a ‘heat map’)
 at a wavelength of <span class="math notranslate nohighlight">\(\lambda=10\;\mu m\)</span>. For comparison, the same image
-is shown as a ‘normal’ image in Fig. <a class="reference internal" href="#fig-rect-circ-image-2d"><span class="std std-numref">Fig. 19</span></a>.</p>
-<div class="figure align-default" id="id12">
-<span id="fig-circ-image-2d"></span><img alt="_images/circim2d.png" src="_images/circim2d.png" />
-<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Example of a circular image of a 2-D spherical model (the model in the
-<code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code> directory).</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
-</div>
+is shown as a ‘normal’ image in Fig. <a class="reference internal" href="#fig-rect-circ-image-2d"><span class="std std-numref">Fig. 20</span></a>.</p>
 <div class="figure align-default" id="id13">
+<span id="fig-circ-image-2d"></span><img alt="_images/circim2d.png" src="_images/circim2d.png" />
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">Example of a circular image of a 2-D spherical model (the model in the
+<code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code> directory).</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id14">
 <span id="fig-rect-circ-image-2d"></span><img alt="_images/spher2dim10mic.png" src="_images/spher2dim10mic.png" />
-<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">The rectangular (‘normal’) version of the image of Fig. <a class="reference internal" href="#fig-circ-image-2d"><span class="std std-numref">Fig. 18</span></a>.
-As one can see: the inner regions of this image are not well-resolved.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">The rectangular (‘normal’) version of the image of Fig. <a class="reference internal" href="#fig-circ-image-2d"><span class="std std-numref">Fig. 19</span></a>.
+As one can see: the inner regions of this image are not well-resolved.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
 </div>
 <p>With a bit of “getting used to” one will find that the circular images will
 reveal a lot of information.</p>
 <p><em>Note:</em> Fig. <a href="#id1"><span class="problematic" id="id2">:numfig:`fig-circ-image-2d`</span></a> shows an effect similar to what is
-shown in Fig. <a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 29</span></a>. This indicates that near the inner
+shown in Fig. <a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 30</span></a>. This indicates that near the inner
 radius of the model, the radial grid is under-resolved in example model
 <code class="docutils literal notranslate"><span class="pre">examples/run_spher2d_1/</span></code>: see Section <a class="reference internal" href="tipsandtricks.html#sec-things-going-wrong"><span class="std std-ref">Careful: Things that might go wrong</span></a>, point
 ‘Too optically thick cells at the surface or inner edge’. So, to improve

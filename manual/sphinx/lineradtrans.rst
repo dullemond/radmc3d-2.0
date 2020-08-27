@@ -15,7 +15,10 @@ ray-tracing in the slow but memory efficient way: the *simple LTE mode*
 you do not need to specify anything to have this selected.
 
 
-\section{Quick start for adding line transfer to images and spectra}
+
+Quick start for adding line transfer to images and spectra
+==========================================================
+
 Do properly model line transfer requires dedication and experimentation.
 This is *not* a simple task. See Section :ref:`sec-lines-pitfalls` for an
 analysis of several pitfalls one may encounter. However, nothing is better
@@ -34,7 +37,7 @@ radiative transfer:
   containing properties of the molecule or atom.
 * ``numberdens_co.inp`` (or its binary version, see Chapter
   :ref:`chap-binary-io`) or that of another molecule: The number density of
-  that molecule in units of cm:math:`^{-3}`.
+  that molecule in units of :math:`\mathrm{cm}^{-3}`.
 * ``gas_temperature.inp`` (or its binary version, see Chapter
   :ref:`chap-binary-io`): The gas temperature at each grid cell. You do not
   need to specify this file if you add the keyword ``tgas_eq_tdust = 1``
@@ -82,7 +85,7 @@ Einstein coefficient for spontaneous emission from level :math:`i` to level
 where :math:`g` are the statistical weights of the levels, :math:`h` the Planck constant
 and :math:`c` the light speed. The symbol :math:`\varphi_{ij}(\omega,\nu)` is the line
 profile function. For zero velocity field
-:math:`\varphi_{ij}(\omega,\nu)=\tilde\varphi_{ij}(\nu)`, i.e.\ the line profile
+:math:`\varphi_{ij}(\omega,\nu)=\tilde\varphi_{ij}(\nu)`, i.e. the line profile
 function is independent of direction. The tilde is to say that this is
 the comoving line profile. It is given by
 
@@ -228,7 +231,7 @@ lines. Try it out, and you will see how it works.
 or optically thin populations, you can also ask RADMC-3D to *not* precalculate
 the level populations before the rendering, but instead compute them
 on-the-fly. This makes the code slower, but requires less memory.  You can do
-this by choosing e.g.\ ``lines_mode=-3`` instead of ``lines_mode=3`` (for
+this by choosing e.g. ``lines_mode=-3`` instead of ``lines_mode=3`` (for
 LVG+EscProb).
 
 The various input files for line transfer
@@ -443,15 +446,15 @@ first few levels are specified (taken from the LAMDA database)::
 
 The first few lines are self-explanatory. The first of the two tables is about
 the levels. Column one is simply a numbering. Column 2 is the energy of the
-level :math:`E_k`, specified in units of :math:`1/`cm. To get the energy in erg
+level :math:`E_k`, specified in units of :math:`1/\mathrm{cm}`. To get the energy in erg
 you multiply this number with :math:`hc/k` where :math:`h` is the Planck
 constant, :math:`c` the light speed and :math:`k` the Boltzmann constant. Column
-3 is the degeneration number, i.e.\ the the :math:`g` parameter of the
+3 is the degeneration number, i.e. the the :math:`g` parameter of the
 level. Column 4 is redundant information, not used by the code.
 
 The second table is the line list. Column 1 is again a simple counter.  Column 2
 and 3 specify which two levels the line connects. Column 4 is the radiative
-decay rate in units of :math:`1/`seconds, i.e.\ the Einstein :math:`A`
+decay rate in units of :math:`1/\mathrm{s}`, i.e. the Einstein :math:`A`
 coefficient. The last two columns are redundant information that can be easily
 derived from the other information.
 
@@ -531,12 +534,12 @@ the number of temperature points at which these collisional rates are
 tabulated. Then follows this list of temperatures.  Finally we have the table of
 collisional transitions. Each line consists of, first, the ID of the transition
 (dummy), then the upper level, then the lower level, and then the
-:math:`K_{\mathrm{up,low}}` collisional rates in units of [cm:math:`^3`/s]. The
+:math:`K_{\mathrm{up,low}}` collisional rates in units of [:math:`\mathrm{cm}^3/s`]. The
 same is again repeated (because in this example we have two collision partners:
 the para-H:math:`_2` molecule and the ortho-H:math:`_2` molecule).
 
 To get the collision rate :math:`C_{\mathrm{up,low}}` per molecule (in units of
-[1/sec]) for the molecule of interest, we must multiply
+[1/s]) for the molecule of interest, we must multiply
 :math:`K_{\mathrm{up,low}}` with the number density of the collision partner
 (see Section :ref:`sec-collpartner`).  So in this example, the
 :math:`C_{\mathrm{up,low}}` becomes:
@@ -580,8 +583,8 @@ Some notes:
 INPUT: Molecular/atomic data: The linelist_XXX.inp file(s)
 ----------------------------------------------------------
 
-In many cases molecular data are merely given as lists of lines (e.g.\ the
-HITRAN database, the Kurucz database, the Jorgensen et al.~databases
+In many cases molecular data are merely given as lists of lines (e.g. the
+HITRAN database, the Kurucz database, the Jorgensen et al. databases
 etc.). These line lists contain information about the line wavelength
 :math:`\lambda_0`, the line strength :math:`A_{\mathrm{ud}}`, the statistical
 weights of the lower and upper level and the energy of the lower or upper
@@ -657,9 +660,9 @@ function (necessary for LTE transfer) and a table with all the lines (or any
 subset you wish to select). The lines table columns are as follows: first column
 is just a dummy index. Second column is the wavelength in micron. Third is the
 Einstein-A-coefficient (spontaneous downward rate) in units of
-sec:math:`^{-1}`. Fourth and fifth are the energies above the ground state of
+:math:`\mathrm{s}^{-1}`. Fourth and fifth are the energies above the ground state of
 the lower and upper levels belonging to this line in units of
-cm:math:`^{-1}`. Sixth and seventh are the statistical weights (degenracies) of
+:math:`\mathrm{cm}^{-1}`. Sixth and seventh are the statistical weights (degenracies) of
 the lower and upper levels belonging to this line.
 
 Note that you can tell RADMC-3D to read ``linelist_h2o.inp`` (instead of search
@@ -818,7 +821,7 @@ this list, and that it is the first level (``ilevel=1``).
 INPUT: The number density of collision partners (for non-LTE transfer)
 ----------------------------------------------------------------------
 
-For non-LTE line transfer (see e.g.~Sections :ref:`sec-lvg`,
+For non-LTE line transfer (see e.g. Sections :ref:`sec-lvg`,
 :ref:`sec-optthinpop`) the molecules can be collisionally excited. The collision
 rates for each pair of molecule + collision partner are given in the molecular
 input data files (Section :ref:`sec-molecule-xxx-inp`). To find how often a
@@ -957,7 +960,7 @@ simultaneously (each ray doing all wavelength at the same time), and the
 local level populations along each ray can now be computed once, and be used
 for all wavelengths. *This may speed up things drastically, and for most
 purposes virtually perfectly correct*. Just beware that when you render
-short-wavelength lines (optical) or you use large grains, i.e.\ when the
+short-wavelength lines (optical) or you use large grains, i.e. when the
 scattering albedo at the wavelength of the line is not negligible, this may
 result in a mis-estimation of the continuum around the line.
 
@@ -1005,7 +1008,7 @@ method, also called the 'Sobolev approximation'.  Please read for instance
 the paper by Ossenkopf (1997) 'The Sobolev approximation in molecular
 clouds', New Astronomy, 2, 365 for more explanation, and a study how it
 works in the context of molecular clouds. The LVG mode of RADMC-3D has been
-used for the first time by Shetty et al.~(2011, MNRAS 412, 1686), and a
+used for the first time by Shetty et al. (2011, MNRAS 412, 1686), and a
 description of the method is included in that paper.  The nice aspect of
 this method is that it is, for most part, local. The only slightly non-local
 aspect is that a velocity gradient has to be computed by comparing the gas
@@ -1053,12 +1056,12 @@ For the LVG method this optical depth is given by the velocity gradient:
    {1.064\,|\nabla \vec v|}\left[\frac{g_i}{g_j}n_j-n_i\right]
    \end{split}
 
-(see e.g.\ van der Tak et al.~2007, A&A 468, 627), where :math:`n_i` is the
+(see e.g. van der Tak et al. 2007, A&A 468, 627), where :math:`n_i` is the
 fractional level population of level :math:`i`, :math:`N_{\mathrm{molec}}` the
 total number density of the molecule, :math:`|\nabla \vec v|` the absolute value
 of the velocity gradient, :math:`g_i` the statistical weight of level :math:`i`
 and :math:`\nu_{ij}` the line frequency for transition :math:`i\rightarrow
-j`. In comparing to Eq.~21 of van der Tak's paper, note that their
+j`. In comparing to Eq. 21 of van der Tak's paper, note that their
 :math:`N_{\mathrm{mol}}` is a column density (cm:math:`^{-2}`) and their
 :math:`\Delta V` is the line width (cm/s), while our :math:`N_{\mathrm{molec}}`
 is the number density (cm:math:`^{-3}`) and :math:`|\nabla \vec v|` is the
@@ -1110,7 +1113,7 @@ equilibrium equation:
    \end{split}
 
 Replacing :math:`J_{ij}` (and similarly :math:`J_{ji}`) with the expression of
-Eq.~(:ref:`eq-linemeanint-escp`) and subsequently replacing :math:`S_{ij}` with
+Eq. (:ref:`eq-linemeanint-escp`) and subsequently replacing :math:`S_{ij}` with
 the well-known expression for the line source function
 
 .. math::
@@ -1136,7 +1139,7 @@ To use the LVG+EscProb method, the following has to be done:
 * Make sure that you use a molecular data file that contains
   collision rate tables (see Section :ref:`sec-molecule-xxx-inp`).
 * Make sure to provide file(s) containing the number densities
-  of the collision partners, e.g.~``numberdens_p-h2.inp``
+  of the collision partners, e.g. ``numberdens_p-h2.inp``
   (see Section :ref:`sec-collpartner`).
 * Make sure to link the rate tables to the number density
   files in ``lines.inp`` (see Section :ref:`sec-line-dot-inp`).
@@ -1197,7 +1200,7 @@ this, the following has to be done:
 * Make sure that you use a molecular data file that contains
   collision rate tables (see Section :ref:`sec-molecule-xxx-inp`).
 * Make sure to provide file(s) containing the number densities
-  of the collision partners, e.g.~``numberdens_p-h2.inp``
+  of the collision partners, e.g. ``numberdens_p-h2.inp``
   (see Section :ref:`sec-collpartner`).
 * Make sure to link the rate tables to the number density
   files in ``lines.inp`` (see Section :ref:`sec-line-dot-inp`).
@@ -1285,7 +1288,7 @@ Then follows the number of levels (written as ``nrlevels_subset`` above). Note
 that this is *not necessarily* equal to the number of levels found in the
 ``molecule_co.inp`` file (for our CO example). It will only be equal to that if
 the file has been produced by the command ``radmc3d calcpop``. If, however, the
-file was produced after making an image or spectrum (e.g.\ through the command
+file was produced after making an image or spectrum (e.g. through the command
 ``radmc3d image lambda 2300 writepop``), then RADMC-3D will only write out those
 levels that have been used to make the image or spectrum. See Section
 :ref:`sec-calcstore-levpop` for more information about this. It is for this
@@ -1293,7 +1296,7 @@ reason that the file in fact contains a list of levels that are included (the
 ``level1 level 2 ...`` in the above file format example).
 
 After these header lines follows the actual data. Each line contains the
-populations at a spatial cell in units of cm:math:`^{-3}`. 
+populations at a spatial cell in units of :math:`\mathrm{cm}^{-3}`. 
 
 This file format is a generalization of the standard format which is
 described for the example of dust density in Section :ref:`sec-dustdens`.
@@ -1340,13 +1343,13 @@ What can go wrong with line transfer?
 ========================================
 
 Even the simple task of performing a ray-tracing line transfer calculation
-with given level populations (i.e.\ the so-called *formal transfer
+with given level populations (i.e. the so-called *formal transfer
 equation*) is a non-trivial task in complex 3-D AMR models with possibly
 highly supersonic motions. I recommend the user to do extensive and critical
 experimentation with the code and make many simple tests to check if the
 results are as they are expected to be. In the end a result must be
 understandable in terms of simple argumentation. If weird effects show up,
-please do some detective work until you understand why they show up, i.e.\
+please do some detective work until you understand why they show up, i.e.
 that they are either a *real* effect or a numerical issue. There are
 many numerical artifacts that can show up that are *not* a bug in the
 code. The code simply does a numerical integration of the equations on some
@@ -1391,7 +1394,7 @@ So here is a list of things to check:
    will not be able to pick up signals from intermediate velocities. In other
    words, because of the discrete gridding of the model, only discrete
    velocities are present, which can cause numerical problems. See
-   Fig.~:ref:`fig-doppler-catch`-Left for a pictographic representation of
+   Fig. :ref:`fig-doppler-catch`-Left for a pictographic representation of
    this problem. There are two possible solutions. One is the wavelength band
    method described in Section :ref:`sec-wavelength-bands`.  But a more
    systematic method is the 'doppler catching' method described in Section
@@ -1414,7 +1417,7 @@ the line can then have a doppler shift substantially to the blue of the
 wavelength-of-sight, while in the next cell the line suddenly shifted to the
 red side. If the intrinsic (= thermal + microturbulent) line width is
 smaller than these shifts, neither cell gives a contribution to the emission
-in the ray. See Fig.~:ref:`fig-doppler-jump` for a pictographic
+in the ray. See Fig. :ref:`fig-doppler-jump` for a pictographic
 representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength-of-sight, and thus make a contribution. Therefore the numerical
@@ -1449,11 +1452,11 @@ it detects one, to make sub-steps in the integration of the formal transfer
 equation so that the smooth passing of the line through the
 wavelength-of-sight can be properly accounted for. Here this is called
 'doppler catching', for lack of a better name. The technique was discussed
-in great detail in Pontoppidan et al.~(2009, ApJ 704, 1482). The idea is
+in great detail in Pontoppidan et al. (2009, ApJ 704, 1482). The idea is
 that the method automatically tests if a line might 'doppler jump' over
 the current wavelength channel. If so, it will insert substeps in the
 integration at the location where this danger is present. See
-Fig.~:ref:`fig-doppler-catch` for a pictographic representation of this
+Fig. :ref:`fig-doppler-catch` for a pictographic representation of this
 method. Note that this method can only be used with the second order
 ray-tracing (see Section :ref:`sec-second-order`); in fact, as soon as you
 switch the doppler catching on, RADMC-3D will automatically also switch on
@@ -1481,12 +1484,12 @@ ensure that smaller steps are taken. By adding a line::
 to the ``radmc3d.inp`` file you will ensure that steps are small
 enough that the doppler shift is at most 0.05 times the local line width.
 
-So why is doppler catching an *option*, i.e.\ why would this not be standard?
+So why is doppler catching an *option*, i.e. why would this not be standard?
 The reason is that doppler catching requires second order integration, which
 requires RADMC-3D to first map all the cell-based quantities to the
 cell-corners. This requires extra memory, which for very large models can be
 problematic. It also requires more CPU time to calculate images/spectra with
-second order integration. So if you do not need it, i.e.\ if your velocity
+second order integration. So if you do not need it, i.e. if your velocity
 gradients are not very steep compared to the intrinsic line width, then it saves
 time and memory to not use doppler catching.
 
@@ -1494,13 +1497,13 @@ It is, however, important to realize that doppler catching is not the golden
 bullet. Even with doppler catching it might happen that some line flux is lost,
 but this time as a result of too low *image resolution*. This is less likely to
 happen in problems like ISM turbulence, but it is pretty likely to happen in
-models of rotating disks. Suppose we have a very thin local line width (i.e.\
+models of rotating disks. Suppose we have a very thin local line width (i.e.
 low gas temperature and no microturbulence) in a rotating thin disk around a
-star. In a given velocity channel (i.e.\ at a given observer-frame frequency) a
+star. In a given velocity channel (i.e. at a given observer-frame frequency) a
 molecular line in the disk emits only in a very thin 'ear-shaped' ring or band
 in the image. The thinner the intrinsic line width, the thinner the band on the
-image. See Pontoppidan et al.~(2009, ApJ 704, 1482) and Pavlyuchenkov et
-al.~(2007, ApJ 669, 1262) for example. If the pixel-resolution of the image is
+image. See Pontoppidan et al. (2009, ApJ 704, 1482) and Pavlyuchenkov et
+al. (2007, ApJ 669, 1262) for example. If the pixel-resolution of the image is
 smaller than that of this band, the image is simply underresolved.  This has
 nothing to do with the doppler jumping problem, but can be equally devastating
 for the results if the user is unaware of this. There appears to be only one
@@ -1508,7 +1511,7 @@ proper solution: assure that the pixel-resolution of the image is sufficiently
 fine for the problem at hand. This is easy to find out: The image would simply
 look terribly noisy if the resolution is insufficient. However, if you are not
 interested in the images, but only in the spectra, then some amount of noisiness
-in the image (i.e.\ marginally sufficient resolution) is OK, since the total
+in the image (i.e. marginally sufficient resolution) is OK, since the total
 flux is an integral over the entire image, smearing out much of the noise.  It
 requires some experimentation, though.
 
@@ -1521,8 +1524,8 @@ Here are some additional issues to keep in mind:
   at the edges of the domain it would require *extra* polation.
   In 1-D this is more easily illustrated, because
   there the cell corners are in fact cell interfaces. Cells :math:`i` and :math:`i+1`
-  share cell interface :math:`i+1/2`. If we have :math:`N` cells, i.e.\ cells
-  :math:`i=1,\cdots,N`, then we have :math:`N+1` interfaces, i.e.\ interfaces
+  share cell interface :math:`i+1/2`. If we have :math:`N` cells, i.e. cells
+  :math:`i=1,\cdots,N`, then we have :math:`N+1` interfaces, i.e. interfaces
   :math:`i=\tfrac{1}{2},\cdots,N+\tfrac{1}{2}`. To get physical quantities from
   the cell centers to cell interfaces
   :math:`i=\tfrac{3}{2},\cdots,N-\tfrac{1}{2}` requires just interpolation. But
@@ -1625,7 +1628,7 @@ and :math:`C_{\mathrm{margin}}` is a constant. By default
    C_{\mathrm{margin}} = 12
 
 But you can change this to another value, say 24, by adding in the
-``radmc3d.inp`` file a line containing, e.g.\ ``lines_widthmargin = 24``.
+``radmc3d.inp`` file a line containing, e.g. ``lines_widthmargin = 24``.
 
 You can in fact get a dump of the level populations that have been computed and
 used for the image(s)/spectrum you created, by adding ``writepop`` on the
@@ -1672,7 +1675,7 @@ populations mode use ``lines_mode=-2``, for on-the-fly LVG mode use
 ``lines_mode=-4``.
 
 *NOTE: The drawback of this method is that, under certain circumstances, it can
-slow down the code dramatically.* This slow-down happens if you use e.g.\
+slow down the code dramatically.* This slow-down happens if you use e.g.
 second-order integration (Section :ref:`sec-second-order`) and/or doppler
 catching (Section :ref:`sec-doppler-catching`) together with non-trivial
 population solving methods like LVG. So please use the on-the-fly method only

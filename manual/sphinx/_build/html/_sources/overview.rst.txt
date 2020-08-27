@@ -15,18 +15,20 @@ subroutines written in the Python language to use the ``radmc3d`` code,
 but ``radmc3d`` can also run without it. In that case the user will
 have to write his/her own pre- and post-processing subroutines.
 
+.. _sec-requirements:
+
 Requirements
 ============
 
 The following pre-installed software is required:
 
-#. *Operating system: Unix-like (e.g.~Linux or MacOSX)*
+#. *Operating system: Unix-like (e.g. Linux or MacOSX)*
 
-   This package runs under Unix-like environment (e.g.~Linux or MacOSX), but has
+   This package runs under Unix-like environment (e.g. Linux or MacOSX), but has
    not been tested under Windows. There is no particular reason why it should not
    also run under Windows, but it would require different ways of file
-   handling. {\em In this manual we always assume a Unix-like environment,
-   in which we will make use of a bash command-line interface (CLI).} We will
+   handling. *In this manual we always assume a Unix-like environment,
+   in which we will make use of a bash command-line interface (CLI).* We will
    call this the *shell*. 
 
 #. ``make`` or ``gmake``
@@ -38,7 +40,8 @@ The following pre-installed software is required:
    
    This is a standard scripting language available on most or all
    Unix/Linux-based systems. If you are in doubt: type ``which perl``
-   to find the location of the ``perl`` executable. See http://www.perl.org/ for details on perl, should you have any
+   to find the location of the ``perl`` executable. See http://www.perl.org/
+   for details on perl, should you have any
    problems. But on current-day Unix-type operating systems perl is nearly
    always installed in the ``/usr/bin/`` directory. If you do not
    have Perl installed, you can also do without. Its sole use is to copy
@@ -99,9 +102,9 @@ RADMC-3D package as a .zip archive
 ----------------------------------
 If you obtain RADMC-3D from its website, it will be
 packed in a zip archive called
-``radmc-3d\_v*.*\_\#\#.\#\#.\#\#.zip`` where the ``*.*`` is the version
-number and ``\#\#.\#\#.\#\#`` is the date of this version in dd.mm.yy
-format. To unpack on a linux, unix or Mac OS X machine you type::
+``radmc-3d_v*.*_dd.mm.yy.zip`` where the ``*.*`` is the version
+number and ``dd.mm.yy`` is the date of this version.
+To unpack on a linux, unix or Mac OS X machine you type::
 
   unzip <this archive file>
 

@@ -374,8 +374,8 @@ the data structure by far easier. Example: suppose you have a base grid of 8x8x8
 cells and you replace the inner 4x4x4 cells with a layer of 8x8x8 cells (each
 cell being half the size of the original cells).  Then you will have for
 instance a ``dust_density.inp`` file containing 1024 values of the density:
-8:math:`^3`\ =512 values for the base grid and again 8:math:`^3`\ =512 values for
-the refinement layer. Of the first 8:math:`^3`\ =512 values 4:math:`^3`\ =64 values
+:math:`8^3`\ =512 values for the base grid and again :math:`8^3`\ =512 values for
+the refinement layer. Of the first :math:`8^3`\ =512 values :math:`4^3`\ =64 values
 are ignored (they could have any value as they will not be used). The file is
 thus 64 values larger than strictly necessary, which is a redundancy of
 64/1024=0.0625. If you would have used the oct-tree refinement style for making
@@ -469,14 +469,14 @@ Making a spectrum of the 1-D plane-parallel atmosphere
 As mentioned above, the 'normal' 3-D way of making a spectrum of the 1-D
 plane-parallel atmosphere is not possible, because formally the atmosphere is
 infinitely extended. Instead you can obtain a spectrum in the form of an
-intensity (erg s:math:`^{-1}` cm:math:`^{-2}` Hz:math:`^{-1}` ster:math:`^{-1}`)
+intensity (:math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}`)
 as a function of wavelength. To do this you ask RADMC-3D to make a
 multi-wavelength image of the atmosphere under a certain inclination
 (inclination 0 meaning face-on), e.g.: ::
 
   radmc3d image allwl incl 70
 
-This make an SED at :math:`\lambda=10\,\mu`m for the observer seeing the
+This make an SED at :math:`\lambda=10\,\mu`\ m for the observer seeing the
 atmosphere at an inclination of 70 degrees. This produces a file image.out,
 described in Section :ref:`sec-image-out`. The image is, in fact, a 1x1 pixel
 multi-wavelength image. The ``allwl`` (which stands for 'all wavelengths') means
