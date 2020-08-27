@@ -1,0 +1,90 @@
+This is a demonstration of the cartesian 1-D plane-parallel mode of RADMC-3D.
+See, however, first the run_simple_1/README file for some general notes about
+setups like this and the RADMC-3D code compilation.
+
+RADMC-3D is, by nature, a 3-D code. But as of version 0.31 it also features
+a cartesian 1-D plane-parallel mode. In this mode some things work a bit
+different than "normal":
+
+ - Images are by default 1x1 pixels, because in a plane-parallel case it
+   is useless to have multiple pixels. 
+
+ - Spectra cannot be made, because "spectrum" is (in RADMC-3D 'language')
+   the flux as a function of frequency as seen at a very large distance of
+   the object, so that the object is in the "far field". Since
+   the concept of "far-field" is no longer meaningful in a plane-parallel
+   case, it is better to make frequency-dependent 1x1 pixel images. This
+   gives you the frequence-dependent intensity, which is all you should
+   need.
+
+This test setup is a 1-D constant density slab geometry with at the lower
+boundary a thermal boundary (see run_simple_1_thermbc for notes about, and
+an example of thermal boundaries).
+
+To run this model, first make sure that the RADMC-3D code compiled and
+installed. Then type on the linux command line:
+
+ python problem_setup.py
+
+Type:
+
+ radmc3d mctherm
+
+This should do the Monte Carlo computation of the dust temperatures.
+You can look at the list of dust temperatures in the file called
+dust_temperature.dat. 
+
+If you wish to find out what the outcoming intensity at, say, lambda
+= 10 micron is for face on view (i.e. the observer is at z=+infinity
+and x=y=0):
+
+ radmc3d image lambda 10
+
+This produces a file image.out which contains a lot of numbers, but 
+the very last number is the one you are interested in: the intensity
+in units of erg/s/cm^2/Hz/ster. You can also obtain this intensity
+at another inclination:
+
+ radmc3d image lambda 10 incl 70
+
+which is the intensity seen at a grazing incidence angle (just 20 
+degrees with the plane). You can also get the intensity as a function
+of wavelength (i.e.\ some form of "spectrum"), for instance:
+
+ radmc3d image lambdarange 5 20 nlam 10
+
+which produces 10 intensity values, at 10 wavelength points between 5 and 20
+microns. Here you can see the meaning of some of the other numbers in
+image.out: the third line contains an integer with the number of wavelength
+points (10 in this case). Starting from the fifth line you have the list
+of wavelengths in microns. After that you have the list of intensities.
+
+You can also choose to get the intensities at all the wavelength 
+points in the wavelength_micron.inp file:
+
+ radmc3d image allwl
+
+(where "allwl" stands for "all wavelengths"). In this example, since
+the wavelength_micron.inp file contains 150 wavelength points, the
+image.out will now also contain a list of 150 wavelength and a list
+of the corresponding intensities.
+
+You can also experiment with parallel beams of radiation impinging onto the
+top of the photosphere. By default the setup is such that these are switched
+off. But by uncommenting one of the "Illuminating parallel flux beams"
+settings you can add these beams. In the problem_setup.pro it is described
+what you should expect.
+
+You can also add a thermal boundary also on the top by uncommenting the
+nearly last line of the problem_setup.pro (but please not while having flux
+beams, because that would have no meaning).
+
+20.03.2012, 20.05.12
+
+NOTE: As of version 0.31 of RADMC-3D this model comes with a dust opacity
+      table that spans a larger wavelength range, allowing it to be used
+      down to lower temperatures. The new opacity table is made with the Mie
+      code from the opac/dust_continuum/jena/ directory, using the
+      olmg50.lnk optical constants file from the Jena database. This is
+      MgFeSiO4 with a specific weight of 3.71 gram/cm^3. The grain size is
+      0.1 micron radius.

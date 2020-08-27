@@ -1,0 +1,44 @@
+Similar setup as run_simple_1. But now we demonstrate the polarized thermal
+emission from aligned grains.
+
+IMPORTANT NOTICE: The alignment asymmetry of the dust opacities (as given in
+   dustkapscatmat_pyrmg70.inp) are PURELY FICTIONAL in this example. To do
+   it right, you would have to use e.g. a T-matrix code to compute the
+   absorption opacity of an oblate grain as seen from the various angles. 
+
+The alignment direction vector field is assumed to be toroidal (rotating
+around the z-axis). Since the grains are assumed to be oblate, with their
+minor axis along the alignment direction (see the fictional alignment
+asymmetry mentioned above), the polarization direction (the E-field) is
+(for face-on view, i.e. theta=0) perpendicular to the alignment direction.
+For theta larger than about 45 degrees the polarization direction mostly
+points vertical. 
+
+Partial alignment is included in this example: the alignment fraction is
+0 near the midplane (z=0) and increases quadratically with z to 1 between
+z=0 and z=radius. For z>radius the alignment is assumed to be perfect.
+
+To run this example:
+
+   python problem_setup.py
+   radmc3d mctherm
+   radmc3d image lambda 0.4e3 theta 45 phi 45 nostar
+
+   ipython --matplotlib
+   %run problem_plot
+
+You can plot the individual Stokes components and the polarized intensity
+by continuing in python:
+
+   from radmc3dPy import image
+   plotImage(a,cmap=cm.hot,au=True,bunit='inu',stokes='Q')
+
+or
+
+   plotImage(a,cmap=cm.hot,au=True,bunit='inu',stokes='U')
+
+or
+
+   plotImage(a,cmap=cm.hot,au=True,bunit='inu',stokes='PI')
+
+08.02.2017

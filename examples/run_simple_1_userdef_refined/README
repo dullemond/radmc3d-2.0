@@ -1,0 +1,82 @@
+---> As run_simple_1_userdef/, but now with grid refinement
+
+This is an example of how to make a model internally inside radmc3d and how
+to use grid refinement while setting up the model. It also demonstrates the
+useage of the userdef_module.f90 module and the special-purpose compilation
+of radmc3d.
+
+This directory should contain the following files: 
+
+  README                         (This file)
+  Makefile                       (The local Makefile for the local build)
+  dustkappa_silicate.inp         (some dust opacity file)
+  problem_setup.py               (a Python script for setting up some input files)
+  userdef_module.f90             (the place where the model and grid are set up)
+
+This is what the model does:
+
+  The model sets up a simple Gaussian blob of dust surrounding a star in a
+  3-D cartesian grid. The model is set up in the userdef_module.f90 module,
+  i.e. inside the radmc3d code. This obviates the need of creating the
+  dust_density.inp and amr_grid.inp files. But some other files are still
+  created by the problem_setup.py script. The model setup makes use of
+  the oct-tree grid refinement capabilities of radmc3d.
+
+This is what you should do to run this model:
+
+  1) Edit the Makefile in this directory and make sure that the compiler
+     settings are alright. Also set the SRC variable to the correct 
+     path of the source directory of radmc3d.
+  2) Inside this model directory type 'make'. This will create a local
+     executable radmc3d.
+  3) Type 'python problem_setup.py'
+
+You can now already make images, because here the temperature of the 
+dust is already set by the setup. Whether that temperature is correct
+is another story; it's just parameterized. Better you calculate the
+temperatures properly with
+
+  ./radmc3d mctherm
+
+Now plot stuff:
+
+  ipython --matplotlib
+  %run problem_plotexamples.py
+
+Please read the run_simple_1/README file for further information
+
+Tip: you can see the refinement of the grid in the images if you make the
+image at incl=phi=0 and if you set the tnoise in the problem_setup.py to
+10.e0 or so. 
+
+A note about the AMR: Since this setup does on-the-fly refinement, we do
+not know in advance how many cells we will need. However, for data memory
+management reasons we MUST specify some reasonable maximum number of cells
+that we expect. This is, unfortunately, not easy to predict, because it
+depends entirely on the scheme of AMR refinement implemented in the
+userdef_module.f90 module. The factor userdef_nrefinefact is meant to
+allow the user to specify how much larger (i.e. by which factor) the
+number of grid cells he/she expects to be needed, compared to the unrefined
+grid. If you run radmc3d and get a message that you run out of free cells,
+then enlarging this parameter will fix that. Making it too large, on the
+other hand, may require too much memory space. 
+
+See run_simple_1/README for more details.
+
+VIEWING THE AMR GRID WITH PARAVIEW:
+-----------------------------------
+You can produce vtk files that can be viewed by Paraview, a publicly available
+3-D viewing tool. This will allow you to get a better feeling for the complex
+AMR gridding. Example, type:
+
+  ./radmc3d vtk_grid
+
+will produce a file called model.vtk which you can read with Paraview.
+Choose, in Paraview, the wireframe view, and you can see the structure of
+the 3-D AMR grid. You can also view the data itself, e.g.
+
+  ./radmc3d vtk_dust_density 1
+
+See the new dedicated chapter about VTK files in the manual.
+
+29.07.09, 02.08.09, 22.09.09, 20.05.12, 03.07.2016

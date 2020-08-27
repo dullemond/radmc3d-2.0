@@ -1,0 +1,144 @@
+This is an example of how to:
+
+ 1a) Make RADMC-3D use your own creative emission and extinction functions
+     as a function of anything you wish. RADMC-3D will simply call your
+     subroutine userdef_srcalp() at every point during the ray-tracing,
+     allowing you to add your own emission and extinction processes, or
+     evern replacing everything RADMC-3D did with your own (meaning: you
+     will then have ONLY your emission and extinction processes).
+
+ 1b) Equivalently, this option will allow you to use RADMC-3D as a fancy
+     volume rendering tool (where the emission and extinction processes are
+     not meant to be physically meaningful, just meant to give nice images).
+
+ 2)  Make viewimage.pro add extra text fields for any possible variables that
+     are used by these user-defined emission and extinction functions.  This
+     is particularly useful for when you use RADMC-3D as a fancy
+     volume-rendering tool: You can leave a few parameters of your transfer
+     function free, and let then be read in via the file transfer.inp.
+
+-----------------------------------------------------------------------------
+Quick-start:
+
+  make
+  idl
+  .r problem_setup
+  .r viewimage
+  viewimage,/usertrans
+
+or alternatively (for the last line):
+
+  viewimage,/usertrans,/color
+
+Note: In this example there is no frequency-dependence. See below.
+
+-----------------------------------------------------------------------------
+1a+b: How to include user-defined emission and extinction processes.
+
+This is done by placing a userdef_module.f90 into the local directory,
+and putting all your stuff in there. In this example model there is already
+a userdef_module.f90 provided. If you compare this to the standard one in
+the src/ directory you will notice that:
+
+ - The userdef_srcalp() routine is now actually filled with something.
+   This is the routine that RADMC-3D calls at every step during the 
+   ray-tracing. Here you can add your emission (src) and extinction (alp)
+   processes. In this particular example, in fact, any old emission or
+   extinction processes are deleted and replaced by the userdef ones.
+   But you could also do src = src + ... and alp = alp + ... instead of
+   src = ... and alp = ... . NOTE: The processes here are just a very
+   simple example! 
+
+ - The processes in the userdef_srcalp() are not 100% fixed. They contain
+   three free parameters: transfer_density_plaw_rgb(1:3). 
+
+ - The free parameters (you can add many more!) are read in from the file
+   "transfer.inp" in the userdef_action() subroutine. In fact, these
+   variables are first set to some default, after which the userdef_action()
+   routine is called to set them to the "real" values. This reading from
+   the transfer.inp file is done using the RADMC-3D-style namelist method.
+   This means that you do not HAVE to put all variables into the transfer.inp
+   file. Any variables that are not included in this file are simply kept
+   at the default value set in the userdef_defaults() subroutine. Even if
+   the transfer.inp file does not exist at all, that's no problem: all 
+   variables will keep their default value.
+
+You do not need to use any free variables. If your process has no free
+parameters, then you do not need any transfer.inp file. It is an option,
+not a must. 
+
+For the rest, RADMC-3D should work as you are used to. As you can see, the
+wavelength_micron.inp file should still be present, even though in this
+particular example the emission process was frequency-independent. This
+is because you can easily also make a frequency-dependent radiative 
+process, in which case RADMC-3D needs a frequency-grid (even if you do
+not use the grid as such). 
+
+NOTE: We call the user-defined processes the "transfer function", just for
+      nomenclature.
+
+-----------------------------------------------------------------------------
+2: Using viewimage.pro with the new user-defined processes
+
+In principle viewimage.pro does not care about the user-defined processes.
+But sometimes you would like to control the parameters of your user-defined
+transfer function on-the-fly, while you are looking at an image. To allow
+this, you simply add the keyword /usertrans to the viewimage call:
+
+ idl
+ .r viewimage
+ viewimage,/usertrans
+
+This will make viewimage check for the file
+
+ transfer.inp.default
+
+which should be like transfer.inp: containing a list of variables and their
+(default) values. viewimage will parse this list and create entries for the
+values of all these variables. 
+
+viewimage will create a transfer.inp file with the current values. Whenever
+you edit any of these values in the widget, viewimage will create a new 
+transfer.inp file with the updated values.
+
+When you remake you image (either by pressing the corresponding button ot
+by typing "enter" in one of the entries) your image will now use the new
+parameters.
+
+-----------------------------------------------------------------------------
+Notes about this particular example:
+
+In this example the three channels of the image (if you use e.g.
+viewimage,/usertrans,/color) are each a different transfer process,
+i.e. each has a different powerlaw. The way this is done in the
+userdef_module.f90 is that the processes are identified by the 
+frequency index:
+
+     do i=1,n
+        src(i) = gasdens(index)**transfer_density_plaw_rgb(i)
+     enddo
+
+The idea here is that if you make a 3-color image, then image 1 (i.e.
+channel 1) will be the image based on
+gasdens(index)**transfer_density_plaw_rgb(1), image 2 based on
+gasdens(index)**transfer_density_plaw_rgb(2) and image 3 based on
+gasdens(index)**transfer_density_plaw_rgb(3). This means that the
+frequencies of these channels are irrelevant. This method of hard-coding
+image "i" to process "i" can be useful both for non-physically motived
+volume rendering as well as for physically motivated imaging. Example of the
+latter: If you are interested in 3-color images in which you wish image 1 to
+be X-ray emission, image 2 to be the H-alpha line and image 3 to be the dust
+continuum, then you may want to implement these three processes by hand
+using the userdef_module.f90/userdef_srcalp() routine, and you do not
+necessarily want to have to set the frequency-dependence.
+
+This is just ONE way of doing this. 
+
+The more traditional way of doing this is to make your processes explicitly
+frequency-dependent, as they "should" be, and to add the processes up
+independently of the channel index. One could say that this is the "better"
+way, because this is how the code was designed. But the above
+"channel-dependent" way is fine, too, as long as you know what you are
+doing. An example of the more traditional way of doing things is also given
+in the userdef_module.f90/userdef_srcalp() routine in this directory, but
+it is commented-out.

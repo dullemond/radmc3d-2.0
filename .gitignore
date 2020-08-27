@@ -49,3 +49,4 @@ build/
 __pycache__/
 python/radmc3dPy/build/
 temp/
+examples_quarantaine/

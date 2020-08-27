@@ -1,0 +1,53 @@
+This is a simple 1-D spherical envelope model.
+
+NOTE: Dust scattering is switched off in this model. But this can easily
+      be switched back on (see scattering_mode_max in problem_setup.py).
+
+This directory should contain the following files: 
+
+  README                         (This file)
+  Makefile                       (Only for convenient cleanmodel and cleanall)
+  dustkappa_silicate.inp         (some dust opacity file)
+  problem_setup.py               (a python script for setting up some input files)
+  plot_session.py                (an example run with some plots)
+
+This is what the model does:
+
+  It puts a spherical envelope of dust around a star and computes the
+  temperature structure of the envelope. You can then make spectra and
+  images.
+
+This is what you should do to run this model:
+
+  1) Make sure you have compiled the main radmc3d code in src/ already.
+     See manual for how to compile.
+  2) Type python problem_setup.py in the linux/unix shell. This should
+     set up your model. You need, of course, a working installation of
+     python 2.7 on your system.
+  3) In the shell type:
+
+      radmc3d mctherm
+      radmc3d sed
+      radmc3d image lambda 10
+
+     The first command will compute the self-consistent dust temperature.
+     The second command will compute the spectral energy distribution (spectrum).
+     The third command will make an image at 10 micron.
+  4) Now you can make plots. See plot_session.py for examples how 
+     to run RADMC-3D and make various plots and images and spectra.
+  5) Note that plot_session.py in fact automatically calls RADMC-3D,
+     reads the results and makes the plots (but please keep in mind
+     that plot_session.py is just meant as examples). Type 
+
+     ipython --matplotlib
+
+     to go into python. Then type:
+
+     %run plot_session
+
+     This should automatically run the code and produce various plots
+     that should pop up.
+
+Note: plot_session.py also demonstrates the use of circular images.
+
+21.03.2017

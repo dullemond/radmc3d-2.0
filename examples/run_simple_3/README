@@ -1,0 +1,15 @@
+This is a model similar to run_simple_1, but now with multiple blobs, and
+the star not being inside a blob. 
+
+  ipython problem_setup.py
+  radmc3d mctherm
+  ipython --matplotlib
+    %run problem_plotexamples.py
+
+Note that in the plotting example the wavelength is now set to 10 microns.
+You see in the image that only one side of each blob emits substantial
+amounts of light: the side toward the star. This is the effect of
+illumination of the blobs by the star. Be careful, though, that the
+spatial resolution is very low.
+
+29.06.16

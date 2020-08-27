@@ -1,0 +1,23 @@
+This is a very simple model setup for a protoplanetary disk. It demonstrates
+how one could set up a disk model. BUT: It is very primitive! For production
+run models you must be careful for:
+
+ (1) adjust the thetaup to ensure that all the material of your model is
+     covered by the grid
+ (2) maybe adjust the theta spacing near the midplane (RADMC-3D allows you
+     to use variable grid spacing, so you could have a finer-spaced theta
+     grid near the midplane if, for instance, your model has dust settling
+     included)
+ (3) Refine the grid near the inner rim of the disk. The inner rim tends to
+     produce a strong NIR flux, because it is directly illuminated by the
+     star at a perpendicular angle. However, if you under-resolve the radial
+     grid at the inner edge, you will under-predict the NIR flux, because
+     your inner grid cells become too cold (still much hotter than the rest
+     of the disk, but too cold anyway). The inner rim must be smoothly
+     sampled from tau<<1 via tau=~ 1 to tau>>1, where tau is the radial
+     optical depth from the star into the disk, the the dust opacity
+     at stellar wavelength. Often a degree of smoothing of the density
+     may be necessary, because refinement in radial grid may become too
+     fine.
+
+For a more basic RADMC-3D setup, see run_simple_1/

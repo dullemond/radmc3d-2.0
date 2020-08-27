@@ -1,0 +1,8 @@
+If you are new to RADMC-3D, it is advisable to start with the simplest
+example model:
+
+  run_simple_1/
+
+Read the README file for directions how to run the model.
+
+

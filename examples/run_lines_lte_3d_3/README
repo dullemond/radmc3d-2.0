@@ -1,0 +1,23 @@
+Now let us test what happens if the local line width is too small compared
+to the velocity gradient over each cell. We take a problem with a linear
+gradient in y-direction of v_y and a very narrow intrinsic line width
+compared to the overall velocity gradient. You will find that you get
+good images if you use the doppler catching mode, but it will go entirely
+wrong without it (sometimes the line emission does not even appear at
+all without doppler catching).
+
+So, first compile RADMC-3D of course. Then
+
+  python problem_setup.py
+
+Now, in Python, you can:
+
+  %run problem_plotexample.py
+
+which shows two images: one created without doppler catching, one with.
+In the one without doppler catching, you do not see any line emission
+whatsoever. Only the (very weak) dust continuum emission and the star
+are seen. But with doppler catching, the line emission is very bright,
+and saturated to the Planck function.
+
+11.01.11 / 04.04.11 / 27.08.2020

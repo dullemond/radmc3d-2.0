@@ -1,0 +1,8 @@
+As run_spher2d_1/ but now without the midplane mirroring trick. In
+run_spher2d_1/ only the upper half of the model was included, and RADMC-3D
+automatically assumes then that the lower half is the mirror copy of the
+upper half. Here, however, the full upper and lower half are explicitly
+included. This is necessary, for instance, when using polarized scattering,
+since that does not allow mirroring.
+
+21.03.2017

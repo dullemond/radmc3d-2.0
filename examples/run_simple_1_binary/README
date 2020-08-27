@@ -1,0 +1,4 @@
+This is identical to run_simple_1, but this time using the binary files.
+Compare problem_setup.py for both cases to see the differences.
+
+13.03.2012

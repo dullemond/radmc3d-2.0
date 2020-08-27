@@ -1,0 +1,14 @@
+This is almost identical to run_simple_1, but with a lower density and a
+different opacity, AND: with a full scattering matrix opacity file, so that
+scattering is now done in full Stokes mode (for spherical or randomly
+oriented particles). 
+
+The dust opacity file dustkapscatmat_pyrmg70.inp was created in the
+opac/bohrenhuffman_scatmat/ directory, using the pyrmg70.lnk optical
+constants file from the Jena database. 
+
+See the README file of run_simple_1 to run this model. See, however,
+the manual of RADMC-3D (and the README file of the bohrenhuffman_scatmat
+directory) to learn more about the anisotropic scattering. 
+
+04.02.2013

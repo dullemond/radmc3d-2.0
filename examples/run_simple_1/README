@@ -1,0 +1,110 @@
+This is perhaps the most primitive example of a model setup for radmc3d.
+It follows the general philosophy of creating all the input files for
+radmc3d via a python script called problem_setup.py. The model calculation
+is then done by the globally (for the user) installed radmc3d, i.e. the
+radmc3d from the src/ directory.
+
+This directory should contain the following files: 
+
+  README                         (This file)
+  Makefile                       (Only for convenient cleanmodel and cleanall)
+  dustkappa_silicate.inp         (some dust opacity file)
+  problem_setup.py               (a python script for setting up some input files)
+  problem_plotexamples.py        (a python script demonstrating the use of radmc3dPy)
+  problem_toolsexamples.py       (a python script demonstrating the use of radm3d_tools)
+
+This is what the model does:
+
+  The model sets up a simple Gaussian blob of dust surrounding a star in a
+  3-D cartesian grid. It is the same model as the one in run_simple_userdef_1/
+  but this time it is set up in the classical way: using an external
+  script to create all input files.
+
+This is what you should do to run this model:
+
+  1) Make sure you have compiled the main radmc3d code in src/ already.
+     See manual for how to compile.
+  2) Type python problem_setup.py
+  3) In the shell type 'radmc3d mctherm' and wait until this is finished
+     NOTE: Do not, as in run_simple_userdef_1/, type './radmc3d mctherm' (i.e.
+     do not use the ./). NOTE: If you compiled the code with openmp,
+     then you can speed up the code with e.g. 'radmc3d mctherm setthreads 4'.
+  4) Make sure that the Python support libraries are installed. See the
+     RADMC-3D manual for details on how to install the radmc3dPy and the
+     radmc3d_tools libraries.
+  5) Go into python with matplotlib interactive mode:
+        ipython --matplotlib
+  6) Now you can use the problem_plotexamples.py to make an image and
+     create some plots. Please read the problem_plotexamples.py script
+     to learn how to do these things interactively. You can run this
+     script from the python prompt with:
+        %run problem_plotexamples.py
+
+One of the examples in the problem_plotexamples.py is how to make a
+spectral energy distribution. Go into ipython --matplotlib and type
+
+  %run problem_plotexamples.py
+
+You can also compute a spectrum straight from the shell by:
+
+   radmc3d sed incl 60 phi 30
+
+where incl and phi are the viewing angles. The SED is is written out in a
+file called spectrum.out. Just type less spectrum.out to see the file. The
+flux is in CGS units, and normalized to 1 parsec distance (although for all
+purposes the true flux will be at much larger distances, but you can simply
+scale the spectrum by the factor (parsec/distance)^2, because for the
+spectrum the far-field limit is used, in spite of the "1 parsec"
+normalization.
+
+Note also that radmc3dPy has routines for reading the spectrum and
+for plotting it (after you ran radmc3d sed incl 60 phi 30 on the shell).
+Just type in ipython --matplotlib the following:
+
+  from matplotlib import pyplot as plt
+  from radmc3dPy.analyze import *
+  s=readSpectrum()
+  plotSpectrum(s,xlg=True,ylg=True,micron=True)
+  plt.axis([1e-1,1e4,1e-12,1e-4])
+
+To learn all the options of plotSpectrum() just type
+
+  ?plotSpectrum
+
+Please have a close look at the problem_setup.py file for getting an 
+understanding of how this model is set up. 
+
+NOTE: Scattering is switched off in this example run. The 
+      opacity file dustkappa_silicate.inp does include the
+      scattering opacity (third column). This would allow
+      a treatment of isotropic scattering. To switch on the
+      isotropic scattering, put scattering_mode_max = 1 in
+      radmc3d.inp (or better: see problem_setup.py where 
+      this file is created).
+
+RADMC-3D can also be used to compute the mean intensity J_nu of the
+radiation field at every point in the model. It produces a list of
+wavelengths in the file
+
+  mcmono_wavelength_micron.inp
+
+and then calls RADMC-3D in the following way:
+
+  radmc3d mcmono nphot_mono 1000000
+
+This then produces the file 
+
+  mean_intensity.out
+
+which contains the mean intensities. The mean intensities are in units
+of erg/s/cm^2/Hz/ster. 
+
+Alternatively to radmc3dPy (which is a quite advanced Python library for working
+with RADMC-3D), you can also use the radmc3d_tools library (see again RADMC-3D
+manual for how to install that). This is a much simpler set of tools, but can be
+useful for getting a better understanding of the input/output file structures of
+RADMC-3D. The use of this tool set is demonstrated (in Python) with
+
+  %run problem_toolsexamples.py
+
+29.07.09, 22.09.09, 13.03.12, 20.05.12, 29.06.16, 27.08.20

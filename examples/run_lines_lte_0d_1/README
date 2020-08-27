@@ -1,0 +1,56 @@
+This is a very simple 0-D (one-zone) model of a box of molecular gas.
+The lines we study are those of CO. We use the LTE assumption, using
+lines_mode=1. The populations are stored for all levels (no level
+subset is chosen). The molecular data file molecule_co.inp is a direct
+copy of the co.dat file of the LAMDA database from Leiden. 
+
+Check out the problem_setup.py. The setup can be trivially extended to
+3-D. The dust temperature is not calculated; it is simply set to 30 K.
+
+As usual, make the setup in Python with:
+
+  python problem_setup.py
+  radmc3d calcpop
+
+A file levelpop_co.dat is produced, containing the absolute populations
+(i.e. in units of 1/cm^3) of all levels of the molecule_co.inp file. By
+typing
+
+  radmc3d spectrum iline 1 widthkms 1
+
+a spectrum is produced (spectrum.out). The width of the window around the
+line center is taken to be 1 km/s. You can inspect the spectrum (which is
+located in the file spectrum.out) using the Python routines analyze.py
+from radmc3dPy. So go into iPython and type:
+
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from radmc3dPy.analyze import *
+  s=readSpectrum()
+  plt.plot(s[:,0],s[:,1])
+
+which plots the spectrum of the line. If you wish to make use of the
+more fancy spectrum plotting tools of radmc3dPy, try out:
+
+  plotSpectrum(s,dpc=140)
+
+where dpc sets the source at a distance of 140 parsec.
+
+Typically, however, you want lines to be plotted with the x-axis
+in km/s. For that you have to know which line you are looking at,
+i.e., which rest wavelength it has. You can read the molecule_co.inp
+file for the carbon monoxide molecule, and then call plotSpectrum()
+in the following way:
+
+  mol=readMol('co')
+  plotSpectrum(s,mol=mol,ilin=1,dpc=140.)
+
+Have a look at the documentation of plotSpectrum to see all its options:
+
+  ?plotSpectrum
+
+You can also try out the problem_plotexamples.py:
+
+  %run problem_plotexamples
+
+02.07.2016 / 24.08.2020

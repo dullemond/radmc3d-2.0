@@ -1,0 +1,20 @@
+As run_lines_lte_3d_1, but now with:
+
+ - Computing the dust temperature self-consistently, and
+
+ - Taking the gas temperature to be equal to the dust temperature
+   using the tgas_eq_tdust   = 1 option in the radmc3d.inp file.
+
+So, first compile RADMC-3D of course. Then
+
+  python problem_setup.py
+
+Then in the linux shell do:
+
+  radmc3d mctherm
+
+After that you can basically do all the stuff that is described in the
+file ../run_lines_lte_3d_1/README.
+
+04.04.11/24.08.2020
+

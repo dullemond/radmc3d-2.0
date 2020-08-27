@@ -1,0 +1,28 @@
+This is the same model as run_ppdisk_simple_1, but now with two dust species:
+one small grain species and a midplane layer of large grains. The mass of the
+disk is increased compared to run_ppdisk_simple_1.
+
+The "fracbig" variable sets the ratio of how much of the dust mass is in the big
+grains.
+
+The two grain opacities can be created using using problem_makeopac.py, which is
+using the routines from ../../opac/dust_continuum/bohrenhuffman_python/ which
+are copied here for convenience. Also it uses the optical constants file
+pyrmg70.lnk, which is from the Jena database of optical constants:
+
+http://www.astro.uni-jena.de/Laboratory/Database/databases.html
+
+But see ../../opac/dust_continuum/bohrenhuffman_python/ for more details
+on how to make opacities for RADMC-3D. 
+
+How to run:
+
+  python problem_setup.py
+  radmc3d mctherm setthreads 4
+
+and then in Python:
+
+  %run problem_plotexamples.py
+
+30.06.2017 / 27.08.2020
+

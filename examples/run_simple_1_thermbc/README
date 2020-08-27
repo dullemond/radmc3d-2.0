@@ -1,0 +1,39 @@
+This is a test of the "thermal wall" boundary condition that you can
+impose in cartesian coordinates. The model is identical to the one of
+run_simple_1/ (see run_simple_1/README for more details on how to
+run the model), except that:
+
+ - There is no star in the model
+ - The density is 100x larger 
+ - All 6 edges of the domain are now thermal walls at 100 Kelvin
+
+The way we tell RADMC-3D to impose these thermal walls is by setting
+
+   thermal_boundary_xl = 100.
+
+in the radmc3d.inp file (for the left-x-boundary); other extensions 
+can be _xr, _yl, _yr, _zl, _zr, standing for the l/r boundary in
+x/y/z direction. The radmc3d.inp file is created in the Python program
+problem_setup.py (as are most of other input files), and in this 
+example all 6 boundaries are taken to be thermal walls at 100 Kelvin.
+The theory of thermodynamics says that then the temperature of the
+dust must also become 100 K, irrespective of the shape of the opacity.
+As you can see when you run the example with
+
+  radmc3d mctherm
+
+and load the resulting temperature into Python and plot a cut:
+
+  from radmc3d_tools.simpleread import *
+  from radmc3d_tools.simpleplot import *
+  a = read_dusttemp()
+  surface(a.dusttemp[:,:,16])
+
+the temperature is indeed (modulo noise) 100 K. 
+
+Now you can experiment with having only one or two thermal walls,
+by removing some of the thermal_boundary_XX = 100. lines. You can
+then see how the temperature is close to 100 near the wall, but
+decays toward larger distances from the wall.
+
+20.03.2012, 20.05.2012, 27.08.2020

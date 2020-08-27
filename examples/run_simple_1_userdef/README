@@ -1,0 +1,37 @@
+---> As run_simple_1, but set up using userdef_module.f90
+
+This is an example of how to make a model internally inside radmc3d. It also
+demonstrates the useage of the userdef_module.f90 module and the
+special-purpose compilation of radmc3d.
+
+This directory should contain the following files: 
+
+  README                         (This file)
+  Makefile                       (The local Makefile for the local build)
+  dustkappa_silicate.inp         (some dust opacity file)
+  problem_setup.py               (a Python script for setting up some input files)
+  userdef_module.f90             (the place where the model and grid are set up)
+
+This is what the model does:
+
+  The model sets up a simple Gaussian blob of dust surrounding a star in a
+  3-D cartesian grid. The model is set up in the userdef_module.f90 module,
+  i.e. inside the radmc3d code. This obviates the need of creating the
+  dust_density.inp and amr_grid.inp files. But some other files are still
+  created by the problem_setup.py script. 
+
+This is what you should do to run this model:
+
+  1) Edit the Makefile in this directory and make sure that the compiler
+     settings are alright. Also set the SRC variable to the correct 
+     path of the source directory of radmc3d.
+  2) Inside this model directory type 'make'. This will create a local
+     executable radmc3d.
+  3) Type 'python problem_setup.py'
+  4) Type './radmc3d mctherm' and wait until this is finished
+  6) Now you can use the radmc3dPy libraries to plot things in Python.
+     See run_simple_1/ for further details.
+
+Please read the run_simple_1/README file for further information
+
+29.07.09, 22.09.09, 20.05.12, 03.07.2016

@@ -1,0 +1,64 @@
+This is a very simple 3-D model of a box of rotating molecular gas.  The
+lines we study are those of CO. We use the LTE assumption, using
+lines_mode=-1 (the default mode of RADMC-3D). The level populations are
+therefore computed on-the-fly during the ray-tracing of an image or a
+spectrum. They are not stored, and therefore also not written to a file. If
+you wish to inspect the populations, check out the example
+run_lines_lte_0d_1, to see how that works.
+
+The molecular data file molecule_co.inp is a direct copy of the co.dat file
+of the LAMDA database from Leiden.
+
+Dust is also included, but in this simple model the dust temperature is
+simply taken to be the gas temperature, which is taken to be constant. Note:
+you can calculate the dust temperature self-consistently, if you wish, by
+calling radmc3d mctherm! But in this model it is not necessary.
+
+Here is how to start the model. First make sure to have compiled radmc3d
+(see manual). Then enter this directory, and type
+
+ python problem_setup.py
+
+(may take a while). Then in the linux shell type, for instance:
+
+ radmc3d image lambda 2600.757 incl 60 phi 30
+
+where 2600.757 is the wavelength in micron of the CO 1-0 line. Due to the
+solid-body rotation of the gas an image around the line center of CO will
+become a band in the image. You can also do this:
+
+ radmc3d image iline 1 incl 60 phi 30
+
+which does the same. Note that we now have only a single molecule. If
+we have more, you may need to specify which molecule/atom you mean:
+
+ radmc3d image imolspec 1 iline 1 incl 60 phi 30
+
+You can also make an image at a different velocity channel:
+
+ radmc3d image iline 1 vkms 10 incl 60 phi 30
+
+which moves the band in the image a bit due to a 10 km/s shift
+off the line center.
+
+You can also do this all interactively. Go into python (don't forget
+the --matplotlib):
+
+ from radmc3dPy.image import *
+ from matplotlib import cm
+ a=readImage()
+ plotImage(a,log=True,maxlog=4,cmap=cm.hot,bunit='snu',dpc=140,arcsec=True)
+
+and have fun. 
+
+NOTE: If you would put vturb0=0.d0 in the problem_setup.pro, then the
+      local line width becomes so small, that the image resolution 
+      of 100x100 (default) will not be enough to resolve the band in 
+      the image. This will lead to inaccurate total flux estimates.
+      Try it out, and play with changing velocity channel. Note: in
+      this case the "doppler catching" algorithm will not help, because
+      the problem here lies not in the ray-tracing, but in the image
+      resolution. See manual, and/or see the paper by Pontoppidan et
+      al. 2009, ApJ 704, 1482. 
+
+04.04.11/28.06.17/24.08.2020

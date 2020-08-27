@@ -1,0 +1,31 @@
+This example shows how to make line channel maps of a protoplanetary disk.
+
+This is a version of run_ppdisk_simple_1 . See the README_PY of that model
+directory for further details about the disk model.
+
+Here we make a channel map of CO 2-1 emission. The molecular data file is
+molecule_co.inp, which is taken from the LAMDA database of Leiden. 
+
+We switch off scattering of dust, to make smoother maps (no MC noise other than
+that of the dust temperature). See radmc3d.inp "scattering_mode_max = 0" line.
+
+We take the gas temperature to be equal to the dust temperature. See radmc3d.inp
+"tgas_eq_tdust = 1" line.
+
+To run this example:
+
+  python problem_setup.py
+  radmc3d mctherm
+
+Then go into ipython and
+
+  %run problem_plotexamples.py
+
+If all goes well, radmc3d will be automatically called to make a channel map at
+velocity 1.5 km/s. This shows the usual "ear" shaped emission on the right side
+of the image. The "ear" is open because of the edge of the disk. The "ear" is
+optically thick (i.e. the CO line is optically thick). The midplane is a bit
+cooler than the surface, and hence the top and bottom of the "ear" are brighter
+than the midplane region.
+
+2018.12.15
