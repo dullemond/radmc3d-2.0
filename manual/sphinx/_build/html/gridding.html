@@ -191,7 +191,7 @@
 <span id="chap-gridding"></span><h1>More information about the gridding<a class="headerlink" href="#more-information-about-the-gridding" title="Permalink to this headline">¶</a></h1>
 <p>We already discussed the various types of grids in Section
 <a class="reference internal" href="basicstructure.html#sec-spatial-grid"><span class="std std-ref">The spatial grid</span></a>, and the grid input file structure is described in
-Section <span class="xref std std-ref">sec-grid-input</span>. In this chapter let us take a closer look
+Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>. In this chapter let us take a closer look
 at the gridding possibilities and things to take special care of.</p>
 <div class="section" id="regular-grids">
 <span id="sec-regular-grid"></span><h2>Regular grids<a class="headerlink" href="#regular-grids" title="Permalink to this headline">¶</a></h2>
@@ -239,7 +239,7 @@ You can choose any set of numbers <span class="math notranslate nohighlight">\(r
 grid, as long as this set of numbers is larger than 0 and monotonically
 increasing. The same is true for the <span class="math notranslate nohighlight">\(\theta\)</span>-grid and the <span class="math notranslate nohighlight">\(\phi\)</span>-grid.</p>
 <p>The precise way how to set up a regular grid using the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file is
-described in Section <span class="xref std std-ref">sec-amr-grid-regular</span>.  The input of any spatial
+described in Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-grid-regular"><span class="std std-ref">Regular grid</span></a>.  The input of any spatial
 variables (such as e.g. the dust density) uses the sequence of grid cells in
 the same order as the cells are specified in that <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file.</p>
 <p>For input and output data to file, for stuff on a regular grid, the order of
@@ -357,9 +357,9 @@ number. For instance, you can have a 6x4 base grid in 2-D, and refine cell
 (1,2) by one level, so that this cell splits into 2x2 subcells.</p>
 <p>Note that it is important to set which dimensions are ‘active’ and which
 are ‘non-active’. For instance, if you have a 1-D model with 100 cells and
-you tell RADMC-3D (see Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>) to make a base
+you tell RADMC-3D (see Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a>) to make a base
 grid of 100x1x1 cells, but you still keep all three dimensions ‘active’
-(see Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>), then a refinement of cell 1
+(see Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a>), then a refinement of cell 1
 (which is actually cell (1,1,1)) will split that cell into 2x2x2 subcells,
 i.e. it will also refine in y and z direction. Only if you explicitly
 switch the y and z dimensions off the AMR will split it into just 2
@@ -393,7 +393,7 @@ flexibility of oct-tree refinement and want to use a simpler kind of refinement,
 then you can use RADMC-3D’s alternative refinement mode: the layer-style AMR
 described in Section <a class="reference internal" href="#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a> below.</p>
 <p>The precise way how to set up such an oct-tree grid using the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
-file is described in Section <span class="xref std std-ref">sec-amr-grid-oct-tree</span>.  The input of any
+file is described in Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a>.  The input of any
 spatial variables (such as e.g. the dust density) uses the sequence of grid
 cells in the same order as the cells are specified in that <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
 file.</p>
@@ -463,7 +463,7 @@ the first layer and the last for the second layer. You may realize at this
 point that this will introduce a redundancy. See Subsection
 <a class="reference internal" href="#sec-layer-amr-redundancy"><span class="std std-ref">On the ‘successively regular’ kind of data storage, and its slight redundancy</span></a> for a discussion of this redundancy.</p>
 <p>The precise way how to set up such an oct-tree grid using the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
-file is described in Section <span class="xref std std-ref">sec-amr-grid-layered</span>.  The input of any
+file is described in Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-grid-layered"><span class="std std-ref">Layer-style AMR grid</span></a>.  The input of any
 spatial variables (such as e.g. the dust density) uses the sequence of grid
 cells in the same order as the cells are specified in that <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
 file.</p>
@@ -515,7 +515,7 @@ in-plane coordinates, while the <span class="math notranslate nohighlight">\(z\)
 thus have a 1-D grid in the <span class="math notranslate nohighlight">\(z\)</span>-coordinate, but no grid in <span class="math notranslate nohighlight">\(x\)</span>- or
 <span class="math notranslate nohighlight">\(y\)</span>-directions.</p>
 <p>You can make a 1-D plane-parallel model by setting some settings in the
-<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file. Please consult Section <span class="xref std std-ref">sec-grid-input</span> for the
+<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file. Please consult Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a> for the
 format of this file. The changes/settings you have to do are (see example
 below): (1) set the coordinate type number to 10, (2) set the <span class="math notranslate nohighlight">\(x\)</span> and
 <span class="math notranslate nohighlight">\(y\)</span> dimensions to non-active and (3) setting the cell interfaces in
@@ -573,7 +573,7 @@ multi-wavelength image of the atmosphere under a certain inclination
 <p>This make an SED at <span class="math notranslate nohighlight">\(\lambda=10\,\mu\)</span>. The image is, in fact, a 1x1 pixel
 multi-wavelength image. The <code class="docutils literal notranslate"><span class="pre">allwl</span></code> (which stands for ‘all wavelengths’) means
 that the spectral points are the same as those in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>
-file (see Section <span class="xref std std-ref">sec-wavelengths</span>).  You can also specify the wavelengths
+file (see Section <a class="reference internal" href="inputoutputfiles.html#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).  You can also specify the wavelengths
 in a different way, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="n">lambdarange</span> <span class="mi">5</span> <span class="mi">20</span> <span class="n">nlam</span> <span class="mi">10</span>
 </pre></div>
@@ -591,7 +591,7 @@ atmosphere from above with a flux, incident onto the atmosphere in a prescribed
 angle. This allows you to model, e.g., the Earth’s atmosphere being illuminated
 by the sun at a given time of the day.  This is done by providing an ascii file
 called <code class="docutils literal notranslate"><span class="pre">illum.inp</span></code> which has the following form (similar, but not identical,
-to the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file, see Section <span class="xref std std-ref">sec-stars</span>):</p>
+to the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file, see Section <a class="reference internal" href="inputoutputfiles.html#sec-stars"><span class="std std-ref">INPUT (mostly required): stars.inp</span></a>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>iformat                           &lt;=== Put this to 2 !
 nillum     nlam
 theta[1]      phi[1]
@@ -651,7 +651,7 @@ realistic than a truly 1-D plane-parallel model.</p>
 that photons can move out freely. The only photons that move into the domain
 from the outside are those from the interstellar radiation field (see Section
 <a class="reference internal" href="stars.html#sec-external-source"><span class="std std-ref">The interstellar radiation field: external source of energy</span></a>) and from any stars that are located outside of the
-computational domain (see Section <span class="xref std std-ref">sec-stars</span>). For some purposes it might,
+computational domain (see Section <a class="reference internal" href="inputoutputfiles.html#sec-stars"><span class="std std-ref">INPUT (mostly required): stars.inp</span></a>). For some purposes it might,
 however, be useful to have one or more of the six boundaries in 3-D to be
 closed. RADMC-3D offers the possibility, in cartesian coordinates, to convert
 the boundaries (each of the six separately) to a thermal boundary, i.e. a

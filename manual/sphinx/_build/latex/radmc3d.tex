@@ -496,7 +496,7 @@ rotated 30 degrees (along the polar axis, clockwise, i.e.the object rotating
 counter\sphinxhyphen{}clockwise), at wavelength \(\lambda=1000\,\mu\mathrm{m}\) (i.e. at 1
 millimeter wavelength). The file that contains the image is \sphinxcode{\sphinxupquote{image.out}}.
 It is a text file that can be read with the \sphinxcode{\sphinxupquote{simpleread.py}} tool in the
-directory \sphinxcode{\sphinxupquote{python/tools/}}.
+directory \sphinxcode{\sphinxupquote{python/radmc3d\_tools/}}.
 
 \end{enumerate}
 
@@ -683,7 +683,7 @@ plus some further directories.
 The first directory, \sphinxcode{\sphinxupquote{src/}}, contains the fortran\sphinxhyphen{}90 source code for
 RADMC\sphinxhyphen{}3D. The second directory, \sphinxcode{\sphinxupquote{python/}}, contains two sets of Python modules
 that are useful for model preparation and post\sphinxhyphen{}processing. One is a directory
-called \sphinxcode{\sphinxupquote{tools/}}, which contains some simple Python tools that might be
+called \sphinxcode{\sphinxupquote{radmc3d\_tools/}}, which contains some simple Python tools that might be
 useful. The other is a directory called \sphinxcode{\sphinxupquote{radmc3dPy/}}, which is a high\sphinxhyphen{}level
 stand\sphinxhyphen{}alone Python library developed by Attila Juhasz for RADMC\sphinxhyphen{}3D. The third
 directory contains a series of example models. The fourth directory,
@@ -799,8 +799,8 @@ directory. If not, it asks if you want it to automatically create one.
 
 \item {} 
 If yes, then it will copy all the files ending with \sphinxcode{\sphinxupquote{.py}} in
-the \sphinxcode{\sphinxupquote{python/tools/}} directory of the distribution to that
-\$HOME\textasciigrave{}\textasciigrave{}/bin/python/radmc3d\_tools/\textasciigrave{}\textasciigrave{} directory. This is useful to
+the \sphinxcode{\sphinxupquote{python/radmc3d\_tools/}} directory of the distribution to that
+\sphinxcode{\sphinxupquote{\$HOME/bin/python/radmc3d\_tools/}} directory. This is useful to
 allow you to make an \sphinxcode{\sphinxupquote{PYTHONPATH}} entry to allow python to find
 these python scripts automatically.
 
@@ -868,10 +868,10 @@ Did you type \sphinxcode{\sphinxupquote{make install}} in the \sphinxcode{\sphin
 directory? I mean, did you not forget the \sphinxcode{\sphinxupquote{install}} part?
 
 \item {} 
-Did you put \$HOME\textasciigrave{}\textasciigrave{}/bin/\textasciigrave{}\textasciigrave{} in your path (see above)?
+Did you put \sphinxcode{\sphinxupquote{\$HOME/bin/}} in your path (see above)?
 
 \item {} 
-If you just added \$HOME\textasciigrave{}\textasciigrave{}/bin/\textasciigrave{}\textasciigrave{} to your path, did you
+If you just added \sphinxcode{\sphinxupquote{\$HOME/bin/}} to your path, did you
 follow the rest of the procedure (either closing the current shell and
 opening a new shell or typing the \sphinxcode{\sphinxupquote{source}} and \sphinxcode{\sphinxupquote{rehash}} commands as
 described above)?
@@ -975,14 +975,14 @@ If this all brings you no further, please first ask your system administrators
 if they can help. If not, then please contact the author.
 
 
-\section{Installing the Python analysis tools}
-\label{\detokenize{installation:installing-the-python-analysis-tools}}\label{\detokenize{installation:sec-install-pythonscripts}}
+\section{Installing the simple Python analysis tools}
+\label{\detokenize{installation:installing-the-simple-python-analysis-tools}}\label{\detokenize{installation:sec-install-pythonscripts}}
 RADMC\sphinxhyphen{}3D offers (in addition to the model setup scripts in the \sphinxcode{\sphinxupquote{examples/}}
 subdirectories) two Python support libraries:
 \begin{enumerate}
 \sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
 \item {} 
-\sphinxcode{\sphinxupquote{python/tools/}}
+\sphinxcode{\sphinxupquote{python/radmc3d\_tools/}}
 
 This library contains only some bare\sphinxhyphen{}bones small Python scripts.
 
@@ -996,14 +996,14 @@ main author.
 \end{enumerate}
 
 
-\subsection{How to install and use the \sphinxstyleliteralintitle{\sphinxupquote{python/tools/}}}
-\label{\detokenize{installation:how-to-install-and-use-the-python-tools}}
-The installation of the \sphinxcode{\sphinxupquote{python/tools}} should be automatic when you
+\subsection{How to install and use the \sphinxstyleliteralintitle{\sphinxupquote{python/radmc3d\_tools/}}}
+\label{\detokenize{installation:how-to-install-and-use-the-python-radmc3d-tools}}
+The installation of the \sphinxcode{\sphinxupquote{python/radmc3d\_tools}} should be automatic when you
 type \sphinxcode{\sphinxupquote{make install}} in the \sphinxcode{\sphinxupquote{src/}} code directory (see
 above). It will copy the files to the \sphinxcode{\sphinxupquote{bin/python/radmc3d\_tools/}}
 directory in your home directory. If this directory does not exist, you
 will be asked if you want it to be created. If you confirm (typing ‘y’),
-then the files from the \sphinxcode{\sphinxupquote{python/tools/}} directory will be
+then the files from the \sphinxcode{\sphinxupquote{python/radmc3d\_tools/}} directory will be
 copied into the \sphinxcode{\sphinxupquote{\$HOME/bin/python/radmc3d\_tools/}} directory.
 
 Now you need to make sure that Python knows that these tools are there.
@@ -1045,7 +1045,7 @@ that \sphinxcode{\sphinxupquote{simpleread.py}} cannot be found, then please ask
 administrators how to solve this.
 
 You may ask why first copy these files to \sphinxcode{\sphinxupquote{\$HOME/bin/python/radmc3d\_tools/}}
-and not point PYTHONPATH directly to the \sphinxcode{\sphinxupquote{python/tools}} in your RADMC\sphinxhyphen{}3D
+and not point PYTHONPATH directly to the \sphinxcode{\sphinxupquote{python/radmc3d\_tools}} in your RADMC\sphinxhyphen{}3D
 distribution? The reason is that if you have multiple versions of RADMC\sphinxhyphen{}3D on
 your computer system, you always are assured that Python finds the python
 routines belonging to the latest installation of RADMC\sphinxhyphen{}3D (note: only assured if
@@ -1776,7 +1776,7 @@ Once this is done, we can analyze the results by reading the output files
 (see Chapter {\hyperref[\detokenize{inputoutputfiles:chap-input-files}]{\sphinxcrossref{\DUrole{std,std-ref}{Main input and output files of RADMC\sphinxhyphen{}3D}}}}). To help you reading and analyzing
 these output files you can use a set of Python routines that we created for
 the user (see Chapter {\hyperref[\detokenize{pythontools:chap-python-analysis-tools}]{\sphinxcrossref{\DUrole{std,std-ref}{Python analysis tool set}}}} and Section
-{\hyperref[\detokenize{installation:sec-install-pythonscripts}]{\sphinxcrossref{\DUrole{std,std-ref}{Installing the Python analysis tools}}}}). But here again, you are free to use any
+{\hyperref[\detokenize{installation:sec-install-pythonscripts}]{\sphinxcrossref{\DUrole{std,std-ref}{Installing the simple Python analysis tools}}}}). But here again, you are free to use any
 other plotting software and/or data postprocessing packages.
 
 \end{enumerate}
@@ -1852,7 +1852,7 @@ details of these files. To create a spectral energy distribution (SED):
 
 This will create a file \sphinxcode{\sphinxupquote{spectrum.out}}.  To analyze these data you can use the
 Python routines delivered with the code (see Chapter
-{\hyperref[\detokenize{pythontools:chap-python-analysis-tools}]{\sphinxcrossref{\DUrole{std,std-ref}{Python analysis tool set}}}} and Section {\hyperref[\detokenize{installation:sec-install-pythonscripts}]{\sphinxcrossref{\DUrole{std,std-ref}{Installing the Python analysis tools}}}}).
+{\hyperref[\detokenize{pythontools:chap-python-analysis-tools}]{\sphinxcrossref{\DUrole{std,std-ref}{Python analysis tool set}}}} and Section {\hyperref[\detokenize{installation:sec-install-pythonscripts}]{\sphinxcrossref{\DUrole{std,std-ref}{Installing the simple Python analysis tools}}}}).
 
 There is a file \sphinxcode{\sphinxupquote{Makefile}} in the directory. This is here only meant to make
 it easy to clean the directory. Type \sphinxcode{\sphinxupquote{make cleanmodel}} to clean all the output
@@ -8761,7 +8761,7 @@ function, so that you can experiment to get the nicest image output.
 \label{\detokenize{pythontools:python-analysis-tool-set}}\label{\detokenize{pythontools:chap-python-analysis-tools}}\label{\detokenize{pythontools::doc}}
 While the code RADMC\sphinxhyphen{}3D is written in fortran\sphinxhyphen{}90, there is an extensive set
 of tools written in Python that make it easier for the user to set up models
-and interpret results. See Section {\hyperref[\detokenize{installation:sec-install-pythonscripts}]{\sphinxcrossref{\DUrole{std,std-ref}{Installing the Python analysis tools}}}} for where
+and interpret results. See Section {\hyperref[\detokenize{installation:sec-install-pythonscripts}]{\sphinxcrossref{\DUrole{std,std-ref}{Installing the simple Python analysis tools}}}} for where
 they are and how they can be properly installed so that they are easy to
 use.
 
@@ -13243,6 +13243,10 @@ message only every \(10^5\) photon packages instead of every thousand.
 We removed the fortran\sphinxhyphen{}unformatted data format from the manual,
 and will remove it from the code in later versions. Use either text
 (ascii) format or binary format.
+
+\item {} 
+The manual is now converted to Sphinx, from which the LaTeX version
+and the HTML version can be automatically created.
 
 \end{itemize}
 

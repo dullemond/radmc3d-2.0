@@ -46,7 +46,7 @@ first example model, this is what you do:
    counter-clockwise), at wavelength :math:`\lambda=1000\,\mu\mathrm{m}` (i.e. at 1
    millimeter wavelength). The file that contains the image is ``image.out``.
    It is a text file that can be read with the ``simpleread.py`` tool in the
-   directory ``python/tools/``.
+   directory ``python/radmc3d_tools/``.
 
 If you experience troubles with the above steps, and you cannot fix it,
 please read the next chapters for more details. 

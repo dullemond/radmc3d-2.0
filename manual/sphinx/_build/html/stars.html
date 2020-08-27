@@ -288,7 +288,7 @@ in a model for RADMC-3D is to</p>
 <li><p>Prepare one or more <em>template stellar spectra</em>, for instance, one for each
 stellar type you wish to include. These must be specified in the file
 <code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code> (see Section
-<span class="xref std std-ref">sec-stellarsrc-templates</span>). Of course the more templates you have, the
+<a class="reference internal" href="inputoutputfiles.html#sec-stellarsrc-templates"><span class="std std-ref">INPUT (optional): stellarsrc_templates.inp</span></a>). Of course the more templates you have, the
 more memory consuming it becomes, which is of particular concern for models
 on large grids. You can of course also take a sum of various stellar types as
 a template. For instance, if we wish to include a ‘typical’ bulge stellar
@@ -300,7 +300,7 @@ i.e. how many stars of each template star are there per unit volume in
 each cell. The stellar density is, in fact, given as gram-of-star/cm:math:<cite>^3</cite>
 (i.e. not as number density of stars). The stellar spatial densities
 are specified in the file <code class="docutils literal notranslate"><span class="pre">stellarsrc_density.inp</span></code> (see
-Section <span class="xref std std-ref">sec-stellarsrc-density</span>).</p></li>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-stellarsrc-density"><span class="std std-ref">INPUT (optional): stellarsrc_density.inp</span></a>).</p></li>
 </ol>
 <p>Note that if you have a file <code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code> in your
 model directly, then the stellar sources are automatically switched on.
@@ -323,7 +323,7 @@ appreciable amount of radiation. They are therefore pure sources, not sinks.</p>
 RADMC-3D. This will take effect both in the making of spectra and images, as
 well as in the Monte Carlo module.</p>
 <p>The way to activate this is to make a file <code class="docutils literal notranslate"><span class="pre">external_source.inp</span></code>
-and fill it with the information needed (see Section <span class="xref std std-ref">sec-ext-src-inp</span>).</p>
+and fill it with the information needed (see Section <a class="reference internal" href="inputoutputfiles.html#sec-ext-src-inp"><span class="std std-ref">INPUT (optional): external_source.inp</span></a>).</p>
 <div class="section" id="role-of-the-external-radiation-field-in-monte-carlo-simulations">
 <h3>Role of the external radiation field in Monte Carlo simulations<a class="headerlink" href="#role-of-the-external-radiation-field-in-monte-carlo-simulations" title="Permalink to this headline">¶</a></h3>
 <p>For the Monte Carlo simulations this means that photons may be launched from
@@ -384,7 +384,7 @@ some internal process such as friction, magnetic reconnection, chemical
 reactions, etc. A nice example is the ‘viscous heating’ inside an
 accretion disk. This net heat source can be included in RADMC-3D by creating
 a file <code class="docutils literal notranslate"><span class="pre">heatsource.inp</span></code>. The format of the file is described in
-Section <span class="xref std std-ref">sec-heatsource</span>. It is the same as for other scalar fields.</p>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-heatsource"><span class="std std-ref">INPUT (optional): heatsource.inp</span></a>. It is the same as for other scalar fields.</p>
 <p>With this input file you have to specify in each cell how much energy per
 second per cubic centimeter is released in the form of heat. This energy
 will then be emitted as radiation by the dust. The way the code does this in

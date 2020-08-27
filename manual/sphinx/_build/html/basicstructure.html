@@ -469,7 +469,7 @@ mirror copy.</p>
 </ul>
 <p>In all cases these structured grids allow for oct-tree-style grid refinement, or
 its simplified version: the layer-style grid refinement. See Section
-<span class="xref std std-ref">sec-grid-input</span> and Chapter <a class="reference internal" href="gridding.html#chap-gridding"><span class="std std-ref">More information about the gridding</span></a> for more information
+<a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a> and Chapter <a class="reference internal" href="gridding.html#chap-gridding"><span class="std std-ref">More information about the gridding</span></a> for more information
 about the gridding and the (adaptive) mesh refinement (AMR).</p>
 </div>
 <div class="section" id="computations-that-radmc-3d-can-perform">
@@ -502,7 +502,7 @@ call <code class="docutils literal notranslate"><span class="pre">radmc3d</span>
 spectral wavelengths points at will, and you can specify these in various
 ways described in Section <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>.  Most easily you
 can create a file called <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> (see Section
-<span class="xref std std-ref">sec-camera-wavelengths</span>) and call RADMC-3D using <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">spectrum</span>
+<a class="reference internal" href="inputoutputfiles.html#sec-camera-wavelengths"><span class="std std-ref">INPUT (optional): camera_wavelength_micron.inp</span></a>) and call RADMC-3D using <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">spectrum</span>
 <span class="pre">loadlambda</span></code>. In all these cases the vantage point (where is the observer)
 can of course be set as well, see Section <a class="reference internal" href="dustradtrans.html#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a> and
 Chapter <a class="reference internal" href="imagesspectra.html#chap-images-spectra"><span class="std std-ref">Making images and spectra</span></a>.</p>
@@ -551,20 +551,20 @@ is (for most part) a cell-based code, i.e. your grid devides space in cells and
 you have to tell RADMC-3D what the average densities of dust and/or gas are in
 these cells.</p>
 <p>The structure of the grid is specified in a file <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> (see Section
-<span class="xref std std-ref">sec-grid-input</span>). All the other data, such as dust density and/or gas
+<a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>). All the other data, such as dust density and/or gas
 density are specified in other files, but all assume that the grid is given by
 <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>.</p>
 <p>We can also specify the locations and properties of one or more stars in the
-model. This is done in the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> (see Section <span class="xref std std-ref">sec-stars</span>) file.</p>
+model. This is done in the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> (see Section <a class="reference internal" href="inputoutputfiles.html#sec-stars"><span class="std std-ref">INPUT (mostly required): stars.inp</span></a>) file.</p>
 <p>Now suppose we want to compute the appearance of our model in dust continuum. We
 will describe this in detail in Chapter <a class="reference internal" href="dustradtrans.html#chap-dust-transfer"><span class="std std-ref">Dust continuum radiative transfer</span></a>, but let us
 give a very rough idea here. We write, in addition to the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> and
 <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> files, a file <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> which specifies the density of
-dust in each cell (see Section <span class="xref std std-ref">sec-dustdens</span>).  We also must write the
-main input file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> (see Section <span class="xref std std-ref">sec-radmc-inp</span>), but we can
+dust in each cell (see Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>).  We also must write the
+main input file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> (see Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>), but we can
 leave it empty for now. We must give RADMC-3D a dust opacity table in the files
 <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> and for instance <code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code> (see Section
-<span class="xref std std-ref">sec-opacities</span>). And finally, we have to give RADMC-3D a table of discrete
+<a class="reference internal" href="inputoutputfiles.html#sec-opacities"><span class="std std-ref">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</span></a>). And finally, we have to give RADMC-3D a table of discrete
 wavelengths in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> that it will use to perform
 its calculations on. We then call the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code with the keyword
 <code class="docutils literal notranslate"><span class="pre">mctherm</span></code> (see Chapter <a class="reference internal" href="dustradtrans.html#chap-dust-transfer"><span class="std std-ref">Dust continuum radiative transfer</span></a>) to tell it to perform a
@@ -577,7 +577,7 @@ which is a list of fluxes at the discrete wavelengths we specified in
 energy distribution of our model. We could also make an image at wavelength 10
 <span class="math notranslate nohighlight">\(\mu\)</span> (see Section
 <a class="reference internal" href="imagesspectra.html#sec-images"><span class="std std-ref">Basics of image making with RADMC-3D</span></a>). This will write out a file <code class="docutils literal notranslate"><span class="pre">image.out</span></code> containing the
-image data (see Section <span class="xref std std-ref">sec-image-out</span>).</p>
+image data (see Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a>).</p>
 <p>As you see, RADMC-3D reads all its information from tables in various
 files. Since you don’t want to make large tables by hand, you will have to write
 a little computer program that generates these tables automatically.  You can do
@@ -629,7 +629,7 @@ model directory, we call <code class="docutils literal notranslate"><span class=
 (see Chapter <a class="reference internal" href="inputoutputfiles.html#chap-input-files"><span class="std std-ref">Main input and output files of RADMC-3D</span></a>). To help you reading and analyzing
 these output files you can use a set of Python routines that we created for
 the user (see Chapter <a class="reference internal" href="pythontools.html#chap-python-analysis-tools"><span class="std std-ref">Python analysis tool set</span></a> and Section
-<a class="reference internal" href="installation.html#sec-install-pythonscripts"><span class="std std-ref">Installing the Python analysis tools</span></a>). But here again, you are free to use any
+<a class="reference internal" href="installation.html#sec-install-pythonscripts"><span class="std std-ref">Installing the simple Python analysis tools</span></a>). But here again, you are free to use any
 other plotting software and/or data postprocessing packages.</p></li>
 </ol>
 </div>
@@ -669,7 +669,7 @@ files are created, type the following in the shell:</p>
 tabulated form. This is a file that you as the user should provide to the
 RADMC-3D code package. The file <code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code> is merely an example,
 which is an amorphous spherical silicate grain with radius 0.1 micron. But see
-Section <span class="xref std std-ref">sec-opacities</span> for more information about the opacities.</p>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-opacities"><span class="std std-ref">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</span></a> for more information about the opacities.</p>
 <p>Now that the input files are created, we must run <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">mctherm</span>
 </pre></div>
@@ -688,7 +688,7 @@ details of these files. To create a spectral energy distribution (SED):</p>
 </div>
 <p>This will create a file <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code>.  To analyze these data you can use the
 Python routines delivered with the code (see Chapter
-<a class="reference internal" href="pythontools.html#chap-python-analysis-tools"><span class="std std-ref">Python analysis tool set</span></a> and Section <a class="reference internal" href="installation.html#sec-install-pythonscripts"><span class="std std-ref">Installing the Python analysis tools</span></a>).</p>
+<a class="reference internal" href="pythontools.html#chap-python-analysis-tools"><span class="std std-ref">Python analysis tool set</span></a> and Section <a class="reference internal" href="installation.html#sec-install-pythonscripts"><span class="std std-ref">Installing the simple Python analysis tools</span></a>).</p>
 <p>There is a file <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> in the directory. This is here only meant to make
 it easy to clean the directory. Type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">cleanmodel</span></code> to clean all the output
 from the radmc3d code. Type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">cleanall</span></code> to clean the directory back to

@@ -38,7 +38,7 @@ close (FILE) ;
 `chmod u+rwx $radmc3dlnk` ;
 #
 # The following is only necessary if you want to use the auxiliary Python 
-# tools in the python/tools/ directory. You can remove or comment-out the 
+# tools in the python/radmc3d_tools/ directory. You can remove or comment-out the 
 # following lines if you do not want to use these tools.
 #
 # NOTE: For the radmc3dPy package (in the python/radmc3dPy/ directory), 
@@ -71,6 +71,6 @@ if(-e $python) {
     if(-e $radmc3d) {
         print "Found the ~/bin/python/radmc3d_tools directory. Copying current python radmc3d tools there.\n" ;
         system("rm -f $radmc3d/*.pyc") ;
-        system("cp -r ../python/tools/* $radmc3d/") ;
+        system("cp -r ../python/radmc3d_tools/* $radmc3d/") ;
     }
 }

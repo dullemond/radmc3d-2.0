@@ -259,7 +259,7 @@ net sources of energy can be included:</p>
 <ul class="simple">
 <li><p><em>Stars:</em> You can specify any number of individual stars: their
 position, and their spectrum and luminosity (See Section
-<span class="xref std std-ref">sec-stars</span>). This is the most commonly used source of luminosity, and
+<a class="reference internal" href="inputoutputfiles.html#sec-stars"><span class="std std-ref">INPUT (mostly required): stars.inp</span></a>). This is the most commonly used source of luminosity, and
 as a beginning user we recommend to use only this for now.</p></li>
 <li><p><em>Continuum stellar source:</em> For simulations of galaxies it would
 require by far too many individual stars to properly include the input
@@ -276,7 +276,7 @@ progress… Not yet working.</em></p></li>
 otherwise the equilibrium dust temperature would be everywhere 0.</p>
 <p>The next step is that this total luminosity is divided into <code class="docutils literal notranslate"><span class="pre">nphot</span></code> packages,
 where <code class="docutils literal notranslate"><span class="pre">nphot</span></code> is 100000 by default, but can be set to any value by the user
-(see the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> described in Section <span class="xref std std-ref">sec-radmc-inp</span>). Then
+(see the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> described in Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>). Then
 these photon packages are emitted by these sources one-by-one. As they move
 through the grid they may scatter off dust grains and thus change their
 direction. They may also get absorbed by the dust. If that happens, the photon
@@ -370,7 +370,7 @@ thermal Monte Carlo simulation and go straight to the creation of images or
 spectra.</p>
 <p>The basic command to make a spectrum at the global grid of wavelength
 (specified in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>,
-see Section <span class="xref std std-ref">sec-wavelengths</span>) is:</p>
+see Section <a class="reference internal" href="inputoutputfiles.html#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>) is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">sed</span>
 </pre></div>
 </div>
@@ -449,15 +449,15 @@ before using the OpenMP parallelized thermal Monte Carlo version (cf. Section
 or <a class="reference internal" href="#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a>, you must give RADMC-3D the following
 data:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">amr_grid.inp:</span></code> The grid file (see Section <span class="xref std std-ref">sec-grid-input</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amr_grid.inp:</span></code> The grid file (see Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp:</span></code> The global wavelength file (see Section
-<span class="xref std std-ref">sec-wavelengths</span>).</p></li>
+<a class="reference internal" href="inputoutputfiles.html#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">stars.inp:</span></code> The locations and properties of stars (see Section
-<span class="xref std std-ref">sec-stars</span>).</p></li>
+<a class="reference internal" href="inputoutputfiles.html#sec-stars"><span class="std std-ref">INPUT (mostly required): stars.inp</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dust_density.inp:</span></code> The spatial distribution of dust on the grid (see
-Section <span class="xref std std-ref">sec-dustdens</span>).</p></li>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dustopac.inp:</span></code> A file with overall information about the various species of
-dust in the model (see Section <span class="xref std std-ref">sec-opacities</span>).  One of the main pieces
+dust in the model (see Section <a class="reference internal" href="inputoutputfiles.html#sec-opacities"><span class="std std-ref">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</span></a>).  One of the main pieces
 of information here is (a) how many dust species are included in the model
 and (b) the tag names of these dust species (see <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
 below). The file <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> must contain exactly this number of
@@ -465,7 +465,7 @@ density distributions: one density distribution for each dust species.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp:</span></code> One or more dust opacity files (where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> should in
 fact be a tag name you define, for instance <code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code>). The
 labels are listed in the <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file. ee Section
-<span class="xref std std-ref">sec-opacities</span> for more information.</p></li>
+<a class="reference internal" href="inputoutputfiles.html#sec-opacities"><span class="std std-ref">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</span></a> for more information.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span> <span class="pre">(optional):</span></code> This file is only needed if you
 want to create a spectrum at a special set of wavelengths (otherwise use
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">sed</span></code>).</p></li>
@@ -493,7 +493,7 @@ as a function of the <span class="math notranslate nohighlight">\((x,y,z)\)</spa
 (spherical) coordinates at frequencies <span class="math notranslate nohighlight">\(\nu_i\equiv 10^4c/\lambda_i\)</span> where
 <span class="math notranslate nohighlight">\(\lambda_i\)</span> are the wavelengths (in <span class="math notranslate nohighlight">\(\mu\)</span> (same format as the file
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> which is described in Section
-<span class="xref std std-ref">sec-wavelengths</span>). The results of this computation can be interesting for,
+<a class="reference internal" href="inputoutputfiles.html#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). The results of this computation can be interesting for,
 for instance, models of photochemistry.</p>
 <p>The file that is produced by <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">mcmono</span></code> is called
 <code class="docutils literal notranslate"><span class="pre">mean_intensity.out</span></code> and has the following form:</p>
@@ -528,7 +528,7 @@ cross section. For instance, if you want to compute the degree to which dust
 shields molecular photodissociation lines in the UV, then you only need to
 compute the total photodissociation rate, which is an integral of the
 photodissociation cross section times the radiation field. In Section
-<span class="xref std std-ref">sec-compute-radiation-integrals</span> it will be explained how you can create a
+<a class="reference internal" href="internalsetup.html#sec-compute-radiation-integrals"><span class="std std-ref">Using the userdef module to compute integrals of J_\nu</span></a> it will be explained how you can create a
 userdef subroutine (see Chapter <a class="reference internal" href="internalsetup.html#chap-internal-setup"><span class="std std-ref">Modifying RADMC-3D: Internal setup and user-specified radiative processes</span></a>) that will do this
 for you in a memory-saving way.</p>
 <p>There is an important parameter for this Monochromatic Monte Carlo that you
@@ -587,7 +587,7 @@ formula.</p>
 <li><p><em>Anisotropic scattering using tabulated phase function</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=3</span></code>):</p>
 <p>To treat scattering using a tabulated phase function, you must specify the
 dust opacities using <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the simpler
-<code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> files (see Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>). You
+<code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> files (see Section <a class="reference internal" href="inputoutputfiles.html#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>). You
 must also set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 3 or higher.</p>
 </li>
 <li><p><em>Anisotropic scattering with polarization for last scattering</em> (<code class="docutils literal notranslate"><span class="pre">scattering_mode=4</span></code>):</p>
@@ -595,7 +595,7 @@ must also set <code class="docutils literal notranslate"><span class="pre">scatt
 you need to set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 4 or higher, and you must
 specify the full dust opacity and scattering matrix using the
 <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the simpler <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
-files (see Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>). If <code class="docutils literal notranslate"><span class="pre">scattering_mode=4</span></code>
+files (see Section <a class="reference internal" href="inputoutputfiles.html#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>). If <code class="docutils literal notranslate"><span class="pre">scattering_mode=4</span></code>
 the full polarization is only done upon the last scattering before light
 reaches the observer (i.e. it is only treated in the computation of the
 scattering source function that is used for the images, but it is not used for
@@ -608,7 +608,7 @@ scattering.</p>
 particles, you need to set <code class="docutils literal notranslate"><span class="pre">scattering_mode_max</span></code> is set to 5, and you must
 specify the full dust opacity and scattering matrix using the
 <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> files instead of the simpler <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>
-files (see Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>).  See Section
+files (see Section <a class="reference internal" href="inputoutputfiles.html#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>).  See Section
 <a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a> for more information about polarized
 scattering.  end{enumerate} Please refer to Sections
 <a class="reference internal" href="#sec-scat-phasefunc"><span class="std std-ref">Scattering phase functions</span></a> and <a class="reference internal" href="#sec-polarized-scattering"><span class="std std-ref">Polarization, Stokes vectors and full phase-functions</span></a> for more
@@ -724,7 +724,7 @@ phase function for isotropic scattering.</p>
 tabulated by you. You have to provide the tabulated phase function as the
 <span class="math notranslate nohighlight">\(Z_{11}(\theta)\)</span> scattering matrix element for a tabulated set of <span class="math notranslate nohighlight">\(\theta_i\)</span>
 values, and this is done in a file <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> (see
-Section <span class="xref std std-ref">sec-dustkapscatmat-files</span> and note that for <code class="docutils literal notranslate"><span class="pre">scattering_mode=3</span></code>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a> and note that for <code class="docutils literal notranslate"><span class="pre">scattering_mode=3</span></code>
 the other <span class="math notranslate nohighlight">\(Z_{ij}\)</span> elements can be kept 0 as they are
 of no consequence). The relation between <span class="math notranslate nohighlight">\(Z_{11}(\theta)\)</span> and
 <span class="math notranslate nohighlight">\(\Phi(\mu)\)</span> is:</p>
@@ -1212,7 +1212,7 @@ location in space watching the radiation. The radiation moves toward the
 reader. We call the second panel (<span class="math notranslate nohighlight">\(Q=+I\)</span>) ‘horizontally polarized’, the
 third panel (<span class="math notranslate nohighlight">\(U=+I\)</span>) ‘diagonally polarized by +45 degrees’ and the
 fourth panel (<span class="math notranslate nohighlight">\(V=+I\)</span>) ‘right-handed circularly polarized’. In the
-images produced by RADMC-3D (<code class="docutils literal notranslate"><span class="pre">image.out</span></code>, see Section <span class="xref std std-ref">sec-image-out</span>
+images produced by RADMC-3D (<code class="docutils literal notranslate"><span class="pre">image.out</span></code>, see Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a>
 and Fig.~:ref:<cite>fig-cameraorient</cite>) the <span class="math notranslate nohighlight">\(x'\)</span> direction is the horizontal
 direction and the <span class="math notranslate nohighlight">\(y'\)</span> direction is the vertical direction.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
@@ -1600,7 +1600,7 @@ instance, the Mie code of Bohren and Huffman (see Chapter
 <a class="reference internal" href="opacitieswww.html#chap-acquiring-opacities"><span class="std std-ref">Acquiring opacities from the WWW</span></a> for RADMC-3D compliant wrappers around that
 code), and then provide them to RADMC-3D through a file called
 <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> (where <code class="docutils literal notranslate"><span class="pre">xxx</span></code> is the name of the dust species) which
-is described in Section <span class="xref std std-ref">sec-dustkapscatmat-files</span>.  This file provides not
+is described in Section <a class="reference internal" href="inputoutputfiles.html#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>.  This file provides not
 only the matrix elements, but also the <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span>,
 <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> and <span class="math notranslate nohighlight">\(g\)</span> (the anisotropy factor). RADMC-3D
 will then internally check that Eqs.(<span class="xref std std-ref">eq-scatmat-selfconsist-kappa</span>,
@@ -1621,7 +1621,7 @@ adjust the signs.</p>
 <p>In spherical coordinates it is possible in RADMC-3D to set up axially symmetric
 models. The trick is simply to set the number of <span class="math notranslate nohighlight">\(\phi\)</span> coordinate points
 <code class="docutils literal notranslate"><span class="pre">nphi</span></code> to 1 and to switch off the <span class="math notranslate nohighlight">\(\phi\)</span>-dimension in the grid (see
-Section <span class="xref std std-ref">sec-grid-input</span>). For isotropic scattering this mode has always
+Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>). For isotropic scattering this mode has always
 been implemented. But for anisotropic scattering things become more complex. For
 such a model the scattering remains a fully 3-D problem: the scattering source
 function has to be stored not only as a function of <span class="math notranslate nohighlight">\(r\)</span> and

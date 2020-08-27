@@ -91,8 +91,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#compiling-the-code-with-make">Compiling the code with ‘make’</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-install-perl-script">The install.perl script</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-to-do-if-this-all-does-not-work">What to do if this all does not work?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-the-python-analysis-tools">Installing the Python analysis tools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-install-and-use-the-python-tools">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-simple-python-analysis-tools">Installing the simple Python analysis tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-and-use-the-python-radmc3d-tools">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-install-and-use-the-python-radmc3dpy-library">How to install and use the <code class="docutils literal notranslate"><span class="pre">python/radmc3dPy</span></code> library</a></li>
 </ul>
 </li>
@@ -251,7 +251,7 @@ by <code class="docutils literal notranslate"><span class="pre">rehash</span></c
 mentioned <code class="docutils literal notranslate"><span class="pre">bin/</span></code> directory, i.e.a <code class="docutils literal notranslate"><span class="pre">$HOME/bin/python/</span></code>
 directory. If not, it asks if you want it to automatically create one.</p></li>
 <li><p>If yes, then it will copy all the files ending with <code class="docutils literal notranslate"><span class="pre">.py</span></code> in
-the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code> directory of the distribution to that
+the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/</span></code> directory of the distribution to that
 $HOME``/bin/python/radmc3d_tools/`` directory. This is useful to
 allow you to make an <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> entry to allow python to find
 these python scripts automatically.</p></li>
@@ -377,12 +377,12 @@ RADMC-3D.</p></li>
 <p>If this all brings you no further, please first ask your system administrators
 if they can help. If not, then please contact the author.</p>
 </div>
-<div class="section" id="installing-the-python-analysis-tools">
-<span id="sec-install-pythonscripts"></span><h2>Installing the Python analysis tools<a class="headerlink" href="#installing-the-python-analysis-tools" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-the-simple-python-analysis-tools">
+<span id="sec-install-pythonscripts"></span><h2>Installing the simple Python analysis tools<a class="headerlink" href="#installing-the-simple-python-analysis-tools" title="Permalink to this headline">¶</a></h2>
 <p>RADMC-3D offers (in addition to the model setup scripts in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code>
 subdirectories) two Python support libraries:</p>
 <ol class="arabic">
-<li><p><code class="docutils literal notranslate"><span class="pre">python/tools/</span></code></p>
+<li><p><code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/</span></code></p>
 <p>This library contains only some bare-bones small Python scripts.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">python/radmc3dPy/</span></code></p>
@@ -391,14 +391,14 @@ Attila Juhasz, and further maintained together with the RADMC-3D
 main author.</p>
 </li>
 </ol>
-<div class="section" id="how-to-install-and-use-the-python-tools">
-<h3>How to install and use the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code><a class="headerlink" href="#how-to-install-and-use-the-python-tools" title="Permalink to this headline">¶</a></h3>
-<p>The installation of the <code class="docutils literal notranslate"><span class="pre">python/tools</span></code> should be automatic when you
+<div class="section" id="how-to-install-and-use-the-python-radmc3d-tools">
+<h3>How to install and use the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/</span></code><a class="headerlink" href="#how-to-install-and-use-the-python-radmc3d-tools" title="Permalink to this headline">¶</a></h3>
+<p>The installation of the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools</span></code> should be automatic when you
 type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> code directory (see
 above). It will copy the files to the <code class="docutils literal notranslate"><span class="pre">bin/python/radmc3d_tools/</span></code>
 directory in your home directory. If this directory does not exist, you
 will be asked if you want it to be created. If you confirm (typing ‘y’),
-then the files from the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code> directory will be
+then the files from the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/</span></code> directory will be
 copied into the <code class="docutils literal notranslate"><span class="pre">$HOME/bin/python/radmc3d_tools/</span></code> directory.</p>
 <p>Now you need to make sure that Python knows that these tools are there.
 In Python here are two ways how you can make sure that Python automatically
@@ -430,7 +430,7 @@ the basic Python tools of RADMC-3D directly. To test this, try typing <code clas
 that <code class="docutils literal notranslate"><span class="pre">simpleread.py</span></code> cannot be found, then please ask your system
 administrators how to solve this.</p>
 <p>You may ask why first copy these files to <code class="docutils literal notranslate"><span class="pre">$HOME/bin/python/radmc3d_tools/</span></code>
-and not point PYTHONPATH directly to the <code class="docutils literal notranslate"><span class="pre">python/tools</span></code> in your RADMC-3D
+and not point PYTHONPATH directly to the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools</span></code> in your RADMC-3D
 distribution? The reason is that if you have multiple versions of RADMC-3D on
 your computer system, you always are assured that Python finds the python
 routines belonging to the latest installation of RADMC-3D (note: only assured if

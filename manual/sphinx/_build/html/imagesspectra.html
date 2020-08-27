@@ -226,7 +226,7 @@ An image can now be made with a simple call to
 </pre></div>
 </div>
 <p>This makes an image of the model at wavelength <span class="math notranslate nohighlight">\(\lambda=10\mu\)</span>. We refer to Section
-<span class="xref std std-ref">sec-image-out</span> for details of this file and how to interpret the
+<a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a> for details of this file and how to interpret the
 content. See Chapter <a class="reference internal" href="pythontools.html#chap-python-analysis-tools"><span class="std std-ref">Python analysis tool set</span></a> for an extensive Python tools
 that make it easy to read and handle these files. The vantage point is
 at infinity at a default inclination of 0, i.e. pole-on view. You can
@@ -361,7 +361,7 @@ have to tell RADMC-3D to do this by adding <code class="docutils literal notrans
 </div>
 <p>The definitions of the Stokes parameters (orientation etc) can be found in
 Section <a class="reference internal" href="dustradtrans.html#sec-definitions-stokes"><span class="std std-ref">Definitions and conventions for Stokes vectors</span></a> and the format of <code class="docutils literal notranslate"><span class="pre">image.out</span></code> in this
-case can be found in Section <span class="xref std std-ref">sec-image-out</span>.</p>
+case can be found in Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a>.</p>
 <p>Note: All the above commands call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> separately. If it needs to load a
 large model (i.e. a model with many cells), then the loading may take a long
 time. If you want to make many images in a row, this may take too much
@@ -382,7 +382,7 @@ example on just one of these methods. Type, for instance,</p>
 </div>
 <p>This will create 10 images at once, all with the same viewing perspective, but
 at 10 wavelengths regularly distributed between 5 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m.  All images are written into a single file, <code class="docutils literal notranslate"><span class="pre">image.out</span></code> (See
-Section <span class="xref std std-ref">sec-image-out</span> for its format).</p>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a> for its format).</p>
 <p>In Python you simply type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="n">image</span>
 <span class="n">a</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">readImage</span><span class="p">()</span>
@@ -418,7 +418,7 @@ see Section <a class="reference internal" href="#sec-image-refinement"><span cla
 and make a spectrum with wavelength points equal to those listed in the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.</p>
 <p>The output will be a file called <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> (see Section
-<span class="xref std std-ref">sec-output-spectrum-out</span>).</p>
+<a class="reference internal" href="inputoutputfiles.html#sec-output-spectrum-out"><span class="std std-ref">OUTPUT: spectrum.out</span></a>).</p>
 <p>You can also make a spectrum on a set of wavelength points of your own
 choice. There are multiple ways by which you can specify the set of
 frequencies/wavelength points for which to make the spectrum: they are described
@@ -528,7 +528,7 @@ images.</p>
 size and circular geometry of a ‘beam’, RADMC-3D allows you to make spectra with
 a simplistic circular mask, the radius of which can be specified as a function
 of wavelength in the file <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code> (see Section
-<span class="xref std std-ref">sec-aperture-info-file</span>).  This file should contain a table of mask radii
+<a class="reference internal" href="inputoutputfiles.html#sec-aperture-info-file"><span class="std std-ref">INPUT: aperture_info.inp</span></a>).  This file should contain a table of mask radii
 at various wavelengths, and when making a spectrum with the command-line keyword
 <code class="docutils literal notranslate"><span class="pre">useapert</span></code> the mask radii will be found from this table by interpolation. In
 other words: the wavelength points of the <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code> file do not have
@@ -603,14 +603,14 @@ the <code class="docutils literal notranslate"><span class="pre">wavelength_micr
 <p>By giving the command <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code> on the command line, <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will search
 for the file <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code>. This file contains integers selecting the
 wavelengths from the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. The file is described in
-Section <span class="xref std std-ref">sec-color-inus</span>.</p>
+Section <a class="reference internal" href="inputoutputfiles.html#sec-color-inus"><span class="std std-ref">The color_inus.inp file (required with comm-line option ‘loadcolor’)</span></a>.</p>
 </div>
 <div class="section" id="using-loadlambda">
 <h3>Using <code class="docutils literal notranslate"><span class="pre">loadlambda</span></code><a class="headerlink" href="#using-loadlambda" title="Permalink to this headline">¶</a></h3>
 <p>By giving the command <code class="docutils literal notranslate"><span class="pre">loadlambda</span></code> on the command line, <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will
 search for the file <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code>. This file contains a list
 of wavelengths in micron which constitute the grid in wavelength. This file is
-described in Section <span class="xref std std-ref">sec-camera-wavelengths</span>.</p>
+described in Section <a class="reference internal" href="inputoutputfiles.html#sec-camera-wavelengths"><span class="std std-ref">INPUT (optional): camera_wavelength_micron.inp</span></a>.</p>
 </div>
 <div class="section" id="using-iline-imolspec-etc-for-when-lines-are-included">
 <h3>Using <code class="docutils literal notranslate"><span class="pre">iline</span></code>, <code class="docutils literal notranslate"><span class="pre">imolspec</span></code> etc (for when lines are included)<a class="headerlink" href="#using-iline-imolspec-etc-for-when-lines-are-included" title="Permalink to this headline">¶</a></h3>

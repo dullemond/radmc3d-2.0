@@ -83,7 +83,7 @@ def surface(ff,x=None,y=None,rstride=None,cstride=None,stride=None,
     if zlabel is not None: ax.set_zlabel(zlabel)
     return fig,ax
 
-def image(ff,x=None,y=None,aspect='auto',cmap=None,range=None):
+def image(ff,x=None,y=None,aspect='equal',cmap=None,range=None):
     f = np.squeeze(ff)
     fig = plt.figure()
     ax = fig.add_subplot(111)

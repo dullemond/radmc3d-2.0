@@ -159,7 +159,7 @@ plus some further directories.
 The first directory, ``src/``, contains the fortran-90 source code for
 RADMC-3D. The second directory, ``python/``, contains two sets of Python modules
 that are useful for model preparation and post-processing. One is a directory
-called ``tools/``, which contains some simple Python tools that might be
+called ``radmc3d_tools/``, which contains some simple Python tools that might be
 useful. The other is a directory called ``radmc3dPy/``, which is a high-level
 stand-alone Python library developed by Attila Juhasz for RADMC-3D. The third
 directory contains a series of example models. The fourth directory,

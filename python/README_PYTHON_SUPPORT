@@ -20,7 +20,14 @@ There are two main ways to interact with RADMC-3D through Python:
    be maintained by Cornelis Dullemond. The radmc3dPy package has its
    own documentation, independent of the main RADMC-3D documentation.
 
-In addition, in the ./tools/ directory you can find some additional
+In addition, in the ./radmc3d_tools/ directory you can find some additional
 tools that might, or might not, be useful for you.
+
+Furthermore, the ./radmc3d_tools/ directory contains the following two
+simple libraries that you could use as an alternative to radmc3dPy,
+mostly for educational purposes:
+
+ - simpleread.py: A set of bare-bones reading functions for RADMC-3D.
+ - simpleplot.py: A set of routines for plotting that might be useful.
 
 2020.08.22

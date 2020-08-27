@@ -790,8 +790,8 @@ use instead of the ascii version). For each molecular/atomic species listed in
 the <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> file there must be a corresponding <code class="docutils literal notranslate"><span class="pre">numberdens_XXX.inp</span></code>
 file. The structure of the file is very similar (though not identical) to the
 structure of the dust density input file <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> (Section
-<span class="xref std std-ref">sec-dustdens</span>). For the precise way to address the various cells in the
-different AMR modes, we refer to Section <span class="xref std std-ref">sec-dustdens</span>, where this is
+<a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>). For the precise way to address the various cells in the
+different AMR modes, we refer to Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>, where this is
 described in detail.</p>
 <p>For formatted style (<code class="docutils literal notranslate"><span class="pre">numberdens_XXX.inp</span></code>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
@@ -812,7 +812,7 @@ version of these files, which are more compact, and which you can use instead of
 the ascii versions). The structure of this file is identical to that described
 in Section <a class="reference internal" href="#sec-mol-numdensity"><span class="std std-ref">INPUT: The number density of each molecular species</span></a>, but of course with number density replaced
 by gas temperature in Kelvin. For the precise way to address the various cells
-in the different AMR modes, we refer to Section <span class="xref std std-ref">sec-dustdens</span>, where this
+in the different AMR modes, we refer to Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>, where this
 is described in detail.</p>
 <p>Note: Instead of literally specifying the gas temperature you can also tell
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to copy the dust temperature (if it know it) into the gas
@@ -838,7 +838,7 @@ positive <span class="math notranslate nohighlight">\(v_\theta\)</span> points d
 positive <span class="math notranslate nohighlight">\(v_\phi\)</span> means velocity in counter-clockwise direction in the
 <span class="math notranslate nohighlight">\(x,y\)</span>-plane.</p>
 <p>For the precise way to address the various cells in the different AMR modes,
-we refer to Section <span class="xref std std-ref">sec-dustdens</span>, where this is described in detail.</p>
+we refer to Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>, where this is described in detail.</p>
 </div>
 <div class="section" id="input-the-local-microturbulent-broadening-optional">
 <span id="sec-turb-broadening"></span><h3>INPUT: The local microturbulent broadening (optional)<a class="headerlink" href="#input-the-local-microturbulent-broadening-optional" title="Permalink to this headline">¶</a></h3>
@@ -850,7 +850,7 @@ broadening is used) but if you want to specify it, you can do so in the file
 version of these files, which are more compact, and which you can use instead of
 the ascii versions). The file format is the same structure as described in
 Section <a class="reference internal" href="#sec-mol-numdensity"><span class="std std-ref">INPUT: The number density of each molecular species</span></a>. For the precise way to address the various
-cells in the different AMR modes, we refer to Section <span class="xref std std-ref">sec-dustdens</span>, where
+cells in the different AMR modes, we refer to Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>, where
 this is described in detail.</p>
 <p>Here is the way it is included into the line profile:</p>
 <div class="math notranslate nohighlight">
@@ -1214,7 +1214,7 @@ of the collision partners, e.g.~``numberdens_p-h2.inp``
 <li><p>Make sure to link the rate tables to the number density
 files in <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> (see Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a>).</p></li>
 <li><p>Set the <code class="docutils literal notranslate"><span class="pre">lines_mode=4</span></code> in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>
-file (see Section <span class="xref std std-ref">sec-radmc-inp</span>).</p></li>
+file (see Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>).</p></li>
 </ul>
 <p><em>NOTE: Currently this method does not yet include radiative pumping
 by stellar radiation.</em></p>
@@ -1298,10 +1298,10 @@ reason that the file in fact contains a list of levels that are included (the
 <p>After these header lines follows the actual data. Each line contains the
 populations at a spatial cell in units of cm:math:<cite>^{-3}</cite>.</p>
 <p>This file format is a generalization of the standard format which is
-described for the example of dust density in Section <span class="xref std std-ref">sec-dustdens</span>.
+described for the example of dust density in Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>.
 Please read that section for more details, and also on how the format
 changes if you use ‘layers’.</p>
-<p>Also the unformatted style is described in Section <span class="xref std std-ref">sec-dustdens</span>. We
+<p>Also the unformatted style is described in Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>. We
 have, however, here the extra complication that at each cell we have more
 than one number. Essentially this simply means that the length of the data
 per cell is larger, so that fewer cells fit into a single record.</p>
