@@ -78,7 +78,7 @@ any directory. What it does is:
   directory. If not, it asks if you want it to automatically create one.
 * If yes, then it will copy all the files ending with ``.py`` in
   the ``python/radmc3d_tools/`` directory of the distribution to that
-  $HOME``/bin/python/radmc3d_tools/`` directory. This is useful to
+  ``$HOME/bin/python/radmc3d_tools/`` directory. This is useful to
   allow you to make an ``PYTHONPATH`` entry to allow python to find
   these python scripts automatically.
 
@@ -138,8 +138,8 @@ proposed procedure to do problem hunting:
 
    * Did you type ``make install`` in the ``src/``
      directory? I mean, did you not forget the ``install`` part?
-   * Did you put $HOME``/bin/`` in your path (see above)?
-   * If you just added $HOME``/bin/`` to your path, did you
+   * Did you put ``$HOME/bin/`` in your path (see above)?
+   * If you just added ``$HOME/bin/`` to your path, did you
      follow the rest of the procedure (either closing the current shell and
      opening a new shell or typing the ``source`` and ``rehash`` commands as
      described above)?
