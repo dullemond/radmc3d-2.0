@@ -271,27 +271,27 @@ In order to perform any of the actions described in Sections
 or :ref:`sec-dust-ray-tracing`, you must give RADMC-3D the following 
 data:
 
-* ``amr_grid.inp:`` The grid file (see Section :ref:`sec-grid-input`).
-* ``wavelength_micron.inp:`` The global wavelength file (see Section
+* ``amr_grid.inp``: The grid file (see Section :ref:`sec-grid-input`).
+* ``wavelength_micron.inp``: The global wavelength file (see Section
   :ref:`sec-wavelengths`).
-* ``stars.inp:`` The locations and properties of stars (see Section
+* ``stars.inp``: The locations and properties of stars (see Section
   :ref:`sec-stars`).
-* ``dust_density.inp:`` The spatial distribution of dust on the grid (see
+* ``dust_density.inp``: The spatial distribution of dust on the grid (see
   Section :ref:`sec-dustdens`).
-* ``dustopac.inp:`` A file with overall information about the various species of
+* ``dustopac.inp``: A file with overall information about the various species of
   dust in the model (see Section :ref:`sec-opacities`).  One of the main pieces
   of information here is (a) how many dust species are included in the model
   and (b) the tag names of these dust species (see ``dustkappa_XXX.inp``
   below). The file ``dust_density.inp`` must contain exactly this number of
   density distributions: one density distribution for each dust species.
-* ``dustkappa_XXX.inp:`` One or more dust opacity files (where ``XXX`` should in
+* ``dustkappa_XXX.inp``: One or more dust opacity files (where ``XXX`` should in
   fact be a tag name you define, for instance ``dustkappa_silicate.inp``). The
   labels are listed in the ``dustopac.inp`` file. ee Section
   :ref:`sec-opacities` for more information.
-* ``camera_wavelength_micron.inp (optional):`` This file is only needed if you
+* ``camera_wavelength_micron.inp (optional)``: This file is only needed if you
   want to create a spectrum at a special set of wavelengths (otherwise use
   ``radmc3d sed``).
-* ``mcmono_wavelength_micron.inp (optional):`` This file is only needed if you
+* ``mcmono_wavelength_micron.inp (optional)``: This file is only needed if you
   want to compute the radiation field inside the model by calling ``radmc3d
   mcmono`` (e.g. for photochemistry).
 

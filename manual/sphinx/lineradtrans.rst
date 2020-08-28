@@ -840,9 +840,11 @@ However, how does RADMC-3D know that the first collision partner of CO is called
 ``p-h2`` and the second ``o-h2``?  In principle the file ``molecule_co.inp``
 give some information about the name of the collision partners. But this is
 often not machine-readable.  Example, in ``molecule_co.inp`` of Section
-:ref:`sec-molecule-xxx-inp` the line that should tell this reads
-\begin{asciibox}\begin{verbatim} 2 CO-pH2 from Flower (2001) & Wernli et
-al. (2006) + extrapolation \end{verbatim}\end{asciibox} for the first of the two
+:ref:`sec-molecule-xxx-inp` the line that should tell this reads::
+
+   2 CO-pH2 from Flower (2001) & Wernli et al. (2006) + extrapolation
+
+for the first of the two
 (which is directly from the LAMDA database).  This is hard to decipher for
 RADMC-3D. Therefore you have to tell this explicitly in the file ``lines.inp``,
 and we refer to Section :ref:`sec-line-dot-inp` for how to do this.

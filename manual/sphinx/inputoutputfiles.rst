@@ -410,41 +410,41 @@ For a regular grid, without grid refinement, the ``amr_grid.inp`` looks like: ::
 
 The meaning of the entries are:
 
-* ``bfiformat:`` The format number, at present 1. For
+* ``iformat``: The format number, at present 1. For
   unformatted files this must be 4-byte integer.
 
-* ``bfcoordsystem:`` If ``coordsystem``\ :math:`<`100 the
+* ``coordsystem``: If ``coordsystem``\ :math:`<`100 the
   coordinate system is cartesian. If 100:math:`<`=``coordsystem``\ :math:`<`200
   the coordinate system is spherical (polar). If 200:math:`<`=``coordsystem``\ :math:`<`300 the coordinate system is cylindrical. For unformatted
   files this must be 4-byte integer.
 
-* ``bfgridinfo:`` If ``gridinfo``\ ==1 there will be
+* ``gridinfo``: If ``gridinfo==1`` there will be
   abundant grid information written into this file, possibly useful for
   post-processing routines. Typically this is redundant information, so it
-  is advised to set ``gridinfo``\ =0 to save disk space. In the
-  following we will assume that ``gridinfo``\ =0. For unformatted
+  is advised to set ``gridinfo=0`` to save disk space. In the
+  following we will assume that ``gridinfo=0``. For unformatted
   files this must be 4-byte integer.
 
-* ``bfincl_x,incl_y,incl_z:`` These are either 0 or
+* ``incl_x,incl_y,incl_z``: These are either 0 or
   1. If 0 then this dimension is not active (so upon grid refinement no
   refinement in this dimension is done). If 1 this dimension is fully
   active, even if the number of base grid cells in this direction is just
   1. Upon refinement the cell will also be splitted in this dimension. For
   unformatted files these numbers must be 4-byte integer.
 
-* ``bfnx,ny,nz:`` These are the number of grid cells on the
+* ``nx,ny,nz``: These are the number of grid cells on the
   base grid in each of these dimensions. For unformatted files these numbers
   must be 4-byte integer.
 
-* ``bfxi[1]...xi[nx+1]:`` The edges of the cells of the base grid in
+* ``xi[1]...xi[nx+1]``: The edges of the cells of the base grid in
   x-direction. For ``nx`` grid cells we have ``nx+1`` cell walls, hence ``nx+1``
   cell wall positions. For unformatted files these numbers must be 8-byte reals
   (=double precision).
 
-* ``bfyi[1]...yi[ny+1]:`` Same as above, but now for
+* ``yi[1]...yi[ny+1]``: Same as above, but now for
   y-direction.
 
-* ``bfzi[1]...zi[nz+1]:`` Same as above, but now for
+* ``zi[1]...zi[nz+1]``: Same as above, but now for
   z-direction.
 
 Example of a simple 2x2x2 regular grid in cartesian coordinates: ::
@@ -492,7 +492,7 @@ For a grid with oct-tree style grid refinement, the ``amr_grid.inp`` looks like:
 
 The keywords have the same meaning as before, but in addition we have:
 
-* ``bf(0/1):`` *NOTE: Only for amrstyle==1*. These are numbers that are either 0
+* ``(0/1)``: *NOTE: Only for* ``amrstyle==1``. These are numbers that are either 0
   or 1. If 0, this means the current cell is a leaf (= a cell that is not
   refined and is therefore a 'true' cell). If 1, the current cell is a branch
   with 2 (in 1-D), 4 (in 2-D) or 8 (in 3-D) daughter cells. In that case the
@@ -571,21 +571,21 @@ For a grid with layer-style grid refinement, the ``amr_grid.inp`` looks like: ::
 
 The keywords have the same meaning as before, but in addition we have:
 
-* ``bfnrlevels:`` How many levels you plan to go, where
-  nrlevels==0 means no refinement, nrlevels==1 means one level of refinement
+* ``nrlevels``: How many levels you plan to go, where
+  ``nrlevels==0`` means no refinement, ``nrlevels==1`` means one level of refinement
   (factor of 2 in resolution), etc.
 
-* ``bfnrlayers:`` How many layers do you have, with nrlayers==0
-  means no refinement, nrlayers==1 means one layer of refinement (factor of
+* ``nrlayers``: How many layers do you have, with ``nrlayers==0``
+  means no refinement, ``nrlayers==1`` means one layer of refinement (factor of
   2 in resolution), etc.
 
-* ``bfparentid:`` (For each layer) The parent layer for this
-  layer. parentid==0 means parent is base grid. First layer has id==1. 
+* ``parentid``: (For each layer) The parent layer for this
+  layer. ``parentid==0`` means parent is base grid. First layer has ``id==1``. 
 
-* ``bfix,iy,iz:`` (For each layer) The location in the parent
+* ``ix,iy,iz``: (For each layer) The location in the parent
   layer where the current layer starts.
 
-* ``bfnx,ny,nz:`` (For each layer) The size of the layer as measured in units of
+* ``nx,ny,nz``: (For each layer) The size of the layer as measured in units of
   the the parent layer. So the actual size of the current layer will be (in
   3-D): ``2*nx,2*ny,2*nz``\ . In 2-D, with only the x- and y- dimensions active,
   we have a size of ``2*nx,2*ny`` with of course size 1 in z-direction.
@@ -939,34 +939,34 @@ This file exists only in formatted (ascii) style. Its structure is:
   flux[nlam,star=nstar]
 
 
-which is valid only if ``iformat``\ ==2. The meaning of the variables:
+which is valid only if ``iformat==2``. The meaning of the variables:
 
-* ``bfiformat:`` The format number, at present better keep it at 2. 
+* ``iformat``: The format number, at present better keep it at 2. 
   If you put it to 1, the list of wavelengths (see below) will instead be
   a list of frequencies in Herz. 
 
-* ``bfnstars:`` The number of stars you wish to specify.
+* ``nstars``: The number of stars you wish to specify.
 
-* ``bfnlam:`` The number of frequency points for the stellar
+* ``nlam``: The number of frequency points for the stellar
   spectra. At present this must be identical to the number of walvelength
   points in the file ``wavelength_micron.inp`` (see Section :ref:`sec-wavelengths`). 
 
-* ``bfrstar[i]:`` The radius of star :math:`i` in centimeters.
+* ``rstar[i]``: The radius of star :math:`i` in centimeters.
 
-* ``bfmstar[i]:`` The mass of star :math:`i` in grams. This is not
+* ``mstar[i]``: The mass of star :math:`i` in grams. This is not
   important for the current version of RADMC-3D, but may be in the
   future.
 
-* ``bfxstar[i]:`` The ``x``\ -coordinate of star :math:`i` in centimeters.
+* ``xstar[i]``: The ``x``\ -coordinate of star :math:`i` in centimeters.
 
-* ``bfystar[i]:`` The ``y``\ -coordinate of star :math:`i` in centimeters.
+* ``ystar[i]``: The ``y``\ -coordinate of star :math:`i` in centimeters.
 
-* ``bfzstar[i]:`` The ``z``\ -coordinate of star :math:`i` in centimeters.
+* ``zstar[i]``: The ``z``\ -coordinate of star :math:`i` in centimeters.
 
-* ``bflambda[i]:`` Wavelength point :math:`i` (where :math:`i\in [1,```nlam``\ :math:`]`) in microns. This must be identical (!) to the equivalent
+* ``lambda[i]``: Wavelength point :math:`i` (where :math:`i\in [1,\mathrm{nlam}]`) in microns. This must be identical (!) to the equivalent
   point in the file ``wavelength_micron.inp`` (see Section :ref:`sec-wavelengths`). If not, an error occurs.
 
-* ``bfflux[i,star=n]:`` The flux :math:`F_\nu` at wavelength point :math:`i`
+* ``flux[i,star=n]``: The flux :math:`F_\nu` at wavelength point :math:`i`
   for star :math:`n` in units of :math:`\mathrm{erg}\,\mathrm{cm}^{-2},\mathrm{s}^{-1},\mathrm{Hz}^{-1}` as seen from a
   distance of 1 parsec = :math:`3.08572\times 10^{18}` cm (for normalization).
 
@@ -1029,25 +1029,25 @@ The file exists only in formatted (ascii) style. Its structure is:
   flux[nlam,templ=ntempl]
 
 
-which is valid only if ``iformat``\ ==2. The meaning of the variables:
+which is valid only if ``iformat==2``. The meaning of the variables:
 
-* ``bfiformat:`` The format number, at present better keep it at 2. 
+* ``iformat``: The format number, at present better keep it at 2. 
   If you put it to 1, the list of wavelengths (see below) will instead be
   a list of frequencies in Herz. 
 
-* ``bfntempl:`` The number of stellar templates you wish to specify.
+* ``ntempl``: The number of stellar templates you wish to specify.
 
-* ``bfnlam:`` The number of frequency points for the stellar
+* ``nlam``: The number of frequency points for the stellar
   template spectra. At present this must be identical to the number of
   walvelength points in the file ``wavelength_micron.inp`` (see
   Section :ref:`sec-wavelengths`).
 
-* ``bflambda[i]:`` Wavelength point :math:`i` (where :math:`i\in
-  [1,```nlam``\ :math:`]`) in microns. This must be identical (!) to the
+* ``lambda[i]``: Wavelength point :math:`i` (where :math:`i\in [1,\mathrm{nlam}]`)
+  in microns. This must be identical (!) to the
   equivalent point in the file ``wavelength_micron.inp`` (see
   Section :ref:`sec-wavelengths`). If not, an error occurs.
 
-* ``bfflux[i,templ=n]:`` The 'flux' at wavelength :math:`i` for
+* ``flux[i,templ=n]``: The 'flux' at wavelength :math:`i` for
   stellar template :math:`n`. The units are somewhat tricky. It is given in units
   of erg / sec / Hz / gram-of-star. So multiply this by the density of
   stars in units of gram-of-star / :math:`\mathrm{cm}^3`, and divide by 4*pi to get the
@@ -1118,23 +1118,23 @@ external radiation field, i.e. the 'interstellar radiation field'
   Intensity[nlam]
 
 
-which is valid only if ``iformat``\ ==2. The meaning of the variables:
+which is valid only if ``iformat==2``. The meaning of the variables:
 
-* ``bfiformat:`` The format number, at present better keep it at 2. 
+* ``iformat``: The format number, at present better keep it at 2. 
   If you put it to 1, the list of wavelengths (see below) will instead be
   a list of frequencies in Herz. 
 
-* ``bfnlam:`` The number of frequency points for the stellar
+* ``nlam``: The number of frequency points for the stellar
   template spectra. At present this must be identical to the number of
   walvelength points in the file ``wavelength_micron.inp`` (see
   Section :ref:`sec-wavelengths`).
 
-* ``bflambda[i]:`` Wavelength point :math:`i` (where :math:`i\in
-  [1,```nlam``\ :math:`]`) in microns. This must be identical (!) to the
+* ``lambda[i]``: Wavelength point :math:`i` (where :math:`i\in [1,\mathrm{nlam}]`)
+  in microns. This must be identical (!) to the
   equivalent point in the file ``wavelength_micron.inp`` (see
   Section :ref:`sec-wavelengths`). If not, an error occurs.
 
-* ``bfIntensity[i]:`` The intensity of the radiation field at
+* ``Intensity[i]``: The intensity of the radiation field at
   wavelength :math:`i` in units of erg / :math:`\mathrm{cm}^2` / sec / Hz / steradian.
 
 
@@ -1183,10 +1183,10 @@ that. This file is only in formatted (ascii) style. It's structure is:
 
 where
 
-* ``bfnlam:`` The number of frequency points for the stellar
+* ``nlam``: The number of frequency points for the stellar
   spectra.
 
-* ``bflambda[i]:`` Wavelength point :math:`i` (where :math:`i\in [1,```nlam``\ :math:`]`) in microns.
+* ``lambda[i]``: Wavelength point :math:`i` (where :math:`i\in [1,\mathrm{nlam}]`) in microns.
 
 The list of wavelengths can be in increasing order or decreasing order, but
 must be monotonically increasing/decreasing. 
@@ -1194,11 +1194,11 @@ must be monotonically increasing/decreasing.
 *IMPORTANT:* It is important to keep in mind that the wavelength
 coverage must include the wavelengths at which the stellar spectra have most
 of their energy, and at which the dust cools predominantly.  This in
-practice means that this should go all the way from 0.1 :math:`\mu`m to 1000
-:math:`\mu`m, typically logarithmically spaced (i.e. equally spaced in
-log:math:`\lambda`). A smaller coverage will cause serious problems in the Monte
+practice means that this should go all the way from 0.1 :math:`\mu`\ m to 1000
+:math:`\mu`\ m, typically logarithmically spaced (i.e. equally spaced in
+:math:`\log(\lambda)`). A smaller coverage will cause serious problems in the Monte
 Carlo run and dust temperatures may then be severely miscalculated. Note
-that the 0.1 :math:`\mu`m is OK for stellar temperatures below 10000 K. For higher
+that the 0.1 :math:`\mu`\ m is OK for stellar temperatures below 10000 K. For higher
 temperatures a shorter wavelength lower limit must be used.
 
 
@@ -1278,12 +1278,12 @@ of 2 separate dust species is used:
 
 where:
 
-* ``bfiformat:`` Currently the format number is 2, and in this manual
+* ``iformat``: Currently the format number is 2, and in this manual
   we always assume it is 2.
 
-* ``bfnspec:`` The number of dust species that will be loaded.
+* ``nspec``: The number of dust species that will be loaded.
 
-* ``bfinputstyle[i]:`` This number tells in which form the dust
+* ``inputstyle[i]``: This number tells in which form the dust
   opacity of dust species :math:`i` is to be read:
 
   * *1* Use the ``dustkappa_*.inp`` input file
@@ -1294,16 +1294,16 @@ where:
     style (see Section :ref:`sec-dustopac-oldstyle`). This is just a backward
     compatibility mode. Should be avoided if possible.
 
-* ``bfiquantum[i]:`` For normal thermal grains this is 0. If,
+* ``iquantum[i]``: For normal thermal grains this is 0. If,
   however, this grain species is supposed to be treated as a quantum-heated
   grain, then non-zero values are to be specified. *NOTE: At the moment
     the quantum heating is not yet implemented. Will be done in the near
     future. Until then, please set this to 0!*
 
-* ``bf:math:`<`nameofdustspeciesi:math:`>`:`` This is the name of the
+* ``<name of dust species i>``: This is the name of the
   dust species (without blank spaces). This name is then glued to the base
   name of the opacity file (see above). For instance, if the name is
-  ``enstatite``\ , and ``inputstyle``\ ==1, then the file to be
+  ``enstatite``\ , and ``inputstyle==1``\ , then the file to be
   read is ``dustkappa_enstatite.inp``\ .
  
 
@@ -1343,32 +1343,32 @@ is sought and read. The structure of this file is:
 
 The meaning of these entries is:
 
-* ``bfiformat:`` If iformat==1, then only the lambda and
+* ``iformat``: If ``iformat==1``, then only the lambda and
   kappa_abs colums are present. In that case the scattering opacity is
-  assumed to be 0, i.e. a zero albedo is assumed. If iformat==2 also
-  kappa_scat is read (third column). If iformat==3 (which is what is used in
+  assumed to be 0, i.e. a zero albedo is assumed. If ``iformat==2`` also
+  kappa_scat is read (third column). If ``iformat==3`` (which is what is used in
   the above example) then *also* the anisotropy factor :math:`g` is included.
 
-* ``bfnlam:`` The number of wavelength points in this file. This
+* ``nlam``: The number of wavelength points in this file. This
   can be any number, and does not have to be the same as those of the
   ``wavelength_micron.inp``\ . It is typically advisable to have a rather
   large number of wavelength points.
 
-* ``bflambda[i]:`` The wavelength point :math:`i` in micron. This does
+* ``lambda[i]``: The wavelength point :math:`i` in micron. This does
   not have to be (and indeed typically is not) the same as the values in the
   ``wavelength_micron.inp`` file. Also for each opacity this list of
   wavelengths can be different (and can be a different quantity of points).
 
-* ``bfkappa_abs[i]:`` The absorption opacity :math:`\kappa_{\mathrm{abs}}` in units of :math:`\mathrm{cm}^2` per gram of dust.
+* ``kappa_abs[i]``: The absorption opacity :math:`\kappa_{\mathrm{abs}}` in units of :math:`\mathrm{cm}^2` per gram of dust.
 
-* ``bfkappa_scat[i]:`` The scattering opacity :math:`\kappa_{\mathrm{abs}}` in units of :math:`\mathrm{cm}^2`
+* ``kappa_scat[i]``: The scattering opacity :math:`\kappa_{\mathrm{abs}}` in units of :math:`\mathrm{cm}^2`
   per gram of dust. Note that this column should only be included if 
-  iformat==2 or higher. 
+  ``iformat==2`` or higher. 
 
-* ``bfg[ilam]:`` The mean scattering angle
+* ``g[ilam]``: The mean scattering angle
   :math:`\langle\cos(\theta)\rangle`, often called :math:`g`. This will be used by
   RADMC-3D in the Henyey-Greenstein scattering phase function. Note that
-  this column should only be included if iformat==3 or higher.
+  this column should only be included if ``iformat==3`` or higher.
 
 Once this file is read, the opacities will be mapped onto the global
 wavelength grid of the ``wavelength_micron.inp`` file. Since this mapping
@@ -1449,50 +1449,50 @@ is sought and read. The structure of this file is:
 
 The meaning of these entries is:
 
-* ``bfiformat:`` For now this value should remain 1.
+* ``iformat``: For now this value should remain 1.
 
-* ``bfnlam:`` The number of wavelength points in this file. This
+* ``nlam``: The number of wavelength points in this file. This
   can be any number, and does not have to be the same as those of the
   ``wavelength_micron.inp``\ . It is typically advisable to have a rather
   large number of wavelength points.
 
-* ``bfnang:`` The number of scattering angle sampling points.
+* ``nang``: The number of scattering angle sampling points.
   This should be large enough that a proper integration over scattering angle
   can be carried out reliably. A reasonable value is 181, so that (for
   a regular grid in scattering angle :math:`\theta`) you have as scattering angles
   :math:`\theta=0,1,2,\cdots,180` (in degrees). But if you have extremely forward-
   or backward peaked scattering, then maybe even 181 is not enough. 
 
-* ``bflambda[ilam]:`` The wavelength point ``ilam`` in micron. This does
+* ``lambda[ilam]``: The wavelength point ``ilam`` in micron. This does
   not have to be (and indeed typically is not) the same as the values in the
   ``wavelength_micron.inp`` file. Also for each opacity this list of
   wavelengths can be different (and can be a different quantity of points).
 
-* ``bfangle_in_degrees[iang]:`` The scattering angle
+* ``angle_in_degrees[iang]``: The scattering angle
   sampling point ``iang`` in degrees (0 degrees is perfect forward scattering,
   180 degrees is perfect backscattering). There should be ``nang``
   such points, where ``angle_in_degrees[1]`` must be 0 and
   ``angle_in_degrees[nang]`` must be 180. In between the angle
   grid can be anything, as long as it is monotonic.
 
-* ``bfkappa_abs[ilam]:`` The absorption opacity :math:`\kappa_{\mathrm{abs}}`
+* ``kappa_abs[ilam]``: The absorption opacity :math:`\kappa_{\mathrm{abs}}`
   in units of :math:`\mathrm{cm}^2` per gram of dust.
 
-* ``bfkappa_scat[ilam]:`` The scattering opacity
+* ``kappa_scat[ilam]``: The scattering opacity
   :math:`\kappa_{\mathrm{scat}}` in units of :math:`\mathrm{cm}^2` per gram of dust. RADMC-3D can
   (and will) in fact calculate :math:`\kappa_{\mathrm{scat}}` from the scattering
   matrix elements. It will then check (for every wavelength) if that is the
   same as the value listed here. If the difference is small, it will simply
-  adjust the ``bfkappa_scat[ilam]`` value internally to get a
+  adjust the ``kappa_scat[ilam]`` value internally to get a
   perfect match. If it is larger than 1E-4 then it will, in addition to
   adjusting, make a warning. if it is larger than 1E-1, it will abort. Note
   that the fewer angles are used, the worse the match will be because the
   integration over angle will be worse.
 
-* ``bfg[ilam]:`` The mean scattering angle
+* ``g[ilam]``: The mean scattering angle
   :math:`\langle\cos(\theta)\rangle`, often called :math:`g`. RADMC-3D can (and will) in
   fact calculate :math:`g` from the scattering matrix elements. Like with
-  ``bfkappa_scat[ilam]`` it will adjust if the difference is not
+  ``kappa_scat[ilam]`` it will adjust if the difference is not
   too large and it will complain or abort if the difference is larger than
   some limit.
 
@@ -1560,18 +1560,18 @@ is sought and read. The structure of this file is:
 
 The meaning of these entries is:
 
-* ``bfnlam:`` The number of frequency (wavelength) points. This
+* ``nlam``: The number of frequency (wavelength) points. This
   must be *identical* to those of the ``wavelength_micron.inp`` file
   or else the code stops.
 
-* ``bfdummy:`` Put this number to 1. It is here for historic
+* ``dummy``: Put this number to 1. It is here for historic
   reasons (and backward compatibility with older RADMC incarnations).
 
-* ``bfkappa_abs[i]:`` The absorption opacity at wavelength point
+* ``kappa_abs[i]``: The absorption opacity at wavelength point
   :math:`i` of the ``wavelength_micron.inp`` wavelength grid, in units of
   :math:`\mathrm{cm}^2` per gram of dust.
 
-* ``bfkappa_scat[i]:`` The scattering opacity at wavelength point
+* ``kappa_scat[i]``: The scattering opacity at wavelength point
   :math:`i` of the ``wavelength_micron.inp`` wavelength grid, in units of
   :math:`\mathrm{cm}^2` per gram of dust. *NOTE: Here isotropic scattering is assumed.*
 
@@ -1604,13 +1604,13 @@ the following structure:
 
 where:
 
-* ``bfiformat:`` This format number is currently set to 1.
+* ``iformat``: This format number is currently set to 1.
 
-* ``bfnlam:`` The number of wavelength points in this spectrum.
+* ``nlam``: The number of wavelength points in this spectrum.
   This does not necessarily have to be the same as those in the
   ``wavelength_micron.inp`` file. It can be any number.
 
-* ``bflambda[i]:`` Wavelength in micron.  This does not necessarily
+* ``lambda[i]``: Wavelength in micron.  This does not necessarily
   have to be the same as those in the ``wavelength_micron.inp`` file.
   The wavelength grid of a spectrum file can be completely independent 
   of all other wavelength grids. For standard SED computations for the
@@ -1619,7 +1619,7 @@ where:
   spectra based on the ``camera_wavelength_micron.inp`` they are
   not. 
 
-* ``bfflux[i]:`` Flux in units of
+* ``flux[i]``: Flux in units of
   :math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}`
   at this
   wavelength as measured at a standard distance of 1 parsec (just as a way
@@ -1674,22 +1674,22 @@ In most cases the nr of images (nr of wavelengths) is just 1, meaning only
 one image is written (i.e. the img=2, .... img=nlam are not there, only
 the img=1). The meaning of the various entries is:
 
-* ``bfiformat:`` This format number is currently set to 1 
+* ``iformat``: This format number is currently set to 1 
 for images from an observer at infinity (default) and 2 for a local observer.
 Note: For full-Stokes images it is 3, but then also the data changes a
 bit, see below.
 
-* ``bfim_nx,im_ny:`` The number of pixels in x and in y
+* ``im_nx,im_ny``: The number of pixels in x and in y
   direction of the image.
 
-* ``bfnlam:`` The number of images at different wavelengths that
+* ``nlam``: The number of images at different wavelengths that
 are in this file. You can make a series of images at different wavelengths
 in one go, and write them in this file. The wavelength belonging to each of
 these images is listed below. The ``nlam`` can be any number from 1 to
 however large you want. Mostly one typically just makes an images at one
 wavelength, meaning ``nlam``\ =1. 
 
-* ``bfpixsize_x,pixsize_y:`` The size of the pixels in cm (for an observer at
+* ``pixsize_x,pixsize_y``: The size of the pixels in cm (for an observer at
   infinity) or radian (for local observer mode).  This means that for the
   observer-at-infinity mode (default) the size is given in model units (distance
   within the 3-D model) and the user can, for any distance, convert this into
@@ -1697,12 +1697,12 @@ wavelength, meaning ``nlam``\ =1.
   in parsec). The pixel size is the full size from the left of the pixel to the
   right of the pixel (or from bottom to top).
 
-* ``bflambda[i]:`` Wavelengths in micron belonging to the various images in this
+* ``lambda[i]``: Wavelengths in micron belonging to the various images in this
   file. In case ``nlam``\ =1 there will be here just a single number. Note that
   this set of wavelengths can be completely independent of all other wavelength
   grids.
 
-* ``bfimage[ix,iy,img]:`` Intensity in the image at pixel ``ix``\ , ``iy`` at
+* ``image[ix,iy,img]``: Intensity in the image at pixel ``ix``\ , ``iy`` at
   wavelength ``img`` (of the above listed wavelength points) in units of
   :math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}`\ .
   *Important:*
@@ -1776,7 +1776,7 @@ the option ``loadcolor`` or ``color`` is specified, and if the main action is
     .
   ilam[nlam]
 
-* ``bfiformat``\ : This format number is currently set to 1.
+* ``iformat``\ : This format number is currently set to 1.
 
 * ``nlam``\ : Number of wavelength indices specified here.
 
@@ -1802,7 +1802,7 @@ aperture (see Section :ref:`sec-aperture`), then you must prepare the file
 
 with
 
-* ``bfiformat``\ : This format number is currently set to 1.
+* ``iformat``\ : This format number is currently set to 1.
 
 * ``nlam``\ : Number of wavelength indices specified here. This
   does *not* have to be the same as the number of wavelength of a
@@ -1832,13 +1832,13 @@ waste of time to let RADMC-3D read all the gas velocity and temperature
 data and level population data into memory if they are not used.
 
 To avoid unnecessary reading of large files the reading of these files is
-usually organized in a `read when required' way. Any subroutine in the code
+usually organized in a 'read when required' way. Any subroutine in the code
 that relies on e.g. line data to be present in memory can simply call the
 routine ``read_lines_all(action)`` with argument ``action`` being 1,
-i.e.:
-\begin{verbatim}
-call read_lines_all(1)
-\end{verbatim}
+i.e.::
+
+  call read_lines_all(1)
+
 This routine will check if the data are present: if no, it will read them,
 if yes, it will return without further action. This means that you can call
 ``read_lines_all(1)`` as often as you want: the line data will be read
