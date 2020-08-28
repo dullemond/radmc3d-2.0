@@ -89,7 +89,7 @@ are marked with [-]. Those that are currently being developed are marked with
 #. Front-end Python packages:
 
    #. [+] Python simple tools for RADMC-3D
-   #. [+] Python RADMC-3D library {\small\tt radmc3dPy} (author: A.~Juhasz)
+   #. [+] Python RADMC-3D library {\small\tt radmc3dPy} (author: A. Juhasz)
 
 #.
 

@@ -206,7 +206,7 @@ For creating an image you can type ::
 
   radmc3d image lambda 10
 
-which creates an image at wavelength :math:`\lambda`=10:math:`\mu`m. More information
+which creates an image at wavelength :math:`\lambda`=10:math:`\mu`\ m. More information
 about making images is given in Chapter :ref:`chap-images-spectra`.
 
 *Important note:* To handle scattering of light off dust grains, the ray-tracing
@@ -320,7 +320,7 @@ This computes the mean intensity
 :math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}`)
 as a function of the :math:`(x,y,z)` (cartesian) or :math:`(r,\theta,\phi)`
 (spherical) coordinates at frequencies :math:`\nu_i\equiv 10^4c/\lambda_i` where
-:math:`\lambda_i` are the wavelengths (in :math:`\mu`m) specified in the file ``mcmono_wavelength_micron.inp`` (same format as the file
+:math:`\lambda_i` are the wavelengths (in :math:`\mu`\ m) specified in the file ``mcmono_wavelength_micron.inp`` (same format as the file
 ``wavelength_micron.inp`` which is described in Section
 :ref:`sec-wavelengths`). The results of this computation can be interesting for,
 for instance, models of photochemistry.
@@ -742,7 +742,7 @@ may wish to play with:
     * In the ``radmc3d.inp`` file as a line ``nphot_scat = 1000000`` for instance.
     * On the command-line by adding ``nphot_scat 1000000``.
       
-  In Figure :ref:`fig-polscat` you can see how the quality of an image in 
+  In Figure :numref:`fig-polscat` you can see how the quality of an image in 
   scattered light improves when increasing ``nphot_scat``.
   
 * ``nphot_spec``
@@ -778,7 +778,7 @@ may wish to play with:
 
    The effect of ``nphot_scat`` on the image quality when the image is dominated
    by scattered light. The images show the result of model
-   ``examples/run_simple_2_scatmat`` at :math:`\lambda=0.84\mu`m in which
+   ``examples/run_simple_2_scatmat`` at :math:`\lambda=0.84\mu`\ m in which
    polarized scattering with the full scattering phase function and scattering
    matrix is used. See Section :ref:`sec-polarized-scattering` about the
    scattering matrices for polarized scattering. See Section
@@ -789,7 +789,7 @@ may wish to play with:
 emission but scattering is still important (high albedo), it cannot be excluded
 that the 'scattering monte carlo' method used by RADMC-3D produces very large
 noise. Example: a very optically thick dust disk consisting of large grains (10
-:math:`\mu`m size), producing thermal dust emission in the near infrared in its
+:math:`\mu`\ m size), producing thermal dust emission in the near infrared in its
 inner disk regions. This thermal radiation can scatter off the large dust grains
 at large radii (where the disk is cold and where the only 'emission' in the
 near-infrared is thus the scattered light) and thus reveal the outer disk in
@@ -825,11 +825,11 @@ extinction limit can be set by ``mc_scat_maxtauabs``, which by default is set to
 30, meaning a photon package is considered extincted when it has travelled an
 absorption optical depth of 30).
 
-**Important note:** *In many (most?) cases this default value of
-``mc_scat_maxtauabs=30`` is overly conservative. Especially
+**Important note:** *In many (most?) cases this default value of*
+``mc_scat_maxtauabs=30`` *is overly conservative. Especially
 when the scattering Monte Carlo is very time-consuming, you may want
-to experiment with a lower value. Try adding a line to the
-``radmc3d.inp`` with*::
+to experiment with a lower value. Try adding a line to the*
+``radmc3d.inp`` *with*::
 
   mc_scat_maxtauabs = 5
 
@@ -862,7 +862,7 @@ Note that multiple scattering may require a very high number of photon packages
 too low ``nphot_scat`` you typically see radial 'rays' in the image emanating
 from each stellar source of photons. For multiple scattering, when taking too
 low ``nphot_scat`` small you would see strange non-radial 'scratches' in the
-image (see Fig. :ref:`fig-polscat`, top two images). It looks as if someone has
+image (see Fig. :numref:`fig-polscat`, top two images). It looks as if someone has
 used a pen and randomly added some streaks. These streaks are the
 double-scattering events which, in that case, apparently are rare enough that
 they show up as individual streaks. To test whether these streaks are indeed
@@ -1025,7 +1025,7 @@ this effect without too high a penalty in reliability. But if one wants to be
 accurate, there is no way around a full treatment of the :math:`(I,Q,U,V)`.
 
 Interaction between polarized radiation with matter happens through so-called
-Müller matrices, which are 4:math:`\times`4 matrices that can be multiplied by
+Müller matrices, which are :math:`4\times 4` matrices that can be multiplied by
 the :math:`(I,Q,U,V)` vector. More on this later.
 
 It is important to distinguish between two situations:
@@ -1159,7 +1159,7 @@ right-handed circular polarization.*
    third panel (:math:`U=+I`) 'diagonally polarized by +45 degrees' and the
    fourth panel (:math:`V=+I`) 'right-handed circularly polarized'. In the
    images produced by RADMC-3D (``image.out``, see Section :ref:`sec-image-out`
-   and Fig. :ref:`fig-cameraorient`) the :math:`x'` direction is the horizontal
+   and Fig. :numref:`fig-cameraorient`) the :math:`x'` direction is the horizontal
    direction and the :math:`y'` direction is the vertical direction.
 
 We can put these definitions into the standard formulae:
@@ -1263,7 +1263,7 @@ definitions are:
    V_{\mathrm{ours}} &=  -V_{\mathrm{mishch}} = -V_{\mathrm{bohrenhuffman}}
    \end{split}
    
-As you see: only the :math:`U` and :math:`V` change sign. For a 4:math:`\times`4
+As you see: only the :math:`U` and :math:`V` change sign. For a :math:`4\times 4`
 Müller matrix :math:`M` this means that the :math:`M_{II}`, :math:`M_{IQ}`,
 :math:`M_{QI}`, :math:`M_{QQ}`, as well as the :math:`M_{UU}`, :math:`M_{UV}`,
 :math:`M_{VU}`, :math:`M_{VV}` stay the same, while :math:`M_{IU}`,
@@ -1279,7 +1279,7 @@ RADMC-3D does not know what 'right' or 'down' are (only what :math:`x'` and
 :math:`y'` are) this rotation is merely a difference in how we plot things in a
 figure, and has no consequences for the results, as long as we define how
 :math:`x'` and :math:`y'` are oriented compared to our model (see
-Fig. :ref:`fig-cameraorient` where :math:`x_{\mathrm{image}}` is our :math:`x'`
+Fig. :numref:`fig-cameraorient` where :math:`x_{\mathrm{image}}` is our :math:`x'`
 here and likewise for :math:`y'`).
 
 Bohren & Huffman have the two unit vectors plotted in the following way:

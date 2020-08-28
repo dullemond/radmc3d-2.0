@@ -51,7 +51,7 @@ The following pre-installed software is required:
 
 #. *A fortran-90 compiler*
    
-   Preferably the {\small\tt gfortran} compiler (which the current
+   Preferably the ``gfortran`` compiler (which the current
    installation assumes is present on the system). Website: 
    http://gcc.gnu.org/fortran/. Other compilers may work, but have not
    been tested yet.
@@ -59,7 +59,7 @@ The following pre-installed software is required:
 #. *An OpenMP-fortran-90 compiler (optional)*
    
    Only needed if you want to use the parallelized OpenMP version for the thermal
-   Monte Carlo (for faster execution). Preferably the {\small\tt GNU OpenMP/GOMP}
+   Monte Carlo (for faster execution). Preferably the ``GNUOpenMP/GOMP``
    compiler which is an implementation of OpenMP for the Fortran compiler in the
    GNU Compiler Collection. Websites: http://openmp.org/wp and
    http://gcc.gnu.org. Other compilers may work, but we give no

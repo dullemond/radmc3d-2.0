@@ -967,7 +967,7 @@ which is valid only if ``iformat``\ ==2. The meaning of the variables:
   point in the file ``wavelength_micron.inp`` (see Section :ref:`sec-wavelengths`). If not, an error occurs.
 
 * ``bfflux[i,star=n]:`` The flux :math:`F_\nu` at wavelength point :math:`i`
-  for star :math:`n` in units of erg cm:math:`^{-2}` s:math:`^{-1}` Hz:math:`^{-1}` as seen from a
+  for star :math:`n` in units of :math:`\mathrm{erg}\,\mathrm{cm}^{-2},\mathrm{s}^{-1},\mathrm{Hz}^{-1}` as seen from a
   distance of 1 parsec = :math:`3.08572\times 10^{18}` cm (for normalization).
 
 Sometimes it may be sufficient to assume simple blackbody spectra
@@ -1050,8 +1050,8 @@ which is valid only if ``iformat``\ ==2. The meaning of the variables:
 * ``bfflux[i,templ=n]:`` The 'flux' at wavelength :math:`i` for
   stellar template :math:`n`. The units are somewhat tricky. It is given in units
   of erg / sec / Hz / gram-of-star. So multiply this by the density of
-  stars in units of gram-of-star / cm:math:`^3`, and divide by 4*pi to get the
-  stellar source function in units of erg / src / Hz / cm:math:`^3` / steradian.
+  stars in units of gram-of-star / :math:`\mathrm{cm}^3`, and divide by 4*pi to get the
+  stellar source function in units of erg / src / Hz / :math:`\mathrm{cm}^3` / steradian.
 
 Sometimes it may be sufficient to assume simple blackbody spectra
 for these stellar sources. If for any of the stellar sources the first (!)
@@ -1135,7 +1135,7 @@ which is valid only if ``iformat``\ ==2. The meaning of the variables:
   Section :ref:`sec-wavelengths`). If not, an error occurs.
 
 * ``bfIntensity[i]:`` The intensity of the radiation field at
-  wavelength :math:`i` in units of erg / cm:math:`^2` / sec / Hz / steradian.
+  wavelength :math:`i` in units of erg / :math:`\mathrm{cm}^2` / sec / Hz / steradian.
 
 
 .. _sec-heatsource:
@@ -1191,7 +1191,7 @@ where
 The list of wavelengths can be in increasing order or decreasing order, but
 must be monotonically increasing/decreasing. 
 
-{\bf IMPORTANT:} It is important to keep in mind that the wavelength
+*IMPORTANT:* It is important to keep in mind that the wavelength
 coverage must include the wavelengths at which the stellar spectra have most
 of their energy, and at which the dust cools predominantly.  This in
 practice means that this should go all the way from 0.1 :math:`\mu`m to 1000
@@ -1286,11 +1286,11 @@ where:
 * ``bfinputstyle[i]:`` This number tells in which form the dust
   opacity of dust species :math:`i` is to be read:
 
-  * *1* Use the ``dustkappa_:math:`<`name:math:`>`.inp`` input file
+  * *1* Use the ``dustkappa_*.inp`` input file
     style (see Section :ref:`sec-dustkappa-files`). 
-  * *10* Use the ``dustkapscatmat_:math:`<`name:math:`>`.inp`` input
+  * *10* Use the ``dustkapscatmat_*.inp`` input
     file style (see Section :ref:`sec-dustkapscatmat-files`).
-  * *-1* Use the ``dustopac_:math:`<`name:math:`>`.inp`` input file
+  * *-1* Use the ``dustopac_*.inp`` input file
     style (see Section :ref:`sec-dustopac-oldstyle`). This is just a backward
     compatibility mode. Should be avoided if possible.
 
@@ -1309,24 +1309,25 @@ where:
 
 .. _sec-dustkappa-files:
 
-The dustkappa_:math:`<`name:math:`>`.inp files
------------------------------------
+The dustkappa_*.inp files
+-------------------------
 
 If you wish to use dust opacities that include the mass-weighted absorption
 opacity :math:`\kappa_{\mathrm{abs}}`, the (optionally) mass-weighted scattering
 opacity :math:`\kappa_{\mathrm{scat}}`, and (optionally) the anisotropy factor :math:`g`
-for scattering, you can do this with a file ``dustkappa_:math:`<`name:math:`>`.inp`` (set input style to 1 in ``dustopac.inp``\ , see Section :ref:`sec-dustopac-inp-file`). With this kind of
+for scattering, you can do this with a file ``dustkappa_*.inp`` (set input style to 1 in
+``dustopac.inp``\ , see Section :ref:`sec-dustopac-inp-file`). With this kind of
 opacity scattering is included either isotropically or using the
 Henyey-Greenstein function.  Using an opacity of this kind does *not*
 allow for full realistic scattering phase functions nor for
-polarization. For that, you need ``dustkapscatmat_:math:`<`name:math:`>`.inp``
+polarization. For that, you need ``dustkapscatmat_*.inp``
 files (see Section :ref:`sec-dustkapscatmat-files`). Please refer to Section
 :ref:`sec-scattering` for more information about how RADMC-3D treats
 scattering.
 
-If for dust species ``:math:`<`name:math:`>``` the ``inputstyle`` in the 
+If for dust species ``<name>`` the ``inputstyle`` in the 
 ``dustopac.inp`` file is set to 1, then the file 
-``dustkappa_:math:`<`name:math:`>`.inp``
+``dustkappa_<name>.inp``
 is sought and read. The structure of this file is:
 ::
 
@@ -1358,9 +1359,9 @@ The meaning of these entries is:
   ``wavelength_micron.inp`` file. Also for each opacity this list of
   wavelengths can be different (and can be a different quantity of points).
 
-* ``bfkappa_abs[i]:`` The absorption opacity :math:`\kappa_{\mathrm{abs}}` in units of cm:math:`^2` per gram of dust.
+* ``bfkappa_abs[i]:`` The absorption opacity :math:`\kappa_{\mathrm{abs}}` in units of :math:`\mathrm{cm}^2` per gram of dust.
 
-* ``bfkappa_scat[i]:`` The scattering opacity :math:`\kappa_{\mathrm{abs}}` in units of cm:math:`^2`
+* ``bfkappa_scat[i]:`` The scattering opacity :math:`\kappa_{\mathrm{abs}}` in units of :math:`\mathrm{cm}^2`
   per gram of dust. Note that this column should only be included if 
   iformat==2 or higher. 
 
@@ -1371,25 +1372,25 @@ The meaning of these entries is:
 
 Once this file is read, the opacities will be mapped onto the global
 wavelength grid of the ``wavelength_micron.inp`` file. Since this mapping
-always involve uncertainties and errors, a file ``dustkappa_:math:`<`name:math:`>`.inp_used`` is created which lists the opacity how it
+always involve uncertainties and errors, a file ``dustkappa_*.inp_used`` is created which lists the opacity how it
 is remapped onto the global wavelength grid. This is only for you as the
 user, so that you can verify what RADMC-3D has internally done. Note that if
-the upper or lower edges of the wavelength domain of the ``dustkappa_:math:`<`name:math:`>`.inp`` file is within the domain of the ``wavelength_micron.inp`` grid, some extrapolation will have to be done.  At
+the upper or lower edges of the wavelength domain of the ``dustkappa_*.inp`` file is within the domain of the ``wavelength_micron.inp`` grid, some extrapolation will have to be done.  At
 short wavelength this will simply be constant extrapolation while at long
-wavelength a powerlaw extrapolation is done. Have a look at the ``dustkappa_:math:`<`name:math:`>`.inp_used`` file to see how RADMC-3D has done this
+wavelength a powerlaw extrapolation is done. Have a look at the ``dustkappa_*.inp_used`` file to see how RADMC-3D has done this
 in your particular case.
 
 
 .. _sec-dustkapscatmat-files:
 
-The dustkapscatmat_:math:`<`name:math:`>`.inp files
+The dustkapscatmat_*.inp files
 ----------------------------------------
 
 If you wish to treat scattering in a more realistic way than just the
 Henyey-Greenstein non-polarized way, then you must provide RADMC-3D with
 more information than is present in the ``dustkappa_xxx.inp``
-files: RADMC-3D will need the full scattering M\"uller matrix for all angles
-of scattering (see e.g. the books by Mishchenko, or by Bohren \& Huffman or
+files: RADMC-3D will need the full scattering Müller matrix for all angles
+of scattering (see e.g. the books by Mishchenko, or by Bohren & Huffman or
 by van de Hulst). For *randomly oriented particles* only 6 of these
 matrix elements can be non-zero: :math:`Z_{11}`, :math:`Z_{12}=Z_{21}`, :math:`Z_{22}`,
 :math:`Z_{33}`, :math:`Z_{34}=-Z_{43}`, :math:`Z_{44}`, where 1,2,3,4 represent the I,Q,U,V
@@ -1402,9 +1403,9 @@ values of these 6 matrix elements. These can be provided in a file
 Section :ref:`sec-scattering` for more information about how RADMC-3D treats
 scattering.
 
-If for dust species ``:math:`<`name:math:`>``` the ``inputstyle`` in the 
+If for dust species ``<name>`` the ``inputstyle`` in the 
 ``dustopac.inp`` file is set to 10, then the file 
-``dustkapscatmat_:math:`<`name:math:`>`.inp``
+``dustkapscatmat_<name>.inp``
 is sought and read. The structure of this file is:
 ::
 
@@ -1462,22 +1463,23 @@ The meaning of these entries is:
   :math:`\theta=0,1,2,\cdots,180` (in degrees). But if you have extremely forward-
   or backward peaked scattering, then maybe even 181 is not enough. 
 
-* ``bflambda[ilam]:`` The wavelength point :math:`ilam` in micron. This does
+* ``bflambda[ilam]:`` The wavelength point ``ilam`` in micron. This does
   not have to be (and indeed typically is not) the same as the values in the
   ``wavelength_micron.inp`` file. Also for each opacity this list of
   wavelengths can be different (and can be a different quantity of points).
 
 * ``bfangle_in_degrees[iang]:`` The scattering angle
-  sampling point :math:`iang` in degrees (0 degrees is perfect forward scattering,
+  sampling point ``iang`` in degrees (0 degrees is perfect forward scattering,
   180 degrees is perfect backscattering). There should be ``nang``
   such points, where ``angle_in_degrees[1]`` must be 0 and
   ``angle_in_degrees[nang]`` must be 180. In between the angle
   grid can be anything, as long as it is monotonic.
 
-* ``bfkappa_abs[ilam]:`` The absorption opacity :math:`\kappa_{\mathrm{abs}}` in units of cm:math:`^2` per gram of dust.
+* ``bfkappa_abs[ilam]:`` The absorption opacity :math:`\kappa_{\mathrm{abs}}`
+  in units of :math:`\mathrm{cm}^2` per gram of dust.
 
 * ``bfkappa_scat[ilam]:`` The scattering opacity
-  :math:`\kappa_{\mathrm{scat}}` in units of cm:math:`^2` per gram of dust. RADMC-3D can
+  :math:`\kappa_{\mathrm{scat}}` in units of :math:`\mathrm{cm}^2` per gram of dust. RADMC-3D can
   (and will) in fact calculate :math:`\kappa_{\mathrm{scat}}` from the scattering
   matrix elements. It will then check (for every wavelength) if that is the
   same as the value listed here. If the difference is small, it will simply
@@ -1495,7 +1497,7 @@ The meaning of these entries is:
   some limit.
 
 * ``Z_{xx}`` These are the scattering matrix elements
-  in units of cm:math:`^2` gram:math:`^{-1}` ster:math:`^{-1}` (i.e. they are angular
+  in units of :math:`\mathrm{cm}^2\, \mathrm{g}^{-1}\,\mathrm{ster}^{-1}` (i.e. they are angular
   differential cross sections). See Section :ref:`sec-scattering` for
   more details.
 
@@ -1527,22 +1529,22 @@ additional file to ``RADMC-3D`` that represents the scattering
   179.0        
   180.0        <=== Last angle (in degrees). Must be 180
 
-{\bf NOTE:} This file is not compulsory. If it is not given, then 
+*NOTE:* This file is not compulsory. If it is not given, then 
 ``RADMC-3D`` will make its own internal scattering angle grid.
 
 
 .. _sec-dustopac-oldstyle:
 
-The dustopac_:math:`<`name:math:`>`.inp files: Backward compatibility with RADMC-2D
+The dustopac_*.inp files: Backward compatibility with RADMC-2D
 ------------------------------------------------------------------------
 
 
 If you want to be able to redo a model from the old RADMC (2D-version) code
 with RADMC-3D, you require RADMC-3D to be able to read the old style 
-dust opacity files ``dustopac_:math:`<`name:math:`>`.inp``\ .
+dust opacity files ``dustopac_*.inp``\ .
 
-If for dust species ``:math:`<`name:math:`>``` the ``inputstyle`` in the 
-``dustopac.inp`` file is set to -1, then the file ``dustopac_:math:`<`name:math:`>`.inp``
+If for dust species ``<name>`` the ``inputstyle`` in the 
+``dustopac.inp`` file is set to -1, then the file ``dustopac_<name>.inp``
 is sought and read. The structure of this file is:
 ::
 
@@ -1567,16 +1569,16 @@ The meaning of these entries is:
 
 * ``bfkappa_abs[i]:`` The absorption opacity at wavelength point
   :math:`i` of the ``wavelength_micron.inp`` wavelength grid, in units of
-  cm:math:`^2` per gram of dust.
+  :math:`\mathrm{cm}^2` per gram of dust.
 
 * ``bfkappa_scat[i]:`` The scattering opacity at wavelength point
   :math:`i` of the ``wavelength_micron.inp`` wavelength grid, in units of
-  cm:math:`^2` per gram of dust. *NOTE: Here isotropic scattering is assumed.*
+  :math:`\mathrm{cm}^2` per gram of dust. *NOTE: Here isotropic scattering is assumed.*
 
 Note that the opacities listed in this kind of file belong to the wavelength
 points in the file ``wavelength_micron.inp``\ . So if you change the
 ``wavelength_micron.inp`` file, you also must change the
-``dustopac_:math:`<`name:math:`>`.inp`` files. This is why this kind of opacity
+``dustopac_*.inp`` files. This is why this kind of opacity
 specification is not recommended.
 
 
@@ -1588,7 +1590,7 @@ OUTPUT: spectrum.out
 ====================
 
 Any spectrum that is made with RADMC-3D will be either called
-``spectrum.out`` or *spectrum_:math:`<`somename:math:`>`.out* and will have
+``spectrum.out`` or ``spectrum_<somename>.out`` and will have
 the following structure:
 ::
 
@@ -1617,7 +1619,9 @@ where:
   spectra based on the ``camera_wavelength_micron.inp`` they are
   not. 
 
-* ``bfflux[i]:`` Flux in erg cm:math:`^{-2}` s:math:`^{-1}` Hz:math:`^{-1}` at this
+* ``bfflux[i]:`` Flux in units of
+  :math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}`
+  at this
   wavelength as measured at a standard distance of 1 parsec (just as a way
   of normalization).
 
@@ -1699,8 +1703,9 @@ wavelength, meaning ``nlam``\ =1.
   grids.
 
 * ``bfimage[ix,iy,img]:`` Intensity in the image at pixel ``ix``\ , ``iy`` at
-  wavelength ``img`` (of the above listed wavelength points) in units of erg
-  cm:math:`^{-2}` s:math:`^{-1}` Hz:math:`^{-1}` ster:math:`^{-1}`. *Important:*
+  wavelength ``img`` (of the above listed wavelength points) in units of
+  :math:`\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}`\ .
+  *Important:*
   The pixels are ordered from left to right (i.e. increasing :math:`x`) in the
   inner loop, and from bottom to top (i.e. increasing :math:`y`) in the outer
   loop.

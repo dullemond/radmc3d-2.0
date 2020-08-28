@@ -109,8 +109,8 @@ changed by you! They are templates from which you can create your own models.*
 For the analysis of the output files created by RADMC-3D you can use your own
 favorite plotting or data-analysis software. But also here we provide some tools
 in Python. These Python routines are in the ``python/`` directory. Typically you
-will create your own program, e.g.\ ``plot_model.py`` or so, that will use
-these subroutines, e.g.\ by putting in the first line: ``from radmc3dPy import
+will create your own program, e.g. ``plot_model.py`` or so, that will use
+these subroutines, e.g. by putting in the first line: ``from radmc3dPy import
 *``. In this way Python is used also as a post-processing tool. But again: this
 can also be done in another language.
 
@@ -381,8 +381,8 @@ various actions. Here is a list:
    With ``radmc3d image`` you call RADMC-3D with the command of performing a
    ray-tracing computation to compute an image. You must specify the
    wavelength(s) at which you want the image by, for instance, calling RADMC-3D
-   as ``radmc3d image lambda 10``, which makes the image at :math:`\lambda=10\mu
-   m`. But there are other ways by which the wavelength(s) can be set, see
+   as ``radmc3d image lambda 10``, which makes the image at
+   :math:`\lambda=10\mu\mathrm{m}`. But there are other ways by which the wavelength(s) can be set, see
    Section :ref:`sec-set-camera-frequencies`.  In all these cases the vantage
    point (where is the observer) can of course be set as well, see Section
    :ref:`sec-dust-ray-tracing` and Chapter :ref:`chap-images-spectra`.
@@ -451,7 +451,7 @@ spectral energy distribution, for instance, we call ``radmc3d sed`` (see Section
 which is a list of fluxes at the discrete wavelengths we specified in
 ``wavelength_micron.inp``.  Then we are done: we have computed the spectral
 energy distribution of our model. We could also make an image at wavelength 10
-:math:`\mu`m for instance with ``radmc3d image lambda 10`` (see Section
+:math:`\mu`\ m for instance with ``radmc3d image lambda 10`` (see Section
 :ref:`sec-images`). This will write out a file ``image.out`` containing the
 image data (see Section :ref:`sec-image-out`).
 
