@@ -24,12 +24,7 @@ A few comments on RADMC-3D input and output files:
   idea is that if new versions of RADMC-3D come out in the future, it would be
   good to have the possibility that new information is added to the files. The
   format number is there to tell RADMC-3D whether a file is the new version or
-  still an older version. NOTE: Do not confuse *format number* with
-  *unformatted/formatted I/O* (see below for the latter). These are unrelated
-  issues.
-
-* RADMC-3D is no longer backward compatible with the older RADMC code input
-  files. It has proven to be too messy to maintain this option.
+  still an older version. 
 
 * RADMC-3D has four types of I/O files:
 
@@ -50,9 +45,9 @@ A few comments on RADMC-3D input and output files:
      not very important for every-day use.
 
 * For many of the I/O files RADMC-3D can read and write formatted (i.e. text
-  style: ascii) files, fortran-style unformatted (i.e. with 'records') files as
-  well as binary files (i.e. C-style unformatted). This is specified by the file
-  extension. See Chapter :ref:`chap-binary-io` for more details.
+  style: ascii) files, or binary files (i.e. C-style unformatted). This is
+  specified by the file extension. See Chapter :ref:`chap-binary-io` for more
+  details.
 
 
 
@@ -84,12 +79,6 @@ is a non-exhaustive list of the variables that can be set.
   with this flag you can explicitly tell RADMC-3D whether it must be
   included (1) or not (0).
 
-* ``incl_freefree`` (default: 0)
-  
-  If 1, then include free-free emission and absorption (Bremsstrahlung).  For
-  this, the gas temperature must be known (but see option ``tgas_eq_tdust``
-  below).
-
 * ``nphot`` or ``nphot_therm`` (default: 100000)
   
   The number of photon packages used for the thermal Monte Carlo simulation.
@@ -110,6 +99,11 @@ is a non-exhaustive list of the variables that can be set.
   using insufficiently large ``nphot_scat`` will cancel each other out in the
   flux calculation. So ``nphot_spec`` is usually taken smaller than
   ``nphot_scat``\ .
+
+* ``nphot_mono`` (default: 100000)
+  
+  The number of photon packages for the Monte Carlo simulations for the
+  ``mcmono`` calculation (see Section :ref:`sec-dust-monochromatic-monte-carlo`).
 
 * ``iseed`` (default: -17933201) *[Fine-tuning only]*
   
@@ -205,17 +199,11 @@ is a non-exhaustive list of the variables that can be set.
   will not just be rendered one ray per pixel. Instead, if necessary,
   a pixel will spawn 2x2 sub-pixels recursively (each of which can 
   split again into 2x2 until the required resolution is obtained) so
-  as to assure that the flux in each pixel is correct. Nrrefine tells
+  as to assure that the flux in each pixel is correct. ``camera_nrrefine`` tells
   how deep RADMC-3D is allowed to recursively refine. 100 is therefore
   effectively infinite. Putting this to 0 means that you go back to
   1 ray per pixel, which is fast, but may seriously misrepresent the flux
-  in each pixel. NOTE: The recursive pixel refinement is done internally
-  and the user will not notice it except for getting better answers. In 
-  the output image only the original pixels are shown; all subpixels have
-  been integrated over to get the flux of the original pixel. So you can
-  keep this to the default value of 100 without having to worry about 
-  handling complex data structures. The only drawback is that it may take
-  longer to compute. See Section :ref:`sec-image-refinement` for more details.
+  in each pixel. See Section :ref:`sec-image-refinement` for more details.
 
 * ``camera_refine_criterion`` (default: 1.0) *[Fine-tuning only]*
   
@@ -228,13 +216,13 @@ is a non-exhaustive list of the variables that can be set.
   
   If 0, then only the interstellar/circumstellar material is rendered
   for the images and spectra. If 1, then also the stellar flux is 
-  included in the spectra and images. So far, stars are treated always
-  as point sources.
+  included in the spectra and images. 
 
 * ``camera_starsphere_nrpix`` (default: 20) *[Fine-tuning only]*
   
   For rectangular images and for the spectra/SEDs (but not for spectra/SEDs
-  created with circular pixel arrangements), this number tells RADMC-3D how
+  created with circular pixel arrangements, see Section
+  :ref:`sec-circularimages`), this number tells RADMC-3D how
   much it should do sub-pixeling over the stellar surface. That is: 20 means
   that at least 20 sub-pixels are assured over the stellar surface. This is
   important for flux conservation (see Section :ref:`sec-image-refinement`).
@@ -251,13 +239,15 @@ is a non-exhaustive list of the variables that can be set.
 
 * ``camera_min_dangle`` (default 0.05) *[Fine-tuning only]*
   
-  Fine-tuning parameter for recursive subpixeling, for spherical coordinates, 
+  Fine-tuning parameter for recursive subpixeling (see Section
+  :ref:`sec-recursive-subpixeling`), for spherical coordinates, 
   assuring that not too fine subpixeling would slow down the rendering of
   images or spectra too much.
 
 * ``camera_max_dangle`` (default 0.3) *[Fine-tuning only]*
   
-  Fine-tuning parameter for recursive subpixeling, for spherical coordinates, 
+  Fine-tuning parameter for recursive subpixeling (see Section
+  :ref:`sec-recursive-subpixeling`), for spherical coordinates, 
   preventing that too coarse subpixeling would reduce the accuracy. 
 
 * ``camera_min_dr`` (default 0.003) *[Fine-tuning only]*
@@ -330,7 +320,8 @@ is a non-exhaustive list of the variables that can be set.
 
 * ``lines_maxdoppler`` (default: 0.3) *[Fine-tuning only]*
   
-  If the doppler catching mode is used, this parameter tells how fine RADMC-3D
+  If the doppler catching mode is used (see Section
+  :ref:`sec-doppler-catching`), this parameter tells how fine RADMC-3D
   must sample along the ray, in units of the doppler width, when a line is
   doppler-shifting along the wavelength-of-sight.
 
@@ -413,10 +404,10 @@ The meaning of the entries are:
 * ``iformat``: The format number, at present 1. For
   unformatted files this must be 4-byte integer.
 
-* ``coordsystem``: If ``coordsystem``\ :math:`<`100 the
-  coordinate system is cartesian. If 100:math:`<`=``coordsystem``\ :math:`<`200
-  the coordinate system is spherical (polar). If 200:math:`<`=``coordsystem``\ :math:`<`300 the coordinate system is cylindrical. For unformatted
-  files this must be 4-byte integer.
+* ``coordsystem``: If ``coordsystem < 100`` the coordinate system is
+  cartesian. If ``100 <= coordsystem < 200`` the coordinate system is spherical
+  (polar).  If ``200 <= coordsystem < 300`` the coordinate system is
+  cylindrical. For unformatted files this must be 4-byte integer.
 
 * ``gridinfo``: If ``gridinfo==1`` there will be
   abundant grid information written into this file, possibly useful for
@@ -465,7 +456,8 @@ Example of a simple 2x2x2 regular grid in cartesian coordinates: ::
 Oct-tree-style AMR grid
 -----------------------
 
-For a grid with oct-tree style grid refinement, the ``amr_grid.inp`` looks like:
+For a grid with oct-tree style grid refinement (see Section
+:ref:`sec-oct-tree-amr`), the ``amr_grid.inp`` looks like:
 ::
 
   iformat                                  <=== Typically 1 at present
@@ -549,7 +541,8 @@ which the (1,2,1) cell is refined again in 2x2x2:
 Layer-style AMR grid
 --------------------
 
-For a grid with layer-style grid refinement, the ``amr_grid.inp`` looks like: ::
+For a grid with layer-style grid refinement (see Section
+:ref:`sec-layered-amr`), the ``amr_grid.inp`` looks like: ::
 
   iformat                                  <=== Typically 1 at present
   10                                       <=== Grid style (10 = layer-style)
@@ -880,7 +873,7 @@ present in the file, but they can have any value you like (typically 0).
 
 Note that if you have multiple species of dust then we will still have
 48 as the value of ``nrcells``\ . The number of values to be read,
-if you have 2 dust species, is then simply 2*``nrcells`` = 2*48 = 96.
+if you have 2 dust species, is then simply 2*\ ``nrcells`` = 2*48 = 96.
 
 
 
@@ -963,12 +956,16 @@ which is valid only if ``iformat==2``. The meaning of the variables:
 
 * ``zstar[i]``: The ``z``\ -coordinate of star :math:`i` in centimeters.
 
-* ``lambda[i]``: Wavelength point :math:`i` (where :math:`i\in [1,\mathrm{nlam}]`) in microns. This must be identical (!) to the equivalent
-  point in the file ``wavelength_micron.inp`` (see Section :ref:`sec-wavelengths`). If not, an error occurs.
+* ``lambda[i]``: Wavelength point :math:`i` (where :math:`i\in
+  [1,\mathrm{nlam}]`) in microns. This must be identical (!) to the equivalent
+  point in the file ``wavelength_micron.inp`` (see Section
+  :ref:`sec-wavelengths`). If not, an error occurs.
 
-* ``flux[i,star=n]``: The flux :math:`F_\nu` at wavelength point :math:`i`
-  for star :math:`n` in units of :math:`\mathrm{erg}\,\mathrm{cm}^{-2},\mathrm{s}^{-1},\mathrm{Hz}^{-1}` as seen from a
-  distance of 1 parsec = :math:`3.08572\times 10^{18}` cm (for normalization).
+* ``flux[i,star=n]``: The flux :math:`F_\nu` at wavelength point :math:`i` for
+  star :math:`n` in units of
+  :math:`\mathrm{erg}\,\mathrm{cm}^{-2},\mathrm{s}^{-1},\mathrm{Hz}^{-1}` as
+  seen from a distance of 1 parsec = :math:`3.08572\times 10^{18}` cm (for
+  normalization).
 
 Sometimes it may be sufficient to assume simple blackbody spectra
 for these stars. If for any of the stars the first (!) flux number 
@@ -1171,9 +1168,9 @@ INPUT (required): wavelength_micron.inp
 
 This is the file that sets the discrete wavelength points for the continuum
 radiative transfer calculations. Note that this is not the same as the
-wavelength grid used for e.g. line radiative transfer.  See Section :ref:`sec-camera-wavelengths` and/or Chapter :ref:`chap-line-transfer` for
-that. This file is only in formatted (ascii) style. It's structure is:
-::
+wavelength grid used for e.g. line radiative transfer.  See Section
+:ref:`sec-camera-wavelengths` and/or Chapter :ref:`chap-line-transfer` for
+that. This file is only in formatted (ascii) style. It's structure is: ::
 
   nlam
   lambda[1]
@@ -1290,15 +1287,12 @@ where:
     style (see Section :ref:`sec-dustkappa-files`). 
   * *10* Use the ``dustkapscatmat_*.inp`` input
     file style (see Section :ref:`sec-dustkapscatmat-files`).
-  * *-1* Use the ``dustopac_*.inp`` input file
-    style (see Section :ref:`sec-dustopac-oldstyle`). This is just a backward
-    compatibility mode. Should be avoided if possible.
 
 * ``iquantum[i]``: For normal thermal grains this is 0. If,
   however, this grain species is supposed to be treated as a quantum-heated
   grain, then non-zero values are to be specified. *NOTE: At the moment
-    the quantum heating is not yet implemented. Will be done in the near
-    future. Until then, please set this to 0!*
+  the quantum heating is not yet implemented. Will be done in the 
+  future, if users request it. Until then, please set this to 0!*
 
 * ``<name of dust species i>``: This is the name of the
   dust species (without blank spaces). This name is then glued to the base
@@ -1317,19 +1311,17 @@ opacity :math:`\kappa_{\mathrm{abs}}`, the (optionally) mass-weighted scattering
 opacity :math:`\kappa_{\mathrm{scat}}`, and (optionally) the anisotropy factor :math:`g`
 for scattering, you can do this with a file ``dustkappa_*.inp`` (set input style to 1 in
 ``dustopac.inp``\ , see Section :ref:`sec-dustopac-inp-file`). With this kind of
-opacity scattering is included either isotropically or using the
-Henyey-Greenstein function.  Using an opacity of this kind does *not*
+opacity input file, scattering is included either isotropically or using the
+Henyey-Greenstein function.  Using an opacity file of this kind does *not*
 allow for full realistic scattering phase functions nor for
 polarization. For that, you need ``dustkapscatmat_*.inp``
 files (see Section :ref:`sec-dustkapscatmat-files`). Please refer to Section
 :ref:`sec-scattering` for more information about how RADMC-3D treats
 scattering.
 
-If for dust species ``<name>`` the ``inputstyle`` in the 
-``dustopac.inp`` file is set to 1, then the file 
-``dustkappa_<name>.inp``
-is sought and read. The structure of this file is:
-::
+If for dust species ``<name>`` the ``inputstyle`` in the ``dustopac.inp`` file
+is set to 1, then the file ``dustkappa_<name>.inp`` is sought and read. The
+structure of this file is: ::
 
   # Any amount of arbitrary
   # comment lines that tell which opacity this is.
@@ -1531,56 +1523,6 @@ additional file to ``RADMC-3D`` that represents the scattering
 
 *NOTE:* This file is not compulsory. If it is not given, then 
 ``RADMC-3D`` will make its own internal scattering angle grid.
-
-
-.. _sec-dustopac-oldstyle:
-
-The dustopac_*.inp files: Backward compatibility with RADMC-2D
-------------------------------------------------------------------------
-
-
-If you want to be able to redo a model from the old RADMC (2D-version) code
-with RADMC-3D, you require RADMC-3D to be able to read the old style 
-dust opacity files ``dustopac_*.inp``\ .
-
-If for dust species ``<name>`` the ``inputstyle`` in the 
-``dustopac.inp`` file is set to -1, then the file ``dustopac_<name>.inp``
-is sought and read. The structure of this file is:
-::
-
-  nlam   dummy
-  kappa_abs[1]
-    .
-    .
-  kappa_abs[nlam]
-  kappa_scat[1]
-    .
-    .
-  kappa_scat[nlam]
-
-The meaning of these entries is:
-
-* ``nlam``: The number of frequency (wavelength) points. This
-  must be *identical* to those of the ``wavelength_micron.inp`` file
-  or else the code stops.
-
-* ``dummy``: Put this number to 1. It is here for historic
-  reasons (and backward compatibility with older RADMC incarnations).
-
-* ``kappa_abs[i]``: The absorption opacity at wavelength point
-  :math:`i` of the ``wavelength_micron.inp`` wavelength grid, in units of
-  :math:`\mathrm{cm}^2` per gram of dust.
-
-* ``kappa_scat[i]``: The scattering opacity at wavelength point
-  :math:`i` of the ``wavelength_micron.inp`` wavelength grid, in units of
-  :math:`\mathrm{cm}^2` per gram of dust. *NOTE: Here isotropic scattering is assumed.*
-
-Note that the opacities listed in this kind of file belong to the wavelength
-points in the file ``wavelength_micron.inp``\ . So if you change the
-``wavelength_micron.inp`` file, you also must change the
-``dustopac_*.inp`` files. This is why this kind of opacity
-specification is not recommended.
-
 
 
 

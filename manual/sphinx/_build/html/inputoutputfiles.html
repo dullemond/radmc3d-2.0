@@ -123,9 +123,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#input-optional-camera-wavelength-micron-inp">INPUT (optional): camera_wavelength_micron.inp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#the-dustopac-inp-file">The dustopac.inp file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-dustkappa-inp-files">The dustkappa_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-dustkapscatmat-inp-files">The dustkapscatmat_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-dustopac-inp-files-backward-compatibility-with-radmc-2d">The dustopac_<span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files: Backward compatibility with RADMC-2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-dustkappa-inp-files">The dustkappa_*.inp files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-dustkapscatmat-inp-files">The dustkapscatmat_*.inp files</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#output-spectrum-out">OUTPUT: spectrum.out</a></li>
@@ -229,11 +228,7 @@ keeps track of the version of the way the information is stored the file. The
 idea is that if new versions of RADMC-3D come out in the future, it would be
 good to have the possibility that new information is added to the files. The
 format number is there to tell RADMC-3D whether a file is the new version or
-still an older version. NOTE: Do not confuse <em>format number</em> with
-<em>unformatted/formatted I/O</em> (see below for the latter). These are unrelated
-issues.</p></li>
-<li><p>RADMC-3D is no longer backward compatible with the older RADMC code input
-files. It has proven to be too messy to maintain this option.</p></li>
+still an older version.</p></li>
 <li><p>RADMC-3D has four types of I/O files:</p>
 <ol class="arabic simple">
 <li><p>Files ending with <code class="docutils literal notranslate"><span class="pre">.inp</span></code> or <code class="docutils literal notranslate"><span class="pre">.binp</span></code> are input files that
@@ -251,9 +246,9 @@ not very important for every-day use.</p></li>
 </ol>
 </li>
 <li><p>For many of the I/O files RADMC-3D can read and write formatted (i.e. text
-style: ascii) files, fortran-style unformatted (i.e. with ‘records’) files as
-well as binary files (i.e. C-style unformatted). This is specified by the file
-extension. See Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for more details.</p></li>
+style: ascii) files, or binary files (i.e. C-style unformatted). This is
+specified by the file extension. See Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for more
+details.</p></li>
 </ul>
 <div class="section" id="input-radmc3d-inp">
 <span id="sec-radmc-inp"></span><h2>INPUT: radmc3d.inp<a class="headerlink" href="#input-radmc3d-inp" title="Permalink to this headline">¶</a></h2>
@@ -278,11 +273,6 @@ is present, it assumes that molecular/atomic lines must be included. But
 with this flag you can explicitly tell RADMC-3D whether it must be
 included (1) or not (0).</p>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">incl_freefree</span></code> (default: 0)</p>
-<p>If 1, then include free-free emission and absorption (Bremsstrahlung).  For
-this, the gas temperature must be known (but see option <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust</span></code>
-below).</p>
-</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nphot</span></code> or <code class="docutils literal notranslate"><span class="pre">nphot_therm</span></code> (default: 100000)</p>
 <p>The number of photon packages used for the thermal Monte Carlo simulation.</p>
 </li>
@@ -300,6 +290,10 @@ integrate over the images. Many of the annoying ‘stripe noise’ in images whe
 using insufficiently large <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> will cancel each other out in the
 flux calculation. So <code class="docutils literal notranslate"><span class="pre">nphot_spec</span></code> is usually taken smaller than
 <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_mono</span></code> (default: 100000)</p>
+<p>The number of photon packages for the Monte Carlo simulations for the
+<code class="docutils literal notranslate"><span class="pre">mcmono</span></code> calculation (see Section <a class="reference internal" href="dustradtrans.html#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>).</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">iseed</span></code> (default: -17933201) <em>[Fine-tuning only]</em></p>
 <p>A starting value of the random seed for the Monte Carlo simulation.</p>
@@ -381,17 +375,11 @@ which is the normal mode, where real images are being created.</p>
 will not just be rendered one ray per pixel. Instead, if necessary,
 a pixel will spawn 2x2 sub-pixels recursively (each of which can
 split again into 2x2 until the required resolution is obtained) so
-as to assure that the flux in each pixel is correct. Nrrefine tells
+as to assure that the flux in each pixel is correct. <code class="docutils literal notranslate"><span class="pre">camera_nrrefine</span></code> tells
 how deep RADMC-3D is allowed to recursively refine. 100 is therefore
 effectively infinite. Putting this to 0 means that you go back to
 1 ray per pixel, which is fast, but may seriously misrepresent the flux
-in each pixel. NOTE: The recursive pixel refinement is done internally
-and the user will not notice it except for getting better answers. In
-the output image only the original pixels are shown; all subpixels have
-been integrated over to get the flux of the original pixel. So you can
-keep this to the default value of 100 without having to worry about
-handling complex data structures. The only drawback is that it may take
-longer to compute. See Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a> for more details.</p>
+in each pixel. See Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a> for more details.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_refine_criterion</span></code> (default: 1.0) <em>[Fine-tuning only]</em></p>
 <p>Setting this value to smaller than 1 means that you refine the recursive
@@ -402,12 +390,12 @@ render. See Section <a class="reference internal" href="imagesspectra.html#sec-i
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_incl_stars</span></code> (default: 1)</p>
 <p>If 0, then only the interstellar/circumstellar material is rendered
 for the images and spectra. If 1, then also the stellar flux is
-included in the spectra and images. So far, stars are treated always
-as point sources.</p>
+included in the spectra and images.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_starsphere_nrpix</span></code> (default: 20) <em>[Fine-tuning only]</em></p>
 <p>For rectangular images and for the spectra/SEDs (but not for spectra/SEDs
-created with circular pixel arrangements), this number tells RADMC-3D how
+created with circular pixel arrangements, see Section
+<a class="reference internal" href="imagesspectra.html#sec-circularimages"><span class="std std-ref">Circular images</span></a>), this number tells RADMC-3D how
 much it should do sub-pixeling over the stellar surface. That is: 20 means
 that at least 20 sub-pixels are assured over the stellar surface. This is
 important for flux conservation (see Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>).</p>
@@ -421,12 +409,14 @@ spherical coordinates.</p>
 observation.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dangle</span></code> (default 0.05) <em>[Fine-tuning only]</em></p>
-<p>Fine-tuning parameter for recursive subpixeling, for spherical coordinates,
+<p>Fine-tuning parameter for recursive subpixeling (see Section
+<a class="reference internal" href="imagesspectra.html#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>), for spherical coordinates,
 assuring that not too fine subpixeling would slow down the rendering of
 images or spectra too much.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_max_dangle</span></code> (default 0.3) <em>[Fine-tuning only]</em></p>
-<p>Fine-tuning parameter for recursive subpixeling, for spherical coordinates,
+<p>Fine-tuning parameter for recursive subpixeling (see Section
+<a class="reference internal" href="imagesspectra.html#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>), for spherical coordinates,
 preventing that too coarse subpixeling would reduce the accuracy.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dr</span></code> (default 0.003) <em>[Fine-tuning only]</em></p>
@@ -491,7 +481,8 @@ computed. The default is 1, which means: Local Thermodynamic Equilibrium
 (LTE). For other modes, please consult Chapter <a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a>.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">lines_maxdoppler</span></code> (default: 0.3) <em>[Fine-tuning only]</em></p>
-<p>If the doppler catching mode is used, this parameter tells how fine RADMC-3D
+<p>If the doppler catching mode is used (see Section
+<a class="reference internal" href="lineradtrans.html#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>), this parameter tells how fine RADMC-3D
 must sample along the ray, in units of the doppler width, when a line is
 doppler-shifting along the wavelength-of-sight.</p>
 </li>
@@ -554,32 +545,34 @@ is not really ‘adaptive’). This is grid style 1.</p></li>
 </div>
 <p>The meaning of the entries are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present 1. For
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: The format number, at present 1. For
 unformatted files this must be 4-byte integer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfcoordsystem:</span></code> If <code class="docutils literal notranslate"><span class="pre">coordsystem</span></code><span class="math notranslate nohighlight">\(&lt;\)</span><span class="math notranslate nohighlight">\(&lt;\)</span>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>&lt;<a href="#id3"><span class="problematic" id="id4">`</span></a>300 the coordinate system is cylindrical. For unformatted
-files this must be 4-byte integer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfgridinfo:</span></code> If <code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>==1 there will be
+<li><p><code class="docutils literal notranslate"><span class="pre">coordsystem</span></code>: If <code class="docutils literal notranslate"><span class="pre">coordsystem</span> <span class="pre">&lt;</span> <span class="pre">100</span></code> the coordinate system is
+cartesian. If <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">&lt;=</span> <span class="pre">coordsystem</span> <span class="pre">&lt;</span> <span class="pre">200</span></code> the coordinate system is spherical
+(polar).  If <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">&lt;=</span> <span class="pre">coordsystem</span> <span class="pre">&lt;</span> <span class="pre">300</span></code> the coordinate system is
+cylindrical. For unformatted files this must be 4-byte integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>: If <code class="docutils literal notranslate"><span class="pre">gridinfo==1</span></code> there will be
 abundant grid information written into this file, possibly useful for
 post-processing routines. Typically this is redundant information, so it
-is advised to set <code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>=0 to save disk space. In the
-following we will assume that <code class="docutils literal notranslate"><span class="pre">gridinfo</span></code>=0. For unformatted
+is advised to set <code class="docutils literal notranslate"><span class="pre">gridinfo=0</span></code> to save disk space. In the
+following we will assume that <code class="docutils literal notranslate"><span class="pre">gridinfo=0</span></code>. For unformatted
 files this must be 4-byte integer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfincl_x,incl_y,incl_z:</span></code> These are either 0 or
+<li><p><code class="docutils literal notranslate"><span class="pre">incl_x,incl_y,incl_z</span></code>: These are either 0 or
 1. If 0 then this dimension is not active (so upon grid refinement no
 refinement in this dimension is done). If 1 this dimension is fully
 active, even if the number of base grid cells in this direction is just
 1. Upon refinement the cell will also be splitted in this dimension. For
 unformatted files these numbers must be 4-byte integer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnx,ny,nz:</span></code> These are the number of grid cells on the
+<li><p><code class="docutils literal notranslate"><span class="pre">nx,ny,nz</span></code>: These are the number of grid cells on the
 base grid in each of these dimensions. For unformatted files these numbers
 must be 4-byte integer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfxi[1]...xi[nx+1]:</span></code> The edges of the cells of the base grid in
+<li><p><code class="docutils literal notranslate"><span class="pre">xi[1]...xi[nx+1]</span></code>: The edges of the cells of the base grid in
 x-direction. For <code class="docutils literal notranslate"><span class="pre">nx</span></code> grid cells we have <code class="docutils literal notranslate"><span class="pre">nx+1</span></code> cell walls, hence <code class="docutils literal notranslate"><span class="pre">nx+1</span></code>
 cell wall positions. For unformatted files these numbers must be 8-byte reals
 (=double precision).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfyi[1]...yi[ny+1]:</span></code> Same as above, but now for
+<li><p><code class="docutils literal notranslate"><span class="pre">yi[1]...yi[ny+1]</span></code>: Same as above, but now for
 y-direction.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfzi[1]...zi[nz+1]:</span></code> Same as above, but now for
+<li><p><code class="docutils literal notranslate"><span class="pre">zi[1]...zi[nz+1]</span></code>: Same as above, but now for
 z-direction.</p></li>
 </ul>
 <p>Example of a simple 2x2x2 regular grid in cartesian coordinates:</p>
@@ -597,7 +590,8 @@ z-direction.</p></li>
 </div>
 <div class="section" id="oct-tree-style-amr-grid">
 <span id="sec-amr-grid-oct-tree"></span><h3>Oct-tree-style AMR grid<a class="headerlink" href="#oct-tree-style-amr-grid" title="Permalink to this headline">¶</a></h3>
-<p>For a grid with oct-tree style grid refinement, the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
+<p>For a grid with oct-tree style grid refinement (see Section
+<a class="reference internal" href="gridding.html#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>), the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
 <span class="mi">1</span>                                        <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="mi">1</span> <span class="o">=</span> <span class="n">Oct</span><span class="o">-</span><span class="n">tree</span><span class="p">)</span>
 <span class="n">coordsystem</span>
@@ -623,7 +617,7 @@ z-direction.</p></li>
 </div>
 <p>The keywords have the same meaning as before, but in addition we have:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bf(0/1):</span></code> <em>NOTE: Only for amrstyle==1</em>. These are numbers that are either 0
+<li><p><code class="docutils literal notranslate"><span class="pre">(0/1)</span></code>: <em>NOTE: Only for</em> <code class="docutils literal notranslate"><span class="pre">amrstyle==1</span></code>. These are numbers that are either 0
 or 1. If 0, this means the current cell is a leaf (= a cell that is not
 refined and is therefore a ‘true’ cell). If 1, the current cell is a branch
 with 2 (in 1-D), 4 (in 2-D) or 8 (in 3-D) daughter cells. In that case the
@@ -676,7 +670,8 @@ which the (1,2,1) cell is refined again in 2x2x2:</p>
 </div>
 <div class="section" id="layer-style-amr-grid">
 <span id="sec-amr-grid-layered"></span><h3>Layer-style AMR grid<a class="headerlink" href="#layer-style-amr-grid" title="Permalink to this headline">¶</a></h3>
-<p>For a grid with layer-style grid refinement, the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
+<p>For a grid with layer-style grid refinement (see Section
+<a class="reference internal" href="gridding.html#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a>), the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
 <span class="mi">10</span>                                       <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="mi">10</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-</span><span class="n">style</span><span class="p">)</span>
 <span class="n">coordsystem</span>
@@ -698,17 +693,17 @@ which the (1,2,1) cell is refined again in 2x2x2:</p>
 </div>
 <p>The keywords have the same meaning as before, but in addition we have:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnrlevels:</span></code> How many levels you plan to go, where
-nrlevels==0 means no refinement, nrlevels==1 means one level of refinement
+<li><p><code class="docutils literal notranslate"><span class="pre">nrlevels</span></code>: How many levels you plan to go, where
+<code class="docutils literal notranslate"><span class="pre">nrlevels==0</span></code> means no refinement, <code class="docutils literal notranslate"><span class="pre">nrlevels==1</span></code> means one level of refinement
 (factor of 2 in resolution), etc.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnrlayers:</span></code> How many layers do you have, with nrlayers==0
-means no refinement, nrlayers==1 means one layer of refinement (factor of
+<li><p><code class="docutils literal notranslate"><span class="pre">nrlayers</span></code>: How many layers do you have, with <code class="docutils literal notranslate"><span class="pre">nrlayers==0</span></code>
+means no refinement, <code class="docutils literal notranslate"><span class="pre">nrlayers==1</span></code> means one layer of refinement (factor of
 2 in resolution), etc.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfparentid:</span></code> (For each layer) The parent layer for this
-layer. parentid==0 means parent is base grid. First layer has id==1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfix,iy,iz:</span></code> (For each layer) The location in the parent
+<li><p><code class="docutils literal notranslate"><span class="pre">parentid</span></code>: (For each layer) The parent layer for this
+layer. <code class="docutils literal notranslate"><span class="pre">parentid==0</span></code> means parent is base grid. First layer has <code class="docutils literal notranslate"><span class="pre">id==1</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ix,iy,iz</span></code>: (For each layer) The location in the parent
 layer where the current layer starts.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnx,ny,nz:</span></code> (For each layer) The size of the layer as measured in units of
+<li><p><code class="docutils literal notranslate"><span class="pre">nx,ny,nz</span></code>: (For each layer) The size of the layer as measured in units of
 the the parent layer. So the actual size of the current layer will be (in
 3-D): <code class="docutils literal notranslate"><span class="pre">2*nx,2*ny,2*nz</span></code>. In 2-D, with only the x- and y- dimensions active,
 we have a size of <code class="docutils literal notranslate"><span class="pre">2*nx,2*ny</span></code> with of course size 1 in z-direction.</p></li>
@@ -856,11 +851,11 @@ Sections <a class="reference internal" href="#sec-amr-grid-regular"><span class=
 <span class="n">density</span><span class="p">[</span><span class="n">nz</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">nz</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id9">
+<div class="figure align-default" id="id1">
 <span id="fig-regular-grid-numbered"></span><img alt="_images/base_amr.png" src="_images/base_amr.png" />
 <p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3 (as
 Fig. <a class="reference internal" href="gridding.html#fig-regular-grid"><span class="std std-numref">Fig. 21</span></a>), with the order of the cells shown as
-numbers in the cells.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+numbers in the cells.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="example-dust-density-inp-for-an-oct-tree-refined-grid">
@@ -896,11 +891,11 @@ one dust species. Then the <code class="docutils literal notranslate"><span clas
 </div>
 <p>A more complex example is shown in Fig.~:ref:<cite>fig-oct-tree-amr-numbered</cite>.
 An unformatted version is also available, in the standard way (see above).</p>
-<div class="figure align-default" id="id10">
+<div class="figure align-default" id="id2">
 <span id="fig-oct-tree-amr-numbered"></span><img alt="_images/oct_tree_amr.png" src="_images/oct_tree_amr.png" />
 <p class="caption"><span class="caption-number">Fig. 32 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement (as
 Fig.~:ref:<cite>fig-oct-tree-amr</cite>) with the order of the cells shown as numbers in
-the cells.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+the cells.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="example-dust-density-inp-for-a-layer-style-refined-grid">
@@ -979,7 +974,7 @@ these values (marked as redundant in the above example) <em>must</em> be
 present in the file, but they can have any value you like (typically 0).</p>
 <p>Note that if you have multiple species of dust then we will still have
 48 as the value of <code class="docutils literal notranslate"><span class="pre">nrcells</span></code>. The number of values to be read,
-if you have 2 dust species, is then simply 2*``nrcells`` = 2*48 = 96.</p>
+if you have 2 dust species, is then simply 2*<code class="docutils literal notranslate"><span class="pre">nrcells</span></code> = 2*48 = 96.</p>
 </div>
 </div>
 <div class="section" id="input-output-dust-temperature-dat">
@@ -1028,27 +1023,31 @@ flux[nlam,star=2]
 flux[nlam,star=nstar]
 </pre></div>
 </div>
-<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat</span></code>==2. The meaning of the variables:</p>
+<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat==2</span></code>. The meaning of the variables:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present better keep it at 2.
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: The format number, at present better keep it at 2.
 If you put it to 1, the list of wavelengths (see below) will instead be
 a list of frequencies in Herz.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnstars:</span></code> The number of stars you wish to specify.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+<li><p><code class="docutils literal notranslate"><span class="pre">nstars</span></code>: The number of stars you wish to specify.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of frequency points for the stellar
 spectra. At present this must be identical to the number of walvelength
 points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfrstar[i]:</span></code> The radius of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfmstar[i]:</span></code> The mass of star <span class="math notranslate nohighlight">\(i\)</span> in grams. This is not
+<li><p><code class="docutils literal notranslate"><span class="pre">rstar[i]</span></code>: The radius of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mstar[i]</span></code>: The mass of star <span class="math notranslate nohighlight">\(i\)</span> in grams. This is not
 important for the current version of RADMC-3D, but may be in the
 future.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfxstar[i]:</span></code> The <code class="docutils literal notranslate"><span class="pre">x</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfystar[i]:</span></code> The <code class="docutils literal notranslate"><span class="pre">y</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfzstar[i]:</span></code> The <code class="docutils literal notranslate"><span class="pre">z</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns. This must be identical (!) to the equivalent
-point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfflux[i,star=n]:</span></code> The flux <span class="math notranslate nohighlight">\(F_\nu\)</span> at wavelength point <span class="math notranslate nohighlight">\(i\)</span>
-for star <span class="math notranslate nohighlight">\(n\)</span> in units of erg cm:math:<cite>^{-2}</cite> s:math:<cite>^{-1}</cite> Hz:math:<cite>^{-1}</cite> as seen from a
-distance of 1 parsec = <span class="math notranslate nohighlight">\(3.08572\times 10^{18}\)</span> cm (for normalization).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xstar[i]</span></code>: The <code class="docutils literal notranslate"><span class="pre">x</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ystar[i]</span></code>: The <code class="docutils literal notranslate"><span class="pre">y</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zstar[i]</span></code>: The <code class="docutils literal notranslate"><span class="pre">z</span></code>-coordinate of star <span class="math notranslate nohighlight">\(i\)</span> in centimeters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in
+[1,\mathrm{nlam}]\)</span>) in microns. This must be identical (!) to the equivalent
+point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see Section
+<a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flux[i,star=n]</span></code>: The flux <span class="math notranslate nohighlight">\(F_\nu\)</span> at wavelength point <span class="math notranslate nohighlight">\(i\)</span> for
+star <span class="math notranslate nohighlight">\(n\)</span> in units of
+<span class="math notranslate nohighlight">\(\mathrm{erg}\,\mathrm{cm}^{-2},\mathrm{s}^{-1},\mathrm{Hz}^{-1}\)</span> as
+seen from a distance of 1 parsec = <span class="math notranslate nohighlight">\(3.08572\times 10^{18}\)</span> cm (for
+normalization).</p></li>
 </ul>
 <p>Sometimes it may be sufficient to assume simple blackbody spectra
 for these stars. If for any of the stars the first (!) flux number
@@ -1099,25 +1098,25 @@ flux[nlam,templ=2]
 flux[nlam,templ=ntempl]
 </pre></div>
 </div>
-<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat</span></code>==2. The meaning of the variables:</p>
+<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat==2</span></code>. The meaning of the variables:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present better keep it at 2.
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: The format number, at present better keep it at 2.
 If you put it to 1, the list of wavelengths (see below) will instead be
 a list of frequencies in Herz.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfntempl:</span></code> The number of stellar templates you wish to specify.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+<li><p><code class="docutils literal notranslate"><span class="pre">ntempl</span></code>: The number of stellar templates you wish to specify.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of frequency points for the stellar
 template spectra. At present this must be identical to the number of
 walvelength points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
 Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in
-[1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns. This must be identical (!) to the
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\mathrm{nlam}]\)</span>)
+in microns. This must be identical (!) to the
 equivalent point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
 Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfflux[i,templ=n]:</span></code> The ‘flux’ at wavelength <span class="math notranslate nohighlight">\(i\)</span> for
+<li><p><code class="docutils literal notranslate"><span class="pre">flux[i,templ=n]</span></code>: The ‘flux’ at wavelength <span class="math notranslate nohighlight">\(i\)</span> for
 stellar template <span class="math notranslate nohighlight">\(n\)</span>. The units are somewhat tricky. It is given in units
 of erg / sec / Hz / gram-of-star. So multiply this by the density of
-stars in units of gram-of-star / cm:math:<cite>^3</cite>, and divide by 4*pi to get the
-stellar source function in units of erg / src / Hz / cm:math:<cite>^3</cite> / steradian.</p></li>
+stars in units of gram-of-star / <span class="math notranslate nohighlight">\(\mathrm{cm}^3\)</span>, and divide by 4*pi to get the
+stellar source function in units of erg / src / Hz / <span class="math notranslate nohighlight">\(\mathrm{cm}^3\)</span> / steradian.</p></li>
 </ul>
 <p>Sometimes it may be sufficient to assume simple blackbody spectra
 for these stellar sources. If for any of the stellar sources the first (!)
@@ -1169,21 +1168,21 @@ Intensity[1]
 Intensity[nlam]
 </pre></div>
 </div>
-<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat</span></code>==2. The meaning of the variables:</p>
+<p>which is valid only if <code class="docutils literal notranslate"><span class="pre">iformat==2</span></code>. The meaning of the variables:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> The format number, at present better keep it at 2.
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: The format number, at present better keep it at 2.
 If you put it to 1, the list of wavelengths (see below) will instead be
 a list of frequencies in Herz.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of frequency points for the stellar
 template spectra. At present this must be identical to the number of
 walvelength points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
 Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in
-[1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns. This must be identical (!) to the
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\mathrm{nlam}]\)</span>)
+in microns. This must be identical (!) to the
 equivalent point in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> (see
 Section <a class="reference internal" href="#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>). If not, an error occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfIntensity[i]:</span></code> The intensity of the radiation field at
-wavelength <span class="math notranslate nohighlight">\(i\)</span> in units of erg / cm:math:<cite>^2</cite> / sec / Hz / steradian.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Intensity[i]</span></code>: The intensity of the radiation field at
+wavelength <span class="math notranslate nohighlight">\(i\)</span> in units of erg / <span class="math notranslate nohighlight">\(\mathrm{cm}^2\)</span> / sec / Hz / steradian.</p></li>
 </ul>
 </div>
 <div class="section" id="input-optional-heatsource-inp">
@@ -1209,7 +1208,8 @@ the heat source would then be the sum over all cells of <code class="docutils li
 <span id="sec-wavelengths"></span><h2>INPUT (required): wavelength_micron.inp<a class="headerlink" href="#input-required-wavelength-micron-inp" title="Permalink to this headline">¶</a></h2>
 <p>This is the file that sets the discrete wavelength points for the continuum
 radiative transfer calculations. Note that this is not the same as the
-wavelength grid used for e.g. line radiative transfer.  See Section <a class="reference internal" href="#sec-camera-wavelengths"><span class="std std-ref">INPUT (optional): camera_wavelength_micron.inp</span></a> and/or Chapter <a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a> for
+wavelength grid used for e.g. line radiative transfer.  See Section
+<a class="reference internal" href="#sec-camera-wavelengths"><span class="std std-ref">INPUT (optional): camera_wavelength_micron.inp</span></a> and/or Chapter <a class="reference internal" href="lineradtrans.html#chap-line-transfer"><span class="std std-ref">Line radiative transfer</span></a> for
 that. This file is only in formatted (ascii) style. It’s structure is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nlam</span>
 <span class="k">lambda</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1220,19 +1220,20 @@ that. This file is only in formatted (ascii) style. It’s structure is:</p>
 </div>
 <p>where</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency points for the stellar
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of frequency points for the stellar
 spectra.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\)</span><span class="math notranslate nohighlight">\(]\)</span>) in microns.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelength point <span class="math notranslate nohighlight">\(i\)</span> (where <span class="math notranslate nohighlight">\(i\in [1,\mathrm{nlam}]\)</span>) in microns.</p></li>
 </ul>
 <p>The list of wavelengths can be in increasing order or decreasing order, but
 must be monotonically increasing/decreasing.</p>
-<p>{bf IMPORTANT:} It is important to keep in mind that the wavelength
+<p><em>IMPORTANT:</em> It is important to keep in mind that the wavelength
 coverage must include the wavelengths at which the stellar spectra have most
 of their energy, and at which the dust cools predominantly.  This in
-practice means that this should go all the way from 0.1 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m, typically logarithmically spaced (i.e. equally spaced in
-log:math:<cite>lambda</cite>). A smaller coverage will cause serious problems in the Monte
+practice means that this should go all the way from 0.1 <span class="math notranslate nohighlight">\(\mu\)</span>m to 1000
+<span class="math notranslate nohighlight">\(\mu\)</span>m, typically logarithmically spaced (i.e. equally spaced in
+<span class="math notranslate nohighlight">\(\log(\lambda)\)</span>). A smaller coverage will cause serious problems in the Monte
 Carlo run and dust temperatures may then be severely miscalculated. Note
-that the 0.1 :math:<a href="#id5"><span class="problematic" id="id6">`</span></a>mu`m is OK for stellar temperatures below 10000 K. For higher
+that the 0.1 <span class="math notranslate nohighlight">\(\mu\)</span>m is OK for stellar temperatures below 10000 K. For higher
 temperatures a shorter wavelength lower limit must be used.</p>
 </div>
 <div class="section" id="input-optional-camera-wavelength-micron-inp">
@@ -1288,54 +1289,48 @@ of 2 separate dust species is used:</p>
 </pre></div>
 </div>
 <p>where:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> Currently the format number is 2, and in this manual
-we always assume it is 2.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnspec:</span></code> The number of dust species that will be loaded.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfinputstyle[i]:</span></code> This number tells in which form the dust
-opacity of dust species <span class="math notranslate nohighlight">\(i\)</span> is to be read:</p>
 <ul class="simple">
-<li><p><em>1</em> Use the <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code> input file
-style (see Section <a class="reference internal" href="#sec-dustkappa-files"><span class="std std-ref">The dustkappa_&lt;&gt;`.inp files</span></a>).</p></li>
-<li><p><em>10</em> Use the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_:math:`&lt;`name:math:`&gt;`.inp</span></code> input
-file style (see Section <a class="reference internal" href="#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>).</p></li>
-<li><p><em>-1</em> Use the <code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code> input file
-style (see Section <a class="reference internal" href="#sec-dustopac-oldstyle"><span class="std std-ref">The dustopac_&lt;&gt;`.inp files: Backward compatibility with RADMC-2D</span></a>). This is just a backward
-compatibility mode. Should be avoided if possible.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: Currently the format number is 2, and in this manual
+we always assume it is 2.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nspec</span></code>: The number of dust species that will be loaded.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputstyle[i]</span></code>: This number tells in which form the dust
+opacity of dust species <span class="math notranslate nohighlight">\(i\)</span> is to be read:</p>
+<ul>
+<li><p><em>1</em> Use the <code class="docutils literal notranslate"><span class="pre">dustkappa_*.inp</span></code> input file
+style (see Section <a class="reference internal" href="#sec-dustkappa-files"><span class="std std-ref">The dustkappa_*.inp files</span></a>).</p></li>
+<li><p><em>10</em> Use the <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_*.inp</span></code> input
+file style (see Section <a class="reference internal" href="#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_*.inp files</span></a>).</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiquantum[i]:</span></code> For normal thermal grains this is 0. If,
+<li><p><code class="docutils literal notranslate"><span class="pre">iquantum[i]</span></code>: For normal thermal grains this is 0. If,
 however, this grain species is supposed to be treated as a quantum-heated
-grain, then non-zero values are to be specified. <a href="#id7"><span class="problematic" id="id8">*</span></a>NOTE: At the moment</p>
-<blockquote>
-<div><p>the quantum heating is not yet implemented. Will be done in the near
-future. Until then, please set this to 0!*</p>
-</div></blockquote>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bf:math:`&lt;`nameofdustspeciesi:math:`&gt;`:</span></code> This is the name of the
+grain, then non-zero values are to be specified. <em>NOTE: At the moment
+the quantum heating is not yet implemented. Will be done in the
+future, if users request it. Until then, please set this to 0!</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;name</span> <span class="pre">of</span> <span class="pre">dust</span> <span class="pre">species</span> <span class="pre">i&gt;</span></code>: This is the name of the
 dust species (without blank spaces). This name is then glued to the base
 name of the opacity file (see above). For instance, if the name is
-<code class="docutils literal notranslate"><span class="pre">enstatite</span></code>, and <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code>==1, then the file to be
+<code class="docutils literal notranslate"><span class="pre">enstatite</span></code>, and <code class="docutils literal notranslate"><span class="pre">inputstyle==1</span></code>, then the file to be
 read is <code class="docutils literal notranslate"><span class="pre">dustkappa_enstatite.inp</span></code>.</p></li>
 </ul>
 </div>
 <div class="section" id="the-dustkappa-inp-files">
-<span id="sec-dustkappa-files"></span><h3>The <a href="#id11"><span class="problematic" id="id12">dustkappa_</span></a><span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files<a class="headerlink" href="#the-dustkappa-inp-files" title="Permalink to this headline">¶</a></h3>
+<span id="sec-dustkappa-files"></span><h3>The dustkappa_*.inp files<a class="headerlink" href="#the-dustkappa-inp-files" title="Permalink to this headline">¶</a></h3>
 <p>If you wish to use dust opacities that include the mass-weighted absorption
 opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span>, the (optionally) mass-weighted scattering
 opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span>, and (optionally) the anisotropy factor <span class="math notranslate nohighlight">\(g\)</span>
-for scattering, you can do this with a file <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code> (set input style to 1 in <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code>, see Section <a class="reference internal" href="#sec-dustopac-inp-file"><span class="std std-ref">The dustopac.inp file</span></a>). With this kind of
-opacity scattering is included either isotropically or using the
-Henyey-Greenstein function.  Using an opacity of this kind does <em>not</em>
+for scattering, you can do this with a file <code class="docutils literal notranslate"><span class="pre">dustkappa_*.inp</span></code> (set input style to 1 in
+<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code>, see Section <a class="reference internal" href="#sec-dustopac-inp-file"><span class="std std-ref">The dustopac.inp file</span></a>). With this kind of
+opacity input file, scattering is included either isotropically or using the
+Henyey-Greenstein function.  Using an opacity file of this kind does <em>not</em>
 allow for full realistic scattering phase functions nor for
-polarization. For that, you need <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_:math:`&lt;`name:math:`&gt;`.inp</span></code>
-files (see Section <a class="reference internal" href="#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_&lt;&gt;`.inp files</span></a>). Please refer to Section
+polarization. For that, you need <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_*.inp</span></code>
+files (see Section <a class="reference internal" href="#sec-dustkapscatmat-files"><span class="std std-ref">The dustkapscatmat_*.inp files</span></a>). Please refer to Section
 <a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for more information about how RADMC-3D treats
 scattering.</p>
-<p>If for dust species <code class="docutils literal notranslate"><span class="pre">:math:`&lt;`name:math:`&gt;`</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
-<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file is set to 1, then the file
-<code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code>
-is sought and read. The structure of this file is:</p>
+<p>If for dust species <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file
+is set to 1, then the file <code class="docutils literal notranslate"><span class="pre">dustkappa_&lt;name&gt;.inp</span></code> is sought and read. The
+structure of this file is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Any amount of arbitrary</span>
 <span class="c1"># comment lines that tell which opacity this is.</span>
 <span class="c1"># Each comment line must start with an # or ; or ! character</span>
@@ -1349,44 +1344,44 @@ is sought and read. The structure of this file is:</p>
 </div>
 <p>The meaning of these entries is:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> If iformat==1, then only the lambda and
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: If <code class="docutils literal notranslate"><span class="pre">iformat==1</span></code>, then only the lambda and
 kappa_abs colums are present. In that case the scattering opacity is
-assumed to be 0, i.e. a zero albedo is assumed. If iformat==2 also
-kappa_scat is read (third column). If iformat==3 (which is what is used in
+assumed to be 0, i.e. a zero albedo is assumed. If <code class="docutils literal notranslate"><span class="pre">iformat==2</span></code> also
+kappa_scat is read (third column). If <code class="docutils literal notranslate"><span class="pre">iformat==3</span></code> (which is what is used in
 the above example) then <em>also</em> the anisotropy factor <span class="math notranslate nohighlight">\(g\)</span> is included.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of wavelength points in this file. This
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of wavelength points in this file. This
 can be any number, and does not have to be the same as those of the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. It is typically advisable to have a rather
 large number of wavelength points.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> The wavelength point <span class="math notranslate nohighlight">\(i\)</span> in micron. This does
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: The wavelength point <span class="math notranslate nohighlight">\(i\)</span> in micron. This does
 not have to be (and indeed typically is not) the same as the values in the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. Also for each opacity this list of
 wavelengths can be different (and can be a different quantity of points).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_abs[i]:</span></code> The absorption opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of cm:math:<cite>^2</cite> per gram of dust.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_scat[i]:</span></code> The scattering opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of cm:math:<cite>^2</cite>
+<li><p><code class="docutils literal notranslate"><span class="pre">kappa_abs[i]</span></code>: The absorption opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^2\)</span> per gram of dust.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kappa_scat[i]</span></code>: The scattering opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^2\)</span>
 per gram of dust. Note that this column should only be included if
-iformat==2 or higher.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfg[ilam]:</span></code> The mean scattering angle
+<code class="docutils literal notranslate"><span class="pre">iformat==2</span></code> or higher.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">g[ilam]</span></code>: The mean scattering angle
 <span class="math notranslate nohighlight">\(\langle\cos(\theta)\rangle\)</span>, often called <span class="math notranslate nohighlight">\(g\)</span>. This will be used by
 RADMC-3D in the Henyey-Greenstein scattering phase function. Note that
-this column should only be included if iformat==3 or higher.</p></li>
+this column should only be included if <code class="docutils literal notranslate"><span class="pre">iformat==3</span></code> or higher.</p></li>
 </ul>
 <p>Once this file is read, the opacities will be mapped onto the global
 wavelength grid of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. Since this mapping
-always involve uncertainties and errors, a file <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp_used</span></code> is created which lists the opacity how it
+always involve uncertainties and errors, a file <code class="docutils literal notranslate"><span class="pre">dustkappa_*.inp_used</span></code> is created which lists the opacity how it
 is remapped onto the global wavelength grid. This is only for you as the
 user, so that you can verify what RADMC-3D has internally done. Note that if
-the upper or lower edges of the wavelength domain of the <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp</span></code> file is within the domain of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> grid, some extrapolation will have to be done.  At
+the upper or lower edges of the wavelength domain of the <code class="docutils literal notranslate"><span class="pre">dustkappa_*.inp</span></code> file is within the domain of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> grid, some extrapolation will have to be done.  At
 short wavelength this will simply be constant extrapolation while at long
-wavelength a powerlaw extrapolation is done. Have a look at the <code class="docutils literal notranslate"><span class="pre">dustkappa_:math:`&lt;`name:math:`&gt;`.inp_used</span></code> file to see how RADMC-3D has done this
+wavelength a powerlaw extrapolation is done. Have a look at the <code class="docutils literal notranslate"><span class="pre">dustkappa_*.inp_used</span></code> file to see how RADMC-3D has done this
 in your particular case.</p>
 </div>
 <div class="section" id="the-dustkapscatmat-inp-files">
-<span id="sec-dustkapscatmat-files"></span><h3>The <a href="#id13"><span class="problematic" id="id14">dustkapscatmat_</span></a><span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files<a class="headerlink" href="#the-dustkapscatmat-inp-files" title="Permalink to this headline">¶</a></h3>
+<span id="sec-dustkapscatmat-files"></span><h3>The dustkapscatmat_*.inp files<a class="headerlink" href="#the-dustkapscatmat-inp-files" title="Permalink to this headline">¶</a></h3>
 <p>If you wish to treat scattering in a more realistic way than just the
 Henyey-Greenstein non-polarized way, then you must provide RADMC-3D with
 more information than is present in the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code>
-files: RADMC-3D will need the full scattering M”uller matrix for all angles
+files: RADMC-3D will need the full scattering Müller matrix for all angles
 of scattering (see e.g. the books by Mishchenko, or by Bohren &amp; Huffman or
 by van de Hulst). For <em>randomly oriented particles</em> only 6 of these
 matrix elements can be non-zero: <span class="math notranslate nohighlight">\(Z_{11}\)</span>, <span class="math notranslate nohighlight">\(Z_{12}=Z_{21}\)</span>, <span class="math notranslate nohighlight">\(Z_{22}\)</span>,
@@ -1399,9 +1394,9 @@ values of these 6 matrix elements. These can be provided in a file
 <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_xxx.inp</span></code> (set input style to 10 in <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code>, see Section <a class="reference internal" href="#sec-dustopac-inp-file"><span class="std std-ref">The dustopac.inp file</span></a>) which comes *  instead of* the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code> file. Please refer to
 Section <a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for more information about how RADMC-3D treats
 scattering.</p>
-<p>If for dust species <code class="docutils literal notranslate"><span class="pre">:math:`&lt;`name:math:`&gt;`</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
+<p>If for dust species <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
 <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file is set to 10, then the file
-<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_:math:`&lt;`name:math:`&gt;`.inp</span></code>
+<code class="docutils literal notranslate"><span class="pre">dustkapscatmat_&lt;name&gt;.inp</span></code>
 is sought and read. The structure of this file is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Any amount of arbitrary</span>
 <span class="c1"># comment lines that tell which opacity this is.</span>
@@ -1444,46 +1439,47 @@ is sought and read. The structure of this file is:</p>
 </div>
 <p>The meaning of these entries is:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> For now this value should remain 1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of wavelength points in this file. This
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: For now this value should remain 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of wavelength points in this file. This
 can be any number, and does not have to be the same as those of the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. It is typically advisable to have a rather
 large number of wavelength points.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnang:</span></code> The number of scattering angle sampling points.
+<li><p><code class="docutils literal notranslate"><span class="pre">nang</span></code>: The number of scattering angle sampling points.
 This should be large enough that a proper integration over scattering angle
 can be carried out reliably. A reasonable value is 181, so that (for
 a regular grid in scattering angle <span class="math notranslate nohighlight">\(\theta\)</span>) you have as scattering angles
 <span class="math notranslate nohighlight">\(\theta=0,1,2,\cdots,180\)</span> (in degrees). But if you have extremely forward-
 or backward peaked scattering, then maybe even 181 is not enough.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[ilam]:</span></code> The wavelength point <span class="math notranslate nohighlight">\(ilam\)</span> in micron. This does
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[ilam]</span></code>: The wavelength point <code class="docutils literal notranslate"><span class="pre">ilam</span></code> in micron. This does
 not have to be (and indeed typically is not) the same as the values in the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. Also for each opacity this list of
 wavelengths can be different (and can be a different quantity of points).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfangle_in_degrees[iang]:</span></code> The scattering angle
-sampling point <span class="math notranslate nohighlight">\(iang\)</span> in degrees (0 degrees is perfect forward scattering,
+<li><p><code class="docutils literal notranslate"><span class="pre">angle_in_degrees[iang]</span></code>: The scattering angle
+sampling point <code class="docutils literal notranslate"><span class="pre">iang</span></code> in degrees (0 degrees is perfect forward scattering,
 180 degrees is perfect backscattering). There should be <code class="docutils literal notranslate"><span class="pre">nang</span></code>
 such points, where <code class="docutils literal notranslate"><span class="pre">angle_in_degrees[1]</span></code> must be 0 and
 <code class="docutils literal notranslate"><span class="pre">angle_in_degrees[nang]</span></code> must be 180. In between the angle
 grid can be anything, as long as it is monotonic.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_abs[ilam]:</span></code> The absorption opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span> in units of cm:math:<cite>^2</cite> per gram of dust.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_scat[ilam]:</span></code> The scattering opacity
-<span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> in units of cm:math:<cite>^2</cite> per gram of dust. RADMC-3D can
+<li><p><code class="docutils literal notranslate"><span class="pre">kappa_abs[ilam]</span></code>: The absorption opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span>
+in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^2\)</span> per gram of dust.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kappa_scat[ilam]</span></code>: The scattering opacity
+<span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^2\)</span> per gram of dust. RADMC-3D can
 (and will) in fact calculate <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span> from the scattering
 matrix elements. It will then check (for every wavelength) if that is the
 same as the value listed here. If the difference is small, it will simply
-adjust the <code class="docutils literal notranslate"><span class="pre">bfkappa_scat[ilam]</span></code> value internally to get a
+adjust the <code class="docutils literal notranslate"><span class="pre">kappa_scat[ilam]</span></code> value internally to get a
 perfect match. If it is larger than 1E-4 then it will, in addition to
 adjusting, make a warning. if it is larger than 1E-1, it will abort. Note
 that the fewer angles are used, the worse the match will be because the
 integration over angle will be worse.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfg[ilam]:</span></code> The mean scattering angle
+<li><p><code class="docutils literal notranslate"><span class="pre">g[ilam]</span></code>: The mean scattering angle
 <span class="math notranslate nohighlight">\(\langle\cos(\theta)\rangle\)</span>, often called <span class="math notranslate nohighlight">\(g\)</span>. RADMC-3D can (and will) in
 fact calculate <span class="math notranslate nohighlight">\(g\)</span> from the scattering matrix elements. Like with
-<code class="docutils literal notranslate"><span class="pre">bfkappa_scat[ilam]</span></code> it will adjust if the difference is not
+<code class="docutils literal notranslate"><span class="pre">kappa_scat[ilam]</span></code> it will adjust if the difference is not
 too large and it will complain or abort if the difference is larger than
 some limit.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Z_{xx}</span></code> These are the scattering matrix elements
-in units of cm:math:<cite>^2</cite> gram:math:<cite>^{-1}</cite> ster:math:<cite>^{-1}</cite> (i.e. they are angular
+in units of <span class="math notranslate nohighlight">\(\mathrm{cm}^2\, \mathrm{g}^{-1}\,\mathrm{ster}^{-1}\)</span> (i.e. they are angular
 differential cross sections). See Section <a class="reference internal" href="dustradtrans.html#sec-scattering"><span class="std std-ref">More about scattering of photons off dust grains</span></a> for
 more details.</p></li>
 </ul>
@@ -1514,53 +1510,14 @@ additional file to <code class="docutils literal notranslate"><span class="pre">
 <span class="mf">180.0</span>        <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">angle</span> <span class="p">(</span><span class="ow">in</span> <span class="n">degrees</span><span class="p">)</span><span class="o">.</span> <span class="n">Must</span> <span class="n">be</span> <span class="mi">180</span>
 </pre></div>
 </div>
-<p>{bf NOTE:} This file is not compulsory. If it is not given, then
+<p><em>NOTE:</em> This file is not compulsory. If it is not given, then
 <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> will make its own internal scattering angle grid.</p>
-</div>
-<div class="section" id="the-dustopac-inp-files-backward-compatibility-with-radmc-2d">
-<span id="sec-dustopac-oldstyle"></span><h3>The <a href="#id15"><span class="problematic" id="id16">dustopac_</span></a><span class="math notranslate nohighlight">\(&lt;\)</span>&gt;`.inp files: Backward compatibility with RADMC-2D<a class="headerlink" href="#the-dustopac-inp-files-backward-compatibility-with-radmc-2d" title="Permalink to this headline">¶</a></h3>
-<p>If you want to be able to redo a model from the old RADMC (2D-version) code
-with RADMC-3D, you require RADMC-3D to be able to read the old style
-dust opacity files <code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code>.</p>
-<p>If for dust species <code class="docutils literal notranslate"><span class="pre">:math:`&lt;`name:math:`&gt;`</span></code> the <code class="docutils literal notranslate"><span class="pre">inputstyle</span></code> in the
-<code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file is set to -1, then the file <code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code>
-is sought and read. The structure of this file is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nlam</span>   <span class="n">dummy</span>
-<span class="n">kappa_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-  <span class="o">.</span>
-  <span class="o">.</span>
-<span class="n">kappa_abs</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
-<span class="n">kappa_scat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-  <span class="o">.</span>
-  <span class="o">.</span>
-<span class="n">kappa_scat</span><span class="p">[</span><span class="n">nlam</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The meaning of these entries is:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of frequency (wavelength) points. This
-must be <em>identical</em> to those of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file
-or else the code stops.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfdummy:</span></code> Put this number to 1. It is here for historic
-reasons (and backward compatibility with older RADMC incarnations).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_abs[i]:</span></code> The absorption opacity at wavelength point
-<span class="math notranslate nohighlight">\(i\)</span> of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> wavelength grid, in units of
-cm:math:<cite>^2</cite> per gram of dust.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfkappa_scat[i]:</span></code> The scattering opacity at wavelength point
-<span class="math notranslate nohighlight">\(i\)</span> of the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> wavelength grid, in units of
-cm:math:<cite>^2</cite> per gram of dust. <em>NOTE: Here isotropic scattering is assumed.</em></p></li>
-</ul>
-<p>Note that the opacities listed in this kind of file belong to the wavelength
-points in the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>. So if you change the
-<code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file, you also must change the
-<code class="docutils literal notranslate"><span class="pre">dustopac_:math:`&lt;`name:math:`&gt;`.inp</span></code> files. This is why this kind of opacity
-specification is not recommended.</p>
 </div>
 </div>
 <div class="section" id="output-spectrum-out">
 <span id="sec-output-spectrum-out"></span><h2>OUTPUT: spectrum.out<a class="headerlink" href="#output-spectrum-out" title="Permalink to this headline">¶</a></h2>
 <p>Any spectrum that is made with RADMC-3D will be either called
-<code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> or <em>spectrum_:math:`&lt;`somename:math:`&gt;`.out</em> and will have
+<code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> or <code class="docutils literal notranslate"><span class="pre">spectrum_&lt;somename&gt;.out</span></code> and will have
 the following structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                      <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">now</span> <span class="n">this</span> <span class="ow">is</span> <span class="mi">1</span>
 <span class="n">nlam</span>
@@ -1573,11 +1530,11 @@ the following structure:</p>
 </div>
 <p>where:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> This format number is currently set to 1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of wavelength points in this spectrum.
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: This format number is currently set to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of wavelength points in this spectrum.
 This does not necessarily have to be the same as those in the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. It can be any number.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelength in micron.  This does not necessarily
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelength in micron.  This does not necessarily
 have to be the same as those in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.
 The wavelength grid of a spectrum file can be completely independent
 of all other wavelength grids. For standard SED computations for the
@@ -1585,7 +1542,9 @@ continuum typically these will be indeed the same as those in the
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file. But for line transfer or for
 spectra based on the <code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> they are
 not.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfflux[i]:</span></code> Flux in erg cm:math:<cite>^{-2}</cite> s:math:<cite>^{-1}</cite> Hz:math:<cite>^{-1}</cite> at this
+<li><p><code class="docutils literal notranslate"><span class="pre">flux[i]</span></code>: Flux in units of
+<span class="math notranslate nohighlight">\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\)</span>
+at this
 wavelength as measured at a standard distance of 1 parsec (just as a way
 of normalization).</p></li>
 </ul>
@@ -1630,15 +1589,15 @@ without Stokes parameters):</p>
 one image is written (i.e. the img=2, …. img=nlam are not there, only
 the img=1). The meaning of the various entries is:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat:</span></code> This format number is currently set to 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: This format number is currently set to 1</p></li>
 </ul>
 <p>for images from an observer at infinity (default) and 2 for a local observer.
 Note: For full-Stokes images it is 3, but then also the data changes a
 bit, see below.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfim_nx,im_ny:</span></code> The number of pixels in x and in y
+<li><p><code class="docutils literal notranslate"><span class="pre">im_nx,im_ny</span></code>: The number of pixels in x and in y
 direction of the image.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnlam:</span></code> The number of images at different wavelengths that</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: The number of images at different wavelengths that</p></li>
 </ul>
 <p>are in this file. You can make a series of images at different wavelengths
 in one go, and write them in this file. The wavelength belonging to each of
@@ -1646,20 +1605,21 @@ these images is listed below. The <code class="docutils literal notranslate"><sp
 however large you want. Mostly one typically just makes an images at one
 wavelength, meaning <code class="docutils literal notranslate"><span class="pre">nlam</span></code>=1.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfpixsize_x,pixsize_y:</span></code> The size of the pixels in cm (for an observer at
+<li><p><code class="docutils literal notranslate"><span class="pre">pixsize_x,pixsize_y</span></code>: The size of the pixels in cm (for an observer at
 infinity) or radian (for local observer mode).  This means that for the
 observer-at-infinity mode (default) the size is given in model units (distance
 within the 3-D model) and the user can, for any distance, convert this into
 arcseconds: pixel size in arcsec = ( pixel size in cm / 1.496E13) / (distance
 in parsec). The pixel size is the full size from the left of the pixel to the
 right of the pixel (or from bottom to top).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bflambda[i]:</span></code> Wavelengths in micron belonging to the various images in this
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda[i]</span></code>: Wavelengths in micron belonging to the various images in this
 file. In case <code class="docutils literal notranslate"><span class="pre">nlam</span></code>=1 there will be here just a single number. Note that
 this set of wavelengths can be completely independent of all other wavelength
 grids.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfimage[ix,iy,img]:</span></code> Intensity in the image at pixel <code class="docutils literal notranslate"><span class="pre">ix</span></code>, <code class="docutils literal notranslate"><span class="pre">iy</span></code> at
-wavelength <code class="docutils literal notranslate"><span class="pre">img</span></code> (of the above listed wavelength points) in units of erg
-cm:math:<cite>^{-2}</cite> s:math:<cite>^{-1}</cite> Hz:math:<cite>^{-1}</cite> ster:math:<cite>^{-1}</cite>. <em>Important:</em>
+<li><p><code class="docutils literal notranslate"><span class="pre">image[ix,iy,img]</span></code>: Intensity in the image at pixel <code class="docutils literal notranslate"><span class="pre">ix</span></code>, <code class="docutils literal notranslate"><span class="pre">iy</span></code> at
+wavelength <code class="docutils literal notranslate"><span class="pre">img</span></code> (of the above listed wavelength points) in units of
+<span class="math notranslate nohighlight">\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\)</span>.
+<em>Important:</em>
 The pixels are ordered from left to right (i.e. increasing <span class="math notranslate nohighlight">\(x\)</span>) in the
 inner loop, and from bottom to top (i.e. increasing <span class="math notranslate nohighlight">\(y\)</span>) in the outer
 loop.</p></li>
@@ -1720,7 +1680,7 @@ the option <code class="docutils literal notranslate"><span class="pre">loadcolo
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat</span></code>: This format number is currently set to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: This format number is currently set to 1.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: Number of wavelength indices specified here.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ilam[i]</span></code>: The wavelength index for image i (the wavelength
 index refers to the list of wavelengths in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.</p></li>
@@ -1741,7 +1701,7 @@ aperture (see Section <a class="reference internal" href="imagesspectra.html#sec
 </div>
 <p>with</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfiformat</span></code>: This format number is currently set to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iformat</span></code>: This format number is currently set to 1.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nlam</span></code>: Number of wavelength indices specified here. This
 does <em>not</em> have to be the same as the number of wavelength of a
 spectrum or the number of wavelengths specified in the file
@@ -1765,14 +1725,14 @@ SED (which in RADMC-3D never includes the lines), then it would be a
 waste of time to let RADMC-3D read all the gas velocity and temperature
 data and level population data into memory if they are not used.</p>
 <p>To avoid unnecessary reading of large files the reading of these files is
-usually organized in a <cite>read when required’ way. Any subroutine in the code
+usually organized in a ‘read when required’ way. Any subroutine in the code
 that relies on e.g. line data to be present in memory can simply call the
-routine ``read_lines_all(action)`</cite> with argument <code class="docutils literal notranslate"><span class="pre">action</span></code> being 1,
-i.e.:
-begin{verbatim}
-call read_lines_all(1)
-end{verbatim}
-This routine will check if the data are present: if no, it will read them,
+routine <code class="docutils literal notranslate"><span class="pre">read_lines_all(action)</span></code> with argument <code class="docutils literal notranslate"><span class="pre">action</span></code> being 1,
+i.e.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="n">read_lines_all</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This routine will check if the data are present: if no, it will read them,
 if yes, it will return without further action. This means that you can call
 <code class="docutils literal notranslate"><span class="pre">read_lines_all(1)</span></code> as often as you want: the line data will be read
 once, and only once. If you look through the code you will therefore find

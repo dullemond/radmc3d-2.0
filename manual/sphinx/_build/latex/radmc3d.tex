@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Aug 28, 2020}
+\date{Aug 29, 2020}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -288,7 +288,7 @@ Front\sphinxhyphen{}end Python packages:
 {[}+{]} Python simple tools for RADMC\sphinxhyphen{}3D
 
 \item {} 
-{[}+{]} Python RADMC\sphinxhyphen{}3D library \{smalltt radmc3dPy\} (author: A.\textasciitilde{}Juhasz)
+{[}+{]} Python RADMC\sphinxhyphen{}3D library \{smalltt radmc3dPy\} (author: A. Juhasz)
 
 \end{enumerate}
 
@@ -559,7 +559,7 @@ if necessary.
 \item {} 
 \sphinxstyleemphasis{A fortran\sphinxhyphen{}90 compiler}
 
-Preferably the \{smalltt gfortran\} compiler (which the current
+Preferably the \sphinxcode{\sphinxupquote{gfortran}} compiler (which the current
 installation assumes is present on the system). Website:
 \sphinxurl{http://gcc.gnu.org/fortran/}. Other compilers may work, but have not
 been tested yet.
@@ -568,7 +568,7 @@ been tested yet.
 \sphinxstyleemphasis{An OpenMP\sphinxhyphen{}fortran\sphinxhyphen{}90 compiler (optional)}
 
 Only needed if you want to use the parallelized OpenMP version for the thermal
-Monte Carlo (for faster execution). Preferably the \{smalltt GNU OpenMP/GOMP\}
+Monte Carlo (for faster execution). Preferably the \sphinxcode{\sphinxupquote{GNUOpenMP/GOMP}}
 compiler which is an implementation of OpenMP for the Fortran compiler in the
 GNU Compiler Collection. Websites: \sphinxurl{http://openmp.org/wp} and
 \sphinxurl{http://gcc.gnu.org}. Other compilers may work, but we give no
@@ -1338,8 +1338,8 @@ changed by you! They are templates from which you can create your own models.}
 For the analysis of the output files created by RADMC\sphinxhyphen{}3D you can use your own
 favorite plotting or data\sphinxhyphen{}analysis software. But also here we provide some tools
 in Python. These Python routines are in the \sphinxcode{\sphinxupquote{python/}} directory. Typically you
-will create your own program, e.g.\sphinxcode{\sphinxupquote{plot\_model.py}} or so, that will use
-these subroutines, e.g.by putting in the first line: \sphinxcode{\sphinxupquote{from radmc3dPy import
+will create your own program, e.g. \sphinxcode{\sphinxupquote{plot\_model.py}} or so, that will use
+these subroutines, e.g. by putting in the first line: \sphinxcode{\sphinxupquote{from radmc3dPy import
 *}}. In this way Python is used also as a post\sphinxhyphen{}processing tool. But again: this
 can also be done in another language.
 
@@ -1639,8 +1639,8 @@ Compute an image:
 With \sphinxcode{\sphinxupquote{radmc3d image}} you call RADMC\sphinxhyphen{}3D with the command of performing a
 ray\sphinxhyphen{}tracing computation to compute an image. You must specify the
 wavelength(s) at which you want the image by, for instance, calling RADMC\sphinxhyphen{}3D
-as \sphinxcode{\sphinxupquote{radmc3d image lambda 10}}, which makes the image at \(\lambda=10\mu
-m\). But there are other ways by which the wavelength(s) can be set, see
+as \sphinxcode{\sphinxupquote{radmc3d image lambda 10}}, which makes the image at
+\(\lambda=10\mu\mathrm{m}\). But there are other ways by which the wavelength(s) can be set, see
 Section {\hyperref[\detokenize{imagesspectra:sec-set-camera-frequencies}]{\sphinxcrossref{\DUrole{std,std-ref}{Specifying custom\sphinxhyphen{}made sets of wavelength points for the camera}}}}.  In all these cases the vantage
 point (where is the observer) can of course be set as well, see Section
 {\hyperref[\detokenize{dustradtrans:sec-dust-ray-tracing}]{\sphinxcrossref{\DUrole{std,std-ref}{Making SEDs, spectra, images for dust continuum}}}} and Chapter {\hyperref[\detokenize{imagesspectra:chap-images-spectra}]{\sphinxcrossref{\DUrole{std,std-ref}{Making images and spectra}}}}.
@@ -1711,7 +1711,7 @@ spectral energy distribution, for instance, we call \sphinxcode{\sphinxupquote{r
 which is a list of fluxes at the discrete wavelengths we specified in
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}}.  Then we are done: we have computed the spectral
 energy distribution of our model. We could also make an image at wavelength 10
-\(\mu\) (see Section
+\(\mu\)m for instance with \sphinxcode{\sphinxupquote{radmc3d image lambda 10}} (see Section
 {\hyperref[\detokenize{imagesspectra:sec-images}]{\sphinxcrossref{\DUrole{std,std-ref}{Basics of image making with RADMC\sphinxhyphen{}3D}}}}). This will write out a file \sphinxcode{\sphinxupquote{image.out}} containing the
 image data (see Section {\hyperref[\detokenize{inputoutputfiles:sec-image-out}]{\sphinxcrossref{\DUrole{std,std-ref}{OUTPUT: image.out or image\_****.out}}}}).
 
@@ -2170,22 +2170,22 @@ or {\hyperref[\detokenize{dustradtrans:sec-dust-ray-tracing}]{\sphinxcrossref{\D
 data:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{amr\_grid.inp:}} The grid file (see Section {\hyperref[\detokenize{inputoutputfiles:sec-grid-input}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): amr\_grid.inp}}}}).
+\sphinxcode{\sphinxupquote{amr\_grid.inp}}: The grid file (see Section {\hyperref[\detokenize{inputoutputfiles:sec-grid-input}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): amr\_grid.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{wavelength\_micron.inp:}} The global wavelength file (see Section
+\sphinxcode{\sphinxupquote{wavelength\_micron.inp}}: The global wavelength file (see Section
 {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{stars.inp:}} The locations and properties of stars (see Section
+\sphinxcode{\sphinxupquote{stars.inp}}: The locations and properties of stars (see Section
 {\hyperref[\detokenize{inputoutputfiles:sec-stars}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (mostly required): stars.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{dust\_density.inp:}} The spatial distribution of dust on the grid (see
+\sphinxcode{\sphinxupquote{dust\_density.inp}}: The spatial distribution of dust on the grid (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-dustdens}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required for dust transfer): dust\_density.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{dustopac.inp:}} A file with overall information about the various species of
+\sphinxcode{\sphinxupquote{dustopac.inp}}: A file with overall information about the various species of
 dust in the model (see Section {\hyperref[\detokenize{inputoutputfiles:sec-opacities}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required for dust transfer): dustopac.inp and dustkappa\_*.inp or dustkapscatmat\_*.inp or dust\_optnk\_*.inp}}}}).  One of the main pieces
 of information here is (a) how many dust species are included in the model
 and (b) the tag names of these dust species (see \sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}}
@@ -2193,18 +2193,18 @@ below). The file \sphinxcode{\sphinxupquote{dust\_density.inp}} must contain exa
 density distributions: one density distribution for each dust species.
 
 \item {} 
-\sphinxcode{\sphinxupquote{dustkappa\_XXX.inp:}} One or more dust opacity files (where \sphinxcode{\sphinxupquote{XXX}} should in
+\sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}}: One or more dust opacity files (where \sphinxcode{\sphinxupquote{XXX}} should in
 fact be a tag name you define, for instance \sphinxcode{\sphinxupquote{dustkappa\_silicate.inp}}). The
 labels are listed in the \sphinxcode{\sphinxupquote{dustopac.inp}} file. ee Section
 {\hyperref[\detokenize{inputoutputfiles:sec-opacities}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required for dust transfer): dustopac.inp and dustkappa\_*.inp or dustkapscatmat\_*.inp or dust\_optnk\_*.inp}}}} for more information.
 
 \item {} 
-\sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp (optional):}} This file is only needed if you
+\sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp (optional)}}: This file is only needed if you
 want to create a spectrum at a special set of wavelengths (otherwise use
 \sphinxcode{\sphinxupquote{radmc3d sed}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{mcmono\_wavelength\_micron.inp (optional):}} This file is only needed if you
+\sphinxcode{\sphinxupquote{mcmono\_wavelength\_micron.inp (optional)}}: This file is only needed if you
 want to compute the radiation field inside the model by calling \sphinxcode{\sphinxupquote{radmc3d
 mcmono}} (e.g. for photochemistry).
 
@@ -2232,7 +2232,7 @@ This computes the mean intensity
 \(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\))
 as a function of the \((x,y,z)\) (cartesian) or \((r,\theta,\phi)\)
 (spherical) coordinates at frequencies \(\nu_i\equiv 10^4c/\lambda_i\) where
-\(\lambda_i\) are the wavelengths (in \(\mu\) (same format as the file
+\(\lambda_i\) are the wavelengths (in \(\mu\)m) specified in the file \sphinxcode{\sphinxupquote{mcmono\_wavelength\_micron.inp}} (same format as the file
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} which is described in Section
 {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}). The results of this computation can be interesting for,
 for instance, models of photochemistry.
@@ -2349,7 +2349,7 @@ formula.
 
 To treat scattering using a tabulated phase function, you must specify the
 dust opacities using \sphinxcode{\sphinxupquote{dustkapscatmat\_XXX.inp}} files instead of the simpler
-\sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}} files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}). You
+\sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}} files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}}). You
 must also set \sphinxcode{\sphinxupquote{scattering\_mode\_max}} is set to 3 or higher.
 
 \item {} 
@@ -2359,7 +2359,7 @@ To treat scattering off randomly oriented particles with the full polarization
 you need to set \sphinxcode{\sphinxupquote{scattering\_mode\_max}} is set to 4 or higher, and you must
 specify the full dust opacity and scattering matrix using the
 \sphinxcode{\sphinxupquote{dustkapscatmat\_XXX.inp}} files instead of the simpler \sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}}
-files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}). If \sphinxcode{\sphinxupquote{scattering\_mode=4}}
+files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}}). If \sphinxcode{\sphinxupquote{scattering\_mode=4}}
 the full polarization is only done upon the last scattering before light
 reaches the observer (i.e. it is only treated in the computation of the
 scattering source function that is used for the images, but it is not used for
@@ -2374,7 +2374,7 @@ For the full treatment of polarized scattering off randomly oriented
 particles, you need to set \sphinxcode{\sphinxupquote{scattering\_mode\_max}} is set to 5, and you must
 specify the full dust opacity and scattering matrix using the
 \sphinxcode{\sphinxupquote{dustkapscatmat\_XXX.inp}} files instead of the simpler \sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}}
-files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}).  See Section
+files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}}).  See Section
 {\hyperref[\detokenize{dustradtrans:sec-polarized-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{Polarization, Stokes vectors and full phase\sphinxhyphen{}functions}}}} for more information about polarized
 scattering.  end\{enumerate\} Please refer to Sections
 {\hyperref[\detokenize{dustradtrans:sec-scat-phasefunc}]{\sphinxcrossref{\DUrole{std,std-ref}{Scattering phase functions}}}} and {\hyperref[\detokenize{dustradtrans:sec-polarized-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{Polarization, Stokes vectors and full phase\sphinxhyphen{}functions}}}} for more
@@ -2516,7 +2516,7 @@ If we have \sphinxcode{\sphinxupquote{scattering\_mode=3}} then the phase functi
 tabulated by you. You have to provide the tabulated phase function as the
 \(Z_{11}(\theta)\) scattering matrix element for a tabulated set of \(\theta_i\)
 values, and this is done in a file \sphinxcode{\sphinxupquote{dustkapscatmat\_xxx.inp}} (see
-Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}} and note that for \sphinxcode{\sphinxupquote{scattering\_mode=3}}
+Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}} and note that for \sphinxcode{\sphinxupquote{scattering\_mode=3}}
 the other \(Z_{ij}\) elements can be kept 0 as they are
 of no consequence). The relation between \(Z_{11}(\theta)\) and
 \(\Phi(\mu)\) is:
@@ -2642,12 +2642,7 @@ On the command\sphinxhyphen{}line by adding \sphinxcode{\sphinxupquote{nphot\_sc
 
 \end{itemize}
 
-In Figure {\hyperref[\detokenize{dustradtrans:fig-polscat}]{\sphinxcrossref{\DUrole{std,std-ref}{The effect of nphot\_scat on the image quality when the image is dominated
-by scattered light. The images show the result of model
-examples/run\_simple\_2\_scatmat at \textbackslash{}lambda=0.84\textbackslash{}mu about the
-scattering matrices for polarized scattering. See Section
-sec\sphinxhyphen{}single\sphinxhyphen{}multiple\sphinxhyphen{}scattering for a discussion about the ‘scratches’
-seen in the top two panels.}}}} you can see how the quality of an image in
+In Figure \hyperref[\detokenize{dustradtrans:fig-polscat}]{Fig.\@ \ref{\detokenize{dustradtrans:fig-polscat}}} you can see how the quality of an image in
 scattered light improves when increasing \sphinxcode{\sphinxupquote{nphot\_scat}}.
 
 \item {} 
@@ -2691,7 +2686,9 @@ If you want to be on the safe side, then set \sphinxcode{\sphinxupquote{nphot\_s
 \noindent\sphinxincludegraphics[width=0.500\linewidth]{{polscat}.pdf}
 \caption{The effect of \sphinxcode{\sphinxupquote{nphot\_scat}} on the image quality when the image is dominated
 by scattered light. The images show the result of model
-\sphinxcode{\sphinxupquote{examples/run\_simple\_2\_scatmat}} at \(\lambda=0.84\mu\) about the
+\sphinxcode{\sphinxupquote{examples/run\_simple\_2\_scatmat}} at \(\lambda=0.84\mu\)m in which
+polarized scattering with the full scattering phase function and scattering
+matrix is used. See Section {\hyperref[\detokenize{dustradtrans:sec-polarized-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{Polarization, Stokes vectors and full phase\sphinxhyphen{}functions}}}} about the
 scattering matrices for polarized scattering. See Section
 {\hyperref[\detokenize{dustradtrans:sec-single-multiple-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{Single\sphinxhyphen{}scattering vs. multiple\sphinxhyphen{}scattering}}}} for a discussion about the ‘scratches’
 seen in the top two panels.}\label{\detokenize{dustradtrans:id1}}\label{\detokenize{dustradtrans:fig-polscat}}\end{figure}
@@ -2700,7 +2697,11 @@ seen in the top two panels.}\label{\detokenize{dustradtrans:id1}}\label{\detoken
 emission but scattering is still important (high albedo), it cannot be excluded
 that the ‘scattering monte carlo’ method used by RADMC\sphinxhyphen{}3D produces very large
 noise. Example: a very optically thick dust disk consisting of large grains (10
-\(\mu\) is
+\(\mu\)m size), producing thermal dust emission in the near infrared in its
+inner disk regions. This thermal radiation can scatter off the large dust grains
+at large radii (where the disk is cold and where the only ‘emission’ in the
+near\sphinxhyphen{}infrared is thus the scattered light) and thus reveal the outer disk in
+scattered light emerging from the inner disk. However, unless \sphinxcode{\sphinxupquote{nphot\_scat}} is
 huge, most thermally emitted photons from the inner disk will be emitted so
 deeply in the disk interior (i.e. below the surface) that they will be
 immediately reabsorbed and lost. This means that that radiation that does escape
@@ -2732,11 +2733,11 @@ extinction limit can be set by \sphinxcode{\sphinxupquote{mc\_scat\_maxtauabs}},
 30, meaning a photon package is considered extincted when it has travelled an
 absorption optical depth of 30).
 
-\sphinxstylestrong{Important note:} \sphinxstyleemphasis{In many (most?) cases this default value of
-\textasciigrave{}\textasciigrave{}mc\_scat\_maxtauabs=30\textasciigrave{}\textasciigrave{} is overly conservative. Especially
+\sphinxstylestrong{Important note:} \sphinxstyleemphasis{In many (most?) cases this default value of}
+\sphinxcode{\sphinxupquote{mc\_scat\_maxtauabs=30}} \sphinxstyleemphasis{is overly conservative. Especially
 when the scattering Monte Carlo is very time\sphinxhyphen{}consuming, you may want
-to experiment with a lower value. Try adding a line to the
-\textasciigrave{}\textasciigrave{}radmc3d.inp\textasciigrave{}\textasciigrave{} with}:
+to experiment with a lower value. Try adding a line to the}
+\sphinxcode{\sphinxupquote{radmc3d.inp}} \sphinxstyleemphasis{with}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{mc\PYGZus{}scat\PYGZus{}maxtauabs} \PYG{o}{=} \PYG{l+m+mi}{5}
@@ -2775,12 +2776,7 @@ Note that multiple scattering may require a very high number of photon packages
 too low \sphinxcode{\sphinxupquote{nphot\_scat}} you typically see radial ‘rays’ in the image emanating
 from each stellar source of photons. For multiple scattering, when taking too
 low \sphinxcode{\sphinxupquote{nphot\_scat}} small you would see strange non\sphinxhyphen{}radial ‘scratches’ in the
-image (see Fig. {\hyperref[\detokenize{dustradtrans:fig-polscat}]{\sphinxcrossref{\DUrole{std,std-ref}{The effect of nphot\_scat on the image quality when the image is dominated
-by scattered light. The images show the result of model
-examples/run\_simple\_2\_scatmat at \textbackslash{}lambda=0.84\textbackslash{}mu about the
-scattering matrices for polarized scattering. See Section
-sec\sphinxhyphen{}single\sphinxhyphen{}multiple\sphinxhyphen{}scattering for a discussion about the ‘scratches’
-seen in the top two panels.}}}}, top two images). It looks as if someone has
+image (see Fig. \hyperref[\detokenize{dustradtrans:fig-polscat}]{Fig.\@ \ref{\detokenize{dustradtrans:fig-polscat}}}, top two images). It looks as if someone has
 used a pen and randomly added some streaks. These streaks are the
 double\sphinxhyphen{}scattering events which, in that case, apparently are rare enough that
 they show up as individual streaks. To test whether these streaks are indeed
@@ -2945,8 +2941,8 @@ this effect without too high a penalty in reliability. But if one wants to be
 accurate, there is no way around a full treatment of the \((I,Q,U,V)\).
 
 Interaction between polarized radiation with matter happens through so\sphinxhyphen{}called
-Müller matrices, which are 4:math:\sphinxtitleref{times\textasciigrave{}4 matrices that can be multiplied by
-the :math:\textasciigrave{}(I,Q,U,V)} vector. More on this later.
+Müller matrices, which are \(4\times 4\) matrices that can be multiplied by
+the \((I,Q,U,V)\) vector. More on this later.
 
 It is important to distinguish between two situations:
 \begin{enumerate}
@@ -3097,16 +3093,7 @@ reader. We call the second panel (\(Q=+I\)) ‘horizontally polarized’, the
 third panel (\(U=+I\)) ‘diagonally polarized by +45 degrees’ and the
 fourth panel (\(V=+I\)) ‘right\sphinxhyphen{}handed circularly polarized’. In the
 images produced by RADMC\sphinxhyphen{}3D (\sphinxcode{\sphinxupquote{image.out}}, see Section {\hyperref[\detokenize{inputoutputfiles:sec-image-out}]{\sphinxcrossref{\DUrole{std,std-ref}{OUTPUT: image.out or image\_****.out}}}}
-and Fig. {\hyperref[\detokenize{imagesspectra:fig-cameraorient}]{\sphinxcrossref{\DUrole{std,std-ref}{Figure depicting how the angles ‘incl’ and ‘phi’ place the camera for images
-and spectra made with RADMC\sphinxhyphen{}3D. The code uses a right\sphinxhyphen{}handed coordinate
-system. The figure shows from which direction the observer is looking at the
-system, where i\_\{\textbackslash{}mathrm\{obs\}\} is the ‘incl’ keyword and
-\textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\} is the ‘phi’ keyword. The
-x\_\{\textbackslash{}mathrm\{image\}\} and y\_\{\textbackslash{}mathrm\{image\}\} are the horizontal
-(left\sphinxhyphen{}to\sphinxhyphen{}right) and vertical (bottom\sphinxhyphen{}to\sphinxhyphen{}top) coordinates of the image. For
-i\_\{\textbackslash{}mathrm\{obs\}\}=0 and \textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\}=0 the
-x\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D x\sphinxhyphen{}coordinate and
-y\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D y\sphinxhyphen{}coordinate.}}}}) the \(x'\) direction is the horizontal
+and Fig. \hyperref[\detokenize{imagesspectra:fig-cameraorient}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-cameraorient}}}) the \(x'\) direction is the horizontal
 direction and the \(y'\) direction is the vertical direction.}\label{\detokenize{dustradtrans:id2}}\label{\detokenize{dustradtrans:fig-stokes-definition}}\end{figure}
 
 We can put these definitions into the standard formulae:
@@ -3195,8 +3182,8 @@ U_{\mathrm{ours}} &=  -U_{\mathrm{mishch}} = -U_{\mathrm{bohrenhuffman}} \\
 V_{\mathrm{ours}} &=  -V_{\mathrm{mishch}} = -V_{\mathrm{bohrenhuffman}}
 \end{split}\end{split}
 \end{equation*}
-As you see: only the \(U\) and \(V\) change sign. For a 4:math:\sphinxtitleref{times\textasciigrave{}4
-Müller matrix :math:\textasciigrave{}M} this means that the \(M_{II}\), \(M_{IQ}\),
+As you see: only the \(U\) and \(V\) change sign. For a \(4\times 4\)
+Müller matrix \(M\) this means that the \(M_{II}\), \(M_{IQ}\),
 \(M_{QI}\), \(M_{QQ}\), as well as the \(M_{UU}\), \(M_{UV}\),
 \(M_{VU}\), \(M_{VV}\) stay the same, while \(M_{IU}\),
 \(M_{IV}\), \(M_{QU}\), \(M_{QV}\), as well as \(M_{UI}\),
@@ -3211,16 +3198,7 @@ RADMC\sphinxhyphen{}3D does not know what ‘right’ or ‘down’ are (only wh
 \(y'\) are) this rotation is merely a difference in how we plot things in a
 figure, and has no consequences for the results, as long as we define how
 \(x'\) and \(y'\) are oriented compared to our model (see
-Fig. {\hyperref[\detokenize{imagesspectra:fig-cameraorient}]{\sphinxcrossref{\DUrole{std,std-ref}{Figure depicting how the angles ‘incl’ and ‘phi’ place the camera for images
-and spectra made with RADMC\sphinxhyphen{}3D. The code uses a right\sphinxhyphen{}handed coordinate
-system. The figure shows from which direction the observer is looking at the
-system, where i\_\{\textbackslash{}mathrm\{obs\}\} is the ‘incl’ keyword and
-\textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\} is the ‘phi’ keyword. The
-x\_\{\textbackslash{}mathrm\{image\}\} and y\_\{\textbackslash{}mathrm\{image\}\} are the horizontal
-(left\sphinxhyphen{}to\sphinxhyphen{}right) and vertical (bottom\sphinxhyphen{}to\sphinxhyphen{}top) coordinates of the image. For
-i\_\{\textbackslash{}mathrm\{obs\}\}=0 and \textbackslash{}phi\_\{\textbackslash{}mathrm\{obs\}\}=0 the
-x\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D x\sphinxhyphen{}coordinate and
-y\_\{\textbackslash{}mathrm\{image\}\} aligns with the 3\sphinxhyphen{}D y\sphinxhyphen{}coordinate.}}}} where \(x_{\mathrm{image}}\) is our \(x'\)
+Fig. \hyperref[\detokenize{imagesspectra:fig-cameraorient}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-cameraorient}}} where \(x_{\mathrm{image}}\) is our \(x'\)
 here and likewise for \(y'\)).
 
 Bohren \& Huffman have the two unit vectors plotted in the following way:
@@ -3551,7 +3529,7 @@ instance, the Mie code of Bohren and Huffman (see Chapter
 {\hyperref[\detokenize{opacitieswww:chap-acquiring-opacities}]{\sphinxcrossref{\DUrole{std,std-ref}{Acquiring opacities from the WWW}}}} for RADMC\sphinxhyphen{}3D compliant wrappers around that
 code), and then provide them to RADMC\sphinxhyphen{}3D through a file called
 \sphinxcode{\sphinxupquote{dustkapscatmat\_xxx.inp}} (where \sphinxcode{\sphinxupquote{xxx}} is the name of the dust species) which
-is described in Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}.  This file provides not
+is described in Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}}.  This file provides not
 only the matrix elements, but also the \(\kappa_{\mathrm{abs}}\),
 \(\kappa_{\mathrm{scat}}\) and \(g\) (the anisotropy factor). RADMC\sphinxhyphen{}3D
 will then internally check that Eqs.(\DUrole{xref,std,std-ref}{eq\sphinxhyphen{}scatmat\sphinxhyphen{}selfconsist\sphinxhyphen{}kappa},
@@ -5122,9 +5100,13 @@ However, how does RADMC\sphinxhyphen{}3D know that the first collision partner o
 \sphinxcode{\sphinxupquote{p\sphinxhyphen{}h2}} and the second \sphinxcode{\sphinxupquote{o\sphinxhyphen{}h2}}?  In principle the file \sphinxcode{\sphinxupquote{molecule\_co.inp}}
 give some information about the name of the collision partners. But this is
 often not machine\sphinxhyphen{}readable.  Example, in \sphinxcode{\sphinxupquote{molecule\_co.inp}} of Section
-{\hyperref[\detokenize{lineradtrans:sec-molecule-xxx-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}} the line that should tell this reads
-begin\{asciibox\}begin\{verbatim\} 2 CO\sphinxhyphen{}pH2 from Flower (2001) \& Wernli et
-al. (2006) + extrapolation end\{verbatim\}end\{asciibox\} for the first of the two
+{\hyperref[\detokenize{lineradtrans:sec-molecule-xxx-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}} the line that should tell this reads:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{l+m+mi}{2} \PYG{n}{CO}\PYG{o}{\PYGZhy{}}\PYG{n}{pH2} \PYG{k+kn}{from} \PYG{n+nn}{Flower} \PYG{p}{(}\PYG{l+m+mi}{2001}\PYG{p}{)} \PYG{o}{\PYGZam{}} \PYG{n}{Wernli} \PYG{n}{et} \PYG{n}{al}\PYG{o}{.} \PYG{p}{(}\PYG{l+m+mi}{2006}\PYG{p}{)} \PYG{o}{+} \PYG{n}{extrapolation}
+\end{sphinxVerbatim}
+
+for the first of the two
 (which is directly from the LAMDA database).  This is hard to decipher for
 RADMC\sphinxhyphen{}3D. Therefore you have to tell this explicitly in the file \sphinxcode{\sphinxupquote{lines.inp}},
 and we refer to Section {\hyperref[\detokenize{lineradtrans:sec-line-dot-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: The line.inp file}}}} for how to do this.
@@ -5703,12 +5685,7 @@ the intrinsic (thermal+microturbulent) line width, then the ray\sphinxhyphen{}tr
 will not be able to pick up signals from intermediate velocities. In other
 words, because of the discrete gridding of the model, only discrete
 velocities are present, which can cause numerical problems. See
-Fig. {\hyperref[\detokenize{lineradtrans:fig-doppler-catch}]{\sphinxcrossref{\DUrole{std,std-ref}{Right: Pictographic representation of the doppler catching method to
-prevent this problem: First of all, second order integration is done
-instead of first order. Secondly, the method automatically detects a
-possibly dangerous doppler jump and makes sub\sphinxhyphen{}steps to neatly integrate
-over the line that shifts in\sphinxhyphen{} and out of the wavelength channel of
-interest.}}}}\sphinxhyphen{}Left for a pictographic representation of
+Fig. \hyperref[\detokenize{lineradtrans:fig-doppler-catch}]{Fig.\@ \ref{\detokenize{lineradtrans:fig-doppler-catch}}}\sphinxhyphen{}Left for a pictographic representation of
 this problem. There are two possible solutions. One is the wavelength band
 method described in Section {\hyperref[\detokenize{imagesspectra:sec-wavelength-bands}]{\sphinxcrossref{\DUrole{std,std-ref}{Heads\sphinxhyphen{}up: In reality wavelength are actually wavelength bands}}}}.  But a more
 systematic method is the ‘doppler catching’ method described in Section
@@ -5730,8 +5707,7 @@ the line can then have a doppler shift substantially to the blue of the
 wavelength\sphinxhyphen{}of\sphinxhyphen{}sight, while in the next cell the line suddenly shifted to the
 red side. If the intrinsic (= thermal + microturbulent) line width is
 smaller than these shifts, neither cell gives a contribution to the emission
-in the ray. See Fig. {\hyperref[\detokenize{lineradtrans:fig-doppler-jump}]{\sphinxcrossref{\DUrole{std,std-ref}{Pictographic representation of the doppler jumping problem with
-ray\sphinxhyphen{}tracing through a model with strong cell\sphinxhyphen{}to\sphinxhyphen{}cell velocity differences.}}}} for a pictographic
+in the ray. See Fig. \hyperref[\detokenize{lineradtrans:fig-doppler-jump}]{Fig.\@ \ref{\detokenize{lineradtrans:fig-doppler-jump}}} for a pictographic
 representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength\sphinxhyphen{}of\sphinxhyphen{}sight, and thus make a contribution. Therefore the numerical
@@ -5770,12 +5746,7 @@ in great detail in Pontoppidan et al. (2009, ApJ 704, 1482). The idea is
 that the method automatically tests if a line might ‘doppler jump’ over
 the current wavelength channel. If so, it will insert substeps in the
 integration at the location where this danger is present. See
-Fig. {\hyperref[\detokenize{lineradtrans:fig-doppler-catch}]{\sphinxcrossref{\DUrole{std,std-ref}{Right: Pictographic representation of the doppler catching method to
-prevent this problem: First of all, second order integration is done
-instead of first order. Secondly, the method automatically detects a
-possibly dangerous doppler jump and makes sub\sphinxhyphen{}steps to neatly integrate
-over the line that shifts in\sphinxhyphen{} and out of the wavelength channel of
-interest.}}}} for a pictographic representation of this
+Fig. \hyperref[\detokenize{lineradtrans:fig-doppler-catch}]{Fig.\@ \ref{\detokenize{lineradtrans:fig-doppler-catch}}} for a pictographic representation of this
 method. Note that this method can only be used with the second order
 ray\sphinxhyphen{}tracing (see Section {\hyperref[\detokenize{imagesspectra:sec-second-order}]{\sphinxcrossref{\DUrole{std,std-ref}{Second order ray\sphinxhyphen{}tracing (Important information!)}}}}); in fact, as soon as you
 switch the doppler catching on, RADMC\sphinxhyphen{}3D will automatically also switch on
@@ -6707,11 +6678,7 @@ Note, by the way, that each of these 2x2 subpixels may be split even further
 into 2x2 sub\sphinxhyphen{}pixels etc until the desired resolution is reached, i.e. until
 the condition that \(S\) is larger or equal to the pixel size divided by
 \(f_{\mathrm{ref}}\) is met. This is illustrated in Fig.
-{\hyperref[\detokenize{imagesspectra:fig-recursive-subpixeling}]{\sphinxcrossref{\DUrole{std,std-ref}{Pictographic representation of how the recursive sub\sphinxhyphen{}pixeling for images
-works. Pixels are recursively split in 2x2 subpixels as far as needed
-to resolve the 3\sphinxhyphen{}D grid structure of the model. But at the end, the
-fluxes of all subpixels are summed up such that the resulting image
-has a regular grid again.}}}}. By this recursive calling, we always end up at
+\hyperref[\detokenize{imagesspectra:fig-recursive-subpixeling}]{Fig.\@ \ref{\detokenize{imagesspectra:fig-recursive-subpixeling}}}. By this recursive calling, we always end up at
 the top level with the average intesity of the entire top\sphinxhyphen{}level pixel.  This
 method is very similar to quad\sphinxhyphen{}tree mesh refinement, but instead of
 retaining and returning the entire complex mesh structure to the user, this
@@ -9883,13 +9850,7 @@ keeps track of the version of the way the information is stored the file. The
 idea is that if new versions of RADMC\sphinxhyphen{}3D come out in the future, it would be
 good to have the possibility that new information is added to the files. The
 format number is there to tell RADMC\sphinxhyphen{}3D whether a file is the new version or
-still an older version. NOTE: Do not confuse \sphinxstyleemphasis{format number} with
-\sphinxstyleemphasis{unformatted/formatted I/O} (see below for the latter). These are unrelated
-issues.
-
-\item {} 
-RADMC\sphinxhyphen{}3D is no longer backward compatible with the older RADMC code input
-files. It has proven to be too messy to maintain this option.
+still an older version.
 
 \item {} 
 RADMC\sphinxhyphen{}3D has four types of I/O files:
@@ -9919,9 +9880,9 @@ not very important for every\sphinxhyphen{}day use.
 
 \item {} 
 For many of the I/O files RADMC\sphinxhyphen{}3D can read and write formatted (i.e. text
-style: ascii) files, fortran\sphinxhyphen{}style unformatted (i.e. with ‘records’) files as
-well as binary files (i.e. C\sphinxhyphen{}style unformatted). This is specified by the file
-extension. See Chapter {\hyperref[\detokenize{binaryio:chap-binary-io}]{\sphinxcrossref{\DUrole{std,std-ref}{Binary I/O files}}}} for more details.
+style: ascii) files, or binary files (i.e. C\sphinxhyphen{}style unformatted). This is
+specified by the file extension. See Chapter {\hyperref[\detokenize{binaryio:chap-binary-io}]{\sphinxcrossref{\DUrole{std,std-ref}{Binary I/O files}}}} for more
+details.
 
 \end{itemize}
 
@@ -9954,13 +9915,6 @@ with this flag you can explicitly tell RADMC\sphinxhyphen{}3D whether it must be
 included (1) or not (0).
 
 \item {} 
-\sphinxcode{\sphinxupquote{incl\_freefree}} (default: 0)
-
-If 1, then include free\sphinxhyphen{}free emission and absorption (Bremsstrahlung).  For
-this, the gas temperature must be known (but see option \sphinxcode{\sphinxupquote{tgas\_eq\_tdust}}
-below).
-
-\item {} 
 \sphinxcode{\sphinxupquote{nphot}} or \sphinxcode{\sphinxupquote{nphot\_therm}} (default: 100000)
 
 The number of photon packages used for the thermal Monte Carlo simulation.
@@ -9983,6 +9937,12 @@ integrate over the images. Many of the annoying ‘stripe noise’ in images whe
 using insufficiently large \sphinxcode{\sphinxupquote{nphot\_scat}} will cancel each other out in the
 flux calculation. So \sphinxcode{\sphinxupquote{nphot\_spec}} is usually taken smaller than
 \sphinxcode{\sphinxupquote{nphot\_scat}}.
+
+\item {} 
+\sphinxcode{\sphinxupquote{nphot\_mono}} (default: 100000)
+
+The number of photon packages for the Monte Carlo simulations for the
+\sphinxcode{\sphinxupquote{mcmono}} calculation (see Section {\hyperref[\detokenize{dustradtrans:sec-dust-monochromatic-monte-carlo}]{\sphinxcrossref{\DUrole{std,std-ref}{Special\sphinxhyphen{}purpose feature: Computing the local radiation field}}}}).
 
 \item {} 
 \sphinxcode{\sphinxupquote{iseed}} (default: \sphinxhyphen{}17933201) \sphinxstyleemphasis{{[}Fine\sphinxhyphen{}tuning only{]}}
@@ -10090,17 +10050,11 @@ For images: to assure that flux is correctly sampled, the image pixels
 will not just be rendered one ray per pixel. Instead, if necessary,
 a pixel will spawn 2x2 sub\sphinxhyphen{}pixels recursively (each of which can
 split again into 2x2 until the required resolution is obtained) so
-as to assure that the flux in each pixel is correct. Nrrefine tells
+as to assure that the flux in each pixel is correct. \sphinxcode{\sphinxupquote{camera\_nrrefine}} tells
 how deep RADMC\sphinxhyphen{}3D is allowed to recursively refine. 100 is therefore
 effectively infinite. Putting this to 0 means that you go back to
 1 ray per pixel, which is fast, but may seriously misrepresent the flux
-in each pixel. NOTE: The recursive pixel refinement is done internally
-and the user will not notice it except for getting better answers. In
-the output image only the original pixels are shown; all subpixels have
-been integrated over to get the flux of the original pixel. So you can
-keep this to the default value of 100 without having to worry about
-handling complex data structures. The only drawback is that it may take
-longer to compute. See Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{The issue of flux conservation: recursive sub\sphinxhyphen{}pixeling}}}} for more details.
+in each pixel. See Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{The issue of flux conservation: recursive sub\sphinxhyphen{}pixeling}}}} for more details.
 
 \item {} 
 \sphinxcode{\sphinxupquote{camera\_refine\_criterion}} (default: 1.0) \sphinxstyleemphasis{{[}Fine\sphinxhyphen{}tuning only{]}}
@@ -10115,14 +10069,14 @@ render. See Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{
 
 If 0, then only the interstellar/circumstellar material is rendered
 for the images and spectra. If 1, then also the stellar flux is
-included in the spectra and images. So far, stars are treated always
-as point sources.
+included in the spectra and images.
 
 \item {} 
 \sphinxcode{\sphinxupquote{camera\_starsphere\_nrpix}} (default: 20) \sphinxstyleemphasis{{[}Fine\sphinxhyphen{}tuning only{]}}
 
 For rectangular images and for the spectra/SEDs (but not for spectra/SEDs
-created with circular pixel arrangements), this number tells RADMC\sphinxhyphen{}3D how
+created with circular pixel arrangements, see Section
+{\hyperref[\detokenize{imagesspectra:sec-circularimages}]{\sphinxcrossref{\DUrole{std,std-ref}{Circular images}}}}), this number tells RADMC\sphinxhyphen{}3D how
 much it should do sub\sphinxhyphen{}pixeling over the stellar surface. That is: 20 means
 that at least 20 sub\sphinxhyphen{}pixels are assured over the stellar surface. This is
 important for flux conservation (see Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{The issue of flux conservation: recursive sub\sphinxhyphen{}pixeling}}}}).
@@ -10142,14 +10096,16 @@ observation.
 \item {} 
 \sphinxcode{\sphinxupquote{camera\_min\_dangle}} (default 0.05) \sphinxstyleemphasis{{[}Fine\sphinxhyphen{}tuning only{]}}
 
-Fine\sphinxhyphen{}tuning parameter for recursive subpixeling, for spherical coordinates,
+Fine\sphinxhyphen{}tuning parameter for recursive subpixeling (see Section
+{\hyperref[\detokenize{imagesspectra:sec-recursive-subpixeling}]{\sphinxcrossref{\DUrole{std,std-ref}{The solution: recursive sub\sphinxhyphen{}pixeling}}}}), for spherical coordinates,
 assuring that not too fine subpixeling would slow down the rendering of
 images or spectra too much.
 
 \item {} 
 \sphinxcode{\sphinxupquote{camera\_max\_dangle}} (default 0.3) \sphinxstyleemphasis{{[}Fine\sphinxhyphen{}tuning only{]}}
 
-Fine\sphinxhyphen{}tuning parameter for recursive subpixeling, for spherical coordinates,
+Fine\sphinxhyphen{}tuning parameter for recursive subpixeling (see Section
+{\hyperref[\detokenize{imagesspectra:sec-recursive-subpixeling}]{\sphinxcrossref{\DUrole{std,std-ref}{The solution: recursive sub\sphinxhyphen{}pixeling}}}}), for spherical coordinates,
 preventing that too coarse subpixeling would reduce the accuracy.
 
 \item {} 
@@ -10230,7 +10186,8 @@ computed. The default is 1, which means: Local Thermodynamic Equilibrium
 \item {} 
 \sphinxcode{\sphinxupquote{lines\_maxdoppler}} (default: 0.3) \sphinxstyleemphasis{{[}Fine\sphinxhyphen{}tuning only{]}}
 
-If the doppler catching mode is used, this parameter tells how fine RADMC\sphinxhyphen{}3D
+If the doppler catching mode is used (see Section
+{\hyperref[\detokenize{lineradtrans:sec-doppler-catching}]{\sphinxcrossref{\DUrole{std,std-ref}{Preventing doppler jumps: The ‘doppler catching method’}}}}), this parameter tells how fine RADMC\sphinxhyphen{}3D
 must sample along the ray, in units of the doppler width, when a line is
 doppler\sphinxhyphen{}shifting along the wavelength\sphinxhyphen{}of\sphinxhyphen{}sight.
 
@@ -10318,23 +10275,25 @@ For a regular grid, without grid refinement, the \sphinxcode{\sphinxupquote{amr\
 The meaning of the entries are:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} The format number, at present 1. For
+\sphinxcode{\sphinxupquote{iformat}}: The format number, at present 1. For
 unformatted files this must be 4\sphinxhyphen{}byte integer.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfcoordsystem:}} If \sphinxcode{\sphinxupquote{coordsystem}}\(<\)\(<\):math:{\color{red}\bfseries{}\textasciigrave{}}\textless{}{\color{red}\bfseries{}\textasciigrave{}}300 the coordinate system is cylindrical. For unformatted
-files this must be 4\sphinxhyphen{}byte integer.
+\sphinxcode{\sphinxupquote{coordsystem}}: If \sphinxcode{\sphinxupquote{coordsystem \textless{} 100}} the coordinate system is
+cartesian. If \sphinxcode{\sphinxupquote{100 \textless{}= coordsystem \textless{} 200}} the coordinate system is spherical
+(polar).  If \sphinxcode{\sphinxupquote{200 \textless{}= coordsystem \textless{} 300}} the coordinate system is
+cylindrical. For unformatted files this must be 4\sphinxhyphen{}byte integer.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfgridinfo:}} If \sphinxcode{\sphinxupquote{gridinfo}}==1 there will be
+\sphinxcode{\sphinxupquote{gridinfo}}: If \sphinxcode{\sphinxupquote{gridinfo==1}} there will be
 abundant grid information written into this file, possibly useful for
 post\sphinxhyphen{}processing routines. Typically this is redundant information, so it
-is advised to set \sphinxcode{\sphinxupquote{gridinfo}}=0 to save disk space. In the
-following we will assume that \sphinxcode{\sphinxupquote{gridinfo}}=0. For unformatted
+is advised to set \sphinxcode{\sphinxupquote{gridinfo=0}} to save disk space. In the
+following we will assume that \sphinxcode{\sphinxupquote{gridinfo=0}}. For unformatted
 files this must be 4\sphinxhyphen{}byte integer.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfincl\_x,incl\_y,incl\_z:}} These are either 0 or
+\sphinxcode{\sphinxupquote{incl\_x,incl\_y,incl\_z}}: These are either 0 or
 1. If 0 then this dimension is not active (so upon grid refinement no
 refinement in this dimension is done). If 1 this dimension is fully
 active, even if the number of base grid cells in this direction is just
@@ -10342,22 +10301,22 @@ active, even if the number of base grid cells in this direction is just
 unformatted files these numbers must be 4\sphinxhyphen{}byte integer.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnx,ny,nz:}} These are the number of grid cells on the
+\sphinxcode{\sphinxupquote{nx,ny,nz}}: These are the number of grid cells on the
 base grid in each of these dimensions. For unformatted files these numbers
 must be 4\sphinxhyphen{}byte integer.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfxi{[}1{]}...xi{[}nx+1{]}:}} The edges of the cells of the base grid in
+\sphinxcode{\sphinxupquote{xi{[}1{]}...xi{[}nx+1{]}}}: The edges of the cells of the base grid in
 x\sphinxhyphen{}direction. For \sphinxcode{\sphinxupquote{nx}} grid cells we have \sphinxcode{\sphinxupquote{nx+1}} cell walls, hence \sphinxcode{\sphinxupquote{nx+1}}
 cell wall positions. For unformatted files these numbers must be 8\sphinxhyphen{}byte reals
 (=double precision).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfyi{[}1{]}...yi{[}ny+1{]}:}} Same as above, but now for
+\sphinxcode{\sphinxupquote{yi{[}1{]}...yi{[}ny+1{]}}}: Same as above, but now for
 y\sphinxhyphen{}direction.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfzi{[}1{]}...zi{[}nz+1{]}:}} Same as above, but now for
+\sphinxcode{\sphinxupquote{zi{[}1{]}...zi{[}nz+1{]}}}: Same as above, but now for
 z\sphinxhyphen{}direction.
 
 \end{itemize}
@@ -10379,7 +10338,8 @@ Example of a simple 2x2x2 regular grid in cartesian coordinates:
 
 \subsection{Oct\sphinxhyphen{}tree\sphinxhyphen{}style AMR grid}
 \label{\detokenize{inputoutputfiles:oct-tree-style-amr-grid}}\label{\detokenize{inputoutputfiles:sec-amr-grid-oct-tree}}
-For a grid with oct\sphinxhyphen{}tree style grid refinement, the \sphinxcode{\sphinxupquote{amr\_grid.inp}} looks like:
+For a grid with oct\sphinxhyphen{}tree style grid refinement (see Section
+{\hyperref[\detokenize{gridding:sec-oct-tree-amr}]{\sphinxcrossref{\DUrole{std,std-ref}{Oct\sphinxhyphen{}tree Adaptive Mesh Refinement}}}}), the \sphinxcode{\sphinxupquote{amr\_grid.inp}} looks like:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{iformat}                                  \PYG{o}{\PYGZlt{}}\PYG{o}{==}\PYG{o}{=} \PYG{n}{Typically} \PYG{l+m+mi}{1} \PYG{n}{at} \PYG{n}{present}
@@ -10408,7 +10368,7 @@ For a grid with oct\sphinxhyphen{}tree style grid refinement, the \sphinxcode{\s
 The keywords have the same meaning as before, but in addition we have:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bf(0/1):}} \sphinxstyleemphasis{NOTE: Only for amrstyle==1}. These are numbers that are either 0
+\sphinxcode{\sphinxupquote{(0/1)}}: \sphinxstyleemphasis{NOTE: Only for} \sphinxcode{\sphinxupquote{amrstyle==1}}. These are numbers that are either 0
 or 1. If 0, this means the current cell is a leaf (= a cell that is not
 refined and is therefore a ‘true’ cell). If 1, the current cell is a branch
 with 2 (in 1\sphinxhyphen{}D), 4 (in 2\sphinxhyphen{}D) or 8 (in 3\sphinxhyphen{}D) daughter cells. In that case the
@@ -10465,7 +10425,8 @@ which the (1,2,1) cell is refined again in 2x2x2:
 
 \subsection{Layer\sphinxhyphen{}style AMR grid}
 \label{\detokenize{inputoutputfiles:layer-style-amr-grid}}\label{\detokenize{inputoutputfiles:sec-amr-grid-layered}}
-For a grid with layer\sphinxhyphen{}style grid refinement, the \sphinxcode{\sphinxupquote{amr\_grid.inp}} looks like:
+For a grid with layer\sphinxhyphen{}style grid refinement (see Section
+{\hyperref[\detokenize{gridding:sec-layered-amr}]{\sphinxcrossref{\DUrole{std,std-ref}{Layered Adaptive Mesh Refinement}}}}), the \sphinxcode{\sphinxupquote{amr\_grid.inp}} looks like:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{iformat}                                  \PYG{o}{\PYGZlt{}}\PYG{o}{==}\PYG{o}{=} \PYG{n}{Typically} \PYG{l+m+mi}{1} \PYG{n}{at} \PYG{n}{present}
@@ -10490,25 +10451,25 @@ For a grid with layer\sphinxhyphen{}style grid refinement, the \sphinxcode{\sphi
 The keywords have the same meaning as before, but in addition we have:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfnrlevels:}} How many levels you plan to go, where
-nrlevels==0 means no refinement, nrlevels==1 means one level of refinement
+\sphinxcode{\sphinxupquote{nrlevels}}: How many levels you plan to go, where
+\sphinxcode{\sphinxupquote{nrlevels==0}} means no refinement, \sphinxcode{\sphinxupquote{nrlevels==1}} means one level of refinement
 (factor of 2 in resolution), etc.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnrlayers:}} How many layers do you have, with nrlayers==0
-means no refinement, nrlayers==1 means one layer of refinement (factor of
+\sphinxcode{\sphinxupquote{nrlayers}}: How many layers do you have, with \sphinxcode{\sphinxupquote{nrlayers==0}}
+means no refinement, \sphinxcode{\sphinxupquote{nrlayers==1}} means one layer of refinement (factor of
 2 in resolution), etc.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfparentid:}} (For each layer) The parent layer for this
-layer. parentid==0 means parent is base grid. First layer has id==1.
+\sphinxcode{\sphinxupquote{parentid}}: (For each layer) The parent layer for this
+layer. \sphinxcode{\sphinxupquote{parentid==0}} means parent is base grid. First layer has \sphinxcode{\sphinxupquote{id==1}}.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfix,iy,iz:}} (For each layer) The location in the parent
+\sphinxcode{\sphinxupquote{ix,iy,iz}}: (For each layer) The location in the parent
 layer where the current layer starts.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnx,ny,nz:}} (For each layer) The size of the layer as measured in units of
+\sphinxcode{\sphinxupquote{nx,ny,nz}}: (For each layer) The size of the layer as measured in units of
 the the parent layer. So the actual size of the current layer will be (in
 3\sphinxhyphen{}D): \sphinxcode{\sphinxupquote{2*nx,2*ny,2*nz}}. In 2\sphinxhyphen{}D, with only the x\sphinxhyphen{} and y\sphinxhyphen{} dimensions active,
 we have a size of \sphinxcode{\sphinxupquote{2*nx,2*ny}} with of course size 1 in z\sphinxhyphen{}direction.
@@ -10683,7 +10644,7 @@ Sections {\hyperref[\detokenize{inputoutputfiles:sec-amr-grid-regular}]{\sphinxc
 \noindent\sphinxincludegraphics{{base_amr}.pdf}
 \caption{Example of a regular 2\sphinxhyphen{}D grid with \sphinxcode{\sphinxupquote{nx}}=4 and \sphinxcode{\sphinxupquote{ny}}=3 (as
 Fig. \hyperref[\detokenize{gridding:fig-regular-grid}]{Fig.\@ \ref{\detokenize{gridding:fig-regular-grid}}}), with the order of the cells shown as
-numbers in the cells.}\label{\detokenize{inputoutputfiles:id9}}\label{\detokenize{inputoutputfiles:fig-regular-grid-numbered}}\end{figure}
+numbers in the cells.}\label{\detokenize{inputoutputfiles:id1}}\label{\detokenize{inputoutputfiles:fig-regular-grid-numbered}}\end{figure}
 
 
 \subsection{Example: \sphinxstyleliteralintitle{\sphinxupquote{dust\_density.inp}} for an oct\sphinxhyphen{}tree refined grid}
@@ -10729,7 +10690,7 @@ An unformatted version is also available, in the standard way (see above).
 \noindent\sphinxincludegraphics{{oct_tree_amr}.pdf}
 \caption{Example of a 2\sphinxhyphen{}D grid with oct\sphinxhyphen{}tree refinement (as
 Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}oct\sphinxhyphen{}tree\sphinxhyphen{}amr}) with the order of the cells shown as numbers in
-the cells.}\label{\detokenize{inputoutputfiles:id10}}\label{\detokenize{inputoutputfiles:fig-oct-tree-amr-numbered}}\end{figure}
+the cells.}\label{\detokenize{inputoutputfiles:id2}}\label{\detokenize{inputoutputfiles:fig-oct-tree-amr-numbered}}\end{figure}
 
 
 \subsection{Example: \sphinxstyleliteralintitle{\sphinxupquote{dust\_density.inp}} for a layer\sphinxhyphen{}style refined grid}
@@ -10812,7 +10773,7 @@ present in the file, but they can have any value you like (typically 0).
 
 Note that if you have multiple species of dust then we will still have
 48 as the value of \sphinxcode{\sphinxupquote{nrcells}}. The number of values to be read,
-if you have 2 dust species, is then simply 2*\textasciigrave{}\textasciigrave{}nrcells\textasciigrave{}\textasciigrave{} = 2*48 = 96.
+if you have 2 dust species, is then simply 2*\sphinxcode{\sphinxupquote{nrcells}} = 2*48 = 96.
 
 
 \section{INPUT/OUTPUT: dust\_temperature.dat}
@@ -10865,46 +10826,50 @@ flux[nlam,star=2]
 flux[nlam,star=nstar]
 \end{sphinxVerbatim}
 
-which is valid only if \sphinxcode{\sphinxupquote{iformat}}==2. The meaning of the variables:
+which is valid only if \sphinxcode{\sphinxupquote{iformat==2}}. The meaning of the variables:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} The format number, at present better keep it at 2.
+\sphinxcode{\sphinxupquote{iformat}}: The format number, at present better keep it at 2.
 If you put it to 1, the list of wavelengths (see below) will instead be
 a list of frequencies in Herz.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnstars:}} The number of stars you wish to specify.
+\sphinxcode{\sphinxupquote{nstars}}: The number of stars you wish to specify.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of frequency points for the stellar
+\sphinxcode{\sphinxupquote{nlam}}: The number of frequency points for the stellar
 spectra. At present this must be identical to the number of walvelength
 points in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfrstar{[}i{]}:}} The radius of star \(i\) in centimeters.
+\sphinxcode{\sphinxupquote{rstar{[}i{]}}}: The radius of star \(i\) in centimeters.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfmstar{[}i{]}:}} The mass of star \(i\) in grams. This is not
+\sphinxcode{\sphinxupquote{mstar{[}i{]}}}: The mass of star \(i\) in grams. This is not
 important for the current version of RADMC\sphinxhyphen{}3D, but may be in the
 future.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfxstar{[}i{]}:}} The \sphinxcode{\sphinxupquote{x}}\sphinxhyphen{}coordinate of star \(i\) in centimeters.
+\sphinxcode{\sphinxupquote{xstar{[}i{]}}}: The \sphinxcode{\sphinxupquote{x}}\sphinxhyphen{}coordinate of star \(i\) in centimeters.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfystar{[}i{]}:}} The \sphinxcode{\sphinxupquote{y}}\sphinxhyphen{}coordinate of star \(i\) in centimeters.
+\sphinxcode{\sphinxupquote{ystar{[}i{]}}}: The \sphinxcode{\sphinxupquote{y}}\sphinxhyphen{}coordinate of star \(i\) in centimeters.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfzstar{[}i{]}:}} The \sphinxcode{\sphinxupquote{z}}\sphinxhyphen{}coordinate of star \(i\) in centimeters.
+\sphinxcode{\sphinxupquote{zstar{[}i{]}}}: The \sphinxcode{\sphinxupquote{z}}\sphinxhyphen{}coordinate of star \(i\) in centimeters.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} Wavelength point \(i\) (where \(i\in [1,\)\(]\)) in microns. This must be identical (!) to the equivalent
-point in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}). If not, an error occurs.
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: Wavelength point \(i\) (where \(i\in
+[1,\mathrm{nlam}]\)) in microns. This must be identical (!) to the equivalent
+point in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see Section
+{\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}). If not, an error occurs.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfflux{[}i,star=n{]}:}} The flux \(F_\nu\) at wavelength point \(i\)
-for star \(n\) in units of erg cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}2\}} s:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} Hz:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} as seen from a
-distance of 1 parsec = \(3.08572\times 10^{18}\) cm (for normalization).
+\sphinxcode{\sphinxupquote{flux{[}i,star=n{]}}}: The flux \(F_\nu\) at wavelength point \(i\) for
+star \(n\) in units of
+\(\mathrm{erg}\,\mathrm{cm}^{-2},\mathrm{s}^{-1},\mathrm{Hz}^{-1}\) as
+seen from a distance of 1 parsec = \(3.08572\times 10^{18}\) cm (for
+normalization).
 
 \end{itemize}
 
@@ -10963,34 +10928,34 @@ flux[nlam,templ=2]
 flux[nlam,templ=ntempl]
 \end{sphinxVerbatim}
 
-which is valid only if \sphinxcode{\sphinxupquote{iformat}}==2. The meaning of the variables:
+which is valid only if \sphinxcode{\sphinxupquote{iformat==2}}. The meaning of the variables:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} The format number, at present better keep it at 2.
+\sphinxcode{\sphinxupquote{iformat}}: The format number, at present better keep it at 2.
 If you put it to 1, the list of wavelengths (see below) will instead be
 a list of frequencies in Herz.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfntempl:}} The number of stellar templates you wish to specify.
+\sphinxcode{\sphinxupquote{ntempl}}: The number of stellar templates you wish to specify.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of frequency points for the stellar
+\sphinxcode{\sphinxupquote{nlam}}: The number of frequency points for the stellar
 template spectra. At present this must be identical to the number of
 walvelength points in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} Wavelength point \(i\) (where \(i\in
-[1,\)\(]\)) in microns. This must be identical (!) to the
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: Wavelength point \(i\) (where \(i\in [1,\mathrm{nlam}]\))
+in microns. This must be identical (!) to the
 equivalent point in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}). If not, an error occurs.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfflux{[}i,templ=n{]}:}} The ‘flux’ at wavelength \(i\) for
+\sphinxcode{\sphinxupquote{flux{[}i,templ=n{]}}}: The ‘flux’ at wavelength \(i\) for
 stellar template \(n\). The units are somewhat tricky. It is given in units
 of erg / sec / Hz / gram\sphinxhyphen{}of\sphinxhyphen{}star. So multiply this by the density of
-stars in units of gram\sphinxhyphen{}of\sphinxhyphen{}star / cm:math:\sphinxtitleref{\textasciicircum{}3}, and divide by 4*pi to get the
-stellar source function in units of erg / src / Hz / cm:math:\sphinxtitleref{\textasciicircum{}3} / steradian.
+stars in units of gram\sphinxhyphen{}of\sphinxhyphen{}star / \(\mathrm{cm}^3\), and divide by 4*pi to get the
+stellar source function in units of erg / src / Hz / \(\mathrm{cm}^3\) / steradian.
 
 \end{itemize}
 
@@ -11050,28 +11015,28 @@ Intensity[1]
 Intensity[nlam]
 \end{sphinxVerbatim}
 
-which is valid only if \sphinxcode{\sphinxupquote{iformat}}==2. The meaning of the variables:
+which is valid only if \sphinxcode{\sphinxupquote{iformat==2}}. The meaning of the variables:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} The format number, at present better keep it at 2.
+\sphinxcode{\sphinxupquote{iformat}}: The format number, at present better keep it at 2.
 If you put it to 1, the list of wavelengths (see below) will instead be
 a list of frequencies in Herz.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of frequency points for the stellar
+\sphinxcode{\sphinxupquote{nlam}}: The number of frequency points for the stellar
 template spectra. At present this must be identical to the number of
 walvelength points in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} Wavelength point \(i\) (where \(i\in
-[1,\)\(]\)) in microns. This must be identical (!) to the
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: Wavelength point \(i\) (where \(i\in [1,\mathrm{nlam}]\))
+in microns. This must be identical (!) to the
 equivalent point in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required): wavelength\_micron.inp}}}}). If not, an error occurs.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfIntensity{[}i{]}:}} The intensity of the radiation field at
-wavelength \(i\) in units of erg / cm:math:\sphinxtitleref{\textasciicircum{}2} / sec / Hz / steradian.
+\sphinxcode{\sphinxupquote{Intensity{[}i{]}}}: The intensity of the radiation field at
+wavelength \(i\) in units of erg / \(\mathrm{cm}^2\) / sec / Hz / steradian.
 
 \end{itemize}
 
@@ -11103,7 +11068,8 @@ the heat source would then be the sum over all cells of \sphinxcode{\sphinxupquo
 \label{\detokenize{inputoutputfiles:input-required-wavelength-micron-inp}}\label{\detokenize{inputoutputfiles:sec-wavelengths}}
 This is the file that sets the discrete wavelength points for the continuum
 radiative transfer calculations. Note that this is not the same as the
-wavelength grid used for e.g. line radiative transfer.  See Section {\hyperref[\detokenize{inputoutputfiles:sec-camera-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (optional): camera\_wavelength\_micron.inp}}}} and/or Chapter {\hyperref[\detokenize{lineradtrans:chap-line-transfer}]{\sphinxcrossref{\DUrole{std,std-ref}{Line radiative transfer}}}} for
+wavelength grid used for e.g. line radiative transfer.  See Section
+{\hyperref[\detokenize{inputoutputfiles:sec-camera-wavelengths}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (optional): camera\_wavelength\_micron.inp}}}} and/or Chapter {\hyperref[\detokenize{lineradtrans:chap-line-transfer}]{\sphinxcrossref{\DUrole{std,std-ref}{Line radiative transfer}}}} for
 that. This file is only in formatted (ascii) style. It’s structure is:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -11117,24 +11083,25 @@ that. This file is only in formatted (ascii) style. It’s structure is:
 where
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of frequency points for the stellar
+\sphinxcode{\sphinxupquote{nlam}}: The number of frequency points for the stellar
 spectra.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} Wavelength point \(i\) (where \(i\in [1,\)\(]\)) in microns.
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: Wavelength point \(i\) (where \(i\in [1,\mathrm{nlam}]\)) in microns.
 
 \end{itemize}
 
 The list of wavelengths can be in increasing order or decreasing order, but
 must be monotonically increasing/decreasing.
 
-\{bf IMPORTANT:\} It is important to keep in mind that the wavelength
+\sphinxstyleemphasis{IMPORTANT:} It is important to keep in mind that the wavelength
 coverage must include the wavelengths at which the stellar spectra have most
 of their energy, and at which the dust cools predominantly.  This in
-practice means that this should go all the way from 0.1 \(\mu\)mu\textasciigrave{}m, typically logarithmically spaced (i.e. equally spaced in
-log:math:\sphinxtitleref{lambda}). A smaller coverage will cause serious problems in the Monte
+practice means that this should go all the way from 0.1 \(\mu\)m to 1000
+\(\mu\)m, typically logarithmically spaced (i.e. equally spaced in
+\(\log(\lambda)\)). A smaller coverage will cause serious problems in the Monte
 Carlo run and dust temperatures may then be severely miscalculated. Note
-that the 0.1 :math:{\color{red}\bfseries{}\textasciigrave{}}mu\textasciigrave{}m is OK for stellar temperatures below 10000 K. For higher
+that the 0.1 \(\mu\)m is OK for stellar temperatures below 10000 K. For higher
 temperatures a shorter wavelength lower limit must be used.
 
 
@@ -11201,69 +11168,61 @@ of 2 separate dust species is used:
 where:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} Currently the format number is 2, and in this manual
+\sphinxcode{\sphinxupquote{iformat}}: Currently the format number is 2, and in this manual
 we always assume it is 2.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnspec:}} The number of dust species that will be loaded.
+\sphinxcode{\sphinxupquote{nspec}}: The number of dust species that will be loaded.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfinputstyle{[}i{]}:}} This number tells in which form the dust
+\sphinxcode{\sphinxupquote{inputstyle{[}i{]}}}: This number tells in which form the dust
 opacity of dust species \(i\) is to be read:
 \begin{itemize}
 \item {} 
-\sphinxstyleemphasis{1} Use the \sphinxcode{\sphinxupquote{dustkappa\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}} input file
-style (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkappa-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkappa\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}).
+\sphinxstyleemphasis{1} Use the \sphinxcode{\sphinxupquote{dustkappa\_*.inp}} input file
+style (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkappa-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkappa\_*.inp files}}}}).
 
 \item {} 
-\sphinxstyleemphasis{10} Use the \sphinxcode{\sphinxupquote{dustkapscatmat\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}} input
-file style (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}).
-
-\item {} 
-\sphinxstyleemphasis{\sphinxhyphen{}1} Use the \sphinxcode{\sphinxupquote{dustopac\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}} input file
-style (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustopac-oldstyle}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustopac\_\textless{}\textgreater{}\textasciigrave{}.inp files: Backward compatibility with RADMC\sphinxhyphen{}2D}}}}). This is just a backward
-compatibility mode. Should be avoided if possible.
+\sphinxstyleemphasis{10} Use the \sphinxcode{\sphinxupquote{dustkapscatmat\_*.inp}} input
+file style (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}}).
 
 \end{itemize}
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfiquantum{[}i{]}:}} For normal thermal grains this is 0. If,
+\sphinxcode{\sphinxupquote{iquantum{[}i{]}}}: For normal thermal grains this is 0. If,
 however, this grain species is supposed to be treated as a quantum\sphinxhyphen{}heated
-grain, then non\sphinxhyphen{}zero values are to be specified. {\color{red}\bfseries{}*}NOTE: At the moment
-\begin{quote}
-
-the quantum heating is not yet implemented. Will be done in the near
-future. Until then, please set this to 0!*
-\end{quote}
+grain, then non\sphinxhyphen{}zero values are to be specified. \sphinxstyleemphasis{NOTE: At the moment
+the quantum heating is not yet implemented. Will be done in the
+future, if users request it. Until then, please set this to 0!}
 
 \item {} 
-\sphinxcode{\sphinxupquote{bf:math:\textasciigrave{}\textless{}\textasciigrave{}nameofdustspeciesi:math:\textasciigrave{}\textgreater{}\textasciigrave{}:}} This is the name of the
+\sphinxcode{\sphinxupquote{\textless{}name of dust species i\textgreater{}}}: This is the name of the
 dust species (without blank spaces). This name is then glued to the base
 name of the opacity file (see above). For instance, if the name is
-\sphinxcode{\sphinxupquote{enstatite}}, and \sphinxcode{\sphinxupquote{inputstyle}}==1, then the file to be
+\sphinxcode{\sphinxupquote{enstatite}}, and \sphinxcode{\sphinxupquote{inputstyle==1}}, then the file to be
 read is \sphinxcode{\sphinxupquote{dustkappa\_enstatite.inp}}.
 
 \end{itemize}
 
 
-\subsection{The {\color{red}\bfseries{}dustkappa\_}\protect\(<\protect\)\textgreater{}\textasciigrave{}.inp files}
+\subsection{The dustkappa\_*.inp files}
 \label{\detokenize{inputoutputfiles:the-dustkappa-inp-files}}\label{\detokenize{inputoutputfiles:sec-dustkappa-files}}
 If you wish to use dust opacities that include the mass\sphinxhyphen{}weighted absorption
 opacity \(\kappa_{\mathrm{abs}}\), the (optionally) mass\sphinxhyphen{}weighted scattering
 opacity \(\kappa_{\mathrm{scat}}\), and (optionally) the anisotropy factor \(g\)
-for scattering, you can do this with a file \sphinxcode{\sphinxupquote{dustkappa\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}} (set input style to 1 in \sphinxcode{\sphinxupquote{dustopac.inp}}, see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustopac-inp-file}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustopac.inp file}}}}). With this kind of
-opacity scattering is included either isotropically or using the
-Henyey\sphinxhyphen{}Greenstein function.  Using an opacity of this kind does \sphinxstyleemphasis{not}
+for scattering, you can do this with a file \sphinxcode{\sphinxupquote{dustkappa\_*.inp}} (set input style to 1 in
+\sphinxcode{\sphinxupquote{dustopac.inp}}, see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustopac-inp-file}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustopac.inp file}}}}). With this kind of
+opacity input file, scattering is included either isotropically or using the
+Henyey\sphinxhyphen{}Greenstein function.  Using an opacity file of this kind does \sphinxstyleemphasis{not}
 allow for full realistic scattering phase functions nor for
-polarization. For that, you need \sphinxcode{\sphinxupquote{dustkapscatmat\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}}
-files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_\textless{}\textgreater{}\textasciigrave{}.inp files}}}}). Please refer to Section
+polarization. For that, you need \sphinxcode{\sphinxupquote{dustkapscatmat\_*.inp}}
+files (see Section {\hyperref[\detokenize{inputoutputfiles:sec-dustkapscatmat-files}]{\sphinxcrossref{\DUrole{std,std-ref}{The dustkapscatmat\_*.inp files}}}}). Please refer to Section
 {\hyperref[\detokenize{dustradtrans:sec-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{More about scattering of photons off dust grains}}}} for more information about how RADMC\sphinxhyphen{}3D treats
 scattering.
 
-If for dust species \sphinxcode{\sphinxupquote{:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}}} the \sphinxcode{\sphinxupquote{inputstyle}} in the
-\sphinxcode{\sphinxupquote{dustopac.inp}} file is set to 1, then the file
-\sphinxcode{\sphinxupquote{dustkappa\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}}
-is sought and read. The structure of this file is:
+If for dust species \sphinxcode{\sphinxupquote{\textless{}name\textgreater{}}} the \sphinxcode{\sphinxupquote{inputstyle}} in the \sphinxcode{\sphinxupquote{dustopac.inp}} file
+is set to 1, then the file \sphinxcode{\sphinxupquote{dustkappa\_\textless{}name\textgreater{}.inp}} is sought and read. The
+structure of this file is:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} Any amount of arbitrary}
@@ -11280,57 +11239,57 @@ is sought and read. The structure of this file is:
 The meaning of these entries is:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} If iformat==1, then only the lambda and
+\sphinxcode{\sphinxupquote{iformat}}: If \sphinxcode{\sphinxupquote{iformat==1}}, then only the lambda and
 kappa\_abs colums are present. In that case the scattering opacity is
-assumed to be 0, i.e. a zero albedo is assumed. If iformat==2 also
-kappa\_scat is read (third column). If iformat==3 (which is what is used in
+assumed to be 0, i.e. a zero albedo is assumed. If \sphinxcode{\sphinxupquote{iformat==2}} also
+kappa\_scat is read (third column). If \sphinxcode{\sphinxupquote{iformat==3}} (which is what is used in
 the above example) then \sphinxstyleemphasis{also} the anisotropy factor \(g\) is included.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of wavelength points in this file. This
+\sphinxcode{\sphinxupquote{nlam}}: The number of wavelength points in this file. This
 can be any number, and does not have to be the same as those of the
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}}. It is typically advisable to have a rather
 large number of wavelength points.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} The wavelength point \(i\) in micron. This does
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: The wavelength point \(i\) in micron. This does
 not have to be (and indeed typically is not) the same as the values in the
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file. Also for each opacity this list of
 wavelengths can be different (and can be a different quantity of points).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfkappa\_abs{[}i{]}:}} The absorption opacity \(\kappa_{\mathrm{abs}}\) in units of cm:math:\sphinxtitleref{\textasciicircum{}2} per gram of dust.
+\sphinxcode{\sphinxupquote{kappa\_abs{[}i{]}}}: The absorption opacity \(\kappa_{\mathrm{abs}}\) in units of \(\mathrm{cm}^2\) per gram of dust.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfkappa\_scat{[}i{]}:}} The scattering opacity \(\kappa_{\mathrm{abs}}\) in units of cm:math:\sphinxtitleref{\textasciicircum{}2}
+\sphinxcode{\sphinxupquote{kappa\_scat{[}i{]}}}: The scattering opacity \(\kappa_{\mathrm{abs}}\) in units of \(\mathrm{cm}^2\)
 per gram of dust. Note that this column should only be included if
-iformat==2 or higher.
+\sphinxcode{\sphinxupquote{iformat==2}} or higher.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfg{[}ilam{]}:}} The mean scattering angle
+\sphinxcode{\sphinxupquote{g{[}ilam{]}}}: The mean scattering angle
 \(\langle\cos(\theta)\rangle\), often called \(g\). This will be used by
 RADMC\sphinxhyphen{}3D in the Henyey\sphinxhyphen{}Greenstein scattering phase function. Note that
-this column should only be included if iformat==3 or higher.
+this column should only be included if \sphinxcode{\sphinxupquote{iformat==3}} or higher.
 
 \end{itemize}
 
 Once this file is read, the opacities will be mapped onto the global
 wavelength grid of the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file. Since this mapping
-always involve uncertainties and errors, a file \sphinxcode{\sphinxupquote{dustkappa\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp\_used}} is created which lists the opacity how it
+always involve uncertainties and errors, a file \sphinxcode{\sphinxupquote{dustkappa\_*.inp\_used}} is created which lists the opacity how it
 is remapped onto the global wavelength grid. This is only for you as the
 user, so that you can verify what RADMC\sphinxhyphen{}3D has internally done. Note that if
-the upper or lower edges of the wavelength domain of the \sphinxcode{\sphinxupquote{dustkappa\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}} file is within the domain of the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} grid, some extrapolation will have to be done.  At
+the upper or lower edges of the wavelength domain of the \sphinxcode{\sphinxupquote{dustkappa\_*.inp}} file is within the domain of the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} grid, some extrapolation will have to be done.  At
 short wavelength this will simply be constant extrapolation while at long
-wavelength a powerlaw extrapolation is done. Have a look at the \sphinxcode{\sphinxupquote{dustkappa\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp\_used}} file to see how RADMC\sphinxhyphen{}3D has done this
+wavelength a powerlaw extrapolation is done. Have a look at the \sphinxcode{\sphinxupquote{dustkappa\_*.inp\_used}} file to see how RADMC\sphinxhyphen{}3D has done this
 in your particular case.
 
 
-\subsection{The {\color{red}\bfseries{}dustkapscatmat\_}\protect\(<\protect\)\textgreater{}\textasciigrave{}.inp files}
+\subsection{The dustkapscatmat\_*.inp files}
 \label{\detokenize{inputoutputfiles:the-dustkapscatmat-inp-files}}\label{\detokenize{inputoutputfiles:sec-dustkapscatmat-files}}
 If you wish to treat scattering in a more realistic way than just the
 Henyey\sphinxhyphen{}Greenstein non\sphinxhyphen{}polarized way, then you must provide RADMC\sphinxhyphen{}3D with
 more information than is present in the \sphinxcode{\sphinxupquote{dustkappa\_xxx.inp}}
-files: RADMC\sphinxhyphen{}3D will need the full scattering M”uller matrix for all angles
+files: RADMC\sphinxhyphen{}3D will need the full scattering Müller matrix for all angles
 of scattering (see e.g. the books by Mishchenko, or by Bohren \& Huffman or
 by van de Hulst). For \sphinxstyleemphasis{randomly oriented particles} only 6 of these
 matrix elements can be non\sphinxhyphen{}zero: \(Z_{11}\), \(Z_{12}=Z_{21}\), \(Z_{22}\),
@@ -11344,9 +11303,9 @@ values of these 6 matrix elements. These can be provided in a file
 Section {\hyperref[\detokenize{dustradtrans:sec-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{More about scattering of photons off dust grains}}}} for more information about how RADMC\sphinxhyphen{}3D treats
 scattering.
 
-If for dust species \sphinxcode{\sphinxupquote{:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}}} the \sphinxcode{\sphinxupquote{inputstyle}} in the
+If for dust species \sphinxcode{\sphinxupquote{\textless{}name\textgreater{}}} the \sphinxcode{\sphinxupquote{inputstyle}} in the
 \sphinxcode{\sphinxupquote{dustopac.inp}} file is set to 10, then the file
-\sphinxcode{\sphinxupquote{dustkapscatmat\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}}
+\sphinxcode{\sphinxupquote{dustkapscatmat\_\textless{}name\textgreater{}.inp}}
 is sought and read. The structure of this file is:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -11392,16 +11351,16 @@ is sought and read. The structure of this file is:
 The meaning of these entries is:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} For now this value should remain 1.
+\sphinxcode{\sphinxupquote{iformat}}: For now this value should remain 1.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of wavelength points in this file. This
+\sphinxcode{\sphinxupquote{nlam}}: The number of wavelength points in this file. This
 can be any number, and does not have to be the same as those of the
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}}. It is typically advisable to have a rather
 large number of wavelength points.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnang:}} The number of scattering angle sampling points.
+\sphinxcode{\sphinxupquote{nang}}: The number of scattering angle sampling points.
 This should be large enough that a proper integration over scattering angle
 can be carried out reliably. A reasonable value is 181, so that (for
 a regular grid in scattering angle \(\theta\)) you have as scattering angles
@@ -11409,45 +11368,46 @@ a regular grid in scattering angle \(\theta\)) you have as scattering angles
 or backward peaked scattering, then maybe even 181 is not enough.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}ilam{]}:}} The wavelength point \(ilam\) in micron. This does
+\sphinxcode{\sphinxupquote{lambda{[}ilam{]}}}: The wavelength point \sphinxcode{\sphinxupquote{ilam}} in micron. This does
 not have to be (and indeed typically is not) the same as the values in the
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file. Also for each opacity this list of
 wavelengths can be different (and can be a different quantity of points).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfangle\_in\_degrees{[}iang{]}:}} The scattering angle
-sampling point \(iang\) in degrees (0 degrees is perfect forward scattering,
+\sphinxcode{\sphinxupquote{angle\_in\_degrees{[}iang{]}}}: The scattering angle
+sampling point \sphinxcode{\sphinxupquote{iang}} in degrees (0 degrees is perfect forward scattering,
 180 degrees is perfect backscattering). There should be \sphinxcode{\sphinxupquote{nang}}
 such points, where \sphinxcode{\sphinxupquote{angle\_in\_degrees{[}1{]}}} must be 0 and
 \sphinxcode{\sphinxupquote{angle\_in\_degrees{[}nang{]}}} must be 180. In between the angle
 grid can be anything, as long as it is monotonic.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfkappa\_abs{[}ilam{]}:}} The absorption opacity \(\kappa_{\mathrm{abs}}\) in units of cm:math:\sphinxtitleref{\textasciicircum{}2} per gram of dust.
+\sphinxcode{\sphinxupquote{kappa\_abs{[}ilam{]}}}: The absorption opacity \(\kappa_{\mathrm{abs}}\)
+in units of \(\mathrm{cm}^2\) per gram of dust.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfkappa\_scat{[}ilam{]}:}} The scattering opacity
-\(\kappa_{\mathrm{scat}}\) in units of cm:math:\sphinxtitleref{\textasciicircum{}2} per gram of dust. RADMC\sphinxhyphen{}3D can
+\sphinxcode{\sphinxupquote{kappa\_scat{[}ilam{]}}}: The scattering opacity
+\(\kappa_{\mathrm{scat}}\) in units of \(\mathrm{cm}^2\) per gram of dust. RADMC\sphinxhyphen{}3D can
 (and will) in fact calculate \(\kappa_{\mathrm{scat}}\) from the scattering
 matrix elements. It will then check (for every wavelength) if that is the
 same as the value listed here. If the difference is small, it will simply
-adjust the \sphinxcode{\sphinxupquote{bfkappa\_scat{[}ilam{]}}} value internally to get a
+adjust the \sphinxcode{\sphinxupquote{kappa\_scat{[}ilam{]}}} value internally to get a
 perfect match. If it is larger than 1E\sphinxhyphen{}4 then it will, in addition to
 adjusting, make a warning. if it is larger than 1E\sphinxhyphen{}1, it will abort. Note
 that the fewer angles are used, the worse the match will be because the
 integration over angle will be worse.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfg{[}ilam{]}:}} The mean scattering angle
+\sphinxcode{\sphinxupquote{g{[}ilam{]}}}: The mean scattering angle
 \(\langle\cos(\theta)\rangle\), often called \(g\). RADMC\sphinxhyphen{}3D can (and will) in
 fact calculate \(g\) from the scattering matrix elements. Like with
-\sphinxcode{\sphinxupquote{bfkappa\_scat{[}ilam{]}}} it will adjust if the difference is not
+\sphinxcode{\sphinxupquote{kappa\_scat{[}ilam{]}}} it will adjust if the difference is not
 too large and it will complain or abort if the difference is larger than
 some limit.
 
 \item {} 
 \sphinxcode{\sphinxupquote{Z\_\{xx\}}} These are the scattering matrix elements
-in units of cm:math:\sphinxtitleref{\textasciicircum{}2} gram:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} ster:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} (i.e. they are angular
+in units of \(\mathrm{cm}^2\, \mathrm{g}^{-1}\,\mathrm{ster}^{-1}\) (i.e. they are angular
 differential cross sections). See Section {\hyperref[\detokenize{dustradtrans:sec-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{More about scattering of photons off dust grains}}}} for
 more details.
 
@@ -11483,66 +11443,14 @@ additional file to \sphinxcode{\sphinxupquote{RADMC\sphinxhyphen{}3D}} that repr
 \PYG{l+m+mf}{180.0}        \PYG{o}{\PYGZlt{}}\PYG{o}{==}\PYG{o}{=} \PYG{n}{Last} \PYG{n}{angle} \PYG{p}{(}\PYG{o+ow}{in} \PYG{n}{degrees}\PYG{p}{)}\PYG{o}{.} \PYG{n}{Must} \PYG{n}{be} \PYG{l+m+mi}{180}
 \end{sphinxVerbatim}
 
-\{bf NOTE:\} This file is not compulsory. If it is not given, then
+\sphinxstyleemphasis{NOTE:} This file is not compulsory. If it is not given, then
 \sphinxcode{\sphinxupquote{RADMC\sphinxhyphen{}3D}} will make its own internal scattering angle grid.
-
-
-\subsection{The {\color{red}\bfseries{}dustopac\_}\protect\(<\protect\)\textgreater{}\textasciigrave{}.inp files: Backward compatibility with RADMC\sphinxhyphen{}2D}
-\label{\detokenize{inputoutputfiles:the-dustopac-inp-files-backward-compatibility-with-radmc-2d}}\label{\detokenize{inputoutputfiles:sec-dustopac-oldstyle}}
-If you want to be able to redo a model from the old RADMC (2D\sphinxhyphen{}version) code
-with RADMC\sphinxhyphen{}3D, you require RADMC\sphinxhyphen{}3D to be able to read the old style
-dust opacity files \sphinxcode{\sphinxupquote{dustopac\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}}.
-
-If for dust species \sphinxcode{\sphinxupquote{:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}}} the \sphinxcode{\sphinxupquote{inputstyle}} in the
-\sphinxcode{\sphinxupquote{dustopac.inp}} file is set to \sphinxhyphen{}1, then the file \sphinxcode{\sphinxupquote{dustopac\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}}
-is sought and read. The structure of this file is:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{nlam}   \PYG{n}{dummy}
-\PYG{n}{kappa\PYGZus{}abs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
-  \PYG{o}{.}
-  \PYG{o}{.}
-\PYG{n}{kappa\PYGZus{}abs}\PYG{p}{[}\PYG{n}{nlam}\PYG{p}{]}
-\PYG{n}{kappa\PYGZus{}scat}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
-  \PYG{o}{.}
-  \PYG{o}{.}
-\PYG{n}{kappa\PYGZus{}scat}\PYG{p}{[}\PYG{n}{nlam}\PYG{p}{]}
-\end{sphinxVerbatim}
-
-The meaning of these entries is:
-\begin{itemize}
-\item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of frequency (wavelength) points. This
-must be \sphinxstyleemphasis{identical} to those of the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file
-or else the code stops.
-
-\item {} 
-\sphinxcode{\sphinxupquote{bfdummy:}} Put this number to 1. It is here for historic
-reasons (and backward compatibility with older RADMC incarnations).
-
-\item {} 
-\sphinxcode{\sphinxupquote{bfkappa\_abs{[}i{]}:}} The absorption opacity at wavelength point
-\(i\) of the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} wavelength grid, in units of
-cm:math:\sphinxtitleref{\textasciicircum{}2} per gram of dust.
-
-\item {} 
-\sphinxcode{\sphinxupquote{bfkappa\_scat{[}i{]}:}} The scattering opacity at wavelength point
-\(i\) of the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} wavelength grid, in units of
-cm:math:\sphinxtitleref{\textasciicircum{}2} per gram of dust. \sphinxstyleemphasis{NOTE: Here isotropic scattering is assumed.}
-
-\end{itemize}
-
-Note that the opacities listed in this kind of file belong to the wavelength
-points in the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}}. So if you change the
-\sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file, you also must change the
-\sphinxcode{\sphinxupquote{dustopac\_:math:\textasciigrave{}\textless{}\textasciigrave{}name:math:\textasciigrave{}\textgreater{}\textasciigrave{}.inp}} files. This is why this kind of opacity
-specification is not recommended.
 
 
 \section{OUTPUT: spectrum.out}
 \label{\detokenize{inputoutputfiles:output-spectrum-out}}\label{\detokenize{inputoutputfiles:sec-output-spectrum-out}}
 Any spectrum that is made with RADMC\sphinxhyphen{}3D will be either called
-\sphinxcode{\sphinxupquote{spectrum.out}} or \sphinxstyleemphasis{spectrum\_:math:\textasciigrave{}\textless{}\textasciigrave{}somename:math:\textasciigrave{}\textgreater{}\textasciigrave{}.out} and will have
+\sphinxcode{\sphinxupquote{spectrum.out}} or \sphinxcode{\sphinxupquote{spectrum\_\textless{}somename\textgreater{}.out}} and will have
 the following structure:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -11558,15 +11466,15 @@ the following structure:
 where:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} This format number is currently set to 1.
+\sphinxcode{\sphinxupquote{iformat}}: This format number is currently set to 1.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of wavelength points in this spectrum.
+\sphinxcode{\sphinxupquote{nlam}}: The number of wavelength points in this spectrum.
 This does not necessarily have to be the same as those in the
 \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file. It can be any number.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} Wavelength in micron.  This does not necessarily
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: Wavelength in micron.  This does not necessarily
 have to be the same as those in the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file.
 The wavelength grid of a spectrum file can be completely independent
 of all other wavelength grids. For standard SED computations for the
@@ -11576,7 +11484,9 @@ spectra based on the \sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp}}
 not.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfflux{[}i{]}:}} Flux in erg cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}2\}} s:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} Hz:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} at this
+\sphinxcode{\sphinxupquote{flux{[}i{]}}}: Flux in units of
+\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\)
+at this
 wavelength as measured at a standard distance of 1 parsec (just as a way
 of normalization).
 
@@ -11627,7 +11537,7 @@ one image is written (i.e. the img=2, …. img=nlam are not there, only
 the img=1). The meaning of the various entries is:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat:}} This format number is currently set to 1
+\sphinxcode{\sphinxupquote{iformat}}: This format number is currently set to 1
 
 \end{itemize}
 
@@ -11636,11 +11546,11 @@ Note: For full\sphinxhyphen{}Stokes images it is 3, but then also the data chang
 bit, see below.
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfim\_nx,im\_ny:}} The number of pixels in x and in y
+\sphinxcode{\sphinxupquote{im\_nx,im\_ny}}: The number of pixels in x and in y
 direction of the image.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnlam:}} The number of images at different wavelengths that
+\sphinxcode{\sphinxupquote{nlam}}: The number of images at different wavelengths that
 
 \end{itemize}
 
@@ -11651,7 +11561,7 @@ however large you want. Mostly one typically just makes an images at one
 wavelength, meaning \sphinxcode{\sphinxupquote{nlam}}=1.
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfpixsize\_x,pixsize\_y:}} The size of the pixels in cm (for an observer at
+\sphinxcode{\sphinxupquote{pixsize\_x,pixsize\_y}}: The size of the pixels in cm (for an observer at
 infinity) or radian (for local observer mode).  This means that for the
 observer\sphinxhyphen{}at\sphinxhyphen{}infinity mode (default) the size is given in model units (distance
 within the 3\sphinxhyphen{}D model) and the user can, for any distance, convert this into
@@ -11660,15 +11570,16 @@ in parsec). The pixel size is the full size from the left of the pixel to the
 right of the pixel (or from bottom to top).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bflambda{[}i{]}:}} Wavelengths in micron belonging to the various images in this
+\sphinxcode{\sphinxupquote{lambda{[}i{]}}}: Wavelengths in micron belonging to the various images in this
 file. In case \sphinxcode{\sphinxupquote{nlam}}=1 there will be here just a single number. Note that
 this set of wavelengths can be completely independent of all other wavelength
 grids.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfimage{[}ix,iy,img{]}:}} Intensity in the image at pixel \sphinxcode{\sphinxupquote{ix}}, \sphinxcode{\sphinxupquote{iy}} at
-wavelength \sphinxcode{\sphinxupquote{img}} (of the above listed wavelength points) in units of erg
-cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}2\}} s:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} Hz:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}} ster:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}}. \sphinxstyleemphasis{Important:}
+\sphinxcode{\sphinxupquote{image{[}ix,iy,img{]}}}: Intensity in the image at pixel \sphinxcode{\sphinxupquote{ix}}, \sphinxcode{\sphinxupquote{iy}} at
+wavelength \sphinxcode{\sphinxupquote{img}} (of the above listed wavelength points) in units of
+\(\mathrm{erg}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\).
+\sphinxstyleemphasis{Important:}
 The pixels are ordered from left to right (i.e. increasing \(x\)) in the
 inner loop, and from bottom to top (i.e. increasing \(y\)) in the outer
 loop.
@@ -11738,7 +11649,7 @@ the option \sphinxcode{\sphinxupquote{loadcolor}} or \sphinxcode{\sphinxupquote{
 \end{sphinxVerbatim}
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat}}: This format number is currently set to 1.
+\sphinxcode{\sphinxupquote{iformat}}: This format number is currently set to 1.
 
 \item {} 
 \sphinxcode{\sphinxupquote{nlam}}: Number of wavelength indices specified here.
@@ -11768,7 +11679,7 @@ aperture (see Section {\hyperref[\detokenize{imagesspectra:sec-aperture}]{\sphin
 with
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfiformat}}: This format number is currently set to 1.
+\sphinxcode{\sphinxupquote{iformat}}: This format number is currently set to 1.
 
 \item {} 
 \sphinxcode{\sphinxupquote{nlam}}: Number of wavelength indices specified here. This
@@ -11800,13 +11711,15 @@ waste of time to let RADMC\sphinxhyphen{}3D read all the gas velocity and temper
 data and level population data into memory if they are not used.
 
 To avoid unnecessary reading of large files the reading of these files is
-usually organized in a \sphinxtitleref{read when required’ way. Any subroutine in the code
+usually organized in a ‘read when required’ way. Any subroutine in the code
 that relies on e.g. line data to be present in memory can simply call the
-routine \textasciigrave{}\textasciigrave{}read\_lines\_all(action)\textasciigrave{}} with argument \sphinxcode{\sphinxupquote{action}} being 1,
+routine \sphinxcode{\sphinxupquote{read\_lines\_all(action)}} with argument \sphinxcode{\sphinxupquote{action}} being 1,
 i.e.:
-begin\{verbatim\}
-call read\_lines\_all(1)
-end\{verbatim\}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{call} \PYG{n}{read\PYGZus{}lines\PYGZus{}all}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+\end{sphinxVerbatim}
+
 This routine will check if the data are present: if no, it will read them,
 if yes, it will return without further action. This means that you can call
 \sphinxcode{\sphinxupquote{read\_lines\_all(1)}} as often as you want: the line data will be read
@@ -12261,7 +12174,7 @@ Monte Carlo method.
 There are also some additional commands that may be useful for diagnostics:
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{subbox\_\textbackslash{}*\textbackslash{}*\textbackslash{}*\textbackslash{}*}}: where **** is one of the following:
+\sphinxcode{\sphinxupquote{subbox\_****}}: where **** is one of the following:
 \sphinxcode{\sphinxupquote{dust\_density}}, \sphinxcode{\sphinxupquote{dust\_temperature}}. But other
 quantities will follow in later versions. See Section {\hyperref[\detokenize{toolsinside:sec-subbox}]{\sphinxcrossref{\DUrole{std,std-ref}{Making a regularly\sphinxhyphen{}spaced datacube (‘subbox’) of AMR\sphinxhyphen{}based models}}}}.
 
@@ -12283,37 +12196,37 @@ forget to list new options here):
 to be used.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnpix}}: {[}for images{]} The next number specifies the number of
+\sphinxcode{\sphinxupquote{npix}}: {[}for images{]} The next number specifies the number of
 pixels in both x and y direction, assuming a square image.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnpixx}}: {[}for images{]} The next number specifies the number of
+\sphinxcode{\sphinxupquote{npixx}}: {[}for images{]} The next number specifies the number of
 pixels in x direction only.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnpixy}}: {[}for images{]} The next number specifies the number of
+\sphinxcode{\sphinxupquote{npixy}}: {[}for images{]} The next number specifies the number of
 pixels in y direction only.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnrrefine}}: {[}for images and spectra{]} Specifies a maximum depth of
+\sphinxcode{\sphinxupquote{nrrefine}}: {[}for images and spectra{]} Specifies a maximum depth of
 refinement of the pixels (see Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{The issue of flux conservation: recursive sub\sphinxhyphen{}pixeling}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bffluxcons}}: {[}for images and spectra{]} Puts nrrefine (see above) to
+\sphinxcode{\sphinxupquote{fluxcons}}: {[}for images and spectra{]} Puts nrrefine (see above) to
 a large value to assue flux conservation (see Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{The issue of flux conservation: recursive sub\sphinxhyphen{}pixeling}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnorefine}}: {[}for images and spectra{]} Puts
+\sphinxcode{\sphinxupquote{norefine}}: {[}for images and spectra{]} Puts
 nrrefine (see above) to 0 so that each pixel of the image corresponds only
 to 1 ray. This is fast but not reliable and therefore not recommended (see
 Section {\hyperref[\detokenize{imagesspectra:sec-image-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{The issue of flux conservation: recursive sub\sphinxhyphen{}pixeling}}}}).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnofluxcons}}: {[}for images and spectra{]} As
+\sphinxcode{\sphinxupquote{nofluxcons}}: {[}for images and spectra{]} As
 \sphinxcode{\sphinxupquote{norefine}} above.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnoscat}}: This option makes RADMC\sphinxhyphen{}3D ignore the
+\sphinxcode{\sphinxupquote{noscat}}: This option makes RADMC\sphinxhyphen{}3D ignore the
 dust scattering process (though not the scattering extinction!) in the
 images, spectra and Monte Carlo simulations. For images and spectra this
 means that no scattering Monte Carlo run has to be performed before each
@@ -12330,12 +12243,12 @@ about 1 micron) have very low scattering albedos in the infrared and
 submillimeter.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfilambda}} or \sphinxcode{\sphinxupquote{bfinu}}: {[}for images{]} Specify the index of the wavelength
+\sphinxcode{\sphinxupquote{ilambda}} or \sphinxcode{\sphinxupquote{inu}}: {[}for images{]} Specify the index of the wavelength
 from the \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} file for which a ray\sphinxhyphen{}trace image should be
 made.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfcolor}}: {[}for images{]} Allows you to make multiple
+\sphinxcode{\sphinxupquote{color}}: {[}for images{]} Allows you to make multiple
 images (each at a different wavelength) in one go. This will make RADMC\sphinxhyphen{}3D
 read the file \sphinxcode{\sphinxupquote{color\_inus.inp}} (see Section
 {\hyperref[\detokenize{inputoutputfiles:sec-minor-input-files}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: (minor input files)}}}}) which is a list of indices \sphinxcode{\sphinxupquote{i}}
@@ -12344,22 +12257,21 @@ images should be made. See Section {\hyperref[\detokenize{imagesspectra:sec-set-
 details.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfloadcolor}}: {[}for images{]} Same as \sphinxcode{\sphinxupquote{color}}.
+\sphinxcode{\sphinxupquote{loadcolor}}: {[}for images{]} Same as \sphinxcode{\sphinxupquote{color}}.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfloadlambda}}: {[}for images{]} Allows you to make multiple images (each at a
+\sphinxcode{\sphinxupquote{loadlambda}}: {[}for images{]} Allows you to make multiple images (each at a
 different wavelength) in one go. This will make RADMC\sphinxhyphen{}3D read the file
-\sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp}} or linebreak\textasciigrave{}\textasciigrave{}camera\_frequency.inp\textasciigrave{}\textasciigrave{}
-(whichever is present) to read the precise wavelength points at which you wish
+\sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp}} to read the precise wavelength points at which you wish
 to make the images. In contrast to \sphinxcode{\sphinxupquote{loadcolor}}, which only allows you to
 pick from the global set of wavelength used by the Monte Carlo simulation (in
-the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}} or \sphinxcode{\sphinxupquote{frequency.inp}}), with the
-\sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp}} or \sphinxcode{\sphinxupquote{camera\_frequency.inp}} files you can
+the file \sphinxcode{\sphinxupquote{wavelength\_micron.inp}}), with the
+\sphinxcode{\sphinxupquote{camera\_wavelength\_micron.inp}} files you can
 specify any wavelength you want, and any number of them. See Section
 {\hyperref[\detokenize{imagesspectra:sec-set-camera-frequencies}]{\sphinxcrossref{\DUrole{std,std-ref}{Specifying custom\sphinxhyphen{}made sets of wavelength points for the camera}}}} for details.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfsizeau}}: {[}for images and spectra{]} The next number
+\sphinxcode{\sphinxupquote{sizeau}}: {[}for images and spectra{]} The next number
 specifies the image size in model space in units of AU (=1.496E13
 cm). This image size is measured from the image left to
 right and top to bottom. This gives always square images. This image
@@ -12368,11 +12280,11 @@ size in arcsec is: image size in arcsec = image size in AU /
 (distance in parsec).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfsizepc}}: {[}for images and spectra{]} Same as \sphinxcode{\sphinxupquote{sizeau}}, but
+\sphinxcode{\sphinxupquote{sizepc}}: {[}for images and spectra{]} Same as \sphinxcode{\sphinxupquote{sizeau}}, but
 now in parsec units.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfzoomau}}: {[}for images and spectra{]} The next four numbers set the image
+\sphinxcode{\sphinxupquote{zoomau}}: {[}for images and spectra{]} The next four numbers set the image
 window precisely by specifying the xleft, xright, ybottom, ytop of the image
 in units of AU. The zero point of the image (the direction of the 2\sphinxhyphen{}D image
 point located at (0.0,0.0) in image coordinates) stays the same (i.e. it aims
@@ -12381,20 +12293,20 @@ this way you can move the image window left or with or up or down without
 having to change the \sphinxcode{\sphinxupquote{pointau}} or \sphinxcode{\sphinxupquote{pointpc}} 3\sphinxhyphen{}D locations. Also for local
 perspective images it is different if you move the image window in the image
 plane, or if you actually change the direction in which you are looking (for
-images from infinity this is the same). \sphinxstyleemphasis{Note that if you use this option
-without the \textasciigrave{}\textasciigrave{}truepix\textasciigrave{}\textasciigrave{} option RADMC\sphinxhyphen{}3D will always make square pixels by
-adapting \textasciigrave{}\textasciigrave{}npixx\textasciigrave{}\textasciigrave{} or \textasciigrave{}\textasciigrave{}npixy\textasciigrave{}\textasciigrave{} such that together with the \textasciigrave{}\textasciigrave{}zoomau\textasciigrave{}\textasciigrave{} image
-size you get approximately square pixels. Furthermore, if \textasciigrave{}\textasciigrave{}truezoom\textasciigrave{}\textasciigrave{} is not
+images from infinity this is the same). \sphinxstyleemphasis{Note:} If you use this option
+without the \sphinxcode{\sphinxupquote{truepix}} option RADMC\sphinxhyphen{}3D will always make square pixels by
+adapting \sphinxcode{\sphinxupquote{npixx}} or \sphinxcode{\sphinxupquote{npixy}} such that together with the \sphinxcode{\sphinxupquote{zoomau}} image
+size you get approximately square pixels. Furthermore, if \sphinxcode{\sphinxupquote{truezoom}} is not
 set, RADMC\sphinxhyphen{}3D will alleviate the remaining tiny deviation from square pixel
-shape by slightly (!) adapting the \textasciigrave{}\textasciigrave{}zoomau\textasciigrave{}\textasciigrave{} window to obtain exactly square
-pixels.}
+shape by slightly (!) adapting the \sphinxcode{\sphinxupquote{zoomau}} window to obtain exactly square
+pixels.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfzoompc}}: {[}for images and spectra{]} Same as \sphinxcode{\sphinxupquote{zoomau}}, but
+\sphinxcode{\sphinxupquote{zoompc}}: {[}for images and spectra{]} Same as \sphinxcode{\sphinxupquote{zoomau}}, but
 now the four numbers are given in units of parsec.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bftruepix}}: {[}for images and spectra{]} If with \sphinxcode{\sphinxupquote{zoomau}} or \sphinxcode{\sphinxupquote{zoompc}} the
+\sphinxcode{\sphinxupquote{truepix}}: {[}for images and spectra{]} If with \sphinxcode{\sphinxupquote{zoomau}} or \sphinxcode{\sphinxupquote{zoompc}} the
 image window is not square then when specifying \sphinxcode{\sphinxupquote{npix}} one gets non\sphinxhyphen{}square
 pixels. Without the \sphinxcode{\sphinxupquote{truepix}} option RADMC\sphinxhyphen{}3D will adapt the \sphinxcode{\sphinxupquote{npixx}} or
 \sphinxcode{\sphinxupquote{npixy}} number, and subsequently modify the zoom window a bit such that the
@@ -12402,24 +12314,24 @@ pixels are square. With the \sphinxcode{\sphinxupquote{truepix}} option RADMC\sp
 \sphinxcode{\sphinxupquote{npixx}} nor \sphinxcode{\sphinxupquote{npixy}} and will allow non\sphinxhyphen{}square pixels to form.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bftruezoom}}: {[}for images and spectra{]} If set, RADMC\sphinxhyphen{}3D will always assure
+\sphinxcode{\sphinxupquote{truezoom}}: {[}for images and spectra{]} If set, RADMC\sphinxhyphen{}3D will always assure
 that the exact zoom window (specified with \sphinxcode{\sphinxupquote{zoomau}} or \sphinxcode{\sphinxupquote{zoompc}})
 will be used, i.e. if \sphinxcode{\sphinxupquote{truepix}} is \sphinxstyleemphasis{not} set but \sphinxcode{\sphinxupquote{truezoom}}
 is set, RADMC\sphinxhyphen{}3D will only (!) adapt \sphinxcode{\sphinxupquote{npixx}} or \sphinxcode{\sphinxupquote{npixy}} to get
 \sphinxstyleemphasis{approximately} square pixels.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfpointau}}: {[}for images and spectra{]} The subsequent three
+\sphinxcode{\sphinxupquote{pointau}}: {[}for images and spectra{]} The subsequent three
 numbers specify a 3\sphinxhyphen{}D location in model space toward which the camera is
 pointing for images and spectra.  The (0,0) coordinate in the image plane
 corresponds by definition to a ray going right through this 3\sphinxhyphen{}D point.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfpointpc}}: {[}for images and spectra{]} Same as \sphinxcode{\sphinxupquote{pointau}} but
+\sphinxcode{\sphinxupquote{pointpc}}: {[}for images and spectra{]} Same as \sphinxcode{\sphinxupquote{pointau}} but
 now in units of parsec.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfincl}}: {[}for images and spectra{]} For the case when the camera
+\sphinxcode{\sphinxupquote{incl}}: {[}for images and spectra{]} For the case when the camera
 is at infinity (i.e. at a large distance so that no local perspective has
 to be taken into account) this inclination specifies the direction toward
 which the camera for images and spectra is positioned. Incl = 0 means
@@ -12428,7 +12340,7 @@ position in the \(x\)\sphinxhyphen{}\(y\)\sphinxhyphen{}plane and incl=180 means
 \(z\)\sphinxhyphen{}axis. The angle is given in degrees.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfphi}}: {[}for images and spectra{]} Like \sphinxcode{\sphinxupquote{incl}}, but now the remaining
+\sphinxcode{\sphinxupquote{phi}}: {[}for images and spectra{]} Like \sphinxcode{\sphinxupquote{incl}}, but now the remaining
 angle, also given in degrees. Examples: \sphinxcode{\sphinxupquote{incl}}=90 and \sphinxcode{\sphinxupquote{phi}}=0 means
 that the observer is located at infinity toward the negative \(y\) axis;
 \sphinxcode{\sphinxupquote{incl}}=90 and \sphinxcode{\sphinxupquote{phi}}=90 means that the observer is located at infinity
@@ -12445,65 +12357,66 @@ upward. Examples: if we fix the position of the observer at for instance
 the object counter\sphinxhyphen{}clockwise in the image plane.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfposang}}: {[}for images{]} This rotates the camera itself around
+\sphinxcode{\sphinxupquote{posang}}: {[}for images{]} This rotates the camera itself around
 the \((0,0)\) point in the image plane.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfimageunform}}: Write out images in unformatted form
+\sphinxcode{\sphinxupquote{imageunform}}: Write out images in binary format
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfimageformatted}}: Write out images in text form (default)
+\sphinxcode{\sphinxupquote{imageformatted}}: Write out images in text form (default)
 
 \item {} 
-\sphinxcode{\sphinxupquote{bftracetau}}: {[}for images{]} If this option is set, then instead
+\sphinxcode{\sphinxupquote{tracetau}}: {[}for images{]} If this option is set, then instead
 of ray\sphinxhyphen{}tracing a true image, the camera will compute the optical depth
 at the wavelength given by e.g. \sphinxcode{\sphinxupquote{inu}} and puts this into an image
 output as if it were a true image. Can be useful for analysis of models.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bftracecolumn}}: {[}for images{]} Like \sphinxcode{\sphinxupquote{tracetau}} but instead of the optical
-depth the simple column depth is computed in g/cm:math:\sphinxtitleref{\textasciicircum{}2}. \sphinxstyleemphasis{NOTE: for now
-only the column depth of the dust.}
+\sphinxcode{\sphinxupquote{tracecolumn}}: {[}for images{]} Like \sphinxcode{\sphinxupquote{tracetau}} but instead of the optical
+depth the simple column depth is computed in
+\(\mathrm{g}/\mathrm{cm}^2\). \sphinxstyleemphasis{NOTE: for now only the column depth of the
+dust.}
 
 \item {} 
-\sphinxcode{\sphinxupquote{bftracenormal}}: {[}for images: Default{]} Only if you specified
+\sphinxcode{\sphinxupquote{tracenormal}}: {[}for images: Default{]} Only if you specified
 \sphinxcode{\sphinxupquote{tracetau}} or \sphinxcode{\sphinxupquote{tracecolumn}} before, and you are in child mode,
 you may sometimes want to reset to normal imaging mode.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfapert}} or \sphinxcode{\sphinxupquote{bfuseapert}}: {[}for
+\sphinxcode{\sphinxupquote{apert}} or \sphinxcode{\sphinxupquote{useapert}}: {[}for
 images/spectra{]} Use the image\sphinxhyphen{}plane aperture information from the file
 \sphinxcode{\sphinxupquote{aperture\_info.inp}}.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnoapert}}: {[}for images/spectra{]} Do \sphinxstyleemphasis{not} use an image\sphinxhyphen{}plane aperture.
+\sphinxcode{\sphinxupquote{noapert}}: {[}for images/spectra{]} Do \sphinxstyleemphasis{not} use an image\sphinxhyphen{}plane aperture.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnphot\_therm}}: {[}for MC{]} The nr of photons for the thermal
+\sphinxcode{\sphinxupquote{nphot\_therm}}: {[}for MC{]} The nr of photons for the thermal
 Monte Carlo simulation. But it is better to use the \sphinxcode{\sphinxupquote{radmc3d.inp}} for this
 (see Section {\hyperref[\detokenize{inputoutputfiles:sec-radmc-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: radmc3d.inp}}}}), because then you can see afterward with
 which photon statistics the run was done.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnphot\_scat}}: {[}for MC{]} The nr of photons for the
+\sphinxcode{\sphinxupquote{nphot\_scat}}: {[}for MC{]} The nr of photons for the
 scattering Monte Carlo simulation done before each image (and thus also in
 the spectrum). But it is better to use the \sphinxcode{\sphinxupquote{radmc3d.inp}} for
 this (see Section {\hyperref[\detokenize{inputoutputfiles:sec-radmc-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: radmc3d.inp}}}}), because then you can see afterward
 with which photon statistics the run was done.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnphot\_mcmono}}: {[}for MC{]} The nr of photons for
+\sphinxcode{\sphinxupquote{nphot\_mcmono}}: {[}for MC{]} The nr of photons for
 the monochromatic Monte Carlo simulation. But it is better to use the
 \sphinxcode{\sphinxupquote{radmc3d.inp}} for this (see Section {\hyperref[\detokenize{inputoutputfiles:sec-radmc-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: radmc3d.inp}}}}),
 because then you can see afterward with which photon statistics the run
 was done.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfcountwrite}}: {[}for MC{]} The nr of photons between
+\sphinxcode{\sphinxupquote{countwrite}}: {[}for MC{]} The nr of photons between
 ‘sign of life’ outputs in a Monte Carlo run. Default is 1000. That means
 that if you have \sphinxcode{\sphinxupquote{nrphot=10000000}} you will see ten\sphinxhyphen{}thousand
-times something like \sphinxcode{\sphinxupquote{Photonnr:19000}} on your screen. Can
-be annoying. By adding \sphinxcode{\sphinxupquote{countwrite100000}} to the command
+times something like \sphinxcode{\sphinxupquote{Photonnr: 19000}} on your screen. Can
+be annoying. By adding \sphinxcode{\sphinxupquote{countwrite 100000}} to the command
 line, you will only see a message every 100000 photon packages.
 
 \end{itemize}
@@ -12515,36 +12428,36 @@ You can switch certain radiative processes on or off with the following
 command\sphinxhyphen{}line options (though often the \sphinxcode{\sphinxupquote{radmc3d.inp}} file also allows this):
 \begin{itemize}
 \item {} 
-\sphinxcode{\sphinxupquote{bfinclstar}}: {[}for images and spectra{]} Include stars in
+\sphinxcode{\sphinxupquote{inclstar}}: {[}for images and spectra{]} Include stars in
 spectrum or images.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnostar}}: {[}for images and spectra{]} Do \sphinxstyleemphasis{not} include stars
+\sphinxcode{\sphinxupquote{nostar}}: {[}for images and spectra{]} Do \sphinxstyleemphasis{not} include stars
 in spectrum or images. Only the circumstellar / interstellar material is
 imaged as if a perfect coronograph is used.
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfinclline}}: Include line emission and extinction
+\sphinxcode{\sphinxupquote{inclline}}: Include line emission and extinction
 in the ray tracing (for images and spectra).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnoline}}: Do not include line emission and extinction
+\sphinxcode{\sphinxupquote{noline}}: Do not include line emission and extinction
 in the ray tracing (for images and spectra).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfincldust}}: Include dust emission, extinction and
+\sphinxcode{\sphinxupquote{incldust}}: Include dust emission, extinction and
 (unless it is switched off) dust scattering in ray tracing (for images and
 spectra).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfnodust}}: Do not include dust emission, extinction and
+\sphinxcode{\sphinxupquote{nodust}}: Do not include dust emission, extinction and
 scattering in ray tracing (for images and spectra).
 
 \item {} 
-\sphinxcode{\sphinxupquote{bfmaxnrscat0}}: (if dust is included) Do not include
-scattering in the images/spectra created by the camera. With \sphinxcode{\sphinxupquote{maxnrscat1}}
+\sphinxcode{\sphinxupquote{maxnrscat 0}}: (if dust is included) Do not include
+scattering in the images/spectra created by the camera. With \sphinxcode{\sphinxupquote{maxnrscat 1}}
 you limit the scattering in the images/spectra to single\sphinxhyphen{}scattering.
-With \sphinxcode{\sphinxupquote{maxnrscat2}} to double scattering, etc. Can be useful to
+With \sphinxcode{\sphinxupquote{maxnrscat 2}} to double scattering, etc. Can be useful to
 figure out the relative importance of single vs multiple scattering.
 
 \end{itemize}

@@ -51,7 +51,7 @@ Monte Carlo method.
 
 There are also some additional commands that may be useful for diagnostics:
 
-* ``subbox_\*\*\*\*``\ : where \*\*\*\* is one of the following:
+* ``subbox_****``\ : where \*\*\*\* is one of the following:
   ``dust_density``\ , ``dust_temperature``\ . But other
   quantities will follow in later versions. See Section :ref:`sec-subbox`.
   
@@ -70,30 +70,30 @@ forget to list new options here):
 * ``setthreads`` [for MC] The next number sets the number of OpenMP parallel threads
   to be used.
   
-* ``bfnpix``\ : [for images] The next number specifies the number of
+* ``npix``\ : [for images] The next number specifies the number of
   pixels in both x and y direction, assuming a square image.
 
-* ``bfnpixx``\ : [for images] The next number specifies the number of
+* ``npixx``\ : [for images] The next number specifies the number of
   pixels in x direction only. 
 
-* ``bfnpixy``\ : [for images] The next number specifies the number of
+* ``npixy``\ : [for images] The next number specifies the number of
   pixels in y direction only.
 
-* ``bfnrrefine``\ : [for images and spectra] Specifies a maximum depth of
+* ``nrrefine``\ : [for images and spectra] Specifies a maximum depth of
   refinement of the pixels (see Section :ref:`sec-image-refinement`).
 
-* ``bffluxcons``\ : [for images and spectra] Puts nrrefine (see above) to
+* ``fluxcons``\ : [for images and spectra] Puts nrrefine (see above) to
   a large value to assue flux conservation (see Section :ref:`sec-image-refinement`).
 
-* ``bfnorefine``\ : [for images and spectra] Puts
+* ``norefine``\ : [for images and spectra] Puts
   nrrefine (see above) to 0 so that each pixel of the image corresponds only
   to 1 ray. This is fast but not reliable and therefore not recommended (see
   Section :ref:`sec-image-refinement`).
 
-* ``bfnofluxcons``\ : [for images and spectra] As
+* ``nofluxcons``\ : [for images and spectra] As
   ``norefine`` above.
 
-* ``bfnoscat``\ : This option makes RADMC-3D ignore the
+* ``noscat``\ : This option makes RADMC-3D ignore the
   dust scattering process (though not the scattering extinction!) in the
   images, spectra and Monte Carlo simulations. For images and spectra this
   means that no scattering Monte Carlo run has to be performed before each
@@ -109,11 +109,11 @@ forget to list new options here):
   about 1 micron) have very low scattering albedos in the infrared and
   submillimeter.
 
-* ``bfilambda`` or ``bfinu``\ : [for images] Specify the index of the wavelength
+* ``ilambda`` or ``inu``\ : [for images] Specify the index of the wavelength
   from the ``wavelength_micron.inp`` file for which a ray-trace image should be
   made.
 
-* ``bfcolor``\ : [for images] Allows you to make multiple
+* ``color``\ : [for images] Allows you to make multiple
   images (each at a different wavelength) in one go. This will make RADMC-3D
   read the file ``color_inus.inp`` (see Section
   :ref:`sec-minor-input-files`) which is a list of indices ``i``
@@ -121,20 +121,19 @@ forget to list new options here):
   images should be made. See Section :ref:`sec-set-camera-frequencies` for
   details.
 
-* ``bfloadcolor``\ : [for images] Same as ``color``\ .
+* ``loadcolor``\ : [for images] Same as ``color``\ .
 
-* ``bfloadlambda``\ : [for images] Allows you to make multiple images (each at a
+* ``loadlambda``\ : [for images] Allows you to make multiple images (each at a
   different wavelength) in one go. This will make RADMC-3D read the file
-  ``camera_wavelength_micron.inp`` or \linebreak``camera_frequency.inp``
-  (whichever is present) to read the precise wavelength points at which you wish
+  ``camera_wavelength_micron.inp`` to read the precise wavelength points at which you wish
   to make the images. In contrast to ``loadcolor``\ , which only allows you to
   pick from the global set of wavelength used by the Monte Carlo simulation (in
-  the file ``wavelength_micron.inp`` or ``frequency.inp``\ ), with the
-  ``camera_wavelength_micron.inp`` or ``camera_frequency.inp`` files you can
+  the file ``wavelength_micron.inp``), with the
+  ``camera_wavelength_micron.inp`` files you can
   specify any wavelength you want, and any number of them. See Section
   :ref:`sec-set-camera-frequencies` for details.
 
-* ``bfsizeau``\ : [for images and spectra] The next number
+* ``sizeau``\ : [for images and spectra] The next number
   specifies the image size in model space in units of AU (=1.496E13
   cm). This image size is measured from the image left to
   right and top to bottom. This gives always square images. This image 
@@ -142,10 +141,10 @@ forget to list new options here):
   size in arcsec is: image size in arcsec = image size in AU /
   (distance in parsec).
 
-* ``bfsizepc``\ : [for images and spectra] Same as ``sizeau``\ , but
+* ``sizepc``\ : [for images and spectra] Same as ``sizeau``\ , but
   now in parsec units.
 
-* ``bfzoomau``\ : [for images and spectra] The next four numbers set the image
+* ``zoomau``\ : [for images and spectra] The next four numbers set the image
   window precisely by specifying the xleft, xright, ybottom, ytop of the image
   in units of AU. The zero point of the image (the direction of the 2-D image
   point located at (0.0,0.0) in image coordinates) stays the same (i.e. it aims
@@ -154,39 +153,39 @@ forget to list new options here):
   having to change the ``pointau`` or ``pointpc`` 3-D locations. Also for local
   perspective images it is different if you move the image window in the image
   plane, or if you actually change the direction in which you are looking (for
-  images from infinity this is the same). *Note that if you use this option
+  images from infinity this is the same). *Note:* If you use this option
   without the ``truepix`` option RADMC-3D will always make square pixels by
   adapting ``npixx`` or ``npixy`` such that together with the ``zoomau`` image
   size you get approximately square pixels. Furthermore, if ``truezoom`` is not
   set, RADMC-3D will alleviate the remaining tiny deviation from square pixel
   shape by slightly (!) adapting the ``zoomau`` window to obtain exactly square
-  pixels.*
+  pixels.
 
-* ``bfzoompc``\ : [for images and spectra] Same as ``zoomau``\ , but
+* ``zoompc``\ : [for images and spectra] Same as ``zoomau``\ , but
   now the four numbers are given in units of parsec.
 
-* ``bftruepix``\ : [for images and spectra] If with ``zoomau`` or ``zoompc`` the
+* ``truepix``\ : [for images and spectra] If with ``zoomau`` or ``zoompc`` the
   image window is not square then when specifying ``npix`` one gets non-square
   pixels. Without the ``truepix`` option RADMC-3D will adapt the ``npixx`` or
   ``npixy`` number, and subsequently modify the zoom window a bit such that the
   pixels are square. With the ``truepix`` option RADMC-3D will not change
   ``npixx`` nor ``npixy`` and will allow non-square pixels to form.
 
-* ``bftruezoom``\ : [for images and spectra] If set, RADMC-3D will always assure
+* ``truezoom``\ : [for images and spectra] If set, RADMC-3D will always assure
   that the exact zoom window (specified with ``zoomau`` or ``zoompc``\ ) 
   will be used, i.e. if ``truepix`` is *not* set but ``truezoom``
   is set, RADMC-3D will only (!) adapt ``npixx`` or ``npixy`` to get
   *approximately* square pixels.
 
-* ``bfpointau``\ : [for images and spectra] The subsequent three
+* ``pointau``\ : [for images and spectra] The subsequent three
   numbers specify a 3-D location in model space toward which the camera is
   pointing for images and spectra.  The (0,0) coordinate in the image plane
   corresponds by definition to a ray going right through this 3-D point.
 
-* ``bfpointpc``\ : [for images and spectra] Same as ``pointau`` but
+* ``pointpc``\ : [for images and spectra] Same as ``pointau`` but
   now in units of parsec.
 
-* ``bfincl``\ : [for images and spectra] For the case when the camera
+* ``incl``\ : [for images and spectra] For the case when the camera
   is at infinity (i.e. at a large distance so that no local perspective has
   to be taken into account) this inclination specifies the direction toward
   which the camera for images and spectra is positioned. Incl = 0 means
@@ -194,7 +193,7 @@ forget to list new options here):
   position in the :math:`x`-:math:`y`-plane and incl=180 means toward the negative
   :math:`z`-axis. The angle is given in degrees.
 
-* ``bfphi``\ : [for images and spectra] Like ``incl``\ , but now the remaining
+* ``phi``\ : [for images and spectra] Like ``incl``\ , but now the remaining
   angle, also given in degrees. Examples: ``incl``\ =90 and ``phi``\ =0 means
   that the observer is located at infinity toward the negative :math:`y` axis;
   ``incl``\ =90 and ``phi``\ =90 means that the observer is located at infinity
@@ -210,54 +209,55 @@ forget to list new options here):
   :math:`z`-axis at infinity downward), then increasing ``phi`` means rotating
   the object counter-clockwise in the image plane.
 
-* ``bfposang``\ : [for images] This rotates the camera itself around
+* ``posang``\ : [for images] This rotates the camera itself around
   the :math:`(0,0)` point in the image plane. 
 
-* ``bfimageunform``\ : Write out images in unformatted form
+* ``imageunform``\ : Write out images in binary format
 
-* ``bfimageformatted``\ : Write out images in text form (default)
+* ``imageformatted``\ : Write out images in text form (default)
 
-* ``bftracetau``\ : [for images] If this option is set, then instead
+* ``tracetau``\ : [for images] If this option is set, then instead
   of ray-tracing a true image, the camera will compute the optical depth
   at the wavelength given by e.g. ``inu`` and puts this into an image
   output as if it were a true image. Can be useful for analysis of models.
 
-* ``bftracecolumn``\ : [for images] Like ``tracetau`` but instead of the optical
-  depth the simple column depth is computed in g/cm:math:`^2`. *NOTE: for now
-  only the column depth of the dust.*
+* ``tracecolumn``\ : [for images] Like ``tracetau`` but instead of the optical
+  depth the simple column depth is computed in
+  :math:`\mathrm{g}/\mathrm{cm}^2`. *NOTE: for now only the column depth of the
+  dust.*
 
-* ``bftracenormal``\ : [for images: Default] Only if you specified 
+* ``tracenormal``\ : [for images: Default] Only if you specified 
   ``tracetau`` or ``tracecolumn`` before, and you are in child mode, 
   you may sometimes want to reset to normal imaging mode.
 
-* ``bfapert`` or ``bfuseapert``\ : [for
+* ``apert`` or ``useapert``\ : [for
   images/spectra] Use the image-plane aperture information from the file
   ``aperture_info.inp``\ .
 
-* ``bfnoapert``\ : [for images/spectra] Do *not* use an image-plane aperture.
+* ``noapert``\ : [for images/spectra] Do *not* use an image-plane aperture.
 
-* ``bfnphot_therm``\ : [for MC] The nr of photons for the thermal
+* ``nphot_therm``\ : [for MC] The nr of photons for the thermal
   Monte Carlo simulation. But it is better to use the ``radmc3d.inp`` for this
   (see Section :ref:`sec-radmc-inp`), because then you can see afterward with
   which photon statistics the run was done.
 
-* ``bfnphot_scat``\ : [for MC] The nr of photons for the
+* ``nphot_scat``\ : [for MC] The nr of photons for the
   scattering Monte Carlo simulation done before each image (and thus also in
   the spectrum). But it is better to use the ``radmc3d.inp`` for
   this (see Section :ref:`sec-radmc-inp`), because then you can see afterward
   with which photon statistics the run was done.
 
-* ``bfnphot_mcmono``\ : [for MC] The nr of photons for
+* ``nphot_mcmono``\ : [for MC] The nr of photons for
   the monochromatic Monte Carlo simulation. But it is better to use the
   ``radmc3d.inp`` for this (see Section :ref:`sec-radmc-inp`),
   because then you can see afterward with which photon statistics the run
   was done.
 
-* ``bfcountwrite``\ : [for MC] The nr of photons between
+* ``countwrite``\ : [for MC] The nr of photons between
   'sign of life' outputs in a Monte Carlo run. Default is 1000. That means
   that if you have ``nrphot=10000000`` you will see ten-thousand
-  times something like ``Photonnr:19000`` on your screen. Can
-  be annoying. By adding ``countwrite100000`` to the command
+  times something like ``Photonnr: 19000`` on your screen. Can
+  be annoying. By adding ``countwrite 100000`` to the command
   line, you will only see a message every 100000 photon packages.
 
 
@@ -268,29 +268,29 @@ You can switch certain radiative processes on or off with the following
 command-line options (though often the ``radmc3d.inp`` file also allows this):
 
 
-* ``bfinclstar``\ : [for images and spectra] Include stars in
+* ``inclstar``\ : [for images and spectra] Include stars in
   spectrum or images.
 
-* ``bfnostar``\ : [for images and spectra] Do *not* include stars
+* ``nostar``\ : [for images and spectra] Do *not* include stars
   in spectrum or images. Only the circumstellar / interstellar material is
   imaged as if a perfect coronograph is used.
 
-* ``bfinclline``\ : Include line emission and extinction
+* ``inclline``\ : Include line emission and extinction
   in the ray tracing (for images and spectra). 
 
-* ``bfnoline``\ : Do not include line emission and extinction
+* ``noline``\ : Do not include line emission and extinction
   in the ray tracing (for images and spectra).
 
-* ``bfincldust``\ : Include dust emission, extinction and
+* ``incldust``\ : Include dust emission, extinction and
   (unless it is switched off) dust scattering in ray tracing (for images and
   spectra).
 
-* ``bfnodust``\ : Do not include dust emission, extinction and
+* ``nodust``\ : Do not include dust emission, extinction and
   scattering in ray tracing (for images and spectra).
 
-* ``bfmaxnrscat0``\ : (if dust is included) Do not include
-  scattering in the images/spectra created by the camera. With ``maxnrscat1``
+* ``maxnrscat 0``\ : (if dust is included) Do not include
+  scattering in the images/spectra created by the camera. With ``maxnrscat 1``
   you limit the scattering in the images/spectra to single-scattering.
-  With ``maxnrscat2`` to double scattering, etc. Can be useful to
+  With ``maxnrscat 2`` to double scattering, etc. Can be useful to
   figure out the relative importance of single vs multiple scattering.
 

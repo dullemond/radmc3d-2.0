@@ -734,11 +734,7 @@ intensities.</p>
 into 2x2 sub-pixels etc until the desired resolution is reached, i.e. until
 the condition that <span class="math notranslate nohighlight">\(S\)</span> is larger or equal to the pixel size divided by
 <span class="math notranslate nohighlight">\(f_{\mathrm{ref}}\)</span> is met. This is illustrated in Fig.
-<a class="reference internal" href="#fig-recursive-subpixeling"><span class="std std-ref">Pictographic representation of how the recursive sub-pixeling for images
-works. Pixels are recursively split in 2x2 subpixels as far as needed
-to resolve the 3-D grid structure of the model. But at the end, the
-fluxes of all subpixels are summed up such that the resulting image
-has a regular grid again.</span></a>. By this recursive calling, we always end up at
+<a class="reference internal" href="#fig-recursive-subpixeling"><span class="std std-numref">Fig. 11</span></a>. By this recursive calling, we always end up at
 the top level with the average intesity of the entire top-level pixel.  This
 method is very similar to quad-tree mesh refinement, but instead of
 retaining and returning the entire complex mesh structure to the user, this

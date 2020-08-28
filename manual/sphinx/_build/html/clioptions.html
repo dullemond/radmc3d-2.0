@@ -216,7 +216,7 @@ which need the local radiation field. See Section
 Monte Carlo method.</p>
 <p>There are also some additional commands that may be useful for diagnostics:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">subbox_\*\*\*\*</span></code>: where **** is one of the following:
+<li><p><code class="docutils literal notranslate"><span class="pre">subbox_****</span></code>: where **** is one of the following:
 <code class="docutils literal notranslate"><span class="pre">dust_density</span></code>, <code class="docutils literal notranslate"><span class="pre">dust_temperature</span></code>. But other
 quantities will follow in later versions. See Section <a class="reference internal" href="toolsinside.html#sec-subbox"><span class="std std-ref">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">linelist</span></code>: Write a list of all the lines included in
@@ -231,23 +231,23 @@ forget to list new options here):</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">setthreads</span></code> [for MC] The next number sets the number of OpenMP parallel threads
 to be used.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnpix</span></code>: [for images] The next number specifies the number of
+<li><p><code class="docutils literal notranslate"><span class="pre">npix</span></code>: [for images] The next number specifies the number of
 pixels in both x and y direction, assuming a square image.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnpixx</span></code>: [for images] The next number specifies the number of
+<li><p><code class="docutils literal notranslate"><span class="pre">npixx</span></code>: [for images] The next number specifies the number of
 pixels in x direction only.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnpixy</span></code>: [for images] The next number specifies the number of
+<li><p><code class="docutils literal notranslate"><span class="pre">npixy</span></code>: [for images] The next number specifies the number of
 pixels in y direction only.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnrrefine</span></code>: [for images and spectra] Specifies a maximum depth of
+<li><p><code class="docutils literal notranslate"><span class="pre">nrrefine</span></code>: [for images and spectra] Specifies a maximum depth of
 refinement of the pixels (see Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bffluxcons</span></code>: [for images and spectra] Puts nrrefine (see above) to
+<li><p><code class="docutils literal notranslate"><span class="pre">fluxcons</span></code>: [for images and spectra] Puts nrrefine (see above) to
 a large value to assue flux conservation (see Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnorefine</span></code>: [for images and spectra] Puts
+<li><p><code class="docutils literal notranslate"><span class="pre">norefine</span></code>: [for images and spectra] Puts
 nrrefine (see above) to 0 so that each pixel of the image corresponds only
 to 1 ray. This is fast but not reliable and therefore not recommended (see
 Section <a class="reference internal" href="imagesspectra.html#sec-image-refinement"><span class="std std-ref">The issue of flux conservation: recursive sub-pixeling</span></a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnofluxcons</span></code>: [for images and spectra] As
+<li><p><code class="docutils literal notranslate"><span class="pre">nofluxcons</span></code>: [for images and spectra] As
 <code class="docutils literal notranslate"><span class="pre">norefine</span></code> above.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnoscat</span></code>: This option makes RADMC-3D ignore the
+<li><p><code class="docutils literal notranslate"><span class="pre">noscat</span></code>: This option makes RADMC-3D ignore the
 dust scattering process (though not the scattering extinction!) in the
 images, spectra and Monte Carlo simulations. For images and spectra this
 means that no scattering Monte Carlo run has to be performed before each
@@ -262,37 +262,36 @@ scattering. For lines in the infrared and submillimeter, if no large
 grains are present, this is usually OK, because small grains (smaller than
 about 1 micron) have very low scattering albedos in the infrared and
 submillimeter.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfilambda</span></code> or <code class="docutils literal notranslate"><span class="pre">bfinu</span></code>: [for images] Specify the index of the wavelength
+<li><p><code class="docutils literal notranslate"><span class="pre">ilambda</span></code> or <code class="docutils literal notranslate"><span class="pre">inu</span></code>: [for images] Specify the index of the wavelength
 from the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file for which a ray-trace image should be
 made.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfcolor</span></code>: [for images] Allows you to make multiple
+<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code>: [for images] Allows you to make multiple
 images (each at a different wavelength) in one go. This will make RADMC-3D
 read the file <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> (see Section
 <a class="reference internal" href="inputoutputfiles.html#sec-minor-input-files"><span class="std std-ref">INPUT: (minor input files)</span></a>) which is a list of indices <code class="docutils literal notranslate"><span class="pre">i</span></code>
 referring to the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file for which the
 images should be made. See Section <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a> for
 details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfloadcolor</span></code>: [for images] Same as <code class="docutils literal notranslate"><span class="pre">color</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfloadlambda</span></code>: [for images] Allows you to make multiple images (each at a
+<li><p><code class="docutils literal notranslate"><span class="pre">loadcolor</span></code>: [for images] Same as <code class="docutils literal notranslate"><span class="pre">color</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loadlambda</span></code>: [for images] Allows you to make multiple images (each at a
 different wavelength) in one go. This will make RADMC-3D read the file
-<code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> or linebreak``camera_frequency.inp``
-(whichever is present) to read the precise wavelength points at which you wish
+<code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> to read the precise wavelength points at which you wish
 to make the images. In contrast to <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code>, which only allows you to
 pick from the global set of wavelength used by the Monte Carlo simulation (in
-the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> or <code class="docutils literal notranslate"><span class="pre">frequency.inp</span></code>), with the
-<code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> or <code class="docutils literal notranslate"><span class="pre">camera_frequency.inp</span></code> files you can
+the file <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>), with the
+<code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span></code> files you can
 specify any wavelength you want, and any number of them. See Section
 <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a> for details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfsizeau</span></code>: [for images and spectra] The next number
+<li><p><code class="docutils literal notranslate"><span class="pre">sizeau</span></code>: [for images and spectra] The next number
 specifies the image size in model space in units of AU (=1.496E13
 cm). This image size is measured from the image left to
 right and top to bottom. This gives always square images. This image
 size in au is observer distance independent. The corresponding image
 size in arcsec is: image size in arcsec = image size in AU /
 (distance in parsec).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfsizepc</span></code>: [for images and spectra] Same as <code class="docutils literal notranslate"><span class="pre">sizeau</span></code>, but
+<li><p><code class="docutils literal notranslate"><span class="pre">sizepc</span></code>: [for images and spectra] Same as <code class="docutils literal notranslate"><span class="pre">sizeau</span></code>, but
 now in parsec units.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfzoomau</span></code>: [for images and spectra] The next four numbers set the image
+<li><p><code class="docutils literal notranslate"><span class="pre">zoomau</span></code>: [for images and spectra] The next four numbers set the image
 window precisely by specifying the xleft, xright, ybottom, ytop of the image
 in units of AU. The zero point of the image (the direction of the 2-D image
 point located at (0.0,0.0) in image coordinates) stays the same (i.e. it aims
@@ -301,40 +300,40 @@ this way you can move the image window left or with or up or down without
 having to change the <code class="docutils literal notranslate"><span class="pre">pointau</span></code> or <code class="docutils literal notranslate"><span class="pre">pointpc</span></code> 3-D locations. Also for local
 perspective images it is different if you move the image window in the image
 plane, or if you actually change the direction in which you are looking (for
-images from infinity this is the same). <em>Note that if you use this option
-without the ``truepix`` option RADMC-3D will always make square pixels by
-adapting ``npixx`` or ``npixy`` such that together with the ``zoomau`` image
-size you get approximately square pixels. Furthermore, if ``truezoom`` is not
+images from infinity this is the same). <em>Note:</em> If you use this option
+without the <code class="docutils literal notranslate"><span class="pre">truepix</span></code> option RADMC-3D will always make square pixels by
+adapting <code class="docutils literal notranslate"><span class="pre">npixx</span></code> or <code class="docutils literal notranslate"><span class="pre">npixy</span></code> such that together with the <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> image
+size you get approximately square pixels. Furthermore, if <code class="docutils literal notranslate"><span class="pre">truezoom</span></code> is not
 set, RADMC-3D will alleviate the remaining tiny deviation from square pixel
-shape by slightly (!) adapting the ``zoomau`` window to obtain exactly square
-pixels.</em></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfzoompc</span></code>: [for images and spectra] Same as <code class="docutils literal notranslate"><span class="pre">zoomau</span></code>, but
+shape by slightly (!) adapting the <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> window to obtain exactly square
+pixels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zoompc</span></code>: [for images and spectra] Same as <code class="docutils literal notranslate"><span class="pre">zoomau</span></code>, but
 now the four numbers are given in units of parsec.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bftruepix</span></code>: [for images and spectra] If with <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> or <code class="docutils literal notranslate"><span class="pre">zoompc</span></code> the
+<li><p><code class="docutils literal notranslate"><span class="pre">truepix</span></code>: [for images and spectra] If with <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> or <code class="docutils literal notranslate"><span class="pre">zoompc</span></code> the
 image window is not square then when specifying <code class="docutils literal notranslate"><span class="pre">npix</span></code> one gets non-square
 pixels. Without the <code class="docutils literal notranslate"><span class="pre">truepix</span></code> option RADMC-3D will adapt the <code class="docutils literal notranslate"><span class="pre">npixx</span></code> or
 <code class="docutils literal notranslate"><span class="pre">npixy</span></code> number, and subsequently modify the zoom window a bit such that the
 pixels are square. With the <code class="docutils literal notranslate"><span class="pre">truepix</span></code> option RADMC-3D will not change
 <code class="docutils literal notranslate"><span class="pre">npixx</span></code> nor <code class="docutils literal notranslate"><span class="pre">npixy</span></code> and will allow non-square pixels to form.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bftruezoom</span></code>: [for images and spectra] If set, RADMC-3D will always assure
+<li><p><code class="docutils literal notranslate"><span class="pre">truezoom</span></code>: [for images and spectra] If set, RADMC-3D will always assure
 that the exact zoom window (specified with <code class="docutils literal notranslate"><span class="pre">zoomau</span></code> or <code class="docutils literal notranslate"><span class="pre">zoompc</span></code>)
 will be used, i.e. if <code class="docutils literal notranslate"><span class="pre">truepix</span></code> is <em>not</em> set but <code class="docutils literal notranslate"><span class="pre">truezoom</span></code>
 is set, RADMC-3D will only (!) adapt <code class="docutils literal notranslate"><span class="pre">npixx</span></code> or <code class="docutils literal notranslate"><span class="pre">npixy</span></code> to get
 <em>approximately</em> square pixels.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfpointau</span></code>: [for images and spectra] The subsequent three
+<li><p><code class="docutils literal notranslate"><span class="pre">pointau</span></code>: [for images and spectra] The subsequent three
 numbers specify a 3-D location in model space toward which the camera is
 pointing for images and spectra.  The (0,0) coordinate in the image plane
 corresponds by definition to a ray going right through this 3-D point.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfpointpc</span></code>: [for images and spectra] Same as <code class="docutils literal notranslate"><span class="pre">pointau</span></code> but
+<li><p><code class="docutils literal notranslate"><span class="pre">pointpc</span></code>: [for images and spectra] Same as <code class="docutils literal notranslate"><span class="pre">pointau</span></code> but
 now in units of parsec.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfincl</span></code>: [for images and spectra] For the case when the camera
+<li><p><code class="docutils literal notranslate"><span class="pre">incl</span></code>: [for images and spectra] For the case when the camera
 is at infinity (i.e. at a large distance so that no local perspective has
 to be taken into account) this inclination specifies the direction toward
 which the camera for images and spectra is positioned. Incl = 0 means
 toward the positive <span class="math notranslate nohighlight">\(z\)</span>-axis (in cartesian space), incl=90 means toward a
 position in the <span class="math notranslate nohighlight">\(x\)</span>-<span class="math notranslate nohighlight">\(y\)</span>-plane and incl=180 means toward the negative
 <span class="math notranslate nohighlight">\(z\)</span>-axis. The angle is given in degrees.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfphi</span></code>: [for images and spectra] Like <code class="docutils literal notranslate"><span class="pre">incl</span></code>, but now the remaining
+<li><p><code class="docutils literal notranslate"><span class="pre">phi</span></code>: [for images and spectra] Like <code class="docutils literal notranslate"><span class="pre">incl</span></code>, but now the remaining
 angle, also given in degrees. Examples: <code class="docutils literal notranslate"><span class="pre">incl</span></code>=90 and <code class="docutils literal notranslate"><span class="pre">phi</span></code>=0 means
 that the observer is located at infinity toward the negative <span class="math notranslate nohighlight">\(y\)</span> axis;
 <code class="docutils literal notranslate"><span class="pre">incl</span></code>=90 and <code class="docutils literal notranslate"><span class="pre">phi</span></code>=90 means that the observer is located at infinity
@@ -349,43 +348,44 @@ upward. Examples: if we fix the position of the observer at for instance
 <code class="docutils literal notranslate"><span class="pre">incl</span></code>=0 (i.e. we look at the object from the top from the positive
 <span class="math notranslate nohighlight">\(z\)</span>-axis at infinity downward), then increasing <code class="docutils literal notranslate"><span class="pre">phi</span></code> means rotating
 the object counter-clockwise in the image plane.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfposang</span></code>: [for images] This rotates the camera itself around
+<li><p><code class="docutils literal notranslate"><span class="pre">posang</span></code>: [for images] This rotates the camera itself around
 the <span class="math notranslate nohighlight">\((0,0)\)</span> point in the image plane.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfimageunform</span></code>: Write out images in unformatted form</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfimageformatted</span></code>: Write out images in text form (default)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bftracetau</span></code>: [for images] If this option is set, then instead
+<li><p><code class="docutils literal notranslate"><span class="pre">imageunform</span></code>: Write out images in binary format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imageformatted</span></code>: Write out images in text form (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tracetau</span></code>: [for images] If this option is set, then instead
 of ray-tracing a true image, the camera will compute the optical depth
 at the wavelength given by e.g. <code class="docutils literal notranslate"><span class="pre">inu</span></code> and puts this into an image
 output as if it were a true image. Can be useful for analysis of models.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bftracecolumn</span></code>: [for images] Like <code class="docutils literal notranslate"><span class="pre">tracetau</span></code> but instead of the optical
-depth the simple column depth is computed in g/cm:math:<cite>^2</cite>. <em>NOTE: for now
-only the column depth of the dust.</em></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bftracenormal</span></code>: [for images: Default] Only if you specified
+<li><p><code class="docutils literal notranslate"><span class="pre">tracecolumn</span></code>: [for images] Like <code class="docutils literal notranslate"><span class="pre">tracetau</span></code> but instead of the optical
+depth the simple column depth is computed in
+<span class="math notranslate nohighlight">\(\mathrm{g}/\mathrm{cm}^2\)</span>. <em>NOTE: for now only the column depth of the
+dust.</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tracenormal</span></code>: [for images: Default] Only if you specified
 <code class="docutils literal notranslate"><span class="pre">tracetau</span></code> or <code class="docutils literal notranslate"><span class="pre">tracecolumn</span></code> before, and you are in child mode,
 you may sometimes want to reset to normal imaging mode.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfapert</span></code> or <code class="docutils literal notranslate"><span class="pre">bfuseapert</span></code>: [for
+<li><p><code class="docutils literal notranslate"><span class="pre">apert</span></code> or <code class="docutils literal notranslate"><span class="pre">useapert</span></code>: [for
 images/spectra] Use the image-plane aperture information from the file
 <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnoapert</span></code>: [for images/spectra] Do <em>not</em> use an image-plane aperture.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnphot_therm</span></code>: [for MC] The nr of photons for the thermal
+<li><p><code class="docutils literal notranslate"><span class="pre">noapert</span></code>: [for images/spectra] Do <em>not</em> use an image-plane aperture.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_therm</span></code>: [for MC] The nr of photons for the thermal
 Monte Carlo simulation. But it is better to use the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> for this
 (see Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>), because then you can see afterward with
 which photon statistics the run was done.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnphot_scat</span></code>: [for MC] The nr of photons for the
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code>: [for MC] The nr of photons for the
 scattering Monte Carlo simulation done before each image (and thus also in
 the spectrum). But it is better to use the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> for
 this (see Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>), because then you can see afterward
 with which photon statistics the run was done.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnphot_mcmono</span></code>: [for MC] The nr of photons for
+<li><p><code class="docutils literal notranslate"><span class="pre">nphot_mcmono</span></code>: [for MC] The nr of photons for
 the monochromatic Monte Carlo simulation. But it is better to use the
 <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> for this (see Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>),
 because then you can see afterward with which photon statistics the run
 was done.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfcountwrite</span></code>: [for MC] The nr of photons between
+<li><p><code class="docutils literal notranslate"><span class="pre">countwrite</span></code>: [for MC] The nr of photons between
 ‘sign of life’ outputs in a Monte Carlo run. Default is 1000. That means
 that if you have <code class="docutils literal notranslate"><span class="pre">nrphot=10000000</span></code> you will see ten-thousand
-times something like <code class="docutils literal notranslate"><span class="pre">Photonnr:19000</span></code> on your screen. Can
-be annoying. By adding <code class="docutils literal notranslate"><span class="pre">countwrite100000</span></code> to the command
+times something like <code class="docutils literal notranslate"><span class="pre">Photonnr:</span> <span class="pre">19000</span></code> on your screen. Can
+be annoying. By adding <code class="docutils literal notranslate"><span class="pre">countwrite</span> <span class="pre">100000</span></code> to the command
 line, you will only see a message every 100000 photon packages.</p></li>
 </ul>
 </div>
@@ -394,24 +394,24 @@ line, you will only see a message every 100000 photon packages.</p></li>
 <p>You can switch certain radiative processes on or off with the following
 command-line options (though often the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file also allows this):</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bfinclstar</span></code>: [for images and spectra] Include stars in
+<li><p><code class="docutils literal notranslate"><span class="pre">inclstar</span></code>: [for images and spectra] Include stars in
 spectrum or images.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnostar</span></code>: [for images and spectra] Do <em>not</em> include stars
+<li><p><code class="docutils literal notranslate"><span class="pre">nostar</span></code>: [for images and spectra] Do <em>not</em> include stars
 in spectrum or images. Only the circumstellar / interstellar material is
 imaged as if a perfect coronograph is used.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfinclline</span></code>: Include line emission and extinction
+<li><p><code class="docutils literal notranslate"><span class="pre">inclline</span></code>: Include line emission and extinction
 in the ray tracing (for images and spectra).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnoline</span></code>: Do not include line emission and extinction
+<li><p><code class="docutils literal notranslate"><span class="pre">noline</span></code>: Do not include line emission and extinction
 in the ray tracing (for images and spectra).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfincldust</span></code>: Include dust emission, extinction and
+<li><p><code class="docutils literal notranslate"><span class="pre">incldust</span></code>: Include dust emission, extinction and
 (unless it is switched off) dust scattering in ray tracing (for images and
 spectra).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfnodust</span></code>: Do not include dust emission, extinction and
+<li><p><code class="docutils literal notranslate"><span class="pre">nodust</span></code>: Do not include dust emission, extinction and
 scattering in ray tracing (for images and spectra).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bfmaxnrscat0</span></code>: (if dust is included) Do not include
-scattering in the images/spectra created by the camera. With <code class="docutils literal notranslate"><span class="pre">maxnrscat1</span></code>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">0</span></code>: (if dust is included) Do not include
+scattering in the images/spectra created by the camera. With <code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">1</span></code>
 you limit the scattering in the images/spectra to single-scattering.
-With <code class="docutils literal notranslate"><span class="pre">maxnrscat2</span></code> to double scattering, etc. Can be useful to
+With <code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">2</span></code> to double scattering, etc. Can be useful to
 figure out the relative importance of single vs multiple scattering.</p></li>
 </ul>
 </div>

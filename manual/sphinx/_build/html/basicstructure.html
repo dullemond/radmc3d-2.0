@@ -272,8 +272,8 @@ changed by you! They are templates from which you can create your own models.</e
 <p>For the analysis of the output files created by RADMC-3D you can use your own
 favorite plotting or data-analysis software. But also here we provide some tools
 in Python. These Python routines are in the <code class="docutils literal notranslate"><span class="pre">python/</span></code> directory. Typically you
-will create your own program, e.g.<code class="docutils literal notranslate"><span class="pre">plot_model.py</span></code> or so, that will use
-these subroutines, e.g.by putting in the first line: <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">radmc3dPy</span> <span class="pre">import</span>
+will create your own program, e.g. <code class="docutils literal notranslate"><span class="pre">plot_model.py</span></code> or so, that will use
+these subroutines, e.g. by putting in the first line: <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">radmc3dPy</span> <span class="pre">import</span>
 <span class="pre">*</span></code>. In this way Python is used also as a post-processing tool. But again: this
 can also be done in another language.</p>
 <p>This procedure is shown in Fig. <a class="reference internal" href="#fig-dataflow-basic-python"><span class="std std-ref">Pictographic representation of how the Python programs in the example directories
@@ -511,8 +511,8 @@ Chapter <a class="reference internal" href="imagesspectra.html#chap-images-spect
 <p>With <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">image</span></code> you call RADMC-3D with the command of performing a
 ray-tracing computation to compute an image. You must specify the
 wavelength(s) at which you want the image by, for instance, calling RADMC-3D
-as <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">image</span> <span class="pre">lambda</span> <span class="pre">10</span></code>, which makes the image at <span class="math notranslate nohighlight">\(\lambda=10\mu
-m\)</span>. But there are other ways by which the wavelength(s) can be set, see
+as <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">image</span> <span class="pre">lambda</span> <span class="pre">10</span></code>, which makes the image at
+<span class="math notranslate nohighlight">\(\lambda=10\mu\mathrm{m}\)</span>. But there are other ways by which the wavelength(s) can be set, see
 Section <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>.  In all these cases the vantage
 point (where is the observer) can of course be set as well, see Section
 <a class="reference internal" href="dustradtrans.html#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a> and Chapter <a class="reference internal" href="imagesspectra.html#chap-images-spectra"><span class="std std-ref">Making images and spectra</span></a>.</p>
@@ -575,7 +575,7 @@ spectral energy distribution, for instance, we call <code class="docutils litera
 which is a list of fluxes at the discrete wavelengths we specified in
 <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>.  Then we are done: we have computed the spectral
 energy distribution of our model. We could also make an image at wavelength 10
-<span class="math notranslate nohighlight">\(\mu\)</span> (see Section
+<span class="math notranslate nohighlight">\(\mu\)</span>m for instance with <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">image</span> <span class="pre">lambda</span> <span class="pre">10</span></code> (see Section
 <a class="reference internal" href="imagesspectra.html#sec-images"><span class="std std-ref">Basics of image making with RADMC-3D</span></a>). This will write out a file <code class="docutils literal notranslate"><span class="pre">image.out</span></code> containing the
 image data (see Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a>).</p>
 <p>As you see, RADMC-3D reads all its information from tables in various

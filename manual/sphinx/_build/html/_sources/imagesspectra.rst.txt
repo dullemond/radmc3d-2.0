@@ -634,7 +634,7 @@ Note, by the way, that each of these 2x2 subpixels may be split even further
 into 2x2 sub-pixels etc until the desired resolution is reached, i.e. until
 the condition that :math:`S` is larger or equal to the pixel size divided by
 :math:`f_{\mathrm{ref}}` is met. This is illustrated in Fig.
-:ref:`fig-recursive-subpixeling`. By this recursive calling, we always end up at
+:numref:`fig-recursive-subpixeling`. By this recursive calling, we always end up at
 the top level with the average intesity of the entire top-level pixel.  This
 method is very similar to quad-tree mesh refinement, but instead of
 retaining and returning the entire complex mesh structure to the user, this

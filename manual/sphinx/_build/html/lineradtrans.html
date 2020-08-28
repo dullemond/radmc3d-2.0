@@ -920,9 +920,11 @@ respectively.  See Section <a class="reference internal" href="#sec-mol-numdensi
 <code class="docutils literal notranslate"><span class="pre">p-h2</span></code> and the second <code class="docutils literal notranslate"><span class="pre">o-h2</span></code>?  In principle the file <code class="docutils literal notranslate"><span class="pre">molecule_co.inp</span></code>
 give some information about the name of the collision partners. But this is
 often not machine-readable.  Example, in <code class="docutils literal notranslate"><span class="pre">molecule_co.inp</span></code> of Section
-<a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a> the line that should tell this reads
-begin{asciibox}begin{verbatim} 2 CO-pH2 from Flower (2001) &amp; Wernli et
-al. (2006) + extrapolation end{verbatim}end{asciibox} for the first of the two
+<a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a> the line that should tell this reads:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span> <span class="n">CO</span><span class="o">-</span><span class="n">pH2</span> <span class="kn">from</span> <span class="nn">Flower</span> <span class="p">(</span><span class="mi">2001</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Wernli</span> <span class="n">et</span> <span class="n">al</span><span class="o">.</span> <span class="p">(</span><span class="mi">2006</span><span class="p">)</span> <span class="o">+</span> <span class="n">extrapolation</span>
+</pre></div>
+</div>
+<p>for the first of the two
 (which is directly from the LAMDA database).  This is hard to decipher for
 RADMC-3D. Therefore you have to tell this explicitly in the file <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code>,
 and we refer to Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a> for how to do this.</p>
@@ -1385,12 +1387,7 @@ the intrinsic (thermal+microturbulent) line width, then the ray-tracing
 will not be able to pick up signals from intermediate velocities. In other
 words, because of the discrete gridding of the model, only discrete
 velocities are present, which can cause numerical problems. See
-Fig. <a class="reference internal" href="#fig-doppler-catch"><span class="std std-ref">Right: Pictographic representation of the doppler catching method to
-prevent this problem: First of all, second order integration is done
-instead of first order. Secondly, the method automatically detects a
-possibly dangerous doppler jump and makes sub-steps to neatly integrate
-over the line that shifts in- and out of the wavelength channel of
-interest.</span></a>-Left for a pictographic representation of
+Fig. <a class="reference internal" href="#fig-doppler-catch"><span class="std std-numref">Fig. 8</span></a>-Left for a pictographic representation of
 this problem. There are two possible solutions. One is the wavelength band
 method described in Section <a class="reference internal" href="imagesspectra.html#sec-wavelength-bands"><span class="std std-ref">Heads-up: In reality wavelength are actually wavelength bands</span></a>.  But a more
 systematic method is the ‘doppler catching’ method described in Section
@@ -1410,8 +1407,7 @@ the line can then have a doppler shift substantially to the blue of the
 wavelength-of-sight, while in the next cell the line suddenly shifted to the
 red side. If the intrinsic (= thermal + microturbulent) line width is
 smaller than these shifts, neither cell gives a contribution to the emission
-in the ray. See Fig. <a class="reference internal" href="#fig-doppler-jump"><span class="std std-ref">Pictographic representation of the doppler jumping problem with
-ray-tracing through a model with strong cell-to-cell velocity differences.</span></a> for a pictographic
+in the ray. See Fig. <a class="reference internal" href="#fig-doppler-jump"><span class="std std-numref">Fig. 7</span></a> for a pictographic
 representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength-of-sight, and thus make a contribution. Therefore the numerical
@@ -1442,12 +1438,7 @@ in great detail in Pontoppidan et al. (2009, ApJ 704, 1482). The idea is
 that the method automatically tests if a line might ‘doppler jump’ over
 the current wavelength channel. If so, it will insert substeps in the
 integration at the location where this danger is present. See
-Fig. <a class="reference internal" href="#fig-doppler-catch"><span class="std std-ref">Right: Pictographic representation of the doppler catching method to
-prevent this problem: First of all, second order integration is done
-instead of first order. Secondly, the method automatically detects a
-possibly dangerous doppler jump and makes sub-steps to neatly integrate
-over the line that shifts in- and out of the wavelength channel of
-interest.</span></a> for a pictographic representation of this
+Fig. <a class="reference internal" href="#fig-doppler-catch"><span class="std std-numref">Fig. 8</span></a> for a pictographic representation of this
 method. Note that this method can only be used with the second order
 ray-tracing (see Section <a class="reference internal" href="imagesspectra.html#sec-second-order"><span class="std std-ref">Second order ray-tracing (Important information!)</span></a>); in fact, as soon as you
 switch the doppler catching on, RADMC-3D will automatically also switch on
