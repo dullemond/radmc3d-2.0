@@ -1,0 +1,54 @@
+Same model as run_spher2d_1, but with different gridding:
+
+  - We now refine the radial grid at the inner edge
+
+  - In theta we now take only 20 grid points, mainly to make
+    the figures showing the grid structure clearer
+
+The refinement is done by repeatedly (nlev times) inserting gridpoints between
+the existing gridpoints (the inner nspan+1 points). This procedure is applied to
+the xi grid, i.e. to the cell walls. This means, on the radial grid the inner
+nspan cells are radially split in half (not in theta-direction), and this is
+repeated nlev times.
+
+The function for this is:
+
+def grid_refine_inner_edge(x_orig,nlev,nspan):
+    x     = x_orig.copy()
+    rev   = x[0]>x[1]
+    for ilev in range(nlev):
+        x_new = 0.5 * ( x[1:nspan+1] + x[:nspan] )
+        x_ref = np.hstack((x,x_new))
+        x_ref.sort()
+        x     = x_ref
+        if rev:
+            x = x[::-1]
+    return x
+
+(the rev boolean is to make this function also applicable to other kinds
+of grids, where the values might not be always in increasing order).
+
+As usual (in the shell):
+
+  python problem_setup.py
+  radmc3d mctherm
+
+Then in Python:
+
+To plot the grid structure:
+
+  %run plot_grid.py
+
+To plot the temperature structure:
+
+  %run plot_structure.py
+
+To plot the images (same as for run_spher2d_1):
+
+  %run plot_images.py
+
+To plot the spectra (same as for run_spher2d_1):
+
+  %run plot_spectra.py
+
+2020.08.29
