@@ -32,7 +32,7 @@ im   = readImage()
 dum  = im.image.shape
 nx   = dum[0]
 nx2  = nx//2
-plt.figure(3)
+plt.figure()
 plotImage(im,log=True,maxlog=6,au=True,bunit='inu',cmap=cm.hot)
 plt.show()
 
@@ -63,7 +63,7 @@ os.system('radmc3d image circ lambda 10 incl 60')
 # of the (normal) rectangular image.
 #
 imcirc = readcircimage()
-plt.figure(4)
+plt.figure()
 plt.plot(imcirc.rc,imcirc.image[:,0,0,0],label='spherical image')
 plt.xscale('log')
 plt.yscale('log')
@@ -84,7 +84,7 @@ lgrout = np.log10(imcirc.rc[-1]/au)
 #
 #   Make the "heatmap" figure of the 10log of the circular image
 #
-plt.figure(5)
+plt.figure()
 plt.imshow(np.log10(imcirc.image[1:,:,0,0]+1e-23),vmin=-16,aspect='auto',cmap=cm.hot,origin='lower',extent=[0,360,lgrin,lgrout])
 plt.title(r'$\lambda = 10\,\mu\mathrm{m}$')
 plt.xlabel(r'$\phi\; [deg]$')

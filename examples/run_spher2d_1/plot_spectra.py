@@ -28,7 +28,7 @@ os.system('radmc3d sed incl 60')
 # to get the spectral energy distribution
 #
 s    = readSpectrum()
-plt.figure(2)
+plt.figure()
 lammic = s[:,0]
 flux   = s[:,1]
 nu     = 1e4*cc/lammic
@@ -66,7 +66,7 @@ os.system('cp spectrum.out spectrum_rect.out')
 #
 srect  = readSpectrum(fname='spectrum_rect.out')
 scirc  = readSpectrum(fname='spectrum_circ.out')
-plt.figure(6)
+plt.figure()
 lammic = srect[:,0]
 nu     = 1e4*cc/lammic
 fluxr  = srect[:,1]

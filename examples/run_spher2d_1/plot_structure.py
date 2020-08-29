@@ -25,7 +25,7 @@ from radmc3dPy.natconst import *
 a    = readData()
 r    = a.grid.x[:]
 temp = a.dusttemp[:,-1,0,0]
-plt.figure(1)
+plt.figure()
 plt.plot(r/au,temp)
 plt.xlabel('r [au]')
 plt.ylabel('T [K]')
@@ -36,7 +36,7 @@ plt.show()
 #
 lgrin  = np.log10(a.grid.x[0]/au)
 lgrout = np.log10(a.grid.x[-1]/au)
-plt.figure(2)
+plt.figure()
 plt.imshow(a.dusttemp[:,:,0,0].T,extent=[lgrin,lgrout,0,np.pi/2-a.grid.y[0]],aspect='auto',cmap=cm.hot)
 plt.xlabel(r'$^{10}\log(r)\; [\mathrm{AU}]$')
 plt.ylabel(r'$\pi/2-\theta$')
@@ -49,7 +49,7 @@ plt.show()
 #
 lgrin  = np.log10(a.grid.x[0]/au)
 lgrout = np.log10(a.grid.x[-1]/au)
-plt.figure(3)
+plt.figure()
 plt.imshow(np.log10(a.rhodust[:,:,0,0].T),extent=[lgrin,lgrout,0,np.pi/2-a.grid.y[0]],aspect='auto',cmap=cm.Blues)
 plt.xlabel(r'$^{10}\log(r)\; [\mathrm{AU}]$')
 plt.ylabel(r'$\pi/2-\theta$')

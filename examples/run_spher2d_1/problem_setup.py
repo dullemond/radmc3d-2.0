@@ -4,11 +4,6 @@
 import numpy as np
 import math
 #
-# Import plotting libraries (start Python with ipython --matplotlib)
-#
-#from mpl_toolkits.mplot3d import axes3d
-#from matplotlib import pyplot as plt
-#
 # Some natural constants
 #
 au  = 1.49598e13     # Astronomical Unit       [cm]
@@ -46,14 +41,11 @@ pstar    = [0.,0.,0.]
 #
 # Make the coordinates
 #
-# Note: The way the xi grid is made is slightly non-standard, but is
-#       done this way to be consistent with problem_setup.pro (the IDL version)
-#
 xi       = rin * (rout/rin)**(np.linspace(0.,nx,nx+1)/(nx-1.0))
 yi       = math.pi/2.0 - zmaxr*np.linspace(ny,0,ny+1)/(ny*1.0)
 zi       = np.array([0.,math.pi*2])
-xc       = 0.5e0 * ( xi[0:nx] + xi[1:nx+1] )
-yc       = 0.5e0 * ( yi[0:ny] + yi[1:ny+1] )
+xc       = 0.5e0 * ( xi[:-1] + xi[1:] )
+yc       = 0.5e0 * ( yi[:-1] + yi[1:] )
 #
 # Make the dust density model
 #
