@@ -32,7 +32,7 @@ nz       = 1
 #
 rin      = 5*au
 rout     = 100*au
-zmaxr    = 0.5e0
+zmaxr    = 0.7e0
 rho0     = 1e-16 * 10000
 prho     = -2.e0
 hpr      = 0.1e0

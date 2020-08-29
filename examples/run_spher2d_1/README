@@ -1,5 +1,6 @@
-This is a simple 2-D envelope model with some density dependence of the
-theta-coordinate.
+This is a simple 2-D envelope model with a density dependence of the
+theta-coordinate: the density is high near the equatorial plane, and
+drops off as a Gaussian toward the poles.
 
 NOTE: Dust scattering is switched off in this model. But this can easily
       be switched back on (see scattering_mode_max in problem_setup.py).
@@ -10,7 +11,9 @@ This directory should contain the following files:
   Makefile                       (Only for convenient cleanmodel and cleanall)
   dustkappa_silicate.inp         (some dust opacity file)
   problem_setup.py               (a python script for setting up some input files)
-  plot_session.py                (an example run with some plots)
+  plot_structure.py              (an example of displaying the density and temperature structure)
+  plot_images.py                 (an example of creating and showing images)
+  plot_spectra.py                (an example of creating and showing SEDs)
 
 This is what the model does:
 
@@ -22,38 +25,39 @@ This is what you should do to run this model:
 
   1) Make sure you have compiled the main radmc3d code in src/ already.
      See manual for how to compile.
+     
   2) Type python problem_setup.py in the linux/unix shell. This should
      set up your model. You need, of course, a working installation of
-     python 2.7 on your system.
+     Python on your system.
+     
   3) In the shell type:
 
       radmc3d mctherm
-      radmc3d sed
-      radmc3d image lambda 10
 
-     The first command will compute the self-consistent dust temperature.
-     The second command will compute the spectral energy distribution (spectrum).
-     The third command will make an image at 10 micron.
-  4) Now you can make plots. See plot_session.py for examples how 
-     to run RADMC-3D and make various plots and images and spectra.
-  5) Note that plot_session.py in fact automatically calls RADMC-3D,
-     reads the results and makes the plots (but please keep in mind
-     that plot_session.py is just meant as examples). Type 
+     This will compute the self-consistent dust temperature.
+     
+  4) Now you can make plots. Go into Python (e.g. ipython --matplotlib).
+  
+     4a) Type %run plot_structure.py for displaying the density and
+         temperature structure.
+         
+     4b) Type %run plot_images.py for an example of creating and displaying
+         images of the model seen at lambda=10 micron and inclination 60 deg.
+         Note that radmc3d is called from within this script.
 
-     ipython --matplotlib
-
-     to go into python. Then type:
-
-     %run plot_session
-
-     This should automatically run the code and produce various plots
-     that should pop up.
-
-Note: plot_session.py also demonstrates the use of circular images.
+     4c) Type %run plot_spectra.py for an example of creating and plotting
+         the spectral energy distribution (SED) at inclination of 60 deg.
+     
+Note: The plot_images.py and plot_spectra.py also demonstrates the use of
+      "circular images".
 
 NOTE: This model is very simple. It has the weakness that the radial grid
       is not sufficiently resolved near the inner edge. See the RADMC-3D
       manual for more information about grid resolution, in particular
-      inner-edge grid resolution.
+      inner-edge grid resolution. And see run_spher2d_2/ for an example
+      of radial grid refinement.
 
-21.03.2017, 27.08.2020
+Note: Compared to the model in version 0.41, this model has a slightly
+      wider theta-grid (zmaxr=0.7 instead of 0.5).
+
+21.03.2017, 29.08.2020
