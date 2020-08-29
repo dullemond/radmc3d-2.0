@@ -122,7 +122,7 @@ lgrout = np.log10(imcirc.rc[-1]/au)
 #
 #   Make the "heatmap" figure of the 10log of the circular image
 #
-plt.figure(6)
+plt.figure(5)
 plt.imshow(np.log10(imcirc.image[1:,:,0,0]+1e-23),vmin=-16,aspect='auto',cmap=cm.hot,origin='lower',extent=[0,360,lgrin,lgrout])
 plt.title(r'$\lambda = 10\,\mu\mathrm{m}$')
 plt.xlabel(r'$\phi\; [deg]$')

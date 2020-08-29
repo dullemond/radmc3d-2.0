@@ -10,7 +10,11 @@ from radmc3dPy.analyze import *
 from radmc3dPy.natconst import * 
 
 #
-# Make sure to have run
+# First set up the model with
+#
+#   python problem_setup.py
+#
+# Then make sure to have run
 #
 #   radmc3d mctherm
 #
@@ -22,8 +26,7 @@ os.system('radmc3d mctherm')
 #
 a    = readData(dtemp=True,binary=False)
 r    = a.grid.x[:]
-nt   = a.dusttemp.shape[1]
-temp = a.dusttemp[:,nt/2,0,0]
+temp = a.dusttemp[:,-1,0,0]
 plt.figure(1)
 plt.plot(r/au,temp)
 plt.xlabel('r [au]')
@@ -64,8 +67,11 @@ os.system('radmc3d image lambda 10 incl 60')
 # to get the image
 #
 im   = readImage()
+dum  = im.image.shape
+nx   = dum[0]
+nx2  = nx//2
 plt.figure(3)
-plotImage(im,log=True,maxlog=6,au=True,bunit='inu')
+plotImage(im,log=True,maxlog=6,au=True,bunit='inu',cmap=cm.hot)
 plt.show()
 
 #
@@ -101,8 +107,28 @@ plt.xscale('log')
 plt.yscale('log')
 plt.xlabel('r [cm]')
 plt.ylabel(r'$I_\nu [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{s}^{-1}\,\mathrm{Hz}^{-1}]$')
-plt.plot(im.x[50:],im.image[50:,50,0],'o',label='rectangular image')
+plt.plot(im.x[nx2:],im.image[nx2:,nx2,0],'o',label='rectangular image')
 plt.legend()
+plt.show()
+
+#
+# You can also show a "heatmap" of the circular image
+#
+#   The radial span
+#   (but note that the r-grid is not fully log, so this is not 100% correct)
+#
+lgrin  = np.log10(imcirc.rc[1]/au)
+lgrout = np.log10(imcirc.rc[-1]/au)
+#
+#   Make the "heatmap" figure of the 10log of the circular image
+#
+plt.figure(5)
+plt.imshow(np.log10(imcirc.image[1:,:,0,0]+1e-23),vmin=-16,aspect='auto',cmap=cm.hot,origin='lower',extent=[0,360,lgrin,lgrout])
+plt.title(r'$\lambda = 10\,\mu\mathrm{m}$')
+plt.xlabel(r'$\phi\; [deg]$')
+plt.ylabel(r'$^{10}\log(r)\; [\mathrm{AU}]$')
+cbar=plt.colorbar()
+cbar.set_label(r'$^{10}\log(I_\nu)\;[\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{s}^{-1}\,\mathrm{Hz}^{-1}\,\mathrm{ster}^{-1}\,]$')
 plt.show()
 
 #
@@ -130,7 +156,7 @@ os.system('cp spectrum.out spectrum_rect.out')
 #
 srect  = readSpectrum(fname='spectrum_rect.out')
 scirc  = readSpectrum(fname='spectrum_circ.out')
-plt.figure(5)
+plt.figure(6)
 lammic = srect[:,0]
 nu     = 1e4*cc/lammic
 fluxr  = srect[:,1]
