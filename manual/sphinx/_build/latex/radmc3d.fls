@@ -307,8 +307,6 @@ INPUT ./dataflow-twostage-python.pdf
 INPUT ./dataflow-twostage-python.pdf
 INPUT dataflow-twostage-python.pdf
 INPUT ./dataflow-twostage-python.pdf
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmri8c.tfm
-INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmri8c.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
@@ -443,12 +441,14 @@ INPUT ./nestedlayer_bare.pdf
 INPUT ./nestedlayer_bare.pdf
 INPUT nestedlayer_bare.pdf
 INPUT ./nestedlayer_bare.pdf
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmri8c.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/helvetic/phvbo8t.tfm
 INPUT dataflow-basic-userdef.pdf
 INPUT ./dataflow-basic-userdef.pdf
 INPUT ./dataflow-basic-userdef.pdf
 INPUT dataflow-basic-userdef.pdf
 INPUT ./dataflow-basic-userdef.pdf
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/times/ptmri8c.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/helvetic/phvbo8t.vf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/helvetic/phvbo8r.tfm
 INPUT disk_rosenfeld.pdf

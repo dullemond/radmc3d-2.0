@@ -1319,7 +1319,7 @@ contains the information about each image it should make. The structure of the
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">iformat</span></code> is an integer that is described below.  The <code class="docutils literal notranslate"><span class="pre">nframes</span></code> is the
-number of frames. The <code class="docutils literal notranslate"><span class="pre">:math:`&lt;&lt;`information</span> <span class="pre">for</span> <span class="pre">frame</span> <span class="pre">xx:math:`&gt;&gt;`</span></code> are lines
+number of frames. The <code class="docutils literal notranslate"><span class="pre">&lt;&lt;information</span> <span class="pre">for</span> <span class="pre">frame</span> <span class="pre">xx&gt;&gt;</span></code> are lines
 containing the information of how the camera should be positioned for each frame
 of the movie (i.e. for each imag). It is also described below.</p>
 <p>There are multiple ways to tell RADMC-3D how to make
@@ -1328,8 +1328,8 @@ by the <code class="docutils literal notranslate"><span class="pre">iformat</spa
 further possibilities. Here are the current possibilities</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">iformat=1</span></code>:
-The observer is at infinity (as usual) and the <code class="docutils literal notranslate"><span class="pre">:math:`&lt;&lt;`information</span>
-<span class="pre">for</span> <span class="pre">frame</span> <span class="pre">xx:math:`&gt;&gt;`</span></code> consists of the following numbers (separated by
+The observer is at infinity (as usual) and the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;information</span>
+<span class="pre">for</span> <span class="pre">frame</span> <span class="pre">xx&gt;&gt;</span></code> consists of the following numbers (separated by
 spaces):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pntx</span> <span class="n">pnty</span> <span class="n">pntz</span> <span class="n">hsx</span> <span class="n">hsy</span> <span class="n">pa</span> <span class="n">incl</span> <span class="n">phi</span>
 </pre></div>
@@ -1352,15 +1352,15 @@ These have the same meaning as for a single image.</p></li>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">iformat=-1</span></code>:
 The observer is local (see Section
-<a class="reference internal" href="#sec-local-observer"><span class="std std-ref">For public outreach work: local observers inside the model</span></a>) and the <code class="docutils literal notranslate"><span class="pre">:math:`&lt;&lt;`information</span> <span class="pre">for</span> <span class="pre">frame</span>
-<span class="pre">xx:math:`&gt;&gt;`</span></code> consists of the following numbers (separated by spaces):</p>
+<a class="reference internal" href="#sec-local-observer"><span class="std std-ref">For public outreach work: local observers inside the model</span></a>) and the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;information</span> <span class="pre">for</span> <span class="pre">frame</span>
+<span class="pre">xx&gt;&gt;</span></code> consists of the following numbers (separated by spaces):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pntx</span> <span class="n">pnty</span> <span class="n">pntz</span> <span class="n">hsx</span> <span class="n">hsy</span> <span class="n">pa</span> <span class="n">obsx</span> <span class="n">obsy</span> <span class="n">obsz</span>
 </pre></div>
 </div>
 <p>These 9 numbers have the following meaning:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">pntx,pnty,pntz,hsx,hsy,pa</span></code>:
-Same meaning as for iformat=1.</p></li>
+Same meaning as for <code class="docutils literal notranslate"><span class="pre">iformat=1</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">obsx,obsy,obsz</span></code>:
 These are the x, y and z position of the local observer (in units of cm).</p></li>
 </ul>

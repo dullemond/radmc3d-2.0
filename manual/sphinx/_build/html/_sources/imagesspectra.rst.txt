@@ -1350,7 +1350,7 @@ contains the information about each image it should make. The structure of the
   <<information for frame nframes>>
 
 The ``iformat`` is an integer that is described below.  The ``nframes`` is the
-number of frames. The ``:math:`<<`information for frame xx:math:`>>``` are lines
+number of frames. The ``<<information for frame xx>>`` are lines
 containing the information of how the camera should be positioned for each frame
 of the movie (i.e. for each imag). It is also described below.
 
@@ -1360,8 +1360,8 @@ by the ``iformat`` number. Currently there are 2, but later we may add
 further possibilities. Here are the current possibilities
 
 * ``iformat=1``:
-  The observer is at infinity (as usual) and the ``:math:`<<`information
-  for frame xx:math:`>>``` consists of the following numbers (separated by
+  The observer is at infinity (as usual) and the ``<<information
+  for frame xx>>`` consists of the following numbers (separated by
   spaces)::
 
     pntx pnty pntz hsx hsy pa incl phi
@@ -1383,15 +1383,15 @@ further possibilities. Here are the current possibilities
 
 * ``iformat=-1``:
   The observer is local (see Section
-  :ref:`sec-local-observer`) and the ``:math:`<<`information for frame
-  xx:math:`>>``` consists of the following numbers (separated by spaces)::
+  :ref:`sec-local-observer`) and the ``<<information for frame
+  xx>>`` consists of the following numbers (separated by spaces)::
 
     pntx pnty pntz hsx hsy pa obsx obsy obsz
 
   These 9 numbers have the following meaning:
 
   * ``pntx,pnty,pntz,hsx,hsy,pa``:
-    Same meaning as for iformat=1.
+    Same meaning as for ``iformat=1``.
   * ``obsx,obsy,obsz``:
     These are the x, y and z position of the local observer (in units of cm).
 

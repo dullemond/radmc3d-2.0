@@ -136,7 +136,7 @@ in a model for RADMC-3D is to
   
 #. For each template you must specify the *spatial distribution*,
    i.e. how many stars of each template star are there per unit volume in
-   each cell. The stellar density is, in fact, given as gram-of-star/cm:math:`^3`
+   each cell. The stellar density is, in fact, given as gram-of-star/cm\ :math:`^3`
    (i.e. not as number density of stars). The stellar spatial densities
    are specified in the file ``stellarsrc_density.inp`` (see
    Section :ref:`sec-stellarsrc-density`).

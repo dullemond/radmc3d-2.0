@@ -391,27 +391,3 @@ See the example directory ``examples/run_simple_userdefsrc`` for
 more ideas.
 
 
-Using RADMC-3D as a fancy volume-rendering tool
-===============================================
-
-Sometimes you want to make nice 3-D volume rendering images of e.g. your
-3-D hydrodynamics simulation. You may, in that case, not be interested in
-*real* emission/extinction processes, but rather some artificial
-transfer function - as long as the outcoming image looks nice. 
-
-RADMC-3D offers a number of advantages over off-the-shelf programs for
-volume rendering:
-
-* It has AMR refinement, so you do not need to first convert into
-  non-AMR grids which are necessary for many volume rendering codes.
-* It allows you full control over the transfer function, i.e. the
-  dependence of the emission/extinction coefficients on any quantities
-  such as density, temperature, magnetic field etc.
-
-The example directory ::
-
-  examples/run_simple_userdefsrc
-
-gives an example of how this can be done. It also shows how you can link this to
-the ``viewimage.pro`` routine, and allow on-the-fly modification of the transfer
-function, so that you can experiment to get the nicest image output.

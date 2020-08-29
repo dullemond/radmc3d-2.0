@@ -1735,8 +1735,8 @@ of everything is the fortran code \sphinxcode{\sphinxupquote{radmc3d}}. This is 
 the hard work for you: it makes the radiative transfer calculations, makes
 images, makes spectra etc. Normally you compile this code just once\sphinxhyphen{}and\sphinxhyphen{}for\sphinxhyphen{}all
 (see Chapter {\hyperref[\detokenize{installation:chap-compilation}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation of RADMC\sphinxhyphen{}3D}}}}), and then simply use the executable
-\sphinxcode{\sphinxupquote{radmc3d}} for all models. There is an exception to this \sphinxtitleref{once\sphinxhyphen{}and\sphinxhyphen{}for\sphinxhyphen{}all’
-rule described in Section :ref:\textasciigrave{}sec\sphinxhyphen{}special\sphinxhyphen{}purpose\sphinxhyphen{}compile}, but in the present
+\sphinxcode{\sphinxupquote{radmc3d}} for all models. There is an exception to this ‘once\sphinxhyphen{}and\sphinxhyphen{}for\sphinxhyphen{}all’
+rule described in Section {\hyperref[\detokenize{installation:sec-special-purpose-compile}]{\sphinxcrossref{\DUrole{std,std-ref}{Making special\sphinxhyphen{}purpose modified versions of RADMC\sphinxhyphen{}3D (optional)}}}}, but in the present
 chapter we will not use this (see Chapter {\hyperref[\detokenize{internalsetup:chap-internal-setup}]{\sphinxcrossref{\DUrole{std,std-ref}{Modifying RADMC\sphinxhyphen{}3D: Internal setup and user\sphinxhyphen{}specified radiative processes}}}} for this
 instead). So we will stick here to the philosophy of compiling this code once
 and using it for all models.
@@ -2600,13 +2600,13 @@ don’t have to worry about this. Whenever you ask RADMC\sphinxhyphen{}3D to mak
 {\hyperref[\detokenize{dustradtrans:sec-modes-of-scattering}]{\sphinxcrossref{\DUrole{std,std-ref}{Five modes of treating scattering}}}}), RADMC\sphinxhyphen{}3D will automatically realize that it
 requires knowledge of \(j_\nu^{\mathrm{scat}}(\Omega')\), and it will start a
 brief single\sphinxhyphen{}wavelength Monte Carlo simulation for computing
-\(j_\nu^{\mathrm{scat}}(\Omega')\). This single\sphinxhyphen{}wavelength \sphinxtitleref{Scattering Monte
+\(j_\nu^{\mathrm{scat}}(\Omega')\). This single\sphinxhyphen{}wavelength ‘Scattering Monte
 Carlo’ simulation is relatively fast compared to the thermal Monte Carlo
 simulation, because photon packages can be destroyed by absorption. So
 photon packages do not bounce around for long, as they do in the thermal
 Monte Carlo simulation.  This Scattering Monte Carlo simulation is in fact
 very similar to the monochromatic Monte Carlo model described in Section
-:ref:\textasciigrave{}sec\sphinxhyphen{}dust\sphinxhyphen{}monochromatic\sphinxhyphen{}monte\sphinxhyphen{}carlo}. While the monochromatic Monte
+{\hyperref[\detokenize{dustradtrans:sec-dust-monochromatic-monte-carlo}]{\sphinxcrossref{\DUrole{std,std-ref}{Special\sphinxhyphen{}purpose feature: Computing the local radiation field}}}}. While the monochromatic Monte
 Carlo model is called specifically by the user (by calling RADMC\sphinxhyphen{}3D with
 \sphinxcode{\sphinxupquote{radmc3d mcmono}}), the Scattering Monte Carlo simulation is not
 something the user must specify him/her\sphinxhyphen{}self: it is automatically done by
@@ -3042,7 +3042,7 @@ In this convention the \(x'\) axis points to the north on the sky, while the
 below). The \(z'\) axis points to the observer. This coordinate system is
 positively right\sphinxhyphen{}handed. The radiation moves toward positive \(z'\). Angles
 in the \((x',y')\) plane are measured counter\sphinxhyphen{}clockwise (angle=0 means
-positive \(x'\) direction, angle=:math:\sphinxtitleref{pi}/2 means positive \(y'\)
+positive \(x'\) direction, angle=\(\pi/2\) means positive \(y'\)
 direction).
 
 In the following we will (still completely consistent with the IAU definitions
@@ -4485,13 +4485,7 @@ The default of the \sphinxcode{\sphinxupquote{lines\_mode}} variable is \sphinxc
 RADMC\sphinxhyphen{}3D finds the file \sphinxcode{\sphinxupquote{lines.inp}} in the model directory. You can switch off
 the lines with the command\sphinxhyphen{}line option \sphinxcode{\sphinxupquote{\textquotesingle{}noline\textquotesingle{}}}.
 
-\sphinxstylestrong{NOTE 2:} The \sphinxcode{\sphinxupquote{viewimage.pro}} image viewer also automatically includes line
-emission. But you would have to seek the precise wavelength of the lines
-yourself. If, however, you call \sphinxcode{\sphinxupquote{viewimage}} with option \sphinxcode{\sphinxupquote{/lines}}, then some
-extras appear that allow you to directly find the right wavelength of the
-lines. Try it out, and you will see how it works.
-
-\sphinxstylestrong{NOTE 3:} If you are very limited by memory, and if you use LTE, LVG+EscProb
+\sphinxstylestrong{NOTE 2:} If you are very limited by memory, and if you use LTE, LVG+EscProb
 or optically thin populations, you can also ask RADMC\sphinxhyphen{}3D to \sphinxstyleemphasis{not} precalculate
 the level populations before the rendering, but instead compute them
 on\sphinxhyphen{}the\sphinxhyphen{}fly. This makes the code slower, but requires less memory.  You can do
@@ -4614,12 +4608,12 @@ number \sphinxcode{\sphinxupquote{4.1e\sphinxhyphen{}11}} in the example of Sect
 collisions with particles for which the number density is given in the file
 \sphinxcode{\sphinxupquote{numberdens\_o\sphinxhyphen{}h2.inp}}.
 
-We could also decide to ignore the difference between para\sphinxhyphen{}H:math:\sphinxtitleref{\_2} and
-ortho\sphinxhyphen{}H:math:\sphinxtitleref{\_2}, and simply use the first table (starting with the number
+We could also decide to ignore the difference between para\sphinxhyphen{}H\(_2\) and
+ortho\sphinxhyphen{}H\(_2\), and simply use the first table (starting with the number
 \sphinxcode{\sphinxupquote{3.2e\sphinxhyphen{}11}} in the example of Section {\hyperref[\detokenize{lineradtrans:sec-leiden-format}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}}),
-which is actually for para\sphinxhyphen{}H:math:\sphinxtitleref{\_2} only, as a proxy for the overall mixture
-of H:math:\sphinxtitleref{\_2} molecules. After all: The collision rate for para\sphinxhyphen{}H:math:\sphinxtitleref{\_2} and
-ortho\sphinxhyphen{}H:math:\sphinxtitleref{\_2} are not so very different. In that case we may simply ignore
+which is actually for para\sphinxhyphen{}H\(_2\) only, as a proxy for the overall mixture
+of H\(_2\) molecules. After all: The collision rate for para\sphinxhyphen{}H\(_2\) and
+ortho\sphinxhyphen{}H\(_2\) are not so very different. In that case we may simply ignore
 this difference and only provide a file \sphinxcode{\sphinxupquote{numberdens\_h2.inp}},
 and link that to the first of the two collision rate tables:
 
@@ -4812,7 +4806,7 @@ collisional transitions. Each line consists of, first, the ID of the transition
 (dummy), then the upper level, then the lower level, and then the
 \(K_{\mathrm{up,low}}\) collisional rates in units of {[}\(\mathrm{cm}^3/s\){]}. The
 same is again repeated (because in this example we have two collision partners:
-the para\sphinxhyphen{}H:math:\sphinxtitleref{\_2} molecule and the ortho\sphinxhyphen{}H:math:\sphinxtitleref{\_2} molecule).
+the para\sphinxhyphen{}H\(_2\) molecule and the ortho\sphinxhyphen{}H\(_2\) molecule).
 
 To get the collision rate \(C_{\mathrm{up,low}}\) per molecule (in units of
 {[}1/s{]}) for the molecule of interest, we must multiply
@@ -5087,8 +5081,8 @@ rates for each pair of molecule + collision partner are given in the molecular
 input data files (Section {\hyperref[\detokenize{lineradtrans:sec-molecule-xxx-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}}). To find how often a
 molecular level of a single molecule is collisionally excited to another level
 we also need to know the number density of the collision partner molecules. In
-the example in Section {\hyperref[\detokenize{lineradtrans:sec-molecule-xxx-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}} these were para\sphinxhyphen{}H:math:\sphinxtitleref{\_2}
-and ortho\sphinxhyphen{}H:math:\sphinxtitleref{\_2}. We must therefore somehow tell RADMC\sphinxhyphen{}3D what the number
+the example in Section {\hyperref[\detokenize{lineradtrans:sec-molecule-xxx-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: Molecular/atomic data: The molecule\_XXX.inp file(s)}}}} these were para\sphinxhyphen{}H\(_2\)
+and ortho\sphinxhyphen{}H\(_2\). We must therefore somehow tell RADMC\sphinxhyphen{}3D what the number
 densities of these molecules are. This is done by reading in the number
 densities for this(these) collision partner(s).  The file for this has exactly
 the same format as that for the number density of any molecule (see Section
@@ -5333,10 +5327,10 @@ total number density of the molecule, \(|\nabla \vec v|\) the absolute value
 of the velocity gradient, \(g_i\) the statistical weight of level \(i\)
 and \(\nu_{ij}\) the line frequency for transition \(i\rightarrow
 j\). In comparing to Eq. 21 of van der Tak’s paper, note that their
-\(N_{\mathrm{mol}}\) is a column density (cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}2\}}) and their
+\(N_{\mathrm{mol}}\) is a column density (cm\(^{-2}\)) and their
 \(\Delta V\) is the line width (cm/s), while our \(N_{\mathrm{molec}}\)
-is the number density (cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}3\}}) and \(|\nabla \vec v|\) is the
-velocity gradient (s:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}1\}}). Their formula is thus in fact EscProb while
+is the number density (cm\(^{-3}\)) and \(|\nabla \vec v|\) is the
+velocity gradient (s\(^{-1}\)). Their formula is thus in fact EscProb while
 ours is LVG.
 
 For the EscProb method \sphinxstyleemphasis{without} velocity gradients, we need to be able to
@@ -5910,8 +5904,8 @@ globally.
 In other words: RADMC\sphinxhyphen{}3D now takes care of the memory\sphinxhyphen{}saving storage of
 the populations automatically.
 
-\sphinxstyleemphasis{How does RADMC\sphinxhyphen{}3D decide whether a line contributes to some wavelength
-:math:\textasciigrave{}lambda\textasciigrave{}?} A line \(i\) with line center \(\lambda_i\) is
+\sphinxstyleemphasis{How does RADMC\sphinxhyphen{}3D decide whether a line contributes to some wavelength}
+\(\lambda\)? A line \(i\) with line center \(\lambda_i\) is
 considered to contribute to an image at wavelength \(\lambda\) if
 \begin{equation*}
 \begin{split}| \lambda_i-\lambda | \le C_{\mathrm{margin}}\Delta\lambda_i\end{split}
@@ -7400,7 +7394,7 @@ contains the information about each image it should make. The structure of the
 \end{sphinxVerbatim}
 
 The \sphinxcode{\sphinxupquote{iformat}} is an integer that is described below.  The \sphinxcode{\sphinxupquote{nframes}} is the
-number of frames. The \sphinxcode{\sphinxupquote{:math:\textasciigrave{}\textless{}\textless{}\textasciigrave{}information for frame xx:math:\textasciigrave{}\textgreater{}\textgreater{}\textasciigrave{}}} are lines
+number of frames. The \sphinxcode{\sphinxupquote{\textless{}\textless{}information for frame xx\textgreater{}\textgreater{}}} are lines
 containing the information of how the camera should be positioned for each frame
 of the movie (i.e. for each imag). It is also described below.
 
@@ -7411,8 +7405,8 @@ further possibilities. Here are the current possibilities
 \begin{itemize}
 \item {} 
 \sphinxcode{\sphinxupquote{iformat=1}}:
-The observer is at infinity (as usual) and the \sphinxcode{\sphinxupquote{:math:\textasciigrave{}\textless{}\textless{}\textasciigrave{}information
-for frame xx:math:\textasciigrave{}\textgreater{}\textgreater{}\textasciigrave{}}} consists of the following numbers (separated by
+The observer is at infinity (as usual) and the \sphinxcode{\sphinxupquote{\textless{}\textless{}information
+for frame xx\textgreater{}\textgreater{}}} consists of the following numbers (separated by
 spaces):
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -7446,8 +7440,8 @@ These have the same meaning as for a single image.
 \item {} 
 \sphinxcode{\sphinxupquote{iformat=\sphinxhyphen{}1}}:
 The observer is local (see Section
-{\hyperref[\detokenize{imagesspectra:sec-local-observer}]{\sphinxcrossref{\DUrole{std,std-ref}{For public outreach work: local observers inside the model}}}}) and the \sphinxcode{\sphinxupquote{:math:\textasciigrave{}\textless{}\textless{}\textasciigrave{}information for frame
-xx:math:\textasciigrave{}\textgreater{}\textgreater{}\textasciigrave{}}} consists of the following numbers (separated by spaces):
+{\hyperref[\detokenize{imagesspectra:sec-local-observer}]{\sphinxcrossref{\DUrole{std,std-ref}{For public outreach work: local observers inside the model}}}}) and the \sphinxcode{\sphinxupquote{\textless{}\textless{}information for frame
+xx\textgreater{}\textgreater{}}} consists of the following numbers (separated by spaces):
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{pntx} \PYG{n}{pnty} \PYG{n}{pntz} \PYG{n}{hsx} \PYG{n}{hsy} \PYG{n}{pa} \PYG{n}{obsx} \PYG{n}{obsy} \PYG{n}{obsz}
@@ -7457,7 +7451,7 @@ These 9 numbers have the following meaning:
 \begin{itemize}
 \item {} 
 \sphinxcode{\sphinxupquote{pntx,pnty,pntz,hsx,hsy,pa}}:
-Same meaning as for iformat=1.
+Same meaning as for \sphinxcode{\sphinxupquote{iformat=1}}.
 
 \item {} 
 \sphinxcode{\sphinxupquote{obsx,obsy,obsz}}:
@@ -7670,7 +7664,7 @@ monotonically increasing. In Figs \hyperref[\detokenize{gridding:fig-spher-sep-r
 \hyperref[\detokenize{gridding:fig-spher-sep-ref-rays}]{Fig.\@ \ref{\detokenize{gridding:fig-spher-sep-ref-rays}}} this is illustrated.
 
 \sphinxstyleemphasis{Note that in addition to separable refinement, also AMR refinement
-is possible in spherical coordinates. See Section :ref:\textasciigrave{}sec\sphinxhyphen{}oct\sphinxhyphen{}tree\sphinxhyphen{}amr\textasciigrave{}.}
+is possible in spherical coordinates. See Section} {\hyperref[\detokenize{gridding:sec-oct-tree-amr}]{\sphinxcrossref{\DUrole{std,std-ref}{Oct\sphinxhyphen{}tree Adaptive Mesh Refinement}}}}.
 
 \begin{figure}[htbp]
 \centering
@@ -7865,11 +7859,11 @@ treated as a regular grid, irrespective of whether it contains sub\sphinxhyphen{
 or not. So if we have a base grid of 4x4x4 grid cells containing two layers:
 one starting at (1,1,1) and having (2,2,2) size and another starting at
 (3,3,3) and having (1,1,2) size, then we first specify the data on the
-4:math:\sphinxtitleref{\textasciicircum{}3\textasciigrave{}=64 base grid, then on the (2*2):math:\textasciigrave{}\textasciicircum{}3\textasciigrave{}=64 grid cells of the first
+\(4^3=64\) base grid, then on the \((2\times 2)^3=64\) grid cells of the first
 layer and then on the 2x2x4=16 cells of the second layer. Each of these
 three layers are regular grids, and the data is inputted/outputted in
 the same way as if these are normal regular grids (see Section
-:ref:\textasciigrave{}sec\sphinxhyphen{}regular\sphinxhyphen{}grid}). But instead of just one such regular grid, now
+{\hyperref[\detokenize{gridding:sec-regular-grid}]{\sphinxcrossref{\DUrole{std,std-ref}{Regular grids}}}}). But instead of just one such regular grid, now
 the data file (e.g. \sphinxcode{\sphinxupquote{dust\_density.inp}}) will contain three
 successive lists of numbers, the first for the base grid, the second for
 the first layer and the last for the second layer. You may realize at this
@@ -8257,7 +8251,7 @@ the template and thus save memory.
 \item {} 
 For each template you must specify the \sphinxstyleemphasis{spatial distribution},
 i.e. how many stars of each template star are there per unit volume in
-each cell. The stellar density is, in fact, given as gram\sphinxhyphen{}of\sphinxhyphen{}star/cm:math:\sphinxtitleref{\textasciicircum{}3}
+each cell. The stellar density is, in fact, given as gram\sphinxhyphen{}of\sphinxhyphen{}star/cm\(^3\)
 (i.e. not as number density of stars). The stellar spatial densities
 are specified in the file \sphinxcode{\sphinxupquote{stellarsrc\_density.inp}} (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-stellarsrc-density}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (optional): stellarsrc\_density.inp}}}}).
@@ -8862,38 +8856,6 @@ See the example directory \sphinxcode{\sphinxupquote{examples/run\_simple\_userd
 more ideas.
 
 
-\section{Using RADMC\sphinxhyphen{}3D as a fancy volume\sphinxhyphen{}rendering tool}
-\label{\detokenize{internalsetup:using-radmc-3d-as-a-fancy-volume-rendering-tool}}
-Sometimes you want to make nice 3\sphinxhyphen{}D volume rendering images of e.g. your
-3\sphinxhyphen{}D hydrodynamics simulation. You may, in that case, not be interested in
-\sphinxstyleemphasis{real} emission/extinction processes, but rather some artificial
-transfer function \sphinxhyphen{} as long as the outcoming image looks nice.
-
-RADMC\sphinxhyphen{}3D offers a number of advantages over off\sphinxhyphen{}the\sphinxhyphen{}shelf programs for
-volume rendering:
-\begin{itemize}
-\item {} 
-It has AMR refinement, so you do not need to first convert into
-non\sphinxhyphen{}AMR grids which are necessary for many volume rendering codes.
-
-\item {} 
-It allows you full control over the transfer function, i.e. the
-dependence of the emission/extinction coefficients on any quantities
-such as density, temperature, magnetic field etc.
-
-\end{itemize}
-
-The example directory
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{examples}\PYG{o}{/}\PYG{n}{run\PYGZus{}simple\PYGZus{}userdefsrc}
-\end{sphinxVerbatim}
-
-gives an example of how this can be done. It also shows how you can link this to
-the \sphinxcode{\sphinxupquote{viewimage.pro}} routine, and allow on\sphinxhyphen{}the\sphinxhyphen{}fly modification of the transfer
-function, so that you can experiment to get the nicest image output.
-
-
 \chapter{Python analysis tool set}
 \label{\detokenize{pythontools:python-analysis-tool-set}}\label{\detokenize{pythontools:chap-python-analysis-tools}}\label{\detokenize{pythontools::doc}}
 While the code RADMC\sphinxhyphen{}3D is written in fortran\sphinxhyphen{}90, there is an extensive set
@@ -9049,7 +9011,7 @@ about like this (for example):
 \PYG{n}{setup}\PYG{o}{.}\PYG{n}{problemSetupDust}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ppdisk}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{mdisk}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{1e\PYGZhy{}5*ms}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{gap\PYGZus{}rin}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{[10.0*au]}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{gap\PYGZus{}rout}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{[40.*au]}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{gap\PYGZus{}drfact}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{[1e\PYGZhy{}5]}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{nz}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{0}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-This example will set up a protoplanetary disk model in 2\sphinxhyphen{}D (r,:math:\sphinxtitleref{theta}),
+This example will set up a protoplanetary disk model in 2\sphinxhyphen{}D \((r,\theta)\),
 with a gap between 10 and 40 au. You can now run RADMC\sphinxhyphen{}3D to compute the dust
 temperature structure, by calling (on the Linux shell):
 
@@ -9338,7 +9300,7 @@ includes the grid of course) type:
 \end{sphinxVerbatim}
 
 Since density can span a huge range, the 10\sphinxhyphen{}log of the density (in units of
-gram/cm:math:\sphinxtitleref{\textasciicircum{}3}) is written instead. For the gas temperature:
+gram/cm\(^3\)) is written instead. For the gas temperature:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{radmc3d} \PYG{n}{vtk\PYGZus{}gas\PYGZus{}temperature}
@@ -9381,7 +9343,7 @@ of the molecules (or atoms):
 \PYG{n}{radmc3d} \PYG{n}{vtk\PYGZus{}molspec} \PYG{l+m+mi}{1}
 \end{sphinxVerbatim}
 
-(for molecular species 1). This number density (in cm:math:\sphinxtitleref{\textasciicircum{}\{\sphinxhyphen{}3\}}) is also
+(for molecular species 1). This number density (in cm\(^{-3}\)) is also
 written in 10\sphinxhyphen{}log form.  You may also wish to visualize the polulations of
 level 1 (ground state) of molecule 2:
 
@@ -9524,7 +9486,7 @@ If you make a new model, try to start with as clean a directory as
 possible. This avoids that you accidently have a old files hanging around,
 their presence of which may cause troubles in your new model.  So if you
 make a model update, make a new directory and then copy only the files
-that are necesary (for instance, \sphinxcode{\sphinxupquote{problem\_setup.pro}},
+that are necesary (for instance, \sphinxcode{\sphinxupquote{problem\_setup.py}},
 \sphinxcode{\sphinxupquote{dustkappa\_silicate.inp}}, \sphinxcode{\sphinxupquote{Makefile}} and other
 necessary files). One way of doing this easily is to write a little perl
 script or csh script that does this for you.
@@ -9607,7 +9569,7 @@ see Section {\hyperref[\detokenize{inputoutputfiles:sec-amr-grid-oct-tree}]{\sph
 at the inner edge of a protoplanetary disk, if the inner cells are not
 assured to be optically thin through grid refinement (and possibly
 additionally a bit of smoothing of the density profile too) is given in
-Fig.\textasciitilde{}:numref:\sphinxtitleref{fig\sphinxhyphen{}innerrim\sphinxhyphen{}lowres}.
+Fig. \hyperref[\detokenize{tipsandtricks:fig-innerrim-lowres}]{Fig.\@ \ref{\detokenize{tipsandtricks:fig-innerrim-lowres}}}.
 
 \begin{figure}[htbp]
 \centering
@@ -9637,7 +9599,7 @@ refinened part of the grid. This is not trivial!  If you, for instance,
 import a 3\sphinxhyphen{}D hydrodynamic model into RADMC\sphinxhyphen{}3D, then it is a common problem
 that the \(\tau_\lambda=1\) surface ‘wants’ to be outside of the grid (or
 outside of the higher\sphinxhyphen{}resolution part of the \(\theta\)\sphinxhyphen{}grid if you use
-separable grid refinement: see Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}spher\sphinxhyphen{}sep\sphinxhyphen{}ref}). For example:
+separable grid refinement: see Fig. \DUrole{xref,std,std-ref}{fig\sphinxhyphen{}spher\sphinxhyphen{}sep\sphinxhyphen{}ref}). For example:
 if you make a * hydrodynamic* model of a protoplanetary disk in \(R\),
 \(\Theta\) and \(\Phi\) coordinates, you typically want to model only
 the lower 2 pressure scale heights of the disk, since that contains 99.5\% of
@@ -9814,7 +9776,18 @@ coordinates, not a protoplanetary disk with
 \(M_{\mathrm{disk}}=0.01\,M_{\odot}\) but accidently one with
 \(M_{\mathrm{disk}}=10\,M_{\odot}\). In such a case a lot of things
 will go wrong. First of all the inner edge of the disk will almost
-certainly behave strangely (see Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}innerrim\sphinxhyphen{}lowres}). Secondly,
+certainly behave strangely (see Fig. {\hyperref[\detokenize{tipsandtricks:fig-innerrim-lowres}]{\sphinxcrossref{\DUrole{std,std-ref}{Example of what can go wrong with radiative transfer if the inner cells of
+a model are optically thick (i.e.if no grid refinement is used, see
+Section sec\sphinxhyphen{}separable\sphinxhyphen{}refinement). Shown here are scattered light
+images at \textbackslash{}lambda=0.7\textbackslash{}muDelta R/R=0.04\textasciigrave{}.  Left image: the
+inner cells are marginally optically thin \textbackslash{}Delta\textbackslash{}tau\textbackslash{}simeq 1,
+creating a bright inner ring, as is expected. Right image: ten times
+higher optical depth, making the inner cells optically thick with roughly
+\textbackslash{}Delta\textbackslash{}tau\textbackslash{}simeq 10, resulting in a wrong image in which the
+emission near the midplane is strongly reduced.  The reason for that is
+that the scattering source function, due to photons scattering at the
+inner 10\% of the inner cell, is diluted over the entire cell, making the
+scattered light brighness 10x lower than it should be.}}}}). Secondly,
 the surface of the disk will almost certainly be cut\sphinxhyphen{}off in the way
 decribed in Section {\hyperref[\detokenize{tipsandtricks:sec-things-going-wrong}]{\sphinxcrossref{\DUrole{std,std-ref}{Careful: Things that might go wrong}}}}, in which case the
 surface of the disk will be hardly illuminated by the star, because the
@@ -10680,7 +10653,9 @@ one dust species. Then the \sphinxcode{\sphinxupquote{dust\_density.inp}} file w
 \PYG{n}{density}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{]}                           \PYG{o}{\PYGZlt{}}\PYG{o}{==}\PYG{o}{=} \PYG{n}{This} \PYG{o+ow}{is} \PYG{n}{the} \PYG{n}{last} \PYG{n}{base} \PYG{n}{grid} \PYG{n}{cell}
 \end{sphinxVerbatim}
 
-A more complex example is shown in Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}oct\sphinxhyphen{}tree\sphinxhyphen{}amr\sphinxhyphen{}numbered}.
+A more complex example is shown in Fig. {\hyperref[\detokenize{inputoutputfiles:fig-oct-tree-amr-numbered}]{\sphinxcrossref{\DUrole{std,std-ref}{Example of a 2\sphinxhyphen{}D grid with oct\sphinxhyphen{}tree refinement (as
+Fig. fig\sphinxhyphen{}oct\sphinxhyphen{}tree\sphinxhyphen{}amr) with the order of the cells shown as numbers in
+the cells.}}}}.
 An unformatted version is also available, in the standard way (see above).
 
 \begin{figure}[htbp]
@@ -10689,7 +10664,8 @@ An unformatted version is also available, in the standard way (see above).
 
 \noindent\sphinxincludegraphics{{oct_tree_amr}.pdf}
 \caption{Example of a 2\sphinxhyphen{}D grid with oct\sphinxhyphen{}tree refinement (as
-Fig.\textasciitilde{}:ref:\sphinxtitleref{fig\sphinxhyphen{}oct\sphinxhyphen{}tree\sphinxhyphen{}amr}) with the order of the cells shown as numbers in
+Fig. {\hyperref[\detokenize{gridding:fig-oct-tree-amr}]{\sphinxcrossref{\DUrole{std,std-ref}{Example of a 2\sphinxhyphen{}D grid with oct\sphinxhyphen{}tree refinement. The base grid has nx=4
+and ny=3. Three levels of refinement are added to this base grid.}}}}) with the order of the cells shown as numbers in
 the cells.}\label{\detokenize{inputoutputfiles:id2}}\label{\detokenize{inputoutputfiles:fig-oct-tree-amr-numbered}}\end{figure}
 
 
@@ -12663,7 +12639,7 @@ no
 
 \section{Local observer mode}
 \label{\detokenize{optionscompat:local-observer-mode}}
-The local observer mode (Sect.\textasciitilde{}:ref:\sphinxtitleref{sec\sphinxhyphen{}local\sphinxhyphen{}observer}) is a special mode
+The local observer mode (Sect. {\hyperref[\detokenize{imagesspectra:sec-local-observer}]{\sphinxcrossref{\DUrole{std,std-ref}{For public outreach work: local observers inside the model}}}}) is a special mode
 for putting the observer in the near\sphinxhyphen{}field of the object, or even right in
 the middle of the object. It is not meant to be really for science use
 (though it can be used for it, to a certain extent), but instead for

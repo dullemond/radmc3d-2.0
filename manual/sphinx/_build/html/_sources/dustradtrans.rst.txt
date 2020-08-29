@@ -706,7 +706,7 @@ don't have to worry about this. Whenever you ask RADMC-3D to make an image
 :ref:`sec-modes-of-scattering`), RADMC-3D will automatically realize that it
 requires knowledge of :math:`j_\nu^{\mathrm{scat}}(\Omega')`, and it will start a
 brief single-wavelength Monte Carlo simulation for computing
-:math:`j_\nu^{\mathrm{scat}}(\Omega')`. This single-wavelength `Scattering Monte
+:math:`j_\nu^{\mathrm{scat}}(\Omega')`. This single-wavelength 'Scattering Monte
 Carlo' simulation is relatively fast compared to the thermal Monte Carlo
 simulation, because photon packages can be destroyed by absorption. So
 photon packages do not bounce around for long, as they do in the thermal
@@ -1108,7 +1108,7 @@ In this convention the :math:`x'` axis points to the north on the sky, while the
 below). The :math:`z'` axis points to the observer. This coordinate system is
 positively right-handed. The radiation moves toward positive :math:`z'`. Angles
 in the :math:`(x',y')` plane are measured counter-clockwise (angle=0 means
-positive :math:`x'` direction, angle=:math:`\pi`/2 means positive :math:`y'`
+positive :math:`x'` direction, angle=\ :math:`\pi/2` means positive :math:`y'`
 direction).
 
 In the following we will (still completely consistent with the IAU definitions

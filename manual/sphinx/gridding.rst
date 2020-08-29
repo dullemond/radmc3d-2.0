@@ -130,7 +130,7 @@ monotonically increasing. In Figs :numref:`fig-spher-sep-ref-txt` and
 :numref:`fig-spher-sep-ref-rays` this is illustrated.
 
 *Note that in addition to separable refinement, also AMR refinement
-is possible in spherical coordinates. See Section :ref:`sec-oct-tree-amr`.*
+is possible in spherical coordinates. See Section* :ref:`sec-oct-tree-amr`.
 
 .. _fig-spher-sep-ref-txt:
 
@@ -333,7 +333,7 @@ treated as a regular grid, irrespective of whether it contains sub-layers
 or not. So if we have a base grid of 4x4x4 grid cells containing two layers:
 one starting at (1,1,1) and having (2,2,2) size and another starting at
 (3,3,3) and having (1,1,2) size, then we first specify the data on the 
-4:math:`^3`=64 base grid, then on the (2*2):math:`^3`=64 grid cells of the first
+:math:`4^3=64` base grid, then on the :math:`(2\times 2)^3=64` grid cells of the first
 layer and then on the 2x2x4=16 cells of the second layer. Each of these
 three layers are regular grids, and the data is inputted/outputted in
 the same way as if these are normal regular grids (see Section

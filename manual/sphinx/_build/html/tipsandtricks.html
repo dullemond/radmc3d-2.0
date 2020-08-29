@@ -261,7 +261,7 @@ Chapter <a class="reference internal" href="internalsetup.html#chap-internal-set
 possible. This avoids that you accidently have a old files hanging around,
 their presence of which may cause troubles in your new model.  So if you
 make a model update, make a new directory and then copy only the files
-that are necesary (for instance, <code class="docutils literal notranslate"><span class="pre">problem_setup.pro</span></code>,
+that are necesary (for instance, <code class="docutils literal notranslate"><span class="pre">problem_setup.py</span></code>,
 <code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code>, <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> and other
 necessary files). One way of doing this easily is to write a little perl
 script or csh script that does this for you.</p></li>
@@ -331,7 +331,7 @@ see Section <a class="reference internal" href="inputoutputfiles.html#sec-amr-gr
 at the inner edge of a protoplanetary disk, if the inner cells are not
 assured to be optically thin through grid refinement (and possibly
 additionally a bit of smoothing of the density profile too) is given in
-Fig.~:numref:<cite>fig-innerrim-lowres</cite>.</p>
+Fig. <a class="reference internal" href="#fig-innerrim-lowres"><span class="std std-numref">Fig. 30</span></a>.</p>
 <div class="figure align-default" id="id1">
 <span id="fig-innerrim-lowres"></span><img alt="_images/innerrim.png" src="_images/innerrim.png" />
 <p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text">Example of what can go wrong with radiative transfer if the inner cells of
@@ -356,7 +356,7 @@ refinened part of the grid. This is not trivial!  If you, for instance,
 import a 3-D hydrodynamic model into RADMC-3D, then it is a common problem
 that the <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span> surface ‘wants’ to be outside of the grid (or
 outside of the higher-resolution part of the <span class="math notranslate nohighlight">\(\theta\)</span>-grid if you use
-separable grid refinement: see Fig.~:ref:<cite>fig-spher-sep-ref</cite>). For example:
+separable grid refinement: see Fig. <span class="xref std std-ref">fig-spher-sep-ref</span>). For example:
 if you make a * hydrodynamic* model of a protoplanetary disk in <span class="math notranslate nohighlight">\(R\)</span>,
 <span class="math notranslate nohighlight">\(\Theta\)</span> and <span class="math notranslate nohighlight">\(\Phi\)</span> coordinates, you typically want to model only
 the lower 2 pressure scale heights of the disk, since that contains 99.5% of
@@ -494,7 +494,18 @@ coordinates, not a protoplanetary disk with
 <span class="math notranslate nohighlight">\(M_{\mathrm{disk}}=0.01\,M_{\odot}\)</span> but accidently one with
 <span class="math notranslate nohighlight">\(M_{\mathrm{disk}}=10\,M_{\odot}\)</span>. In such a case a lot of things
 will go wrong. First of all the inner edge of the disk will almost
-certainly behave strangely (see Fig.~:ref:<cite>fig-innerrim-lowres</cite>). Secondly,
+certainly behave strangely (see Fig. <a class="reference internal" href="#fig-innerrim-lowres"><span class="std std-ref">Example of what can go wrong with radiative transfer if the inner cells of
+a model are optically thick (i.e.if no grid refinement is used, see
+Section sec-separable-refinement). Shown here are scattered light
+images at \lambda=0.7\muDelta R/R=0.04`.  Left image: the
+inner cells are marginally optically thin \Delta\tau\simeq 1,
+creating a bright inner ring, as is expected. Right image: ten times
+higher optical depth, making the inner cells optically thick with roughly
+\Delta\tau\simeq 10, resulting in a wrong image in which the
+emission near the midplane is strongly reduced.  The reason for that is
+that the scattering source function, due to photons scattering at the
+inner 10% of the inner cell, is diluted over the entire cell, making the
+scattered light brighness 10x lower than it should be.</span></a>). Secondly,
 the surface of the disk will almost certainly be cut-off in the way
 decribed in Section <a class="reference internal" href="#sec-things-going-wrong"><span class="std std-ref">Careful: Things that might go wrong</span></a>, in which case the
 surface of the disk will be hardly illuminated by the star, because the

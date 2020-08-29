@@ -478,7 +478,7 @@ of everything is the fortran code ``radmc3d``. This is the main code which does
 the hard work for you: it makes the radiative transfer calculations, makes
 images, makes spectra etc. Normally you compile this code just once-and-for-all
 (see Chapter :ref:`chap-compilation`), and then simply use the executable
-``radmc3d`` for all models. There is an exception to this `once-and-for-all'
+``radmc3d`` for all models. There is an exception to this 'once-and-for-all'
 rule described in Section :ref:`sec-special-purpose-compile`, but in the present
 chapter we will not use this (see Chapter :ref:`chap-internal-setup` for this
 instead). So we will stick here to the philosophy of compiling this code once

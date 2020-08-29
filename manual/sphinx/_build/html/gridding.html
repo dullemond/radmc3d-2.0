@@ -287,7 +287,7 @@ and <span class="math notranslate nohighlight">\(\phi\)</span> completely freely
 monotonically increasing. In Figs <a class="reference internal" href="#fig-spher-sep-ref-txt"><span class="std std-numref">Fig. 22</span></a> and
 <a class="reference internal" href="#fig-spher-sep-ref-rays"><span class="std std-numref">Fig. 23</span></a> this is illustrated.</p>
 <p><em>Note that in addition to separable refinement, also AMR refinement
-is possible in spherical coordinates. See Section :ref:`sec-oct-tree-amr`.</em></p>
+is possible in spherical coordinates. See Section</em> <a class="reference internal" href="#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>.</p>
 <div class="figure align-default" id="id2">
 <span id="fig-spher-sep-ref-txt"></span><a class="reference internal image-reference" href="_images/spher_grid_ref_txt.png"><img alt="_images/spher_grid_ref_txt.png" src="_images/spher_grid_ref_txt.png" style="width: 30%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Example of a spherical 2-D grid in which the radial and <span class="math notranslate nohighlight">\(\theta\)</span> grids
@@ -452,11 +452,11 @@ treated as a regular grid, irrespective of whether it contains sub-layers
 or not. So if we have a base grid of 4x4x4 grid cells containing two layers:
 one starting at (1,1,1) and having (2,2,2) size and another starting at
 (3,3,3) and having (1,1,2) size, then we first specify the data on the
-4:math:<cite>^3`=64 base grid, then on the (2*2):math:`^3`=64 grid cells of the first
+<span class="math notranslate nohighlight">\(4^3=64\)</span> base grid, then on the <span class="math notranslate nohighlight">\((2\times 2)^3=64\)</span> grid cells of the first
 layer and then on the 2x2x4=16 cells of the second layer. Each of these
 three layers are regular grids, and the data is inputted/outputted in
 the same way as if these are normal regular grids (see Section
-:ref:`sec-regular-grid</cite>). But instead of just one such regular grid, now
+<a class="reference internal" href="#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>). But instead of just one such regular grid, now
 the data file (e.g. <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code>) will contain three
 successive lists of numbers, the first for the base grid, the second for
 the first layer and the last for the second layer. You may realize at this

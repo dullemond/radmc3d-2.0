@@ -36,7 +36,7 @@ includes the grid of course) type:
   radmc3d vtk_gas_density
 
 Since density can span a huge range, the 10-log of the density (in units of
-gram/cm:math:`^3`) is written instead. For the gas temperature:
+gram/cm\ :math:`^3`) is written instead. For the gas temperature:
 ::
 
   radmc3d vtk_gas_temperature
@@ -74,7 +74,7 @@ of the molecules (or atoms):
 
   radmc3d vtk_molspec 1
 
-(for molecular species 1). This number density (in cm:math:`^{-3}`) is also
+(for molecular species 1). This number density (in cm\ :math:`^{-3}`) is also
 written in 10-log form.  You may also wish to visualize the polulations of
 level 1 (ground state) of molecule 2:
 ::

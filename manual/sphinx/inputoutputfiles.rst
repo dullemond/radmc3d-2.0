@@ -781,7 +781,7 @@ one dust species. Then the ``dust_density.inp`` file would be: ::
   density[1,2,2]
   density[2,2,2]                           <=== This is the last base grid cell
 
-A more complex example is shown in Fig.~:ref:`fig-oct-tree-amr-numbered`.
+A more complex example is shown in Fig. :ref:`fig-oct-tree-amr-numbered`.
 An unformatted version is also available, in the standard way (see above).
 
 .. _fig-oct-tree-amr-numbered:
@@ -789,7 +789,7 @@ An unformatted version is also available, in the standard way (see above).
 .. figure:: Figures/oct_tree_amr.*
 
    Example of a 2-D grid with oct-tree refinement (as
-   Fig.~:ref:`fig-oct-tree-amr`) with the order of the cells shown as numbers in
+   Fig. :ref:`fig-oct-tree-amr`) with the order of the cells shown as numbers in
    the cells.
 
 

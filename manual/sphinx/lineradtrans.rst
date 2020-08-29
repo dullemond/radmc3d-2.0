@@ -221,13 +221,7 @@ The default of the ``lines_mode`` variable is ``lines_mode=1``.
 RADMC-3D finds the file ``lines.inp`` in the model directory. You can switch off
 the lines with the command-line option ``'noline'``.
 
-**NOTE 2:** The ``viewimage.pro`` image viewer also automatically includes line
-emission. But you would have to seek the precise wavelength of the lines
-yourself. If, however, you call ``viewimage`` with option ``/lines``, then some
-extras appear that allow you to directly find the right wavelength of the
-lines. Try it out, and you will see how it works.
-
-**NOTE 3:** If you are very limited by memory, and if you use LTE, LVG+EscProb
+**NOTE 2:** If you are very limited by memory, and if you use LTE, LVG+EscProb
 or optically thin populations, you can also ask RADMC-3D to *not* precalculate
 the level populations before the rendering, but instead compute them
 on-the-fly. This makes the code slower, but requires less memory.  You can do
@@ -346,12 +340,12 @@ number ``4.1e-11`` in the example of Section :ref:`sec-leiden-format`) is for
 collisions with particles for which the number density is given in the file
 ``numberdens_o-h2.inp``.
 
-We could also decide to ignore the difference between para-H:math:`_2` and
-ortho-H:math:`_2`, and simply use the first table (starting with the number
+We could also decide to ignore the difference between para-H\ :math:`_2` and
+ortho-H\ :math:`_2`, and simply use the first table (starting with the number
 ``3.2e-11`` in the example of Section :ref:`sec-leiden-format`),
-which is actually for para-H:math:`_2` only, as a proxy for the overall mixture
-of H:math:`_2` molecules. After all: The collision rate for para-H:math:`_2` and
-ortho-H:math:`_2` are not so very different. In that case we may simply ignore
+which is actually for para-H\ :math:`_2` only, as a proxy for the overall mixture
+of H\ :math:`_2` molecules. After all: The collision rate for para-H\ :math:`_2` and
+ortho-H\ :math:`_2` are not so very different. In that case we may simply ignore
 this difference and only provide a file ``numberdens_h2.inp``,
 and link that to the first of the two collision rate tables::
 
@@ -536,7 +530,7 @@ collisional transitions. Each line consists of, first, the ID of the transition
 (dummy), then the upper level, then the lower level, and then the
 :math:`K_{\mathrm{up,low}}` collisional rates in units of [:math:`\mathrm{cm}^3/s`]. The
 same is again repeated (because in this example we have two collision partners:
-the para-H:math:`_2` molecule and the ortho-H:math:`_2` molecule).
+the para-H\ :math:`_2` molecule and the ortho-H\ :math:`_2` molecule).
 
 To get the collision rate :math:`C_{\mathrm{up,low}}` per molecule (in units of
 [1/s]) for the molecule of interest, we must multiply
@@ -827,8 +821,8 @@ rates for each pair of molecule + collision partner are given in the molecular
 input data files (Section :ref:`sec-molecule-xxx-inp`). To find how often a
 molecular level of a single molecule is collisionally excited to another level
 we also need to know the number density of the collision partner molecules. In
-the example in Section :ref:`sec-molecule-xxx-inp` these were para-H:math:`_2`
-and ortho-H:math:`_2`. We must therefore somehow tell RADMC-3D what the number
+the example in Section :ref:`sec-molecule-xxx-inp` these were para-H\ :math:`_2`
+and ortho-H\ :math:`_2`. We must therefore somehow tell RADMC-3D what the number
 densities of these molecules are. This is done by reading in the number
 densities for this(these) collision partner(s).  The file for this has exactly
 the same format as that for the number density of any molecule (see Section
@@ -1064,10 +1058,10 @@ total number density of the molecule, :math:`|\nabla \vec v|` the absolute value
 of the velocity gradient, :math:`g_i` the statistical weight of level :math:`i`
 and :math:`\nu_{ij}` the line frequency for transition :math:`i\rightarrow
 j`. In comparing to Eq. 21 of van der Tak's paper, note that their
-:math:`N_{\mathrm{mol}}` is a column density (cm:math:`^{-2}`) and their
+:math:`N_{\mathrm{mol}}` is a column density (cm\ :math:`^{-2}`) and their
 :math:`\Delta V` is the line width (cm/s), while our :math:`N_{\mathrm{molec}}`
-is the number density (cm:math:`^{-3}`) and :math:`|\nabla \vec v|` is the
-velocity gradient (s:math:`^{-1}`). Their formula is thus in fact EscProb while
+is the number density (cm\ :math:`^{-3}`) and :math:`|\nabla \vec v|` is the
+velocity gradient (s\ :math:`^{-1}`). Their formula is thus in fact EscProb while
 ours is LVG.
 
 For the EscProb method *without* velocity gradients, we need to be able to
@@ -1614,8 +1608,8 @@ globally.
 In other words: RADMC-3D now takes care of the memory-saving storage of
 the populations automatically.
 
-*How does RADMC-3D decide whether a line contributes to some wavelength
-:math:`\lambda`?* A line :math:`i` with line center :math:`\lambda_i` is
+*How does RADMC-3D decide whether a line contributes to some wavelength*
+:math:`\lambda`? A line :math:`i` with line center :math:`\lambda_i` is
 considered to contribute to an image at wavelength :math:`\lambda` if
 
 .. math::

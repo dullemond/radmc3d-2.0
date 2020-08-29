@@ -97,7 +97,7 @@ develop the code.
    possible. This avoids that you accidently have a old files hanging around,
    their presence of which may cause troubles in your new model.  So if you
    make a model update, make a new directory and then copy only the files
-   that are necesary (for instance, ``problem_setup.pro``\ ,
+   that are necesary (for instance, ``problem_setup.py``\ ,
    ``dustkappa_silicate.inp``\ , ``Makefile`` and other
    necessary files). One way of doing this easily is to write a little perl
    script or csh script that does this for you.
@@ -177,7 +177,7 @@ So please remain creative yourself in coming up with good tests and checks.
    at the inner edge of a protoplanetary disk, if the inner cells are not
    assured to be optically thin through grid refinement (and possibly
    additionally a bit of smoothing of the density profile too) is given in
-   Fig.~:numref:`fig-innerrim-lowres`.
+   Fig. :numref:`fig-innerrim-lowres`.
    
    .. _fig-innerrim-lowres:
 
@@ -209,7 +209,7 @@ So please remain creative yourself in coming up with good tests and checks.
    import a 3-D hydrodynamic model into RADMC-3D, then it is a common problem
    that the :math:`\tau_\lambda=1` surface 'wants' to be outside of the grid (or
    outside of the higher-resolution part of the :math:`\theta`-grid if you use
-   separable grid refinement: see Fig.~:ref:`fig-spher-sep-ref`). For example:
+   separable grid refinement: see Fig. :ref:`fig-spher-sep-ref`). For example:
    if you make a * hydrodynamic* model of a protoplanetary disk in :math:`R`,
    :math:`\Theta` and :math:`\Phi` coordinates, you typically want to model only
    the lower 2 pressure scale heights of the disk, since that contains 99.5\% of
@@ -360,7 +360,7 @@ encounter a problem. Here is a list of common issues and tips how to fix them.
      :math:`M_{\mathrm{disk}}=0.01\,M_{\odot}` but accidently one with
      :math:`M_{\mathrm{disk}}=10\,M_{\odot}`. In such a case a lot of things
      will go wrong. First of all the inner edge of the disk will almost
-     certainly behave strangely (see Fig.~:ref:`fig-innerrim-lowres`). Secondly,
+     certainly behave strangely (see Fig. :ref:`fig-innerrim-lowres`). Secondly,
      the surface of the disk will almost certainly be cut-off in the way
      decribed in Section :ref:`sec-things-going-wrong`, in which case the
      surface of the disk will be hardly illuminated by the star, because the

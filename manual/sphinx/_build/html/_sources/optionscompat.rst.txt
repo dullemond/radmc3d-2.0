@@ -62,7 +62,7 @@ limitations.
 Local observer mode
 ===================
 
-The local observer mode (Sect.~:ref:`sec-local-observer`) is a special mode
+The local observer mode (Sect. :ref:`sec-local-observer`) is a special mode
 for putting the observer in the near-field of the object, or even right in
 the middle of the object. It is not meant to be really for science use
 (though it can be used for it, to a certain extent), but instead for 

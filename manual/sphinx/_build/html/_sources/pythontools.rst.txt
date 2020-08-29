@@ -141,7 +141,7 @@ about like this (for example): ::
   analyze.writeDefaultParfile('ppdisk')
   setup.problemSetupDust('ppdisk', mdisk='1e-5*ms', gap_rin='[10.0*au]', gap_rout='[40.*au]', gap_drfact='[1e-5]', nz='0')
 
-This example will set up a protoplanetary disk model in 2-D (r,:math:`\theta`),
+This example will set up a protoplanetary disk model in 2-D :math:`(r,\theta)`,
 with a gap between 10 and 40 au. You can now run RADMC-3D to compute the dust
 temperature structure, by calling (on the Linux shell): ::
 

@@ -800,13 +800,13 @@ don’t have to worry about this. Whenever you ask RADMC-3D to make an image
 <a class="reference internal" href="#sec-modes-of-scattering"><span class="std std-ref">Five modes of treating scattering</span></a>), RADMC-3D will automatically realize that it
 requires knowledge of <span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}(\Omega')\)</span>, and it will start a
 brief single-wavelength Monte Carlo simulation for computing
-<span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}(\Omega')\)</span>. This single-wavelength <cite>Scattering Monte
+<span class="math notranslate nohighlight">\(j_\nu^{\mathrm{scat}}(\Omega')\)</span>. This single-wavelength ‘Scattering Monte
 Carlo’ simulation is relatively fast compared to the thermal Monte Carlo
 simulation, because photon packages can be destroyed by absorption. So
 photon packages do not bounce around for long, as they do in the thermal
 Monte Carlo simulation.  This Scattering Monte Carlo simulation is in fact
 very similar to the monochromatic Monte Carlo model described in Section
-:ref:`sec-dust-monochromatic-monte-carlo</cite>. While the monochromatic Monte
+<a class="reference internal" href="#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>. While the monochromatic Monte
 Carlo model is called specifically by the user (by calling RADMC-3D with
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span> <span class="pre">mcmono</span></code>), the Scattering Monte Carlo simulation is not
 something the user must specify him/her-self: it is automatically done by
@@ -1172,7 +1172,7 @@ described in Hamaker &amp; Bregman (1996) A&amp;AS 117, pp.161.</p>
 below). The <span class="math notranslate nohighlight">\(z'\)</span> axis points to the observer. This coordinate system is
 positively right-handed. The radiation moves toward positive <span class="math notranslate nohighlight">\(z'\)</span>. Angles
 in the <span class="math notranslate nohighlight">\((x',y')\)</span> plane are measured counter-clockwise (angle=0 means
-positive <span class="math notranslate nohighlight">\(x'\)</span> direction, angle=:math:<cite>pi</cite>/2 means positive <span class="math notranslate nohighlight">\(y'\)</span>
+positive <span class="math notranslate nohighlight">\(x'\)</span> direction, angle=<span class="math notranslate nohighlight">\(\pi/2\)</span> means positive <span class="math notranslate nohighlight">\(y'\)</span>
 direction).</p>
 <p>In the following we will (still completely consistent with the IAU definitions
 above, see the ‘important note’ below) define “up” to be positive <span class="math notranslate nohighlight">\(y'\)</span> and

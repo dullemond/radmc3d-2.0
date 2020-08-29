@@ -373,12 +373,7 @@ if you know very well what you are doing…</p>
 <p><strong>NOTE 1:</strong> Line emission is automatically included in the images and spectra if
 RADMC-3D finds the file <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> in the model directory. You can switch off
 the lines with the command-line option <code class="docutils literal notranslate"><span class="pre">'noline'</span></code>.</p>
-<p><strong>NOTE 2:</strong> The <code class="docutils literal notranslate"><span class="pre">viewimage.pro</span></code> image viewer also automatically includes line
-emission. But you would have to seek the precise wavelength of the lines
-yourself. If, however, you call <code class="docutils literal notranslate"><span class="pre">viewimage</span></code> with option <code class="docutils literal notranslate"><span class="pre">/lines</span></code>, then some
-extras appear that allow you to directly find the right wavelength of the
-lines. Try it out, and you will see how it works.</p>
-<p><strong>NOTE 3:</strong> If you are very limited by memory, and if you use LTE, LVG+EscProb
+<p><strong>NOTE 2:</strong> If you are very limited by memory, and if you use LTE, LVG+EscProb
 or optically thin populations, you can also ask RADMC-3D to <em>not</em> precalculate
 the level populations before the rendering, but instead compute them
 on-the-fly. This makes the code slower, but requires less memory.  You can do
@@ -485,12 +480,12 @@ collisions with particles for which the number density is given in the file
 number <code class="docutils literal notranslate"><span class="pre">4.1e-11</span></code> in the example of Section <a class="reference internal" href="#sec-leiden-format"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a>) is for
 collisions with particles for which the number density is given in the file
 <code class="docutils literal notranslate"><span class="pre">numberdens_o-h2.inp</span></code>.</p>
-<p>We could also decide to ignore the difference between para-H:math:<cite>_2</cite> and
-ortho-H:math:<cite>_2</cite>, and simply use the first table (starting with the number
+<p>We could also decide to ignore the difference between para-H<span class="math notranslate nohighlight">\(_2\)</span> and
+ortho-H<span class="math notranslate nohighlight">\(_2\)</span>, and simply use the first table (starting with the number
 <code class="docutils literal notranslate"><span class="pre">3.2e-11</span></code> in the example of Section <a class="reference internal" href="#sec-leiden-format"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a>),
-which is actually for para-H:math:<cite>_2</cite> only, as a proxy for the overall mixture
-of H:math:<cite>_2</cite> molecules. After all: The collision rate for para-H:math:<cite>_2</cite> and
-ortho-H:math:<cite>_2</cite> are not so very different. In that case we may simply ignore
+which is actually for para-H<span class="math notranslate nohighlight">\(_2\)</span> only, as a proxy for the overall mixture
+of H<span class="math notranslate nohighlight">\(_2\)</span> molecules. After all: The collision rate for para-H<span class="math notranslate nohighlight">\(_2\)</span> and
+ortho-H<span class="math notranslate nohighlight">\(_2\)</span> are not so very different. In that case we may simply ignore
 this difference and only provide a file <code class="docutils literal notranslate"><span class="pre">numberdens_h2.inp</span></code>,
 and link that to the first of the two collision rate tables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>
@@ -665,7 +660,7 @@ collisional transitions. Each line consists of, first, the ID of the transition
 (dummy), then the upper level, then the lower level, and then the
 <span class="math notranslate nohighlight">\(K_{\mathrm{up,low}}\)</span> collisional rates in units of [<span class="math notranslate nohighlight">\(\mathrm{cm}^3/s\)</span>]. The
 same is again repeated (because in this example we have two collision partners:
-the para-H:math:<cite>_2</cite> molecule and the ortho-H:math:<cite>_2</cite> molecule).</p>
+the para-H<span class="math notranslate nohighlight">\(_2\)</span> molecule and the ortho-H<span class="math notranslate nohighlight">\(_2\)</span> molecule).</p>
 <p>To get the collision rate <span class="math notranslate nohighlight">\(C_{\mathrm{up,low}}\)</span> per molecule (in units of
 [1/s]) for the molecule of interest, we must multiply
 <span class="math notranslate nohighlight">\(K_{\mathrm{up,low}}\)</span> with the number density of the collision partner
@@ -908,8 +903,8 @@ rates for each pair of molecule + collision partner are given in the molecular
 input data files (Section <a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a>). To find how often a
 molecular level of a single molecule is collisionally excited to another level
 we also need to know the number density of the collision partner molecules. In
-the example in Section <a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a> these were para-H:math:<cite>_2</cite>
-and ortho-H:math:<cite>_2</cite>. We must therefore somehow tell RADMC-3D what the number
+the example in Section <a class="reference internal" href="#sec-molecule-xxx-inp"><span class="std std-ref">INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)</span></a> these were para-H<span class="math notranslate nohighlight">\(_2\)</span>
+and ortho-H<span class="math notranslate nohighlight">\(_2\)</span>. We must therefore somehow tell RADMC-3D what the number
 densities of these molecules are. This is done by reading in the number
 densities for this(these) collision partner(s).  The file for this has exactly
 the same format as that for the number density of any molecule (see Section
@@ -1106,10 +1101,10 @@ total number density of the molecule, <span class="math notranslate nohighlight"
 of the velocity gradient, <span class="math notranslate nohighlight">\(g_i\)</span> the statistical weight of level <span class="math notranslate nohighlight">\(i\)</span>
 and <span class="math notranslate nohighlight">\(\nu_{ij}\)</span> the line frequency for transition <span class="math notranslate nohighlight">\(i\rightarrow
 j\)</span>. In comparing to Eq. 21 of van der Tak’s paper, note that their
-<span class="math notranslate nohighlight">\(N_{\mathrm{mol}}\)</span> is a column density (cm:math:<cite>^{-2}</cite>) and their
+<span class="math notranslate nohighlight">\(N_{\mathrm{mol}}\)</span> is a column density (cm<span class="math notranslate nohighlight">\(^{-2}\)</span>) and their
 <span class="math notranslate nohighlight">\(\Delta V\)</span> is the line width (cm/s), while our <span class="math notranslate nohighlight">\(N_{\mathrm{molec}}\)</span>
-is the number density (cm:math:<cite>^{-3}</cite>) and <span class="math notranslate nohighlight">\(|\nabla \vec v|\)</span> is the
-velocity gradient (s:math:<cite>^{-1}</cite>). Their formula is thus in fact EscProb while
+is the number density (cm<span class="math notranslate nohighlight">\(^{-3}\)</span>) and <span class="math notranslate nohighlight">\(|\nabla \vec v|\)</span> is the
+velocity gradient (s<span class="math notranslate nohighlight">\(^{-1}\)</span>). Their formula is thus in fact EscProb while
 ours is LVG.</p>
 <p>For the EscProb method <em>without</em> velocity gradients, we need to be able to
 compute the total column depth <span class="math notranslate nohighlight">\(\Sigma_{\mathrm{molec}}\)</span> in the direction
@@ -1581,8 +1576,8 @@ this to be the ‘subset’ of levels for which the populations will be stored
 globally.</p>
 <p>In other words: RADMC-3D now takes care of the memory-saving storage of
 the populations automatically.</p>
-<p><em>How does RADMC-3D decide whether a line contributes to some wavelength
-:math:`lambda`?</em> A line <span class="math notranslate nohighlight">\(i\)</span> with line center <span class="math notranslate nohighlight">\(\lambda_i\)</span> is
+<p><em>How does RADMC-3D decide whether a line contributes to some wavelength</em>
+<span class="math notranslate nohighlight">\(\lambda\)</span>? A line <span class="math notranslate nohighlight">\(i\)</span> with line center <span class="math notranslate nohighlight">\(\lambda_i\)</span> is
 considered to contribute to an image at wavelength <span class="math notranslate nohighlight">\(\lambda\)</span> if</p>
 <div class="math notranslate nohighlight">
 \[| \lambda_i-\lambda | \le C_{\mathrm{margin}}\Delta\lambda_i\]</div>

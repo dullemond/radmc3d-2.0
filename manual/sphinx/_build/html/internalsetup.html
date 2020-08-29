@@ -101,7 +101,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#using-the-userdef-module-to-compute-integrals-of-j-nu">Using the userdef module to compute integrals of <span class="math notranslate nohighlight">\(J_\nu\)</span></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#some-tips-and-tricks-for-programming-user-defined-subroutines">Some tips and tricks for programming user-defined subroutines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-your-own-emission-and-absorption-processes">Creating your own emission and absorption processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-radmc-3d-as-a-fancy-volume-rendering-tool">Using RADMC-3D as a fancy volume-rendering tool</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pythontools.html">Python analysis tool set</a></li>
@@ -514,29 +513,6 @@ that is not usually read into RADMC-3D, you can add read commands in the
 </div>
 <p>See the example directory <code class="docutils literal notranslate"><span class="pre">examples/run_simple_userdefsrc</span></code> for
 more ideas.</p>
-</div>
-<div class="section" id="using-radmc-3d-as-a-fancy-volume-rendering-tool">
-<h2>Using RADMC-3D as a fancy volume-rendering tool<a class="headerlink" href="#using-radmc-3d-as-a-fancy-volume-rendering-tool" title="Permalink to this headline">¶</a></h2>
-<p>Sometimes you want to make nice 3-D volume rendering images of e.g. your
-3-D hydrodynamics simulation. You may, in that case, not be interested in
-<em>real</em> emission/extinction processes, but rather some artificial
-transfer function - as long as the outcoming image looks nice.</p>
-<p>RADMC-3D offers a number of advantages over off-the-shelf programs for
-volume rendering:</p>
-<ul class="simple">
-<li><p>It has AMR refinement, so you do not need to first convert into
-non-AMR grids which are necessary for many volume rendering codes.</p></li>
-<li><p>It allows you full control over the transfer function, i.e. the
-dependence of the emission/extinction coefficients on any quantities
-such as density, temperature, magnetic field etc.</p></li>
-</ul>
-<p>The example directory</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">examples</span><span class="o">/</span><span class="n">run_simple_userdefsrc</span>
-</pre></div>
-</div>
-<p>gives an example of how this can be done. It also shows how you can link this to
-the <code class="docutils literal notranslate"><span class="pre">viewimage.pro</span></code> routine, and allow on-the-fly modification of the transfer
-function, so that you can experiment to get the nicest image output.</p>
 </div>
 </div>
 
