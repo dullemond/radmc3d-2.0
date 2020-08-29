@@ -24,7 +24,8 @@ from radmc3dPy.natconst import *
 #
 a    = readData()
 r    = a.grid.x[:]
-temp = a.dusttemp[:,-1,0,0]
+ny   = len(a.grid.y)
+temp = a.dusttemp[:,ny//2,0,0]
 plt.figure()
 plt.plot(r/au,temp)
 plt.xlabel('r [au]')

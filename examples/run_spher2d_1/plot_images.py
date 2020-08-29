@@ -20,7 +20,7 @@ from radmc3dPy.natconst import *
 #os.system('radmc3d mctherm')
 
 #
-# Now make sure to have run 
+# Now make the image
 #
 #   radmc3d image lambda 10 incl 60
 #
@@ -34,6 +34,27 @@ nx   = dum[0]
 nx2  = nx//2
 plt.figure()
 plotImage(im,log=True,maxlog=6,au=True,bunit='inu',cmap=cm.hot)
+plt.show()
+
+#
+# Now make a strongly zoomed-in image
+# This time we plot linear intensity, not logarithmic,
+# but we saturate the starlight
+#
+#   radmc3d image lambda 10 incl 60 sizeau 10
+#
+os.system('radmc3d image lambda 10 incl 60 sizeau 10')
+#
+# to get the image
+#
+imz  = readImage()
+dum  = imz.image.shape
+nx   = dum[0]
+nx2  = nx//2
+vmax = 5e-10
+
+plt.figure()
+plotImage(imz,au=True,bunit='inu',vmax=vmax,cmap=cm.hot)
 plt.show()
 
 #

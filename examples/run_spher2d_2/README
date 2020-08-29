@@ -51,4 +51,17 @@ To plot the spectra (same as for run_spher2d_1):
 
   %run plot_spectra.py
 
+In particular in the zoomed-in image from plot_images.py, you will see that the
+inner rim is now brighter than for run_spher2d_1, and the effect of a dark
+midplane region is much less. This is the effect of the grid refinement near the
+inner rim.
+
+With
+
+  %run plot_compare_run_spher2d_1.py
+
+you can compare the effect of the radial grid refinement on the SED. For that
+you must make sure to have run %run plot_spectra.py in both the current
+directory (run_spher2d_2/) and the previous one (run_spher2d_1/).
+
 2020.08.29
