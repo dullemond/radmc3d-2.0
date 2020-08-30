@@ -4,5 +4,5 @@ cleanall:
 	   dust_density.uinp *.uout *.udat                          \
 	   amr_grid.inp stars.inp radmc3d.inp image_script.pro      \
 	   radmc3d Makefile~ *.pro~ README*~ *.f90~ *.inp~ *.py~    \
-	   dustkap_*.inp opacities.pickle
+	   dustkap*amorph*.inp opacities.pickle
 	@echo Directory cleaned to basic
