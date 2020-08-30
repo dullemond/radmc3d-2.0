@@ -413,8 +413,11 @@ def read_dustkappa(species=None):
     fname     = 'dustkappa_'+species+'.inp'
     print('Reading '+ fname)
     with open(fname, 'r') as rfile:
-        # Read the format number
-        iformat = int(rfile.readline())
+        # Check the file format (skipping comments)
+        iformat_str = rfile.readline()
+        while iformat_str[0]=='#':
+            iformat_str = rfile.readline()
+        iformat = int(iformat_str)
 
         # Read the number of wavelength points
         dustkappa.nwav = int(rfile.readline())
