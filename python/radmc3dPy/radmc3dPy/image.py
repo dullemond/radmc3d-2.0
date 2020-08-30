@@ -1864,6 +1864,12 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
         com = com + ' noscat'
 
     #
+    # Print the command
+    #
+    print("Executing RADMC-3D Command:")
+    print(com)
+    
+    #
     # Now finally run radmc3d and calculate the image
     #
     # dum = sp.Popen([com], stdout=sp.PIPE, shell=True).wait()
