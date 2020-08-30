@@ -23,7 +23,7 @@ ntheta   = 32
 nphi     = 1
 rin      = 10*au
 rout     = 100*au
-thetaup  = np.pi*0.5 - 0.5e0
+thetaup  = np.pi*0.5 - 0.7e0
 #
 # Disk parameters
 #

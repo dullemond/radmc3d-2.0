@@ -3,9 +3,9 @@ import numpy as np
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import pyplot as plt
 from matplotlib import cm
-from radmc3dPy.image import *    # Make sure that the shell variable PYTHONPATH points to the RADMC-3D python directory
-from radmc3dPy.analyze import *  # Make sure that the shell variable PYTHONPATH points to the RADMC-3D python directory
-from radmc3dPy.natconst import * # Make sure that the shell variable PYTHONPATH points to the RADMC-3D python directory
+from radmc3dPy.image import *
+from radmc3dPy.analyze import *
+from radmc3dPy.natconst import *
 
 #
 # Make sure to have done the following beforhand:
@@ -21,9 +21,9 @@ from radmc3dPy.natconst import * # Make sure that the shell variable PYTHONPATH 
 # of the two dust species)
 #
 fig2  = plt.figure()
-makeImage(npix=100,incl=60.,wav=30,sizeau=300)   # This calls radmc3d 
+makeImage(npix=200,incl=60.,phi=30.,wav=30,sizeau=300)   # This calls radmc3d
 a=readImage()
-plotImage(a,log=True,au=True,maxlog=4,cmap='hot')
+plotImage(a,log=True,au=True,maxlog=6,cmap='hot')
 
 #
 # Make and plot the SED as seen at 1 pc distance
