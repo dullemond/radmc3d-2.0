@@ -2753,13 +2753,13 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         !
         ! Do not include dust scattering in images/spectra. 
         !
-        scattering_mode = 0 
+        scattering_mode_max = 0
         gotit = .true.
      elseif(buffer(1:8).eq.'inclscat') then
         !
         ! Include dust scattering in images/spectra.
         !
-        scattering_mode = scattering_mode_def
+        scattering_mode_max = scattering_mode_def
         gotit = .true.
      elseif(buffer(1:6).eq.'noline') then
         !
