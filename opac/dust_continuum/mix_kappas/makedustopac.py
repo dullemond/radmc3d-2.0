@@ -264,7 +264,7 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
         # Message
         #
         if verbose:
-            print "Doing wavelength %13.6e cm"%lamcm[i]
+            print("Doing wavelength %13.6e cm"%lamcm[i])
         #
         # Now loop over the grain sizes
         #
@@ -273,7 +273,7 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
             # Message
             #
             if verbose and nagr>1:
-                print "...Doing grain size %13.6e cm"%agr[l]
+                print("...Doing grain size %13.6e cm"%agr[l])
             #
             # Compute x
             #
@@ -359,10 +359,10 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
     # If error found, then warn
     #
     if error:
-        print "Warning: Angular integral of Z11 is not equal to kscat at all wavelength. "
-        print "Maximum error = %13.6e"%errmax
+        print("Warning: Angular integral of Z11 is not equal to kscat at all wavelength. ")
+        print("Maximum error = %13.6e"%errmax)
         if chopforward>0:
-            print "But I am using chopforward to remove strong forward scattering, and then renormalized kapscat."
+            print("But I am using chopforward to remove strong forward scattering, and then renormalized kapscat.")
     #                
     # Now return what we computed in a dictionary
     #
