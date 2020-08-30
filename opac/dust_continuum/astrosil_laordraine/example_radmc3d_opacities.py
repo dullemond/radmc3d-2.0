@@ -28,7 +28,7 @@ theta     = np.linspace(0.,180.,ntheta)
 # Now make the opacity with the bhmie code
 #
 optconstfile= optconst+'.lnk'
-print "Running the code. Please wait..."
+print("Running the code. Please wait...")
 opac       = compute_opac_mie(optconstfile,matdens,agraincm,lamcm,theta=theta,
                               extrapolate=extrapol,logawidth=logawidth,na=na,
                               chopforward=chop,verbose=verbose)
@@ -37,14 +37,14 @@ opac       = compute_opac_mie(optconstfile,matdens,agraincm,lamcm,theta=theta,
 #
 # ...The full scattering matrix file
 #
-print "Writing the opacity to scatmat file"
+print("Writing the opacity to scatmat file")
 write_radmc3d_scatmat_file(opac,optconst)
 #
 # ...Only the opacity file with simple scattering info
 #    (uncomment the next two commands if you wish to use this)
 #
-#print "Writing the opacity to kappa file"
-#write_radmc3d_kappa_file(opac,optconst)
+print("Writing the opacity to kappa file")
+write_radmc3d_kappa_file(opac,optconst)
 #
 # Now that RADMC-3D does not like it when both files are there, so
 # you must choose whether you want to do the full scattering or not
