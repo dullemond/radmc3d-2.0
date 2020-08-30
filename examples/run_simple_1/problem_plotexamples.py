@@ -70,7 +70,7 @@ plt.axis([1e-1,1e4,1e-8,1])
 # Use the radmc3dPy.analyze tool set to read in the dust temperatures
 # calculated by the command-line command "radmc3d mctherm"
 #
-q     = readData(dtemp=True,binary=False)
+q     = readData()
 fig5  = plt.figure()
 ay    = fig5.gca(projection='3d')
 qq    = np.meshgrid(q.grid.x,q.grid.y,q.grid.z,indexing='ij')

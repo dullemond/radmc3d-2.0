@@ -3,11 +3,6 @@
 #
 import numpy as np
 #
-# Import plotting libraries (start Python with ipython --matplotlib)
-#
-#from mpl_toolkits.mplot3d import axes3d
-#from matplotlib import pyplot as plt
-#
 # Some natural constants
 #
 au  = 1.49598e13     # Astronomical Unit       [cm]
@@ -127,7 +122,7 @@ with open('dustopac.inp','w+') as f:
     f.write('============================================================================\n')
     f.write('10              Way in which this dust species is read\n')
     f.write('0               0=Thermal grain\n')
-    f.write('pyrmg70         Extension of name of dustkappa_***.inp file\n')
+    f.write('silicate        Extension of name of dustkapscatmat_***.inp file\n')
     f.write('----------------------------------------------------------------------------\n')
 #
 # Write the radmc3d.inp control file
