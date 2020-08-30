@@ -1,0 +1,42 @@
+Here we create the dust opacities used in the examples/ models of RADMC-3D. The
+dustkappa_silicate.inp file in many of those example models is, in fact, the
+same as the dustkappa_olivine_amorph_mg50_jaeger94dorschner95.inp we will create
+here. It is the opacity of amorphous olivine MgFeSiO4 with a grain radius of 0.1
+micrometer.
+
+In this directory we will also create the opacity files for amorphous pyroxene
+with 70% Mg, and for amorphous carbon.
+
+To create the opacities:
+
+   python create_basic_opacities.py
+
+You can plot them in Python:
+
+   %run plot_basic_opacities.py
+
+You can create a mixture (with a very simplistic mixing rule):
+
+   python mix_opacities.py
+
+You can also create different grain sizes (may take some time):
+
+   %run create_opacities_grainsizes.py
+
+and plot them:
+
+   %run plot_opacities_grainsizes.py
+
+NOTE: In version 0.41 of RADMC-3D the dustkappa_silicate.inp was extrapolated a
+bit differently to wavelengths outside of the lab-measured domain. You can 
+compare the new opacities (as of version 2.0 of RADMC-3D) with the old ones:
+
+   %run plot_compare_silicate_v0.41.py
+
+At wavelengths <0.2 micron there are differences, and there are also minor
+differences >100 micron. Otherwise they are identical.
+
+Note also that all dustkap*_v0.41.inp files are the old opacity files
+from version 0.41 of RADMC-3D. They are here only for comparison.
+
+2020-08-30

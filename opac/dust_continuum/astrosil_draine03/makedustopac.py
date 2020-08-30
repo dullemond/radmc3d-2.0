@@ -264,7 +264,7 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
         # Message
         #
         if verbose:
-            print "Doing wavelength %13.6e cm"%lamcm[i]
+            print("Doing wavelength %13.6e cm"%lamcm[i])
         #
         # Now loop over the grain sizes
         #
@@ -273,7 +273,7 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
             # Message
             #
             if verbose and nagr>1:
-                print "...Doing grain size %13.6e cm"%agr[l]
+                print("...Doing grain size %13.6e cm"%agr[l])
             #
             # Compute x
             #
@@ -359,10 +359,10 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
     # If error found, then warn
     #
     if error:
-        print "Warning: Angular integral of Z11 is not equal to kscat at all wavelength. "
-        print "Maximum error = %13.6e"%errmax
+        print("Warning: Angular integral of Z11 is not equal to kscat at all wavelength. ")
+        print("Maximum error = %13.6e"%errmax)
         if chopforward>0:
-            print "But I am using chopforward to remove strong forward scattering, and then renormalized kapscat."
+            print("But I am using chopforward to remove strong forward scattering, and then renormalized kapscat.")
     #                
     # Now return what we computed in a dictionary
     #
@@ -387,7 +387,7 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
     return package
 
 
-def write_radmc3d_scatmat_file(package,name):
+def write_radmc3d_scatmat_file(package,name,descr=None,ref=None):
     """
     The RADMC-3D radiative transfer package
       http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/
@@ -398,8 +398,11 @@ def write_radmc3d_scatmat_file(package,name):
     the file dustkapscatmat_<name>.inp.
     """
     filename = 'dustkapscatmat_'+name+'.inp'
+    if descr is None: descr=name
     with open(filename,'w') as f:
-        f.write('# Opacity and scattering matrix file for '+name+'\n')
+        f.write('# Opacity and scattering matrix file for '+descr+'\n')
+        if ref is not None:
+            f.write('# Optical constants from '+ref+'\n')
         f.write('# Please do not forget to cite in your publications the original paper of these optical constant measurements\n')
         f.write('# Made with the makedustopac.py code by Cornelis Dullemond\n')
         f.write('# using the bhmie.py Mie code of Bohren and Huffman (python version by Cornelis Dullemond, from original bhmie.f code by Bruce Draine)\n')
@@ -427,7 +430,7 @@ def write_radmc3d_scatmat_file(package,name):
         f.write('\n')
 
 
-def write_radmc3d_kappa_file(package,name):
+def write_radmc3d_kappa_file(package,name,descr=None,ref=None):
     """
     The RADMC-3D radiative transfer package
       http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d/
@@ -440,7 +443,16 @@ def write_radmc3d_kappa_file(package,name):
     of wavelength.
     """
     filename = 'dustkappa_'+name+'.inp'
+    if descr is None: descr=name
     with open(filename,'w') as f:
+        f.write('# Opacity file for '+descr+'\n')
+        if ref is not None:
+            f.write('# Optical constants from '+ref+'\n')
+        f.write('# Please do not forget to cite in your publications the original paper of these optical constant measurements\n')
+        f.write('# Made with the makedustopac.py code by Cornelis Dullemond\n')
+        f.write('# using the bhmie.py Mie code of Bohren and Huffman (python version by Cornelis Dullemond, from original bhmie.f code by Bruce Draine)\n')
+        f.write('# Grain size = %13.6e cm\n'%(package['agraincm']))
+        f.write('# Material density = %6.3f g/cm^3\n'%(package['matdens']))
         f.write('3\n')  # Format number
         f.write('%d\n'%(package['lamcm'].size))
         f.write('\n')

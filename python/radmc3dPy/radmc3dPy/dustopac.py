@@ -291,27 +291,33 @@ class radmc3dDustOpac(object):
                 fname = 'dustkapscatmat_' + ext[i] + '.inp'
                 print('Reading ' + fname)
 
-                # Check the file format
-                iformat = np.fromfile(fname, count=1, sep=" ", dtype=np.int)
-                iformat = iformat[0]
-                if iformat != 1:
-                    msg = 'Format number of the file dustkapscatmat_' + ext[i] + '.inp (iformat=' + ("%d" % iformat) + \
-                          ') is unkown'
-                    raise ValueError(msg)
+                with open(fname, 'r') as rfile:
 
-                data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-                hdr = np.array(data[:3], dtype=np.int)
-                data = data[3:]
+                    # Check the file format (skipping comments)
+                    iformat_str = rfile.readline()
+                    while iformat_str[0]=='#':
+                        iformat_str = rfile.readline()
+                    iformat = int(iformat_str)
+                    if iformat != 1:
+                        msg = 'Format number of the file dustkapscatmat_' + ext[i] + '.inp (iformat=' + ("%d" % iformat) + ') is unkown'
+                        raise ValueError(msg)
 
-                self.nwav.append(hdr[1])
-                self.nfreq.append(hdr[1])
-                self.nang.append(hdr[2])
+                    # Now read the rest of the file
+                    data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
+                    hdr  = np.array(data[:2], dtype=np.int)
+                    nlam = hdr[0]
+                    nang = hdr[1]
+                    data = data[2:]
+
+                self.nwav.append(nlam)
+                self.nfreq.append(nlam)
+                self.nang.append(nang)
                 self.ext.append(ext[i])
                 self.idust.append(idust[i])
 
                 # Get the opacities
-                data_opac = np.reshape(data[:hdr[1]*4], [hdr[1], 4])
-                data = data[hdr[1]*4:]
+                data_opac = np.reshape(data[:nlam*4], [nlam, 4])
+                data = data[nlam*4:]
                 self.wav.append(data_opac[:, 0])
                 self.freq.append(nc.cc / data_opac[:, 0] * 1e4)
                 self.kabs.append(data_opac[:, 1])
@@ -319,11 +325,11 @@ class radmc3dDustOpac(object):
                 self.phase_g.append(data_opac[:, 3])
 
                 # Get the angular grid
-                self.scatang.append(data[:hdr[2]])
-                data = data[hdr[2]:]
+                self.scatang.append(data[:nang])
+                data = data[nang:]
 
                 # Now get the scattering matrix
-                data = np.reshape(data, [hdr[1], hdr[2], 6])
+                data = np.reshape(data, [nlam, nang, 6])
                 self.z11.append(data[:, :, 0])
                 self.z12.append(data[:, :, 1])
                 self.z22.append(data[:, :, 2])
@@ -337,25 +343,31 @@ class radmc3dDustOpac(object):
 
                     print('Reading '+fname)
 
-                    # Check the file format
-                    iformat = np.fromfile(fname, count=1, sep=" ", dtype=np.int)
-                    iformat = iformat[0]
-                    if (iformat < 1) | (iformat > 3):
-                        msg = 'Unknown file format in the dust opacity file ' + fname
-                        raise ValueError(msg)
+                    with open(fname, 'r') as rfile:
 
-                    data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-                    hdr = np.array(data[:2], dtype=np.int)
-                    data = data[2:]
+                        # Check the file format (skipping comments)
+                        iformat_str = rfile.readline()
+                        while iformat_str[0]=='#':
+                            iformat_str = rfile.readline()
+                        iformat = int(iformat_str)
+                        if (iformat < 1) | (iformat > 3):
+                            msg = 'Unknown file format in the dust opacity file ' + fname
+                            raise ValueError(msg)
+
+                        # Now read the rest of the file
+                        data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
+                        hdr  = np.array(data[:1], dtype=np.int)
+                        nlam = hdr[0]
+                        data = data[1:]
 
                     self.ext.append(ext[i])
                     self.idust.append(idust[i])
-                    self.nwav.append(hdr[1])
-                    self.nfreq.append(hdr[1])
+                    self.nwav.append(nlam)
+                    self.nfreq.append(nlam)
 
                     # If only the absorption coefficients are specified
-                    if hdr[0] == 1:
-                        data = np.reshape(data, [hdr[1], 2])
+                    if iformat == 1:
+                        data = np.reshape(data, [nlam, 2])
                         self.wav.append(data[:, 0])
                         self.freq.append(nc.cc / data[:, 0] * 1e4)
                         self.kabs.append(data[:, 1])
@@ -363,8 +375,8 @@ class radmc3dDustOpac(object):
                         self.phase_g.append([-999.])
 
                     # If the absorption and scattering coefficients are specified
-                    elif hdr[0] == 2:
-                        data = np.reshape(data, [hdr[1], 3])
+                    elif iformat == 2:
+                        data = np.reshape(data, [nlam, 3])
                         self.wav.append(data[:, 0])
                         self.freq.append(nc.cc / data[:, 0] * 1e4)
                         self.kabs.append(data[:, 1])
@@ -373,8 +385,8 @@ class radmc3dDustOpac(object):
 
                     # If the absorption and scattering coefficients and also the scattering phase
                     # function are specified
-                    elif hdr[0] == 3:
-                        data = np.reshape(data, [hdr[1], 4])
+                    elif iformat == 3:
+                        data = np.reshape(data, [nlam, 4])
                         self.wav.append(data[:, 0])
                         self.freq.append(nc.cc / data[:, 0] * 1e4)
                         self.kabs.append(data[:, 1])

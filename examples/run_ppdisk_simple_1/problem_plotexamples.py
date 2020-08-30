@@ -3,9 +3,9 @@ import numpy as np
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import pyplot as plt
 from matplotlib import cm
-from radmc3dPy.image import *    # Make sure that the shell variable PYTHONPATH points to the RADMC-3D python directory
-from radmc3dPy.analyze import *  # Make sure that the shell variable PYTHONPATH points to the RADMC-3D python directory
-from radmc3dPy.natconst import * # Make sure that the shell variable PYTHONPATH points to the RADMC-3D python directory
+from radmc3dPy.image import *
+from radmc3dPy.analyze import *
+from radmc3dPy.natconst import *
 
 #
 # Make sure to have done the following beforhand:
