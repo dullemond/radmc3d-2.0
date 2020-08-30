@@ -1,0 +1,4 @@
+This is a protoplanetary disk model, similar to run_ppdisk_simple_1/ but for a
+Herbig Ae star. Here we demonstrate how to refine the radial grid.
+
+2020-08-30
