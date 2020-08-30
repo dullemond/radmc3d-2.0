@@ -3,11 +3,6 @@
 #
 import numpy as np
 #
-# Import plotting libraries (start Python with ipython --matplotlib)
-#
-#from mpl_toolkits.mplot3d import axes3d
-#from matplotlib import pyplot as plt
-#
 # Some natural constants
 #
 au  = 1.49598e13     # Astronomical Unit       [cm]
