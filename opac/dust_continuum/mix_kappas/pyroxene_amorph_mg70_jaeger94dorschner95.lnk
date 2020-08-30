@@ -1,10 +1,11 @@
 # Optical constants for amorphous pyroxene with 70% Mg and 30% Fe. From
 # Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655.
+# Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520.
 # This file was downloaded from the Jena database:
 # http://www.astro.uni-jena.de/Laboratory/OCDB/amsilicates.html
 # http://www.astro.uni-jena.de/Laboratory/OCDB/data/silicate/amorph/pyrmg70.lnk
 # The material density is 3.01 g/cm^3.
-# When you use this file, please cite the above paper.
+# When you use this file, please cite the above papers.
 # Columns are: lambda [micron], n, k
      0.20000    1.696000    0.032659
      0.22000    1.672920    0.057080
