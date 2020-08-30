@@ -8,6 +8,8 @@ logawidth = 0.05          # Smear out the grain size by 5% in both directions
 na        = 20            # Use 20 grain size samples
 chop      = 5.            # Remove forward scattering within an angle of 5 degrees
 optconst  = "pyrmg70"     # The optical constants name
+name      = "Amorphous Pyroxene with 70% Mg and 30% Fe"
+ref       = "Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655; Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520"
 matdens   = 3.0           # The material density in gram / cm^3
 extrapol  = True          # Extrapolate optical constants beyond its wavelength grid, if necessary
 verbose   = False         # If True, then write out status information
@@ -38,15 +40,15 @@ opac       = compute_opac_mie(optconstfile,matdens,agraincm,lamcm,theta=theta,
 # ...The full scattering matrix file
 #
 print("Writing the opacity to scatmat file")
-write_radmc3d_scatmat_file(opac,optconst)
+write_radmc3d_scatmat_file(opac,optconst,name,ref)
 #
 # ...Only the opacity file with simple scattering info
 #    (uncomment the next two commands if you wish to use this)
 #
 print("Writing the opacity to kappa file")
-write_radmc3d_kappa_file(opac,optconst)
+write_radmc3d_kappa_file(opac,optconst,name,ref)
 #
-# Now that RADMC-3D does not like it when both files are there, so
+# Note that RADMC-3D does not like it when both files are there, so
 # you must choose whether you want to do the full scattering or not
 # (advice: yes, do the full scattering, which is safer as it is more
 # accurate).
