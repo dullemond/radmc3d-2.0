@@ -87,7 +87,29 @@ You can run that straight from the command line in linux:
 
 No plots will be made when using example_radmc3d_opacities.py; it will only
 write the file dustkapscatmat_pyrmg70.inp which is an example of an opacity
-file needed by the RADMC-3D code.
+file needed by the RADMC-3D code. But you can read these opacities in
+with the radmc3dPy package:
+
+   from radmc3dPy.analyze import readOpac
+   o=readOpac(ext='pyrmg70')
+   s=readOpac(ext='pyrmg70',scatmat=True)
+   import matplotlib.pyplot as plt
+   plt.figure()
+   plt.loglog(o.wav[0],o.kabs[0],label='Absorption')
+   plt.loglog(o.wav[0],o.ksca[0],label='Scattering')
+   plt.xlabel(r'$\lambda\;[\mu\mathrm{m}]$')
+   plt.ylabel(r'$\kappa_\lambda\;[\mathrm{cm}^2/\mathrm{s}]$')
+   plt.legend()
+   plt.figure()
+   ilam = 100
+   plt.plot(s.scatang[0],s.z11[0][ilam,:]/s.ksca[0][ilam])
+   plt.xlabel(r'$\theta\;[\mathrm{deg}]$')
+   plt.ylabel(r'$Z_{11}/\kappa_{\mathrm{scat}}$')
+   lamstr = ('{0:6.2f}'.format(o.wav[0][ilam])).strip()
+   title  = r'$\lambda\;=\;'+lamstr+'\;\mu\mathrm{m}$'
+   plt.title(title)
+
+for instance.
 
 19.02.2017
 
