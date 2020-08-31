@@ -1,0 +1,35 @@
+To install the radmc3d_tools, you have to point the PYTHONPATH to this directory
+(or one of its parent directories).
+
+However, the standard installation by the RADMC-3D package is done slightly
+differently:
+
+  cd ../../
+
+to bring you back to the root of the RADMC-3D package, then:
+
+  cd src/
+  make install
+
+This should be it!
+
+Explanation:
+
+The src/install.perl script will copy the radmc3d_tools package to the following
+directory in your $HOME:
+
+  $HOME/bin/python/radmc3d_tools/
+
+and it will make this directory if it is not yet there. Then you just need to
+point your PYTHONPATH to $HOME/bin/python/ and you're done.  To do this in the
+bash shell add the following line to your .bashrc file (which is a file that
+should be located in your $HOME directory; if not, create it):
+
+  export PYTHONPATH='$HOME/bin/python/:$PYTHONPATH'
+
+If you use (in the future) a different version of RADMC-3D, you do not need to
+add each version of RADMC-3D to the PYTHONPATH. The latest "make install"
+installation will automatically make that version current, by copying the
+relevant stuff into the $HOME/bin/ directory.
+
+2020-08-31
