@@ -29,7 +29,7 @@ nufnu = nu*fnu
 plt.plot(lam,nufnu)
 plt.xscale('log')
 plt.yscale('log')
-plt.axis([1e-1, 1e4, 1e-10, 1e-4])
+plt.axis([1e-1, 1e4, 1e-8, 1e-2])
 plt.xlabel('$\lambda\; [\mu \mathrm{m}$]')
 plt.ylabel('$\\nu F_\\nu \; [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{s}^{-1}]$')
 plt.show()
