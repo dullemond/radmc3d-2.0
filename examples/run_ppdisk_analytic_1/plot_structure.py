@@ -70,9 +70,10 @@ plt.legend()
 # and compare to the analytic estimate
 #
 plt.figure()
-plt.semilogx(d.grid.x/au,d.dusttemp[:,0,0],':',label='RADMC-3D temperature (surface)')
-plt.semilogx(d.grid.x/au,d.dusttemp[:,-1,0],label='RADMC-3D temperature (midplane)')
-plt.semilogx(p.r/au,p.tmid,label='Analytic temperature (midplane)')
+plt.semilogx(d.grid.x/au,d.dusttemp[:,0,0],':',label='RADMC-3D temperature (surface)',color='C0')
+plt.semilogx(d.grid.x/au,d.dusttemp[:,-1,0],label='RADMC-3D temperature (midplane)',color='C1')
+plt.semilogx(d.grid.x/au,d.dusttemp[:,-1,0],'.',color='C1')
+plt.semilogx(p.r/au,p.tmid,label='Analytic temperature (midplane)',color='C2')
 plt.xlabel(r'$r\;[\mathrm{au}]$')
 plt.ylabel(r'$T\;[\mathrm{K}]$')
 plt.ylim((0,190))

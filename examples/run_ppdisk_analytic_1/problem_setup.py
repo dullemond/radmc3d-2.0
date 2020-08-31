@@ -75,7 +75,8 @@ sigmad   = sigmad0 * (r/au)**plsig     # The surface density profile
 # Vertical grid parameters (theta-grid in spherical coordinates)
 #
 ntheta   = 32
-thetaup  = np.pi*0.5 - 0.7e0
+zrmax    = 0.5
+thetaup  = np.pi*0.5 - 0.5e0
 
 #
 # Make the theta and phi coordinates
