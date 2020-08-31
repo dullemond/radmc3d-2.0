@@ -38,7 +38,7 @@ radmc3d
 test*
 .DS_Store
 models/
-test/
+!python/radmc3dPy/radmc3dPy/models
 TT*
 tt*
 selftest
