@@ -36,6 +36,23 @@ radmc3dPy relies on several auxiliary but widely used python packages:
     numpy           - used for array operations
     astropy.io.fits - previously known as PyFits, ython library for fits file handling
     
-    
-                
+TROUBLE SHOOTING:
+-----------------
 
+If you have used an earlier version of RADMC-3D and/or radmc3dPy, make sure
+that there is no old version of radmc3dPy conflicting with your current one:
+check that there is NO directory
+
+  $HOME/bin/python/radmc3dPy/
+
+If there is, then do this:
+
+  cd $HOME/bin/python
+  mv radmc3dPy old_radmc3dPy
+
+Explanation: In version 0.41 of RADMC-3D, the radmc3dPy package was put
+there. But in version 2.0 of RADMC-3D, the radmc3dPy package is installed
+straight into your Python distribution. To avoid a mix-up (given that the
+$HOME/bin/python/ directory will be in your PYTHONPATH), you need to remove the
+one in $HOME/bin/python. Note that with the new installation method, you can
+still use radmc3dPy with version 0.41 of RADMC-3D or older.
