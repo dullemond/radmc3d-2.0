@@ -32,3 +32,5 @@ im_1 = readImage()
 plt.figure()
 plotImage(im_1,au=True,log=True,vmax=-10,vmin=-15,bunit='inu',cmap='hot')
 plt.text(-90,80,'With isotropic scattering',color='white')
+
+plt.show()
