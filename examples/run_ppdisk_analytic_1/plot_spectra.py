@@ -22,14 +22,15 @@ from radmc3dPy.natconst import *
 os.system("radmc3d sed incl 60 phi 30")
 fig3  = plt.figure()
 s     = readSpectrum()
+star  = readStars()
 lam   = s[:,0]
 nu    = 1e4*cc/lam
 fnu   = s[:,1]
 nufnu = nu*fnu
-plt.plot(lam,nufnu)
-plt.xscale('log')
-plt.yscale('log')
-plt.axis([1e-1, 1e4, 1e-10, 1e-4])
+plt.loglog(lam,nufnu,label='Total SED')
+plt.loglog(lam,nu*star.fnustar[:,0],label='Star')
+plt.axis([1e-1, 1e4, 1e-8, 1e-2])
 plt.xlabel('$\lambda\; [\mu \mathrm{m}$]')
 plt.ylabel('$\\nu F_\\nu \; [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{s}^{-1}]$')
+plt.legend()
 plt.show()
