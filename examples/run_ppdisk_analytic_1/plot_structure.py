@@ -33,9 +33,14 @@ ax   = fig1.gca(projection='3d')
 ax.plot_surface(np.log10(rr)/au, zzr, np.log10(rhod), rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=1, antialiased=False)
 
 #
+# Set the radii where to make the following plots
+#
+rpl = np.array([10,21,44,90])*au   # Radii where to make the plots
+irr = np.array(np.interp(rpl,d.grid.x,np.arange(len(d.grid.x)))+0.5,dtype=int)  # Nearest radial grid point
+
+#
 # Plot the vertical density structure at different radii
 #
-irr = [0,10,20,30]
 plt.figure()
 for ir in irr:
     r    = d.grid.x[ir]
@@ -50,7 +55,6 @@ plt.legend()
 #
 # Plot the vertical temperature structure at different radii
 #
-irr = [0,10,20,30]
 plt.figure()
 for ir in irr:
     r    = d.grid.x[ir]
@@ -71,6 +75,7 @@ plt.semilogx(d.grid.x/au,d.dusttemp[:,-1,0],label='RADMC-3D temperature (midplan
 plt.semilogx(p.r/au,p.tmid,label='Analytic temperature (midplane)')
 plt.xlabel(r'$r\;[\mathrm{au}]$')
 plt.ylabel(r'$T\;[\mathrm{K}]$')
+plt.ylim((0,190))
 plt.legend()
 
 plt.show()

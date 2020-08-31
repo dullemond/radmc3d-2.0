@@ -3,6 +3,20 @@
 #
 import numpy as np
 #
+# A simple grid refinement function
+#
+def grid_refine_inner_edge(x_orig,nlev,nspan):
+    x     = x_orig.copy()
+    rev   = x[0]>x[1]
+    for ilev in range(nlev):
+        x_new = 0.5 * ( x[1:nspan+1] + x[:nspan] )
+        x_ref = np.hstack((x,x_new))
+        x_ref.sort()
+        x     = x_ref
+        if rev:
+            x = x[::-1]
+    return x
+#
 # Some natural constants
 #
 au  = 1.49598e13     # Astronomical Unit       [cm]
@@ -41,8 +55,12 @@ flang    = 0.05      # The assumed constant radiative incidence angle
 nr       = 32        # Nr of radial grid points
 rin      = 10*au     # Inner radius
 rout     = 100*au    # Outer radius
+nlev_rin = 12        # Grid refinement at the inner edge: nr of cycles
+nspan_rin= 3         # Grid refinement at the inner edge: nr of cells each cycle
 ri       = np.logspace(np.log10(rin),np.log10(rout),nr+1)
-rc       = 0.5 * ( ri[0:nr] + ri[1:nr+1] )
+ri       = grid_refine_inner_edge(ri,nlev_rin,nspan_rin)   # Refinement at inner edge
+rc       = 0.5 * ( ri[:-1] + ri[1:] )
+nr       = len(rc)   # Recompute nr, because of refinement at inner edge
 r        = rc        # The radial grid of the analytic disk model
 lstar    = 4*pi*rstar**2*ss*tstar**4   # Stellar luminosity
 firr     = flang*lstar/(4*pi*r**2)     # Irradiative flux
