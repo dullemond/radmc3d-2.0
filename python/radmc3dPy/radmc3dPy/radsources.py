@@ -218,7 +218,10 @@ class radmc3dRadSources(object):
             self.mstar = []
             self.tstar = []
             for istar in range(self.nstar):
-                dum = rfile.readline().split()
+                dum = rfile.readline()
+                while dum.strip()=='':
+                    dum = rfile.readline()
+                dum = dum.split()
                 self.rstar.append(float(dum[0]))
                 self.mstar.append(float(dum[1]))
                 self.pstar.append([float(dum[2]), float(dum[3]), float(dum[4])])
