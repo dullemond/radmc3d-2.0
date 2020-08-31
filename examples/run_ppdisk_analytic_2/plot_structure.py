@@ -47,7 +47,7 @@ for ir in irr:
     rstr = '{0:4.0f}'.format(r/au)
     rstr = 'r = '+rstr.strip()+' au'
     plt.semilogy(zzr[ir,:],rhod[ir,:],label=rstr)
-plt.ylim((1e-25,1e-15))
+plt.ylim((1e-22,1e-12))
 plt.xlabel(r'$\pi/2-\theta\simeq z/r$')
 plt.ylabel(r'$\rho_{\mathrm{dust}}\;[\mathrm{g}/\mathrm{cm}^3]$')
 plt.legend()
