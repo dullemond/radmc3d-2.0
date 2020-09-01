@@ -655,17 +655,17 @@ def plotSpectrum(a, ev=False, kev=False, micron=False, jy=False, lsun=False,
         if not jy:
             if not sed:
                 lumfact = 1.0
-                ytitle = '$F_{\\nu}\; [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\, \mathrm{s}^{-1}]$'
+                ytitle = r'$F_{\nu}\; [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{Hz}^{-1}\, \mathrm{s}^{-1}]$'
             else:
                 lumfact = 1.0 * freq
-                ytitle = '$\\nu F_{\\nu}\; [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{s}^{-1}]$'
+                ytitle = r'$\nu F_{\nu}\; [\mathrm{erg}\,\mathrm{cm}^{-2}\,\mathrm{s}^{-1}]$'
         else:
             if not sed:
                 lumfact = 1e+23
-                ytitle = '$F_{\\nu} [Jy]$'
+                ytitle = r'$F_{\nu} [Jy]$'
             else:
                 lumfact = 1e+23 * freq
-                ytitle = '$\\nu F_{\\nu} [JyHz]$'
+                ytitle = r'$\nu F_{\nu} [JyHz]$'
     else:
         #
         # Plot spectrum as luminosity
@@ -677,14 +677,14 @@ def plotSpectrum(a, ev=False, kev=False, micron=False, jy=False, lsun=False,
 
         if not sed:
             lumfact = 1.e0
-            ytitle = 'L_{\\nu}\; [\mathrm{erg}\,\mathrm{Hz}^{-1}\, \mathrm{s}^{-1}]'
+            ytitle = r'$L_{\nu}\; [\mathrm{erg}\,\mathrm{Hz}^{-1}\, \mathrm{s}^{-1}]$'
         else:
             if not lsun:
                 lumfact = 1.0 * freq
-                ytitle = '\\nu L_{\\nu}\; [\mathrm{erg}\, \mathrm{s}^{-1}]'
+                ytitle = r'$\nu L_{\nu}\; [\mathrm{erg}\, \mathrm{s}^{-1}]$'
             else:
                 lumfact = freq * 2.5956986e-34
-                ytitle = '\\nu L_{\\nu}\; [L_{\odot}]'
+                ytitle = r'$\nu L_{\nu}\; [L_{\odot}]$'
 
     #
     # The data on the y axis
