@@ -502,7 +502,7 @@ def readMol(mol=None, fname=None):
 def plotSpectrum(a, ev=False, kev=False, micron=False, jy=False, lsun=False,
                  lnu=False, nulnu=False, fnu=False, nufnu=False, dpc=1.e0,
                  oplot=False, xlg=False, ylg=False, obs=False,
-                 mol=None, ilin=None):
+                 mol=None, ilin=None, **kwargs):
     """Plot the spectrum / SED 
 
     Parameters
@@ -704,7 +704,7 @@ def plotSpectrum(a, ev=False, kev=False, micron=False, jy=False, lsun=False,
     #
     # Now plot
     #
-    plt.plot(xcoord, ycoord)
+    plt.plot(xcoord, ycoord, **kwargs)
 
 
 def gmass(x=None, y=None, z=None, dx=None, dy=None, dz=None, model=None, ppar=None, **kwargs):
