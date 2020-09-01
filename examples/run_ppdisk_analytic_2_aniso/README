@@ -1,0 +1,66 @@
+Here we demonstrate the effect of anisotropic scattering on images at short
+wavelengths. Since the models so far have used 0.1 micron size grains, and for
+comparison reasons we want to stick to that, we choose here to make the images
+at a very short wavelength (0.2 microns) in order to demonstrate what happens
+when you have very strongly forward-peaked scattering. For lambda = 1 micron,
+the given scattering opacity would be not very strongly anisotropic.
+
+NOTE: Because the dustkapscatmat_silicate.inp file is rather big, we copy
+      it from ../run_simple_2_scatmat/ to here, so that the RADMC-3D
+      package does not become too bulky. This is done automatically
+      in problem_setup.py
+
+To use the full scattering phase function, including the polarization, we use
+the dustkapscatmat_silicate.inp opacity file, which contains the angular
+differential cross sections at all scattering angles. The file is therefore much
+larger than dustkappa_silicate.inp used in the other examples.
+
+Note: The full scattering mode does not work with mirror symmetry in the
+midplane. So now the theta-grid must span all the way from "above the disk"
+to "below the disk". The number of theta-gridpoints is therefore now double
+as high as before.
+
+Now, as usual set up the model and compute the dust temperature:
+
+   python problem_setup.py
+   radmc3d mctherm
+
+Now in Python make the image figures:
+
+   %run plot_images.py
+
+This will create two images: one with isotropic scattering assumption and one
+with full scattering treatment (anisotropic). The forwardly-peaked scattering is
+clearly seen.
+
+You may wonder why the full scattering Monte Carlo is so very much slower than
+the isotropic treatment. The reason is that for isotropic scattering, the
+scattering source function S_nu^scat is angle-independent, while for the full
+scattering it is angle-dependent, and thus we need to store (for each cell
+in (r,theta)) not just one value S_nu^scat, but an entire array of values
+S_nu^scat(phi), where phi is the third dimension (azimuth). Reason: Given
+that we (the observer) are looking at the disk from a particular angle
+(phi=0), the axisymmetry for the scattering source function is broken. For
+non-isotropic scattering we actually need full 3-D! In earlier versions of
+RADMC-3D full scattering was therefore simply forbidden in 2-D axisymmetric
+models. You needed to make a full 3-D model in (r,theta,phi). However, for
+the thermal Monte Carlo (where there is no observer breaking the symmetry)
+this required then a lot more computational effort. Moreover, it is simply
+inconvenient to handle 3-D models if most of the model is axisymmetric. So
+now RADMC-3D allows 2-D models to use non-axisymmetric scattering. The trick
+is simply that for scattering it (internally) creates a 3-D array for the
+scattering source function (and only for that; all other arrays stay 2-D).
+
+Note: If you use nphot=10000 you (obviously) see stronger noise at the far end
+of the full scattering image. These are the multiple-scattered photon packages
+leaving their mark.
+
+Note that the image is _not_ left-right-symmetric. Given that the model is
+axisymmetric, this may look wrong. The observer may break axial symmetry, but
+not mirror symmetry (except for the polarization). However, the photon packages
+move in full 3-D. The photon noise is therefore not strictly axisymmetric. If a
+photon package initially moves away from us, then gets scattered to the left,
+then its contribution to the source function will be different on the left than
+on the right side of the disk.
+
+2020-09-01
