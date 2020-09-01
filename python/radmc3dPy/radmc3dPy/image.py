@@ -1691,7 +1691,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
 def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None, pointau=None,
               fluxcons=True, nostar=False, noscat=False,
               widthkms=None, linenlam=None, vkms=None, iline=None,
-              lambdarange=None, nlam=None, stokes=False, binary=False):
+              lambdarange=None, nlam=None, stokes=False, binary=False, setthreads=None):
     """Calculates a rectangular image with RADMC-3D 
 
     Parameters
@@ -1755,6 +1755,10 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
     binary      : bool, optional
                   If True the output image will be written in a C-style binary format, if False
                   the image format will be ASCII
+
+    setthreads  : integer, optional
+                  If set, then do the Monte Carlo with OpenMP parallellization, with 
+                  the integer setthreads being the number of parallel threads.
 
     Example
     -------
@@ -1862,6 +1866,9 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
 
     if noscat:
         com = com + ' noscat'
+
+    if setthreads is not None:
+        com = com + ' setthreads {}'.format(setthreads)
 
     #
     # Print the command
