@@ -187,7 +187,7 @@ with open('dustopac.inp','w+') as f:
     f.write('============================================================================\n')
     f.write('10              Way in which this dust species is read\n')
     f.write('0               0=Thermal grain\n')
-    f.write('silicate        Extension of name of dustkappa_***.inp file\n')
+    f.write('silicate        Extension of name of dustkapscatmat_***.inp file\n')
     f.write('----------------------------------------------------------------------------\n')
 #
 # Write the radmc3d.inp control file
