@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from radmc3d_tools.subbox import *
+from radmc3dPy.subbox import *
 from natconst import *
 
 #

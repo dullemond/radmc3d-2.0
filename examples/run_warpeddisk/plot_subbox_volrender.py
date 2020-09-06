@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 import numpy as np
-from radmc3d_tools.subbox import *
+from radmc3dPy.subbox import *
 from natconst import *
 
 #
