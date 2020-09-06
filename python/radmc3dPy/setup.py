@@ -16,6 +16,10 @@ except:
 import os, sys
 from subprocess import Popen, PIPE
 
+home = os.path.expanduser("~")
+oldpath = home+"/bin/python/radmc3dPy"
+assert not (os.path.isdir(oldpath)), "Found an old version of radmc3dPy in your home directory: ~/bin/python/radmc3dPy/. Please remove that (e.g. by renaming that directory to ~/bin/python/old_radmc3dPy/) before retrying the installation."
+
 def findFiles(src_dir, *wildcards):
 
     src_dir = src_dir.strip()
