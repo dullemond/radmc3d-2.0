@@ -1,10 +1,18 @@
 
-RADMC-3D Python module v0.30.2
+RADMC-3D Python module version 2.00
+
+(version 2.00 is the direct descendent of version 0.30.2)
 
 
 Attila Juhasz 
 Institute of Astronomy, University of Cambridge
 juhasz@ast.cam.ac.uk
+
+with contributions and maintainance by
+Cornelis Dullemond
+Heidelberg University
+dullemond@uni-heidelberg.de
+
 
 INSTALLATION
 ------------

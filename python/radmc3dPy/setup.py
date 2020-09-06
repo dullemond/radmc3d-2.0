@@ -16,6 +16,10 @@ except:
 import os, sys
 from subprocess import Popen, PIPE
 
+home = os.path.expanduser("~")
+oldpath = home+"/bin/python/radmc3dPy"
+assert not (os.path.isdir(oldpath)), "Found an old version of radmc3dPy in your home directory: ~/bin/python/radmc3dPy/. Please remove that (e.g. by renaming that directory to ~/bin/python/old_radmc3dPy/) before retrying the installation."
+
 def findFiles(src_dir, *wildcards):
 
     src_dir = src_dir.strip()
@@ -76,20 +80,20 @@ for i in range(len(python_files)):
 
 if ext is not None:
     setup(name='radmc3dPy',
-          version='0.30.2',
+          version='2.00',
           requires=['numpy', 'scipy', 'matplotlib', 'astropy'], 
           description='Python module for RADMC3D',
           author='Attila Juhasz',
-          author_email='juhasz@ast.cam.ac.uk',
+          author_email='at.juhasz01@gmail.com',
           packages=packageNames,
           ext_modules=[ext])
 else:
     setup(name='radmc3dPy',
-          version='0.30.2',
+          version='2.00',
           requires=['numpy', 'scipy', 'matplotlib', 'astropy'], 
           description='Python module for RADMC3D',
           author='Attila Juhasz',
-          author_email='juhasz@ast.cam.ac.uk',
+          author_email='at.juhasz01@gmail.com',
           packages=packageNames)
 
 
