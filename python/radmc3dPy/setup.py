@@ -76,20 +76,20 @@ for i in range(len(python_files)):
 
 if ext is not None:
     setup(name='radmc3dPy',
-          version='0.30.2',
+          version='2.00',
           requires=['numpy', 'scipy', 'matplotlib', 'astropy'], 
           description='Python module for RADMC3D',
           author='Attila Juhasz',
-          author_email='juhasz@ast.cam.ac.uk',
+          author_email='at.juhasz01@gmail.com',
           packages=packageNames,
           ext_modules=[ext])
 else:
     setup(name='radmc3dPy',
-          version='0.30.2',
+          version='2.00',
           requires=['numpy', 'scipy', 'matplotlib', 'astropy'], 
           description='Python module for RADMC3D',
           author='Attila Juhasz',
-          author_email='juhasz@ast.cam.ac.uk',
+          author_email='at.juhasz01@gmail.com',
           packages=packageNames)
 
 
