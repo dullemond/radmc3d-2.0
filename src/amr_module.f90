@@ -3459,12 +3459,15 @@ subroutine amr_subbox_3d(nv,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,            &
      endif
   endif
   !
-  sinphi1  = sin(phi1)
-  cosphi1  = cos(phi1)
-  sintheta = sin(theta)
-  costheta = cos(theta)
-  sinphi2  = sin(phi2)
-  cosphi2  = cos(phi2)
+  ! NOTE: As of version 2.0 of RADMC-3D these angles are in degrees, no
+  !       longer in radian
+  !
+  sinphi1  = sin(phi1*pi/180.)
+  cosphi1  = cos(phi1*pi/180.)
+  sintheta = sin(theta*pi/180.)
+  costheta = cos(theta*pi/180.)
+  sinphi2  = sin(phi2*pi/180.)
+  cosphi2  = cos(phi2*pi/180.)
   do iz=1,nz
      do iy=1,ny
         do ix=1,nx
@@ -3583,12 +3586,15 @@ subroutine amr_subbox2_3d(nv1,nv2,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,      &
      endif
   endif
   !
-  sinphi1  = sin(phi1)
-  cosphi1  = cos(phi1)
-  sintheta = sin(theta)
-  costheta = cos(theta)
-  sinphi2  = sin(phi2)
-  cosphi2  = cos(phi2)
+  ! NOTE: As of version 2.0 of RADMC-3D these angles are in degrees, no
+  !       longer in radian
+  !
+  sinphi1  = sin(phi1*pi/180.)
+  cosphi1  = cos(phi1*pi/180.)
+  sintheta = sin(theta*pi/180.)
+  costheta = cos(theta*pi/180.)
+  sinphi2  = sin(phi2*pi/180.)
+  cosphi2  = cos(phi2*pi/180.)
   do iz=1,nz
      do iy=1,ny
         do ix=1,nx
