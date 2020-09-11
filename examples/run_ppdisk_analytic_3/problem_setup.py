@@ -42,7 +42,7 @@ pstar    = np.array([0.,0.,0.])
 #
 # Disk parameters
 #
-sigmag0  = 1e1               # Sigma gas at 1 AU
+sigmag0  = 1e2               # Sigma gas at 1 AU
 sigmad0  = sigmag0 * 0.01    # Sigma dust at 1 AU
 plsig    = -1.0e0            # Powerlaw of the surface density
 
@@ -72,6 +72,17 @@ hpr      = hp/r                        # The dimensionless hp
 sigmad   = sigmad0 * (r/au)**plsig     # The surface density profile
 
 #
+# Let's have two dust species: one consisting of 0.1 micron dust grains,
+# which we assume will be vertically well-mixed with the gas. The other
+# consisting of 100 micron dust grains which forms a settled dust midplane
+# layer that is 'settfact' settled.
+#
+fracbig  = 0.90              # Fraction of dust that is the big grain dust
+settfact = 0.1               # Settling factor of the big grains
+hp_biggr = hp*settfact
+hpr_biggr= hpr*settfact
+
+#
 # Vertical grid parameters (theta-grid in spherical coordinates)
 #
 ntheta   = 32
@@ -79,12 +90,23 @@ zrmax    = 0.5
 thetaup  = np.pi*0.5 - zrmax
 
 #
-# Make the theta and phi coordinates
+# Make the theta coordinate, and refine near the midplane
+# (to resolve the dust layer)
+#
+thetai   = np.linspace(thetaup,0.5e0*np.pi,ntheta+1)
+zr       = thetai[::-1]
+nlev_zr  = 5         # Grid refinement at the midplane: nr of cycles
+nspan_zr = 3         # Grid refinement at the midplane: nr of cells each cycle
+zr       = grid_refine_inner_edge(zr,nlev_zr,nspan_zr)
+thetai   = zr[::-1]
+thetac   = 0.5 * ( thetai[:-1] + thetai[1:] )
+ntheta   = len(thetac)
+
+#
+# Make the phi coordinate
 #
 nphi     = 1
-thetai   = np.linspace(thetaup,0.5e0*np.pi,ntheta+1)
 phii     = np.linspace(0.e0,np.pi*2.e0,nphi+1)
-thetac   = 0.5 * ( thetai[0:ntheta] + thetai[1:ntheta+1] )
 phic     = 0.5 * ( phii[0:nphi] + phii[1:nphi+1] )
 
 #
@@ -101,11 +123,14 @@ zr       = np.pi/2.e0 - qq[1]
 sigmad_3d  = np.meshgrid(sigmad,thetac,phic,indexing='ij')[0]
 hh         = np.meshgrid(hp,thetac,phic,indexing='ij')[0]
 hhr        = np.meshgrid(hpr,thetac,phic,indexing='ij')[0]
+hh_biggr   = np.meshgrid(hp_biggr,thetac,phic,indexing='ij')[0]
+hhr_biggr  = np.meshgrid(hpr_biggr,thetac,phic,indexing='ij')[0]
 
 #
 # Make the dust density model
 #
-rhod     = ( sigmad_3d / (np.sqrt(2.e0*np.pi)*hh) ) * np.exp(-(zr**2/hhr**2)/2.e0)
+rhod_smlgr = (1.-fracbig) * ( sigmad_3d / (np.sqrt(2.e0*np.pi)*hh) ) * np.exp(-(zr**2/hhr**2)/2.e0)
+rhod_biggr = fracbig *      ( sigmad_3d / (np.sqrt(2.e0*np.pi)*hh_biggr) ) * np.exp(-(zr**2/hhr_biggr**2)/2.e0)
 
 #
 # Monte Carlo parameters
@@ -158,7 +183,7 @@ with open('amr_grid.inp','w+') as f:
     for value in ri:
         f.write('%13.6e\n'%(value))      # X coordinates (cell walls)
     for value in thetai:
-        f.write('%13.6e\n'%(value))      # Y coordinates (cell walls)
+        f.write('%17.10e\n'%(value))     # Y coordinates (cell walls) (use higher precision here)
     for value in phii:
         f.write('%13.6e\n'%(value))      # Z coordinates (cell walls)
 #
@@ -167,8 +192,11 @@ with open('amr_grid.inp','w+') as f:
 with open('dust_density.inp','w+') as f:
     f.write('1\n')                       # Format number
     f.write('%d\n'%(nr*ntheta*nphi))     # Nr of cells
-    f.write('1\n')                       # Nr of dust species
-    data = rhod.ravel(order='F')         # Create a 1-D view, fortran-style indexing
+    f.write('2\n')                       # Nr of dust species
+    data = rhod_smlgr.ravel(order='F')   # Create a 1-D view, fortran-style indexing
+    data.tofile(f, sep='\n', format="%13.6e")
+    f.write('\n')
+    data = rhod_biggr.ravel(order='F')   # Create a 1-D view, fortran-style indexing
     data.tofile(f, sep='\n', format="%13.6e")
     f.write('\n')
 #
@@ -176,11 +204,15 @@ with open('dust_density.inp','w+') as f:
 #
 with open('dustopac.inp','w+') as f:
     f.write('2               Format number of this file\n')
-    f.write('1               Nr of dust species\n')
+    f.write('2               Nr of dust species\n')
     f.write('============================================================================\n')
     f.write('1               Way in which this dust species is read\n')
     f.write('0               0=Thermal grain\n')
-    f.write('silicate        Extension of name of dustkappa_***.inp file\n')
+    f.write('0.1_micron      Extension of name of dustkappa_***.inp file\n')
+    f.write('----------------------------------------------------------------------------\n')
+    f.write('1               Way in which this dust species is read\n')
+    f.write('0               0=Thermal grain\n')
+    f.write('100_micron      Extension of name of dustkappa_***.inp file\n')
     f.write('----------------------------------------------------------------------------\n')
 #
 # Write the radmc3d.inp control file

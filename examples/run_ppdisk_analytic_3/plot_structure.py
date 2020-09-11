@@ -1,4 +1,3 @@
-import problem_setup as p
 import numpy as np
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import pyplot as plt
@@ -22,15 +21,11 @@ from radmc3dPy.natconst import *
 d     = readData()
 rr,tt = np.meshgrid(d.grid.x,d.grid.y,indexing='ij')
 zzr   = np.pi/2-tt
-rhod  = d.rhodust[:,:,0,0]
-temp  = d.dusttemp[:,:,0,0]
-
-#
-# View a surface plot of the density structure
-#
-fig1 = plt.figure()
-ax   = fig1.gca(projection='3d')
-ax.plot_surface(np.log10(rr)/au, zzr, np.log10(rhod), rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=1, antialiased=False)
+rhod_smlgr  = d.rhodust[:,:,0,0]
+rhod_biggr  = d.rhodust[:,:,0,1]
+if(len(d.dusttemp)>0):
+    temp_smlgr  = d.dusttemp[:,:,0,0]
+    temp_biggr  = d.dusttemp[:,:,0,1]
 
 #
 # Set the radii where to make the following plots
@@ -42,12 +37,40 @@ irr = np.array(np.interp(rpl,d.grid.x,np.arange(len(d.grid.x)))+0.5,dtype=int)  
 # Plot the vertical density structure at different radii
 #
 plt.figure()
+icol = 0
 for ir in irr:
     r    = d.grid.x[ir]
     rstr = '{0:4.0f}'.format(r/au)
     rstr = 'r = '+rstr.strip()+' au'
-    plt.semilogy(zzr[ir,:],rhod[ir,:],label=rstr)
+    rstr_smlgr = rstr+' (small grains)'
+    rstr_biggr = rstr+' (big grains)'
+    plt.semilogy(zzr[ir,:],rhod_smlgr[ir,:],label=rstr_smlgr,color='C{}'.format(icol))
+    plt.semilogy(zzr[ir,:],rhod_biggr[ir,:],'--',label=rstr_biggr,color='C{}'.format(icol))
+    icol += 1
 plt.ylim((1e-22,1e-12))
+plt.xlabel(r'$\pi/2-\theta\simeq z/r$')
+plt.ylabel(r'$\rho_{\mathrm{dust}}\;[\mathrm{g}/\mathrm{cm}^3]$')
+plt.legend()
+
+#
+# Same as above, but now with grid points, and zoom-in to midplane to
+# see the effect of the vertical grid refinement
+#
+plt.figure()
+icol = 0
+for ir in irr:
+    r    = d.grid.x[ir]
+    rstr = '{0:4.0f}'.format(r/au)
+    rstr = 'r = '+rstr.strip()+' au'
+    rstr_smlgr = rstr+' (small grains)'
+    rstr_biggr = rstr+' (big grains)'
+    plt.semilogy(zzr[ir,:],rhod_smlgr[ir,:],color='C{}'.format(icol))
+    plt.semilogy(zzr[ir,:],rhod_biggr[ir,:],'--',color='C{}'.format(icol))
+    plt.semilogy(zzr[ir,:],rhod_smlgr[ir,:],'.',label=rstr_smlgr,color='C{}'.format(icol))
+    plt.semilogy(zzr[ir,:],rhod_biggr[ir,:],'o',label=rstr_biggr,color='C{}'.format(icol))
+    icol += 1
+plt.xlim((0,0.1))
+plt.ylim((1e-22,1e-10))
 plt.xlabel(r'$\pi/2-\theta\simeq z/r$')
 plt.ylabel(r'$\rho_{\mathrm{dust}}\;[\mathrm{g}/\mathrm{cm}^3]$')
 plt.legend()
@@ -55,28 +78,20 @@ plt.legend()
 #
 # Plot the vertical temperature structure at different radii
 #
-plt.figure()
-for ir in irr:
-    r    = d.grid.x[ir]
-    rstr = '{0:4.0f}'.format(r/au)
-    rstr = 'r = '+rstr.strip()+' au'
-    plt.plot(zzr[ir,:],temp[ir,:],label=rstr)
-plt.xlabel(r'$\pi/2-\theta\simeq z/r$')
-plt.ylabel(r'$T_{\mathrm{dust}}\;[\mathrm{K}]$')
-plt.legend()
-
-#
-# Plot the radial midplane and surface temperature,
-# and compare to the analytic estimate
-#
-plt.figure()
-plt.semilogx(d.grid.x/au,d.dusttemp[:,0,0],':',label='RADMC-3D temperature (surface)',color='C0')
-plt.semilogx(d.grid.x/au,d.dusttemp[:,-1,0],label='RADMC-3D temperature (midplane)',color='C1')
-plt.semilogx(d.grid.x/au,d.dusttemp[:,-1,0],'.',color='C1')
-plt.semilogx(p.r/au,p.tmid,label='Analytic temperature (midplane)',color='C2')
-plt.xlabel(r'$r\;[\mathrm{au}]$')
-plt.ylabel(r'$T\;[\mathrm{K}]$')
-plt.ylim((0,2100))
-plt.legend()
+if(len(d.dusttemp)>0):
+    plt.figure()
+    icol = 0
+    for ir in irr:
+        r    = d.grid.x[ir]
+        rstr = '{0:4.0f}'.format(r/au)
+        rstr = 'r = '+rstr.strip()+' au'
+        rstr_smlgr = rstr+' (small grains)'
+        rstr_biggr = rstr+' (big grains)'
+        plt.semilogy(zzr[ir,:],temp_smlgr[ir,:],label=rstr_smlgr,color='C{}'.format(icol))
+        plt.semilogy(zzr[ir,:],temp_biggr[ir,:],'--',label=rstr_biggr,color='C{}'.format(icol))
+        icol += 1
+    plt.xlabel(r'$\pi/2-\theta\simeq z/r$')
+    plt.ylabel(r'$T_{\mathrm{dust}}\;[\mathrm{K}]$')
+    plt.legend()
 
 plt.show()
