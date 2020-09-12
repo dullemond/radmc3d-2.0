@@ -34,9 +34,9 @@ program bhmakeopac
   doubleprecision, allocatable :: kappa_abs(:),kappa_sca(:),kappa_g(:)
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
   doubleprecision, allocatable :: agrain_cm(:),weight(:),mgrain(:)
-  integer :: nlam,ilam,nang180,nagr,ia,leng,nrcomments,icomment
+  integer :: nlam,ilam,nang180,nagr,ia,leng,nrcomments,icomment,iang
   doubleprecision :: agrain_cm_mean,logawidth,xigrain,dum(1:3)
-  doubleprecision :: siggeom,factor,wfact
+  doubleprecision :: siggeom,factor,wfact,chopforward
   character*160 :: filename,material,str0,str1
   logical :: notfinished
   PI=4.D0*ATAN(1.D0)
@@ -45,6 +45,7 @@ program bhmakeopac
   !
   REFMED = 1.d0
   errmax = 0.01
+  chopforward = 0.d0
   !
   ! Open parameter file
   !
@@ -57,6 +58,7 @@ program bhmakeopac
   read(1,*) xigrain
   read(1,*) nang180           ! Nr of angles between 0 and 180 degrees
   read(1,*,end=209) errmax
+  read(1,*,end=209) chopforward
 209 continue
   close(1)
   filename = trim(material)//".lnk"
@@ -272,6 +274,28 @@ program bhmakeopac
      else
         scalefact(ilam) = kappa_sca(ilam) / sum
         zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
+     endif
+     !
+     ! Do the "chopping" of excessive forward scattering
+     !
+     if(chopforward.gt.0.d0) then
+        iang = 0
+        do j=1,nan
+           if(angle(j).lt.chopforward) iang=j
+        enddo
+        if(iang.gt.0) then
+           iang = iang+1
+           do j=1,iang-1
+              zscat(1:6,j,ilam) = zscat(1:6,iang,ilam)
+           enddo
+           sum = 0.d0
+           do j=2,nan
+              sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
+                   abs(mu(j)-mu(j-1))
+           enddo
+           sum = sum * 4*PI
+           kappa_sca(ilam) = sum
+        endif
      endif
   enddo
   !
