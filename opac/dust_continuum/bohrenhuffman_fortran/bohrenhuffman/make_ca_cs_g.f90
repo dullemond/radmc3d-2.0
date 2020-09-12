@@ -32,9 +32,9 @@ program bhmakeopac
   real, allocatable :: lambda_cm(:),optcnst_n(:),optcnst_k(:)
   real :: kappa_abs,kappa_sca,kappa_g
   real :: zscat(2*MXNANG-1,1:6)
-  integer :: nlam,ilam
+  integer :: nlam,ilam,nrcomments,icomment
   real :: agrain_cm,xigrain,dum(1:3),siggeom,mgrain
-  character*160 :: filename,material
+  character*160 :: filename,material,str0
   logical :: notfinished
   PI=4.E0*ATAN(1.E0)
   !
@@ -54,9 +54,24 @@ program bhmakeopac
   !
   ! Open optical constants file
   !
+  open(unit=1,file=filename)
+  notfinished = .true.
+  nrcomments = 0
+  do while(notfinished)
+     read(1,*) str0
+     if(str0(1:1)=='#') then
+        nrcomments = nrcomments + 1
+     else
+        notfinished = .false.
+     endif
+  enddo
+  close(1)
   nlam = 0
   notfinished = .true.
   open(unit=1,file=filename)
+  do icomment=1,nrcomments
+     read(1,*) str0
+  enddo
   do while(notfinished)
      read(1,*,end=20) dum
      nlam = nlam + 1
@@ -65,6 +80,9 @@ program bhmakeopac
   close(1)
   allocate(lambda_cm(nlam),optcnst_n(nlam),optcnst_k(nlam))
   open(unit=1,file=filename)
+  do icomment=1,nrcomments
+     read(1,*) str0
+  enddo
   do ilam=1,nlam
      read(1,*) lambda_cm(ilam),optcnst_n(ilam),optcnst_k(ilam)
   enddo

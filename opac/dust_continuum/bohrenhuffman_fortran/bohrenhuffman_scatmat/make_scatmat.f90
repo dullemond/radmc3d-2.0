@@ -33,7 +33,7 @@ program bhmakeopac
   doubleprecision, allocatable :: lambda_cm(:),optcnst_n(:),optcnst_k(:)
   doubleprecision, allocatable :: kappa_abs(:),kappa_sca(:),kappa_g(:)
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
-  integer :: nlam,ilam,nang180,leng
+  integer :: nlam,ilam,nang180,leng,nrcomments,icomment
   doubleprecision :: agrain_cm,xigrain,dum(1:3),siggeom,mgrain,factor
   character*160 :: filename,material,str0,str1
   logical :: notfinished
@@ -72,9 +72,24 @@ program bhmakeopac
   !
   ! Open optical constants file
   !
+  open(unit=1,file=filename)
+  notfinished = .true.
+  nrcomments = 0
+  do while(notfinished)
+     read(1,*) str0
+     if(str0(1:1)=='#') then
+        nrcomments = nrcomments + 1
+     else
+        notfinished = .false.
+     endif
+  enddo
+  close(1)
   nlam = 0
   notfinished = .true.
   open(unit=1,file=filename)
+  do icomment=1,nrcomments
+     read(1,*) str0
+  enddo
   do while(notfinished)
      read(1,*,end=20) dum
      nlam = nlam + 1
@@ -85,6 +100,9 @@ program bhmakeopac
   allocate(kappa_abs(nlam),kappa_sca(nlam),kappa_g(nlam))
   allocate(zscat(6,2*MXNANG-1,nlam))
   open(unit=1,file=filename)
+  do icomment=1,nrcomments
+     read(1,*) str0
+  enddo
   do ilam=1,nlam
      read(1,*) lambda_cm(ilam),optcnst_n(ilam),optcnst_k(ilam)
   enddo
