@@ -174,7 +174,7 @@ thetaup  = np.pi*0.5 - zrmax
 #
 thetai   = np.linspace(thetaup,0.5e0*np.pi,ntheta+1)
 zr       = thetai[::-1]
-nlev_zr  = 5         # Grid refinement at the midplane: nr of cycles
+nlev_zr  = 7         # Grid refinement at the midplane: nr of cycles
 nspan_zr = 3         # Grid refinement at the midplane: nr of cells each cycle
 zr       = grid_refine_inner_edge(zr,nlev_zr,nspan_zr)
 thetai   = zr[::-1]
@@ -189,6 +189,12 @@ rr       = qq[0]
 tt       = qq[1]
 pp       = qq[2]
 zr       = np.pi/2.e0 - qq[1]
+
+#
+# For later vertical normalization: the Delta z
+# (we integrate along theta, i.e. not exactly vertical)
+#
+dz       = zr[:,:-1,:]*rr[:,:-1,:]-zr[:,1:,:]*rr[:,1:,:]
 
 #
 # Expand the 2-D gas model to 3-D
@@ -208,14 +214,39 @@ zhpr2_3d   = zr**2/hhr_3d**2
 #
 rho_dust_3d = []
 for St,Sig in zip(Stokes_mid_2d,fargo.sigma_dust_cgs):
+    #
+    # Make things 3D
+    #
     sigma_dust_3d  = np.zeros_like(rr)
     St_3d          = np.zeros_like(rr)
     D_3d           = np.zeros_like(rr)
     for it in range(ntheta):
         sigma_dust_3d[:,it,:] = Sig[:,:]
         St_3d[:,it,:]         = St[:,:]
-        D_3d[:,it,:]          = D_cgs
+        D_3d[:,it,:]          = D_cgs/(cs_2d*hp_2d)   # Dimensionless diffusion coefficient
+    #
+    # Now use Fromang & Nelson's formula
+    #
     rho = np.exp(-(St_3d/D_3d)*(np.exp(zhpr2_3d*0.5)-1)-zhpr2_3d*0.5)
+    #
+    # Compute the vertical integral
+    #
+    rhoav = 0.5*(rho[:,:-1,:]+rho[:,1:,:])
+    dum   = (rhoav*dz).sum(axis=1)
+    #
+    # Now normalize the dust distribution such that the vertical
+    # integral equals the dust surface density sigma_dust_3d
+    #
+    norm  = np.zeros_like(rr)
+    for it in range(ntheta):
+        norm[:,it,:]          = dum[:,:]
+    if thetac.max()<=np.pi/2:
+        norm *= 2  # Two sides
+    norm  = sigma_dust_3d/norm
+    rho  *= norm
+    #
+    # Add this dust component to the list
+    #
     rho_dust_3d.append(rho)
     
 #
