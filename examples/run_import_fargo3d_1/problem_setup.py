@@ -54,6 +54,22 @@ fargo.convert_to_cgs(mstar,r0)
 #fargo.show(q=fargo.sigma_dust_cgs[1])
 
 #
+# The 1-st dust component for RADMC-3D will follow the gas component
+# of FARGO3D. We assume that these grains are small enough that they
+# are well-mixed with the gas, at least near the midplane.
+#
+# Any dust components in FARGO3D will be _in_addition_ to this first
+# component
+#
+dtg_smalldust  = 1e-2                         # Dust to gas ratio for small dust following the gas
+sigma_gas_2d   = fargo.sigma_gas_cgs
+sigma_dust_2d  = []
+sigma_dust_2d.append(sigma_gas_2d*dtg_smalldust)
+for d in fargo.sigma_dust_cgs:
+    sigma_dust_2d.append(d)
+nrspec   = len(sigma_dust_2d)
+    
+#
 # Make the RADMC-3D radial and phi grids
 #
 ri       = 0.5*(fargo.r_cgs[1:]+fargo.r_cgs[:-1])
@@ -121,12 +137,12 @@ print('in the FARGO3D model, to make them both mutually self-consistent.')
 #       density must be consistent with that of the material
 #       of the dust in dustkappa_xxxx.inp.
 #
-a_grains_mic= np.array([1e2,1e3,1e4])    # Grain radii in micron
+a_grains_mic= np.array([1e-1,1e2,1e3,1e4])    # Grain radii in micron
 a_grains    = a_grains_mic*1e-4          # Grain radii in cm
 xi_grains   = 3.7                        # Grain material density in g/cm^3
 m_grains    = (4*np.pi/3)*xi_grains*a_grains**3  # Grain masses
 s_grains    = np.pi*a_grains**2                  # Grain cross sections
-nrspec      = len(a_grains)
+assert nrspec==len(a_grains), "Error: The number of grain sizes is unequal to the number of dust components in FARGO3D (Note: the first dust component follows the gas, so if your FARGO3D simulation has 2 dust components, in RADMC-3D we have 3 dust components."
 
 #
 # We now compute the Stokes number of these grains at the
@@ -137,7 +153,7 @@ cs_2d,dum   = np.meshgrid(cs,phic,indexing='ij')  # The isothermal sound speed c
 hp_2d       = cs_2d/omk_2d               # The press scale height H_p = c_s / Omega_K in cm
 hpr_2d      = hp_2d/r_2d                 # The aspect ratio H_p / r
 vth_2d      = np.sqrt(8/np.pi)*cs_2d     # The thermal velocity of H2 gas particles in cm/s
-rho_gas_mid_2d = fargo.sigma_gas_cgs/(np.sqrt(2*pi)*hp_2d)  # Midplane gas density in g/cm^3
+rho_gas_mid_2d = sigma_gas_2d/(np.sqrt(2*pi)*hp_2d)  # Midplane gas density in g/cm^3
 Stokes_mid_2d = []
 for m,s in zip(m_grains,s_grains):
     St = (3./4.)*(m/s)*omk_2d/(rho_gas_mid_2d*vth_2d)  # Stokes number assuming Epstein drag law
@@ -203,7 +219,7 @@ sigma_gas_3d  = np.zeros_like(rr)
 hh_3d         = np.zeros_like(rr)
 hhr_3d        = np.zeros_like(rr)
 for it in range(ntheta):
-    sigma_gas_3d[:,it,:] = fargo.sigma_gas_cgs[:,:]
+    sigma_gas_3d[:,it,:] = sigma_gas_2d[:,:]
     hh_3d[:,it,:]        = hp_2d[:,:]
     hhr_3d[:,it,:]       = hpr_2d[:,:]
 rho_gas_3d = ( sigma_gas_3d / (np.sqrt(2.e0*np.pi)*hh_3d) ) * np.exp(-(zr**2/hhr_3d**2)/2.e0)
@@ -213,7 +229,7 @@ zhpr2_3d   = zr**2/hhr_3d**2
 # Now do the same for the dust. Use Eq. (19) of Fromang & Nelson (2009) A&A 496, 597.
 #
 rho_dust_3d = []
-for St,Sig in zip(Stokes_mid_2d,fargo.sigma_dust_cgs):
+for St,Sig in zip(Stokes_mid_2d,sigma_dust_2d):
     #
     # Make things 3D
     #
