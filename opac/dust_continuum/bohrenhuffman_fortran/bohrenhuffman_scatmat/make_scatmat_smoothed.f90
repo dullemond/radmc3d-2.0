@@ -181,8 +181,8 @@ program bhmakeopac
      allocate(lambda_cm(nlam),optcnst_n(nlam),optcnst_k(nlam))
      do ilam=1,nlam
         lambda_cm(ilam) = lambda_cm_orig(ilam)
-        optcnst_n(nlam) = optcnst_n_orig(nlam)
-        optcnst_k(nlam) = optcnst_k_orig(nlam)
+        optcnst_n(ilam) = optcnst_n_orig(ilam)
+        optcnst_k(ilam) = optcnst_k_orig(ilam)
      enddo
   else
      !

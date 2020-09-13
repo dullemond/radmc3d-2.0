@@ -18,9 +18,19 @@ ntheta    = 181           # Number of scattering angle sampling points
 #
 # Set up a wavelength grid upon which we want to compute the opacities
 #
-data = np.loadtxt(optconst+'.lnk')
-lammic, ncoef, kcoef = data.T
+#data = np.loadtxt(optconst+'.lnk')
+#lammic, ncoef, kcoef = data.T
+#lamcm     = lammic*1e-4
+#
+lammin    = 0.1
+lammax    = 1e4
+nlam      = 200
+lammic    = lammin * (lammax/lammin)**np.linspace(0,1,nlam)
 lamcm     = lammic*1e-4
+with open('wavelength_micron.inp','w') as f:
+    f.write('{}\n'.format(nlam))
+    for l in lammic:
+        f.write('{0:13.7e}\n'.format(l))
 
 #
 # Set up an angular grid for which we want to compute the scattering matrix Z
