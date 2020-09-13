@@ -42,7 +42,7 @@ program bhmakeopac
   doubleprecision :: lam_orig_min,lam_orig_max,opt_n_min,opt_n_max,opt_k_min,opt_k_max
   doubleprecision :: slope_n,slope_k,eps
   character*160 :: filename,material,str0,str1,wlfile
-  logical :: notfinished
+  logical :: notfinished,wlfile_exists
   PI=4.D0*ATAN(1.D0)
   !
   ! Defaults
@@ -70,6 +70,10 @@ program bhmakeopac
 209 continue
   close(1)
   filename = trim(material)//".lnk"
+  wlfile_exists = .false.
+  if(wlfile.ne."") then
+     inquire(file=wlfile,exist=wlfile_exists)
+  endif
   !
   ! Do a check
   !
@@ -169,7 +173,7 @@ program bhmakeopac
   !
   ! Map these optical constants onto the actual wavelength grid
   !
-  if(wlfile.eq."") then
+  if(.not.wlfile_exists) then
      !
      ! No wavelength file given, so use the same wavelength grid as the optical constants file
      !
@@ -415,7 +419,7 @@ program bhmakeopac
   write(2,str1) '# Opacity and scattering matrix file for ',trim(material)
   write(2,'(A109)') '# Please do not forget to cite in your publications the original ' &
        //'paper of these optical constant measurements'
-  write(2,'(A44)') '# Made with the make_scatmat_smoothed.f90 code,'
+  write(2,'(A47)') '# Made with the make_scatmat_smoothed.f90 code,'
   write(2,'(A70)') '# using the bhmie.f Mie code of Bohren and Huffman (version by Draine)'
   write(2,'(A26)') '# Grain size distribution:'
   write(2,'(A23,E13.6,A3)') '#   agrain_mean      = ',agrain_cm_mean,' cm'
