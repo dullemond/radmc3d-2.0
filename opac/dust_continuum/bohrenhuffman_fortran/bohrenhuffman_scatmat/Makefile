@@ -19,4 +19,4 @@ clean:
 	@echo OBJECT and MODULE files removed.
 
 cleanall:
-	@rm -f	*.o *.mod *~ dustkapscatmat*.inp makeopac makeopac_distr makeopac_smoothed *.out
+	@rm -f	*.o *.mod *~ dustkapscatmat*.inp dustkappa*.inp makeopac makeopac_distr makeopac_smoothed *.out
