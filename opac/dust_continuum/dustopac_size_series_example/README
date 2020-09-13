@@ -1,0 +1,37 @@
+Here is an example of how to make a series of dust opacities of different sizes.
+It is just meant as an example, and you may need to modify it to your needs.
+
+Here is what you should do:
+
+  make
+  python problem_make_all_opacities.py
+
+This creates the opacity files for a series of grain sizes. The sizes themselves
+are listed in the file sizes.inp, and the grain species and material density is
+written to the file dustproperties.inp
+
+Then to make some nice plots:
+
+  ipython --matplotlib
+  %run plot_all_opacities.py
+
+To clean everything up:
+
+A few caveats:
+
+ - So far only the full dustkapscatmat_*.inp files are generated, not the
+   smaller dustkappa_*.inp files.
+
+ - The large grains have very large errors in the normalization, hence the
+   very large error tolerance used. This is, however, due to the fact that
+   at short wavelength for large grains the scattering is very strongly
+   forward-peaked, which can not be handled with the 181-point angular
+   sampling. However, very-forward-peaked scattering is almost like no
+   scattering (after all: the photon continues on almost the same path).
+   So we use the "chopping" method to limit the forward scattering.
+
+ - For VERY large grains, the Mie calculation becomes very slow. At a
+   later point it is planned to replace the shortest-wavelength values
+   for such very large grains with an approximation.
+
+2020.09.13
