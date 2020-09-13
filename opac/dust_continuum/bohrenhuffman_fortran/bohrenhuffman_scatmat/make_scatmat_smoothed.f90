@@ -34,7 +34,7 @@ program bhmakeopac
   doubleprecision, allocatable :: kappa_abs(:),kappa_sca(:),kappa_g(:)
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
   doubleprecision, allocatable :: agrain_cm(:),weight(:),mgrain(:)
-  integer :: nlam,ilam,nang180,nagr,ia,leng,nrcomments,icomment,iang
+  integer :: nlam,ilam,nang180,nagr,ia,leng,nrcomments,icomment,iang,irescalez
   doubleprecision :: agrain_cm_mean,logawidth,xigrain,dum(1:3)
   doubleprecision :: siggeom,factor,wfact,chopforward
   character*160 :: filename,material,str0,str1
@@ -44,8 +44,9 @@ program bhmakeopac
   ! Defaults
   !
   REFMED = 1.d0
-  errmax = 0.01
-  chopforward = 0.d0
+  errmax = 0.01       ! Default maximum allowed relative error
+  chopforward = 0.d0  ! By default no chopping
+  irescalez = 0       ! Major difference with older versions: Now by default do not rescale Z to match kappa_scat
   !
   ! Open parameter file
   !
@@ -56,9 +57,10 @@ program bhmakeopac
   read(1,*) logawidth
   read(1,*) wfact
   read(1,*) xigrain
-  read(1,*) nang180           ! Nr of angles between 0 and 180 degrees
-  read(1,*,end=209) errmax
-  read(1,*,end=209) chopforward
+  read(1,*) nang180                ! Nr of angles between 0 and 180 degrees
+  read(1,*,end=209) errmax         ! If encountering errors above this, then stop
+  read(1,*,end=209) irescalez      ! Keep this 0. Only for backward compatibility with old version (=1)
+  read(1,*,end=209) chopforward    ! Forward scattering with angles less than this: apply chopping method
 209 continue
   close(1)
   filename = trim(material)//".lnk"
@@ -272,8 +274,11 @@ program bhmakeopac
         close(2)
         stop
      else
-        scalefact(ilam) = kappa_sca(ilam) / sum
-        zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
+        if(irescalez.gt.0) then
+           ! ONLY FOR BACKWARD COMPATIBILITY - SHOULD NOT BE USED (SET irescalez=0)
+           scalefact(ilam) = kappa_sca(ilam) / sum
+           zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
+        endif
      endif
      !
      ! Do the "chopping" of excessive forward scattering
@@ -348,12 +353,14 @@ program bhmakeopac
   !
   ! Just for information to the user: write out the scaling factor used
   !
-  open(unit=1,file='scalefactor.out')
-  write(1,*) nlam
-  do ilam=1,nlam
-     write(1,'(2(E13.6,1X))') lambda_cm(ilam)*1e4,scalefact(ilam)
-  enddo
-  close(1)
+  if(irescalez.gt.0) then
+     open(unit=1,file='scalefactor.out')
+     write(1,*) nlam
+     do ilam=1,nlam
+        write(1,'(2(E13.6,1X))') lambda_cm(ilam)*1e4,scalefact(ilam)
+     enddo
+     close(1)
+  endif
   !
   ! Deallocate stuff
   !

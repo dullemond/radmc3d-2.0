@@ -33,8 +33,8 @@ program bhmakeopac
   doubleprecision, allocatable :: lambda_cm(:),optcnst_n(:),optcnst_k(:)
   doubleprecision, allocatable :: kappa_abs(:),kappa_sca(:),kappa_g(:)
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
-  integer :: nlam,ilam,nang180,leng,nrcomments,icomment
-  doubleprecision :: agrain_cm,xigrain,dum(1:3),siggeom,mgrain,factor
+  integer :: nlam,ilam,nang180,leng,nrcomments,icomment,iang,irescalez
+  doubleprecision :: agrain_cm,xigrain,dum(1:3),siggeom,mgrain,factor,chopforward
   character*160 :: filename,material,str0,str1
   logical :: notfinished
   PI=4.D0*ATAN(1.D0)
@@ -42,7 +42,9 @@ program bhmakeopac
   ! Defaults
   !
   REFMED = 1.d0
-  errmax = 0.01
+  errmax = 0.01       ! Default maximum allowed relative error
+  chopforward = 0.d0  ! By default no chopping
+  irescalez = 0       ! Major difference with older versions: Now by default do not rescale Z to match kappa_scat
   !
   ! Open parameter file
   !
@@ -52,6 +54,8 @@ program bhmakeopac
   read(1,*) xigrain
   read(1,*) nang180           ! Nr of angles between 0 and 180 degrees
   read(1,*,end=209) errmax
+  read(1,*,end=209) irescalez      ! Keep this 0. Only for backward compatibility with old version (=1)
+  read(1,*,end=209) chopforward    ! Forward scattering with angles less than this: apply chopping method
 209 continue
   close(1)
   filename = trim(material)//".lnk"
@@ -249,18 +253,34 @@ program bhmakeopac
         close(2)
         stop
      else
-        scalefact(ilam) = kappa_sca(ilam) / sum
-        zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
+        if(irescalez.gt.0) then
+           ! ONLY FOR BACKWARD COMPATIBILITY - SHOULD NOT BE USED (SET irescalez=0)
+           scalefact(ilam) = kappa_sca(ilam) / sum
+           zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
+        endif
      endif
-!!###########################
-!     sum = 0.d0
-!     do j=2,nan
-!        sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
-!              abs(mu(j)-mu(j-1))
-!     enddo
-!     sum = sum * 4*PI
-!     write(*,*) '---> ',kappa_sca(ilam),sum/kappa_sca(ilam)
-!!###########################
+     !
+     ! Do the "chopping" of excessive forward scattering
+     !
+     if(chopforward.gt.0.d0) then
+        iang = 0
+        do j=1,nan
+           if(angle(j).lt.chopforward) iang=j
+        enddo
+        if(iang.gt.0) then
+           iang = iang+1
+           do j=1,iang-1
+              zscat(1:6,j,ilam) = zscat(1:6,iang,ilam)
+           enddo
+           sum = 0.d0
+           do j=2,nan
+              sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
+                   abs(mu(j)-mu(j-1))
+           enddo
+           sum = sum * 4*PI
+           kappa_sca(ilam) = sum
+        endif
+     endif
   enddo
   !
   ! Write the results
@@ -283,12 +303,14 @@ program bhmakeopac
   !
   ! Just for information to the user: write out the scaling factor used
   !
-  open(unit=1,file='scalefactor.out')
-  write(1,*) nlam
-  do ilam=1,nlam
-     write(1,'(2(E13.6,1X))') lambda_cm(ilam)*1e4,scalefact(ilam)
-  enddo
-  close(1)
+  if(irescalez.gt.0) then
+     open(unit=1,file='scalefactor.out')
+     write(1,*) nlam
+     do ilam=1,nlam
+        write(1,'(2(E13.6,1X))') lambda_cm(ilam)*1e4,scalefact(ilam)
+     enddo
+     close(1)
+  endif
   !
   ! Deallocate stuff
   !

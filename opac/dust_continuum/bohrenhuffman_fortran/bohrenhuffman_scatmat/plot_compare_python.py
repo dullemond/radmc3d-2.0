@@ -2,7 +2,21 @@ from plot import *
 from radmc3dPy.analyze import *                                                                                                       
 import os                                                                                                                             
 
-of=readOpac(ext='pyrmg70',scatmat=True)                                                                                                
+#
+# To make the comparison between the Fortran-90 and Python versions,
+# do the following:
+#
+#   make
+#   ./makeopac_smoothed
+#   mv dustkapscatmat_pyrmg70.inp dustkapscatmat_pyrmg70_fortran.inp
+#   python python_version.py
+#   mv dustkapscatmat_pyrmg70.inp dustkapscatmat_pyrmg70_python.inp
+#   ipython --matplotlib
+#   %run plot_compare_python.py
+#
+
+
+of=readOpac(ext='pyrmg70_fortran',scatmat=True)
 
 op=readOpac(ext='pyrmg70_python',scatmat=True)                                                                                                
 
