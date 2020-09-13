@@ -45,28 +45,50 @@ pstar    = np.array([0.,0.,0.])
 #
 # Read a FARGO3D frame
 #
+# NOTE: Set the dir variable to the simulation you wish to import, and
+#       the itime to the time snapshot you are interested in. The FARGO3D
+#       simulations are in dimensionless units. By setting r0 in cm (see below)
+#       and mstar in gram (see above), the simulation becomes "physical"
+#       with units in CGS.
+#
 dir      = '/Users/cornelisdullemond/science/software/fargo3d/outputs/fargo_multifluid'
 itime    = 85
 r0       = 60*au    # The radius corresponding to '1' in dimensionless units
 fargo    = fg.frame(itime,rhodust=True,dir=dir)
 fargo.convert_to_cgs(mstar,r0)
 #fargo.show(q=fargo.sigma_gas_cgs)
-#fargo.show(q=fargo.sigma_dust_cgs[1])
+#fargo.show(q=fargo.sigma_dust_cgs[0])
 
 #
 # The 1-st dust component for RADMC-3D will follow the gas component
 # of FARGO3D. We assume that these grains are small enough that they
-# are well-mixed with the gas, at least near the midplane.
+# are well-mixed with the gas, at least near the midplane. We specify
+# the dust-to-gas ratio for this fine-grained dust with the dtg_smalldust
+# parameter.
 #
 # Any dust components in FARGO3D will be _in_addition_ to this first
 # component
 #
-dtg_smalldust  = 1e-2                         # Dust to gas ratio for small dust following the gas
+# NOTE: Without any small-grain component, the dust geometry will become
+#       very geometrically thin, which means that very little starlight
+#       will be captured, and the disk will become very cold. However,
+#       if at least one of the dust components is vertically extended
+#       (i.e. small grains), then more stellar radiation is captured
+#       and the re-emission of this radiation will then also make the
+#       large dust grains at the midplane warmer. Observations of most
+#       protoplanetary disks show that most of them have some small
+#       dust vertically extended above the midplane even though other
+#       dust appears to be near the midplane (see e.g. IM Lup,
+#       with the small grains seen in scattered light with VLT-SPHERE,
+#       Avenhaus et al. 2018, ApJ 863, 44, and large grains seen with
+#       ALMA, Huang et al., 2018, APJ 869, 43).
+#
+dtg_smalldust  = 1e-2                             # Dust to gas ratio for small dust following the gas
 sigma_gas_2d   = fargo.sigma_gas_cgs
 sigma_dust_2d  = []
-sigma_dust_2d.append(sigma_gas_2d*dtg_smalldust)
+sigma_dust_2d.append(sigma_gas_2d*dtg_smalldust)  # First the gas-following small dust
 for d in fargo.sigma_dust_cgs:
-    sigma_dust_2d.append(d)
+    sigma_dust_2d.append(d)                       # Then the dynamic dust from FARGO3D multifluid
 nrspec   = len(sigma_dust_2d)
     
 #
@@ -137,6 +159,10 @@ print('in the FARGO3D model, to make them both mutually self-consistent.')
 #       density must be consistent with that of the material
 #       of the dust in dustkappa_xxxx.inp.
 #
+# NOTE: Don't forget that the first grain size belongs to the
+#       dust component that is assumed to follow the gas, i.e.
+#       it should have small grain size (e.g. 0.1 micron).
+#
 a_grains_mic= np.array([1e-1,1e2,1e3,1e4])    # Grain radii in micron
 a_grains    = a_grains_mic*1e-4          # Grain radii in cm
 xi_grains   = 3.7                        # Grain material density in g/cm^3
@@ -187,6 +213,12 @@ thetaup  = np.pi*0.5 - zrmax
 #
 # Make the theta coordinate, and refine near the midplane
 # (to resolve the dust layer)
+#
+# NOTE: If your grains have not-so-large Stokes numbers,
+#       you can save computing time by reducing nlev_zr.
+#       Just make sure that the vertical structure of the
+#       distribution of the largest grains remains resolved
+#       by the theta-grid.
 #
 thetai   = np.linspace(thetaup,0.5e0*np.pi,ntheta+1)
 zr       = thetai[::-1]
