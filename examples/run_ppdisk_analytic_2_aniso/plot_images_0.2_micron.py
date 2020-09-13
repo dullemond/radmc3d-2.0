@@ -55,4 +55,19 @@ plt.figure()
 plotImage(im_full,au=True,log=True,vmax=-10,vmin=-15,bunit='inu',cmap='hot')
 plt.text(-90,80,'Full scattering',color='white')
 
+#
+# Now compare the cross-sections of the images along the
+# major and minor axis
+#
+plt.figure()
+plt.semilogy(im_iso.x/au,im_iso.image[:,100],label='iso major')
+plt.semilogy(im_full.x/au,im_full.image[:,100],label='full major')
+plt.semilogy(im_iso.x/au,im_iso.image[100,:],label='iso minor')
+plt.semilogy(im_full.x/au,im_full.image[100,:],label='full minor')
+plt.xlabel('x [au]')
+plt.ylabel(r'$I_\nu\;[CGS]$')
+plt.ylim((1e-16,1e-10))
+plt.title(r'$\lambda\;=\;0.2\;\mu\mathrm{m}$')
+plt.legend()
+
 plt.show()
