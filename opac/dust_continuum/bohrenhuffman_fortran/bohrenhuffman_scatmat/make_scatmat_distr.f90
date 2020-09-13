@@ -453,6 +453,41 @@ program bhmakeopac
   enddo
   close(2)
   !
+  ! Write the simpler dustkappa_*.inp file
+  !
+  filename = 'dustkappa_'//trim(material)//'.inp'
+  open(unit=2,file=filename)
+  leng = len_trim(material)
+  if(leng.lt.10) then
+     write(str0,'(I1)')
+  elseif(leng.lt.100) then
+     write(str0,'(I2)')
+  elseif(leng.lt.1000) then
+     write(str0,'(I3)')
+  else
+     write(*,*) 'Dust opacity name too long'
+     stop 
+  endif
+  str1 = '(A19,A'//trim(str0)//')'
+  write(2,str1) '# Opacity file for ',trim(material)
+  write(2,'(A109)') '# Please do not forget to cite in your publications the original ' &
+       //'paper of these optical constant measurements'
+  write(2,'(A44)') '# Made with the make_scatmat_distr.f90 code,'
+  write(2,'(A70)') '# using the bhmie.f Mie code of Bohren and Huffman (version by Draine)'
+  write(2,'(A26)') '# Grain size distribution:'
+  write(2,'(A23,E13.6,A3)') '#   agrain_min       = ',agrain_cm_min,' cm'
+  write(2,'(A23,E13.6,A3)') '#   agrain_max       = ',agrain_cm_max,' cm'
+  write(2,'(A23,F13.6)') '#   powerlaw index   = ',plindex
+  write(2,'(A23,I4,A3)') '#   nr of sizes used = ',nagr
+  write(2,'(A20,F9.6,A7)') '# Material density =',xigrain,' g/cm^3'
+  write(2,*) 3     ! Format number
+  write(2,*) nlam
+  write(2,*) 
+  do ilam=1,nlam
+     write(2,'(4(E13.6,1X))') lambda_cm(ilam)*1e4,kappa_abs(ilam),kappa_sca(ilam),kappa_g(ilam)
+  enddo
+  close(2)
+  !
   ! Just for information to the user: write out the scaling factor used
   !
   if(irescalez.gt.0) then
