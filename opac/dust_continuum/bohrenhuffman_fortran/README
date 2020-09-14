@@ -49,7 +49,9 @@ the "shell around it" is provided here. What you must do is:
     i.e. 5. You can then safely set the error tolerance to a large value.
  5) Now type ./makeopac and this produces a file dustkapscatmat_pyrmg70.inp.
     See RADMC-3D manual for the format of this file, although it is realtively
-    straightforward.
+    straightforward. It will also create the smaller opacity file called
+    dustkappa_pyrmg70.inp, which does not contain the full scattering
+    matrix. 
 
 or if you want to use makeopac_distr:
 
