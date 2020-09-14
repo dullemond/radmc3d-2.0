@@ -4,7 +4,8 @@ C Note: important that MXNANG be consistent with dimension of S1 and S2
 C       in calling routine!
       INTEGER MXNANG,NMXX
 C      PARAMETER(MXNANG=1000,NMXX=15000)
-      PARAMETER(MXNANG=1000,NMXX=150000)
+C      PARAMETER(MXNANG=1000,NMXX=150000)
+      PARAMETER(MXNANG=1000,NMXX=1500000)
 C Arguments:
       INTEGER NANG
       REAL GSCA,QBACK,QEXT,QSCA,X

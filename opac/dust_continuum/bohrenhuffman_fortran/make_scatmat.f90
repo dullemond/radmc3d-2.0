@@ -35,10 +35,10 @@ program bhmakeopac
   doubleprecision, allocatable :: kappa_abs(:),kappa_sca(:),kappa_g(:)
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
   integer :: nlam,ilam,nang180,leng,nrcomments,icomment,iang,irescalez
-  integer :: nlam_orig,ilam_orig,ilamtmp,istr,jstr
+  integer :: nlam_orig,ilam_orig,ilamtmp,istr,jstr,ihighest_x
   doubleprecision :: agrain_cm,xigrain,dum(1:3),siggeom,mgrain,factor,chopforward,lam
   doubleprecision :: lam_orig_min,lam_orig_max,opt_n_min,opt_n_max,opt_k_min,opt_k_max
-  doubleprecision :: slope_n,slope_k,eps
+  doubleprecision :: slope_n,slope_k,eps,max_x,highest_x
   character*160 :: filename,material,str0,str1,wlfile,ref1,ref2,ref3
   logical :: notfinished,wlfile_exists
   PI=4.D0*ATAN(1.D0)
@@ -52,6 +52,7 @@ program bhmakeopac
   ref1 = ""
   ref2 = ""
   ref3 = ""
+  max_x = 1d99
   !
   ! Open parameter file
   !
@@ -64,6 +65,7 @@ program bhmakeopac
   read(1,*,end=209) irescalez      ! Keep this 0. Only for backward compatibility with old version (=1)
   read(1,*,end=209) chopforward    ! Forward scattering with angles less than this: apply chopping method
   read(1,*,end=209) wlfile         ! If not "", then this is the file with the list of wavelengths to be used (in micron)
+  read(1,*,end=209) max_x          ! Maximum value of X=2*pi*a/lambda. Beyond that we extrapolate.
 209 continue
   close(1)
   filename = trim(material)//".lnk"
@@ -315,6 +317,8 @@ program bhmakeopac
   !
   ! Now do the loop over wavelengths
   !
+  highest_x  = 0.d0
+  ihighest_x = -1
   do ilam=1,nlam
      !
      ! Prepare the parameters for BHMie
@@ -335,92 +339,127 @@ program bhmakeopac
      !
      X=2.E0*PI*RAD*REFMED/WAVEL
      !
-     ! Call BHMie
+     ! Check the highest x value
      !
-     CALL BHMIE(X,REFREL,NANG,S1,S2,QEXT,QSCA,QBACK,GSCA)
-     QABS=QEXT-QSCA
-     !
-     ! Put results into array
-     !
-     kappa_abs(ilam) = qabs*siggeom/mgrain
-     kappa_sca(ilam) = qsca*siggeom/mgrain
-     kappa_g(ilam)   = GSCA
-     !write(1,*) lambda_cm(ilam)*1e4,kappa_abs,kappa_sca,kappa_g
-     !
-     ! Compute conversion factor from the Sxx matrix elements
-     ! from the Bohren & Huffman code to the Zxx matrix elements we
-     ! use (such that 2*pi*int_{-1}^{+1}Z11(mu)dmu=kappa_scat).
-     ! This includes the factor k^2 (wavenumber squared) to get 
-     ! the actual cross section in units of cm^2 / ster, and there 
-     ! is the mass of the grain to get the cross section per gram.
-     !
-     factor = (lambda_cm(ilam)/(2*PI))**2/mgrain
-     !
-     ! Also store the Z matrix elements
-     !
-     NAN=2*NANG-1
-     DO J=1,NAN
-        S11=0.5E0*CABS(S2(J))*CABS(S2(J))
-        S11=S11+0.5E0*CABS(S1(J))*CABS(S1(J))
-        S12=0.5E0*CABS(S2(J))*CABS(S2(J))
-        S12=S12-0.5E0*CABS(S1(J))*CABS(S1(J))
-        POL=-S12/S11
-        S33=REAL(S2(J)*CONJG(S1(J)))
-        S34=AIMAG(S2(J)*CONJG(S1(J)))
-        zscat(1,j,ilam) = S11 * factor
-        zscat(2,j,ilam) = S12 * factor
-        zscat(3,j,ilam) = S11 * factor
-        zscat(4,j,ilam) = S33 * factor
-        zscat(5,j,ilam) = S34 * factor
-        zscat(6,j,ilam) = S33 * factor
-     enddo
-     !
-     ! Check if the sum of the S11 over all angles is indeed kappa_scat
-     !
-     sum = 0.d0
-     do j=2,nan
-        sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
-              abs(mu(j)-mu(j-1))
-     enddo
-     sum = sum * 4*PI
-     error = abs(sum/kappa_sca(ilam)-1.d0)
-     if(error.gt.errmax) then
-        write(*,*) 'ERROR: At lambda=',lambda_cm(ilam)*1d4,'micron the error in the',&
-             ' scattering integral is ',error,'which is larger than the error limit',errmax
-        write(*,*) '    kappa_scat                     = ',kappa_sca(ilam)
-        write(*,*) '    2*pi*int_{-1}^{+1} Z_11(mu)dmu = ',sum
-        write(*,*) '    Please use a larger number of angle points or take a weaker error limit (5th line in param.inp).'
-        write(*,*) '    Note: This problem usually happens for large ratio of a/lambda.'
-        close(2)
-        stop
-     else
-        if(irescalez.gt.0) then
-           ! ONLY FOR BACKWARD COMPATIBILITY - SHOULD NOT BE USED (SET irescalez=0)
-           scalefact(ilam) = kappa_sca(ilam) / sum
-           zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
-        endif
+     if((X.gt.highest_x).and.(X.lt.max_x)) then
+        highest_x  = X
+        ihighest_x = ilam
      endif
      !
-     ! Do the "chopping" of excessive forward scattering
+     ! If X<max_x then call BHMIE
      !
-     if(chopforward.gt.0.d0) then
-        iang = 0
-        do j=1,nan
-           if(angle(j).lt.chopforward) iang=j
+     if(X.lt.max_x) then
+        !
+        ! Call BHMie
+        !
+        CALL BHMIE(X,REFREL,NANG,S1,S2,QEXT,QSCA,QBACK,GSCA)
+        QABS=QEXT-QSCA
+        !
+        ! Put results into array
+        !
+        kappa_abs(ilam) = qabs*siggeom/mgrain
+        kappa_sca(ilam) = qsca*siggeom/mgrain
+        kappa_g(ilam)   = GSCA
+        !write(1,*) lambda_cm(ilam)*1e4,kappa_abs,kappa_sca,kappa_g
+        !
+        ! Compute conversion factor from the Sxx matrix elements
+        ! from the Bohren & Huffman code to the Zxx matrix elements we
+        ! use (such that 2*pi*int_{-1}^{+1}Z11(mu)dmu=kappa_scat).
+        ! This includes the factor k^2 (wavenumber squared) to get 
+        ! the actual cross section in units of cm^2 / ster, and there 
+        ! is the mass of the grain to get the cross section per gram.
+        !
+        factor = (lambda_cm(ilam)/(2*PI))**2/mgrain
+        !
+        ! Also store the Z matrix elements
+        !
+        NAN=2*NANG-1
+        DO J=1,NAN
+           S11=0.5E0*CABS(S2(J))*CABS(S2(J))
+           S11=S11+0.5E0*CABS(S1(J))*CABS(S1(J))
+           S12=0.5E0*CABS(S2(J))*CABS(S2(J))
+           S12=S12-0.5E0*CABS(S1(J))*CABS(S1(J))
+           POL=-S12/S11
+           S33=REAL(S2(J)*CONJG(S1(J)))
+           S34=AIMAG(S2(J)*CONJG(S1(J)))
+           zscat(1,j,ilam) = S11 * factor
+           zscat(2,j,ilam) = S12 * factor
+           zscat(3,j,ilam) = S11 * factor
+           zscat(4,j,ilam) = S33 * factor
+           zscat(5,j,ilam) = S34 * factor
+           zscat(6,j,ilam) = S33 * factor
         enddo
-        if(iang.gt.0) then
-           iang = iang+1
-           do j=1,iang-1
-              zscat(1:6,j,ilam) = zscat(1:6,iang,ilam)
-           enddo
-           sum = 0.d0
-           do j=2,nan
-              sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
-                   abs(mu(j)-mu(j-1))
-           enddo
-           sum = sum * 4*PI
-           kappa_sca(ilam) = sum
+        !
+        ! Check if the sum of the S11 over all angles is indeed kappa_scat
+        !
+        sum = 0.d0
+        do j=2,nan
+           sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
+                 abs(mu(j)-mu(j-1))
+        enddo
+        sum = sum * 4*PI
+        error = abs(sum/kappa_sca(ilam)-1.d0)
+        if(error.gt.errmax) then
+           write(*,*) 'ERROR: At lambda=',lambda_cm(ilam)*1d4,'micron the error in the',&
+                ' scattering integral is ',error,'which is larger than the error limit',errmax
+           write(*,*) '    kappa_scat                     = ',kappa_sca(ilam)
+           write(*,*) '    2*pi*int_{-1}^{+1} Z_11(mu)dmu = ',sum
+           write(*,*) '    Please use a larger number of angle points or take a weaker error limit (5th line in param.inp).'
+           write(*,*) '    Note: This problem usually happens for large ratio of a/lambda.'
+           close(2)
+           stop
+        else
+           if(irescalez.gt.0) then
+              ! ONLY FOR BACKWARD COMPATIBILITY - SHOULD NOT BE USED (SET irescalez=0)
+              scalefact(ilam) = kappa_sca(ilam) / sum
+              zscat(1:6,1:nan,ilam) = zscat(1:6,1:nan,ilam) * scalefact(ilam)
+           endif
         endif
+        !
+        ! Do the "chopping" of excessive forward scattering
+        !
+        if(chopforward.gt.0.d0) then
+           iang = 0
+           do j=1,nan
+              if(angle(j).lt.chopforward) iang=j
+           enddo
+           if(iang.gt.0) then
+              iang = iang+1
+              do j=1,iang-1
+                 zscat(1:6,j,ilam) = zscat(1:6,iang,ilam)
+              enddo
+              sum = 0.d0
+              do j=2,nan
+                 sum = sum + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
+                      abs(mu(j)-mu(j-1))
+              enddo
+              sum = sum * 4*PI
+              kappa_sca(ilam) = sum
+           endif
+        endif
+     endif
+  enddo
+  !
+  ! Now extrapolate for X>=max_x
+  !
+  ! This avoids excessively long computation, but is of course an approximation
+  !
+  do ilam=1,nlam
+     rad   = agrain_cm
+     wavel = lambda_cm(ilam)
+     X     = 2.E0*PI*RAD*REFMED/WAVEL
+     if(X.ge.max_x) then
+        kappa_abs(ilam) = kappa_abs(ihighest_x)
+        kappa_sca(ilam) = kappa_sca(ihighest_x)
+        kappa_g(ilam)   = kappa_g(ihighest_x)
+        DO J=1,NAN
+           zscat(1,j,ilam) = zscat(1,j,ihighest_x)
+           zscat(2,j,ilam) = zscat(2,j,ihighest_x)
+           zscat(3,j,ilam) = zscat(3,j,ihighest_x)
+           zscat(4,j,ilam) = zscat(4,j,ihighest_x)
+           zscat(5,j,ilam) = zscat(5,j,ihighest_x)
+           zscat(6,j,ilam) = zscat(6,j,ihighest_x)
+        enddo
      endif
   enddo
   !
