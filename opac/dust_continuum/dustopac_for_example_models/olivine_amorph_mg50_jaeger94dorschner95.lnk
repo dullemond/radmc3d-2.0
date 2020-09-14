@@ -1,10 +1,11 @@
 # Optical constants for amorphous olivine with 50% Mg and 50% Fe. From
-# Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655.
-# Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520.
+# @reference = Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655.
+# @reference = Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520.
 # This file was downloaded from the Jena database:
 # http://www.astro.uni-jena.de/Laboratory/OCDB/amsilicates.html
 # http://www.astro.uni-jena.de/Laboratory/OCDB/data/silicate/amorph/olmg50.txt
-# The material density is 3.71 g/cm^3.
+# The material density is:
+# @density = 3.71 g/cm^3.
 # When you use this file, please cite the above papers.
 # Columns are: lambda [micron], n, k
      0.20000    1.639000    0.252700
