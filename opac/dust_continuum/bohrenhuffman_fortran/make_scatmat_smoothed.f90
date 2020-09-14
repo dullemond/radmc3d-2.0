@@ -92,35 +92,6 @@ program bhmakeopac
      write(*,*) 'Are you sure that this is what you want?'
   endif
   !
-  ! Make the grain size grid
-  !
-  if(nagr.lt.4) then
-     write(*,*) 'ERROR: Must have at least 4 grain size sampling points.'
-     stop
-  endif
-  allocate(agrain_cm(nagr),weight(nagr),mgrain(nagr))
-  do ia=1,nagr
-     agrain_cm(ia) = log(agrain_cm_mean)+wfact*logawidth*(2*(ia-1.d0)/(nagr-1.d0)-1.d0)
-     agrain_cm(ia) = exp(agrain_cm(ia))
-  enddo
-  !
-  ! Compute mass of grains
-  !
-  do ia=1,nagr
-     mgrain(ia) = (4.d0*pi/3.d0)*xigrain*agrain_cm(ia)**3
-  enddo
-  !
-  ! Make the grain size distribution according to a Gauss
-  ! in log(a), centered on log(a_mean), and with a width
-  ! in log(a) space logawidth
-  !
-  sum = 0.d0
-  do ia=1,nagr
-     weight(ia) = exp(-0.5*((log(agrain_cm(ia)/agrain_cm_mean))/logawidth)**2)
-     sum = sum + weight(ia)
-  enddo
-  weight(:) = weight(:) / sum
-  !
   ! NANG=number of angles between 0 and 90 degrees (incl. 0 and 90)
   ! Scattering matrix elements are calculated for 2*NANG-1 angles
   ! including 0, 90, and 180 degrees.
@@ -288,6 +259,35 @@ program bhmakeopac
         endif
      enddo
   endif
+  !
+  ! Make the grain size grid
+  !
+  if(nagr.lt.4) then
+     write(*,*) 'ERROR: Must have at least 4 grain size sampling points.'
+     stop
+  endif
+  allocate(agrain_cm(nagr),weight(nagr),mgrain(nagr))
+  do ia=1,nagr
+     agrain_cm(ia) = log(agrain_cm_mean)+wfact*logawidth*(2*(ia-1.d0)/(nagr-1.d0)-1.d0)
+     agrain_cm(ia) = exp(agrain_cm(ia))
+  enddo
+  !
+  ! Compute mass of grains
+  !
+  do ia=1,nagr
+     mgrain(ia) = (4.d0*pi/3.d0)*xigrain*agrain_cm(ia)**3
+  enddo
+  !
+  ! Make the grain size distribution according to a Gauss
+  ! in log(a), centered on log(a_mean), and with a width
+  ! in log(a) space logawidth
+  !
+  sum = 0.d0
+  do ia=1,nagr
+     weight(ia) = exp(-0.5*((log(agrain_cm(ia)/agrain_cm_mean))/logawidth)**2)
+     sum = sum + weight(ia)
+  enddo
+  weight(:) = weight(:) / sum
   !
   ! Now allocate the opacity arrays
   !

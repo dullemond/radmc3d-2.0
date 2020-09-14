@@ -15,7 +15,7 @@ import os
 #   ./makeopac_distr
 #   mv dustkapscatmat_pyrmg70.inp dustkapscatmat_pyrmg70_fortran_distr.inp
 #   ipython --matplotlib
-#   %run plot_compare_python.py
+#   %run plot_compare_distr.py
 #
 
 
