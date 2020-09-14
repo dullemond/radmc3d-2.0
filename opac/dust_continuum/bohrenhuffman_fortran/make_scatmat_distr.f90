@@ -28,7 +28,7 @@ program bhmakeopac
   integer :: IREADEP,J,NAN,NANG
   doubleprecision :: DANG,PI,sum,error,errmax
   real :: QABS,QBACK,QEXT,QSCA,RAD,REFMED,GSCA,POL
-  real :: S11,S12,S33,S34,WAVEL,X
+  real :: S11,S12,S33,S34,WAVEL,X,XMAX
   complex :: REFREL,CXEPS,S1(2*MXNANG-1),S2(2*MXNANG-1)
   doubleprecision, allocatable :: lambda_cm(:),optcnst_n(:),optcnst_k(:)
   doubleprecision, allocatable :: lambda_cm_orig(:),optcnst_n_orig(:),optcnst_k_orig(:)
@@ -36,11 +36,11 @@ program bhmakeopac
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
   doubleprecision, allocatable :: agrain_cm(:),dagr(:),weight(:),mgrain(:)
   integer :: nlam,ilam,nang180,nagr,ia,leng,nrcomments,icomment,iang,irescalez
-  integer :: nlam_orig,ilam_orig,ilamtmp,istr,jstr
+  integer :: nlam_orig,ilam_orig,ilamtmp,istr,jstr,ihighest_x
   doubleprecision :: agrain_cm_min,agrain_cm_max,xigrain,dum(1:3)
   doubleprecision :: siggeom,factor,plindex,chopforward,lam
   doubleprecision :: lam_orig_min,lam_orig_max,opt_n_min,opt_n_max,opt_k_min,opt_k_max
-  doubleprecision :: slope_n,slope_k,eps
+  doubleprecision :: slope_n,slope_k,eps,max_x,highest_x
   character*160 :: filename,material,str0,str1,wlfile,ref1,ref2,ref3
   logical :: notfinished,wlfile_exists
   PI=4.D0*ATAN(1.D0)
@@ -55,6 +55,7 @@ program bhmakeopac
   ref1 = ""
   ref2 = ""
   ref3 = ""
+  max_x = 1d99
   !
   ! Open parameter file
   !
@@ -70,6 +71,7 @@ program bhmakeopac
   read(1,*,end=209) irescalez      ! Keep this 0. Only for backward compatibility with old version (=1)
   read(1,*,end=209) chopforward    ! Forward scattering with angles less than this: apply chopping method
   read(1,*,end=209) wlfile         ! If not "", then this is the file with the list of wavelengths to be used (in micron)
+  read(1,*,end=209) max_x          ! Maximum value of X=2*pi*a/lambda. Beyond that we extrapolate.
 209 continue
   close(1)
   filename = trim(material)//".lnk"
@@ -317,6 +319,8 @@ program bhmakeopac
      !
      ! Now do the loop over wavelengths
      !
+     highest_x  = 0.d0
+     ihighest_x = -1
      do ilam=1,nlam
         !
         ! Prepare the parameters for BHMie
@@ -337,28 +341,64 @@ program bhmakeopac
         !
         X=2.E0*PI*RAD*REFMED/WAVEL
         !
-        ! Call BHMie
+        ! Check the highest x value
         !
-        CALL BHMIE(X,REFREL,NANG,S1,S2,QEXT,QSCA,QBACK,GSCA)
-        QABS=QEXT-QSCA
+        if((X.gt.highest_x).and.(X.lt.max_x)) then
+           highest_x  = X
+           ihighest_x = ilam
+        endif
         !
-        ! Put results into array
+        ! If X<max_x then call BHMIE
         !
-        ! Note: The averaging of g has to be done multiplied by kappa_scat, 
-        !       otherwise the answer is wrong.
-        !
-        kappa_abs(ilam) = kappa_abs(ilam) + weight(ia)*qabs*siggeom/mgrain(ia)
-        kappa_sca(ilam) = kappa_sca(ilam) + weight(ia)*qsca*siggeom/mgrain(ia)
-        kappa_g(ilam)   = kappa_g(ilam)   + weight(ia)*GSCA*qsca*siggeom/mgrain(ia)
-        !
-        ! Compute conversion factor from the Sxx matrix elements
-        ! from the Bohren & Huffman code to the Zxx matrix elements we
-        ! use (such that 2*pi*int_{-1}^{+1}Z11(mu)dmu=kappa_scat).
-        ! This includes the factor k^2 (wavenumber squared) to get 
-        ! the actual cross section in units of cm^2 / ster, and there 
-        ! is the mass of the grain to get the cross section per gram.
-        !
-        factor = (lambda_cm(ilam)/(2*PI))**2/mgrain(ia)
+        if(X.lt.max_x) then
+           !
+           ! Call BHMie
+           !
+           CALL BHMIE(X,REFREL,NANG,S1,S2,QEXT,QSCA,QBACK,GSCA)
+           QABS=QEXT-QSCA
+           !
+           ! Put results into array
+           !
+           ! Note: The averaging of g has to be done multiplied by kappa_scat, 
+           !       otherwise the answer is wrong.
+           !
+           kappa_abs(ilam) = kappa_abs(ilam) + weight(ia)*qabs*siggeom/mgrain(ia)
+           kappa_sca(ilam) = kappa_sca(ilam) + weight(ia)*qsca*siggeom/mgrain(ia)
+           kappa_g(ilam)   = kappa_g(ilam)   + weight(ia)*GSCA*qsca*siggeom/mgrain(ia)
+           !
+           ! Compute conversion factor from the Sxx matrix elements
+           ! from the Bohren & Huffman code to the Zxx matrix elements we
+           ! use (such that 2*pi*int_{-1}^{+1}Z11(mu)dmu=kappa_scat).
+           ! This includes the factor k^2 (wavenumber squared) to get 
+           ! the actual cross section in units of cm^2 / ster, and there 
+           ! is the mass of the grain to get the cross section per gram.
+           !
+           factor = (lambda_cm(ilam)/(2*PI))**2/mgrain(ia)
+        else
+           !
+           ! Here we do a trick to guestimate the value for very high X values
+           !
+           ! Call BHMie
+           !
+           XMAX = max_x
+           CALL BHMIE(XMAX,REFREL,NANG,S1,S2,QEXT,QSCA,QBACK,GSCA)
+           QABS=QEXT-QSCA
+           !
+           ! Put results into array
+           !
+           kappa_abs(ilam) = weight(ia)*qabs*siggeom/mgrain(ia)
+           kappa_sca(ilam) = weight(ia)*qsca*siggeom/mgrain(ia)
+           kappa_g(ilam)   = weight(ia)*GSCA*qsca*siggeom/mgrain(ia)
+           !
+           ! Compute conversion factor from the Sxx matrix elements
+           ! from the Bohren & Huffman code to the Zxx matrix elements we
+           ! use (such that 2*pi*int_{-1}^{+1}Z11(mu)dmu=kappa_scat).
+           ! This includes the factor k^2 (wavenumber squared) to get 
+           ! the actual cross section in units of cm^2 / ster, and there 
+           ! is the mass of the grain to get the cross section per gram.
+           !
+           factor = (X/max_x)**2*(lambda_cm(ilam)/(2*PI))**2/mgrain(ia)
+        endif
         !
         ! Also store the Z matrix elements
         !
