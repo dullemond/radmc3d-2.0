@@ -1,0 +1,11 @@
+pyrmg70     ; Name of the grain, referring to the file pyrmg70.lnk
+20          ; Nr of grain sizes in this distribution
+1.00d-3     ; Mean grain radius in cm
+0.05        ; logawidth
+3.0         ; wfact
+0.0d0       ; Material density in gram/cm^3. If 0, then read the material density from the optical constants file.
+181         ; Nr of angle sampling points between 0 and 180
+100         ; Error tolerance for testing kappa_scat = 2 pi int_{-1}^{+1} Z_11(mu) dmu
+0           ; Keep this to 0 (only for backward compatibility with old version)
+5.          ; Chopping angle
+wavelength_micron.inp
