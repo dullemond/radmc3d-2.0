@@ -29,7 +29,10 @@ the "shell around it" is provided here. What you must do is:
     indeed pyrmg70.lnk). The second line should be the grain size in cm.
     The third line the material density in gram/cm^3 (note: you can find
     this either on the jena website or you'll have to look for this on other
-    databases). The fourth line is the number of angle sampling points for
+    databases). If this is set to 0, then the code will look in the
+    optical constants file for a line starting with '# @density = ' and
+    will take the number after that statement as the material density.
+    The fourth line is the number of angle sampling points for
     the phase function (uniformly distributed in angle in degrees between 0
     and 180); a reasonable value for this could be 181, meaning one sampling
     per degree. Optionally you can give the maximum allowed error
