@@ -3,7 +3,7 @@ import os
 #
 # Function for creating a dust opacity file
 #
-def create_dustkapscatmat_file(a,species,materialdensity,nsample=20,logawidth=0.05,       \
+def create_dustkapscatmat_file(a,species,nsample=20,logawidth=0.05,       \
                                errortol=0.1,chopangle=5.,renametosize=True,sizeformat="", \
                                command="./makeopac_smoothed"):
     """
@@ -14,7 +14,6 @@ def create_dustkapscatmat_file(a,species,materialdensity,nsample=20,logawidth=0.
 
       a                 Grain radius in micrometer
       species           Dust species name (there should be a file <species>.lnk in the directory)
-      materialdensity   The density of the dust species material in g/cm^3 (for olivine = 3.71 g/cm^3)
 
     OPTIONAL ARGS:
 
@@ -48,7 +47,7 @@ def create_dustkapscatmat_file(a,species,materialdensity,nsample=20,logawidth=0.
         f.write("{0:10.3e}   ; Mean grain radius in cm\n".format(a*1e-4))
         f.write("{}        ; logawidth\n".format(logawidth))
         f.write("3.0         ; wfact\n")
-        f.write("{}       ; Material density in gram/cm^3\n".format(materialdensity))
+        f.write("0.0         ; Set to zero, so that the material density is read from the optical constants file\n")
         f.write("181         ; Nr of angle sampling points between 0 and 180\n")
         f.write("{}          ; Error tolerance for testing kappa_scat integral\n".format(errortol))
         f.write("0           ; Keep this to 0 (only for backward compatibility with old version)\n")

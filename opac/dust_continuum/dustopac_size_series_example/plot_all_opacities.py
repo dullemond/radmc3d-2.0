@@ -2,9 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from radmc3dPy.analyze import readOpac
 
-with open("dustproperties.inp","r") as f:
+with open("dustspecies.inp","r") as f:
     species = f.readline()
-    materialdensity = float(f.readline())
 
 a_grains_string = []
 with open("sizes.inp","r") as f:
@@ -12,14 +11,23 @@ with open("sizes.inp","r") as f:
         a_grains_string.append(s.strip())
 a_grains = np.array(a_grains_string,dtype="float")
 a_grains_cm   = a_grains*1e-4
-m_grains_g    = (4*np.pi/3.)*materialdensity*a_grains_cm**3
-s_grains_cm2  = np.pi*a_grains_cm**2       # Geometric cross section of the grains
-k_geom_grains = s_grains_cm2/m_grains_g    # Geometric opacity of the grains
 
 opacs = []
 for astr in a_grains_string:
     o = readOpac(ext=astr,scatmat=True)
     opacs.append(o)
+
+#
+# Get the material density (same for all sizes)
+#
+materialdensity = o.materialdensity[0]
+
+#
+# Compute the geometric opacities of these grains
+#
+m_grains_g    = (4*np.pi/3.)*materialdensity*a_grains_cm**3
+s_grains_cm2  = np.pi*a_grains_cm**2       # Geometric cross section of the grains
+k_geom_grains = s_grains_cm2/m_grains_g    # Geometric opacity of the grains
 
 #
 # Plot the absorption opacities

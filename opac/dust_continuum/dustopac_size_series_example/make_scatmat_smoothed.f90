@@ -31,14 +31,18 @@ program bhmakeopac
   real :: S11,S12,S33,S34,WAVEL,X
   complex :: REFREL,CXEPS,S1(2*MXNANG-1),S2(2*MXNANG-1)
   doubleprecision, allocatable :: lambda_cm(:),optcnst_n(:),optcnst_k(:)
+  doubleprecision, allocatable :: lambda_cm_orig(:),optcnst_n_orig(:),optcnst_k_orig(:)
   doubleprecision, allocatable :: kappa_abs(:),kappa_sca(:),kappa_g(:)
   doubleprecision, allocatable :: zscat(:,:,:),angle(:),mu(:),scalefact(:)
   doubleprecision, allocatable :: agrain_cm(:),weight(:),mgrain(:)
   integer :: nlam,ilam,nang180,nagr,ia,leng,nrcomments,icomment,iang,irescalez
+  integer :: nlam_orig,ilam_orig,ilamtmp,istr,jstr
   doubleprecision :: agrain_cm_mean,logawidth,xigrain,dum(1:3)
-  doubleprecision :: siggeom,factor,wfact,chopforward
-  character*160 :: filename,material,str0,str1
-  logical :: notfinished
+  doubleprecision :: siggeom,factor,wfact,chopforward,lam
+  doubleprecision :: lam_orig_min,lam_orig_max,opt_n_min,opt_n_max,opt_k_min,opt_k_max
+  doubleprecision :: slope_n,slope_k,eps
+  character*160 :: filename,material,str0,str1,wlfile,ref1,ref2,ref3
+  logical :: notfinished,wlfile_exists
   PI=4.D0*ATAN(1.D0)
   !
   ! Defaults
@@ -47,6 +51,10 @@ program bhmakeopac
   errmax = 0.01       ! Default maximum allowed relative error
   chopforward = 0.d0  ! By default no chopping
   irescalez = 0       ! Major difference with older versions: Now by default do not rescale Z to match kappa_scat
+  wlfile = ""         ! If not "", then this is the file with the list of wavelengths to be used (in micron)
+  ref1 = ""
+  ref2 = ""
+  ref3 = ""
   !
   ! Open parameter file
   !
@@ -56,14 +64,19 @@ program bhmakeopac
   read(1,*) agrain_cm_mean
   read(1,*) logawidth
   read(1,*) wfact
-  read(1,*) xigrain
+  read(1,*) xigrain                ! Set to 0 to use material density from optical constants file header
   read(1,*) nang180                ! Nr of angles between 0 and 180 degrees
   read(1,*,end=209) errmax         ! If encountering errors above this, then stop
   read(1,*,end=209) irescalez      ! Keep this 0. Only for backward compatibility with old version (=1)
   read(1,*,end=209) chopforward    ! Forward scattering with angles less than this: apply chopping method
+  read(1,*,end=209) wlfile         ! If not "", then this is the file with the list of wavelengths to be used (in micron)
 209 continue
   close(1)
   filename = trim(material)//".lnk"
+  wlfile_exists = .false.
+  if(wlfile.ne."") then
+     inquire(file=wlfile,exist=wlfile_exists)
+  endif
   !
   ! Do a check
   !
@@ -77,6 +90,174 @@ program bhmakeopac
   if(nang180.lt.60) then
      write(*,*) 'Warning: You have less than 60 angles between 0 and 180 deg.'
      write(*,*) 'Are you sure that this is what you want?'
+  endif
+  !
+  ! NANG=number of angles between 0 and 90 degrees (incl. 0 and 90)
+  ! Scattering matrix elements are calculated for 2*NANG-1 angles
+  ! including 0, 90, and 180 degrees.
+  !
+  IF(NANG180.GT.2*MXNANG-1)STOP'***Error: NANG > MXNANG'
+  NANG=(NANG180+1)/2
+  DANG=0.5d0*PI/(NANG-1.d0)
+  NAN=NANG180
+  allocate(mu(nan),angle(nan))
+  do j=1,nan
+     angle(j)=DANG*((1.d0*J)-1.E0)*180.E0/PI
+     mu(j)=cos(angle(j)*PI/180.)
+  enddo
+  mu(1) = 1.0
+  mu(nan) = -1.0
+  !
+  ! Open optical constants file
+  !
+  open(unit=1,file=filename)
+  notfinished = .true.
+  nrcomments = 0
+  do while(notfinished)
+     read(1,'(A)') str0
+     if(str0(1:1)=='#') then
+        nrcomments = nrcomments + 1
+        if(str0(3:3)=='@') then
+           if(str0(4:12)=='reference') then
+              istr = 13
+              do while((str0(istr:istr)==' ').or.(str0(istr:istr)=='='))
+                 istr = istr+1
+              enddo
+              if(ref1=="") then
+                 ref1 = str0(istr:len(str0))
+              elseif(ref2=="") then
+                 ref2 = str0(istr:len(str0))
+              elseif(ref3=="") then
+                 ref3 = str0(istr:len(str0))
+              endif
+           elseif(str0(4:10)=='density') then
+              istr = 11
+              do while((str0(istr:istr).eq.' ').or.(str0(istr:istr).eq.'=').or.(istr.ge.160))
+                 istr = istr+1
+              enddo
+              jstr = istr
+              do while((str0(jstr:jstr).ne.' ').and.(jstr.lt.160))
+                 jstr = jstr+1
+              enddo
+              jstr = jstr - 1
+              if(xigrain.le.0.d0) then
+                 read(str0(istr:jstr),*) xigrain
+              endif
+           endif
+        endif
+     else
+        notfinished = .false.
+     endif
+  enddo
+  close(1)
+  if(xigrain.le.0.d0) then
+     write(*,*) 'ERROR: material density is not specified.'
+     stop
+  endif
+  nlam_orig = 0
+  notfinished = .true.
+  open(unit=1,file=filename)
+  do icomment=1,nrcomments
+     read(1,*) str0
+  enddo
+  do while(notfinished)
+     read(1,*,end=20) dum
+     nlam_orig = nlam_orig + 1
+  enddo
+20 continue
+  close(1)
+  allocate(lambda_cm_orig(nlam_orig),optcnst_n_orig(nlam_orig),optcnst_k_orig(nlam_orig))
+  open(unit=1,file=filename)
+  do icomment=1,nrcomments
+     read(1,*) str0
+  enddo
+  do ilam=1,nlam_orig
+     read(1,*) lambda_cm_orig(ilam),optcnst_n_orig(ilam),optcnst_k_orig(ilam)
+  enddo
+  close(1)
+  lambda_cm_orig = lambda_cm_orig * 1d-4
+  !
+  ! Map these optical constants onto the actual wavelength grid
+  !
+  if(.not.wlfile_exists) then
+     !
+     ! No wavelength file given, so use the same wavelength grid as the optical constants file
+     !
+     nlam = nlam_orig
+     allocate(lambda_cm(nlam),optcnst_n(nlam),optcnst_k(nlam))
+     do ilam=1,nlam
+        lambda_cm(ilam) = lambda_cm_orig(ilam)
+        optcnst_n(ilam) = optcnst_n_orig(ilam)
+        optcnst_k(ilam) = optcnst_k_orig(ilam)
+     enddo
+  else
+     !
+     ! Read the wavelength file
+     !
+     open(unit=1,file=wlfile)
+     read(1,*) nlam
+     allocate(lambda_cm(nlam),optcnst_n(nlam),optcnst_k(nlam))
+     do ilam=1,nlam
+        read(1,*) lambda_cm(ilam)
+     enddo
+     close(1)
+     lambda_cm = lambda_cm * 1d-4
+     !
+     ! Get some information about the original grid
+     !
+     if(lambda_cm_orig(1).lt.lambda_cm_orig(nlam_orig)) then
+        lam_orig_min = lambda_cm_orig(1)
+        lam_orig_max = lambda_cm_orig(nlam_orig)
+        opt_n_min    = optcnst_n_orig(1)
+        opt_n_max    = optcnst_n_orig(nlam_orig)
+        opt_k_min    = optcnst_k_orig(1)
+        opt_k_max    = optcnst_k_orig(nlam_orig)
+        slope_n      = (log(optcnst_n_orig(nlam_orig))-log(optcnst_n_orig(nlam_orig-1)))/ &
+                       (log(lambda_cm_orig(nlam_orig))-log(lambda_cm_orig(nlam_orig-1)))
+        slope_k      = (log(optcnst_k_orig(nlam_orig))-log(optcnst_k_orig(nlam_orig-1)))/ &
+                       (log(lambda_cm_orig(nlam_orig))-log(lambda_cm_orig(nlam_orig-1)))
+     else
+        lam_orig_min = lambda_cm_orig(nlam_orig)
+        lam_orig_max = lambda_cm_orig(1)
+        opt_n_min    = optcnst_n_orig(nlam_orig)
+        opt_n_max    = optcnst_n_orig(1)
+        opt_k_min    = optcnst_k_orig(nlam_orig)
+        opt_k_max    = optcnst_k_orig(1)
+        slope_n      = (log(optcnst_n_orig(2))-log(optcnst_n_orig(1)))/ &
+                       (log(lambda_cm_orig(2))-log(lambda_cm_orig(1)))
+        slope_k      = (log(optcnst_k_orig(2))-log(optcnst_k_orig(1)))/ &
+                       (log(lambda_cm_orig(2))-log(lambda_cm_orig(1)))
+     endif
+     !
+     ! Now do the inter/extra-polation
+     !
+     do ilam=1,nlam
+        lam = lambda_cm(ilam)
+        if(lam*0.999.lt.lam_orig_min) then
+           optcnst_n(ilam) = opt_n_min
+           optcnst_k(ilam) = opt_k_min
+        elseif(lam*1.001.gt.lam_orig_max) then
+           optcnst_n(ilam) = opt_n_max*exp((log(lam)-log(lam_orig_max))*slope_n)
+           optcnst_k(ilam) = opt_k_max*exp((log(lam)-log(lam_orig_max))*slope_k)
+        else
+           ilam_orig = 1
+           if(lambda_cm_orig(1).lt.lambda_cm_orig(nlam_orig)) then
+              do ilamtmp=2,nlam_orig-1
+                 if(lambda_cm_orig(ilamtmp).le.lam) ilam_orig=ilamtmp
+              enddo
+           else
+              do ilamtmp=2,nlam_orig-1
+                 if(lambda_cm_orig(ilamtmp).ge.lam) ilam_orig=ilamtmp
+              enddo
+           endif
+           eps = (log(lam)-log(lambda_cm_orig(ilam_orig)))/                           &
+                 (log(lambda_cm_orig(ilam_orig+1))-log(lambda_cm_orig(ilam_orig)))
+           optcnst_n(ilam) = exp((1.d0-eps)*log(optcnst_n_orig(ilam_orig))+           &
+                                        eps*log(optcnst_n_orig(ilam_orig+1)))
+           optcnst_k(ilam) = exp((1.d0-eps)*log(optcnst_k_orig(ilam_orig))+           &
+                                        eps*log(optcnst_k_orig(ilam_orig+1)))
+        endif
+     enddo
   endif
   !
   ! Make the grain size grid
@@ -108,60 +289,10 @@ program bhmakeopac
   enddo
   weight(:) = weight(:) / sum
   !
-  ! NANG=number of angles between 0 and 90 degrees (incl. 0 and 90)
-  ! Scattering matrix elements are calculated for 2*NANG-1 angles
-  ! including 0, 90, and 180 degrees.
+  ! Now allocate the opacity arrays
   !
-  IF(NANG180.GT.2*MXNANG-1)STOP'***Error: NANG > MXNANG'
-  NANG=(NANG180+1)/2
-  DANG=0.5d0*PI/(NANG-1.d0)
-  NAN=NANG180
-  allocate(mu(nan),angle(nan))
-  do j=1,nan
-     angle(j)=DANG*((1.d0*J)-1.E0)*180.E0/PI
-     mu(j)=cos(angle(j)*PI/180.)
-  enddo
-  mu(1) = 1.0
-  mu(nan) = -1.0
-  !
-  ! Open optical constants file
-  !
-  open(unit=1,file=filename)
-  notfinished = .true.
-  nrcomments = 0
-  do while(notfinished)
-     read(1,*) str0
-     if(str0(1:1)=='#') then
-        nrcomments = nrcomments + 1
-     else
-        notfinished = .false.
-     endif
-  enddo
-  close(1)
-  nlam = 0
-  notfinished = .true.
-  open(unit=1,file=filename)
-  do icomment=1,nrcomments
-     read(1,*) str0
-  enddo
-  do while(notfinished)
-     read(1,*,end=20) dum
-     nlam = nlam + 1
-  enddo
-20 continue
-  close(1)
-  allocate(lambda_cm(nlam),optcnst_n(nlam),optcnst_k(nlam),scalefact(nlam))
-  allocate(kappa_abs(nlam),kappa_sca(nlam),kappa_g(nlam))
+  allocate(kappa_abs(nlam),kappa_sca(nlam),kappa_g(nlam),scalefact(nlam))
   allocate(zscat(6,2*MXNANG-1,nlam))
-  open(unit=1,file=filename)
-  do icomment=1,nrcomments
-     read(1,*) str0
-  enddo
-  do ilam=1,nlam
-     read(1,*) lambda_cm(ilam),optcnst_n(ilam),optcnst_k(ilam)
-  enddo
-  close(1)
-  lambda_cm = lambda_cm * 1d-4
   !
   ! Reset things
   !
@@ -323,14 +454,18 @@ program bhmakeopac
   write(2,str1) '# Opacity and scattering matrix file for ',trim(material)
   write(2,'(A109)') '# Please do not forget to cite in your publications the original ' &
        //'paper of these optical constant measurements'
-  write(2,'(A44)') '# Made with the make_scatmat_smoothed.f90 code,'
+  if(ref1.ne.'') call write_ref(ref1)
+  if(ref2.ne.'') call write_ref(ref2)
+  if(ref3.ne.'') call write_ref(ref3)
+  write(2,'(A47)') '# Made with the make_scatmat_smoothed.f90 code,'
   write(2,'(A70)') '# using the bhmie.f Mie code of Bohren and Huffman (version by Draine)'
   write(2,'(A26)') '# Grain size distribution:'
   write(2,'(A23,E13.6,A3)') '#   agrain_mean      = ',agrain_cm_mean,' cm'
   write(2,'(A23,E13.6)') '#   logawidth        = ',logawidth
   write(2,'(A23,F13.6)') '#   wfact            = ',wfact
   write(2,'(A23,I4,A3)') '#   nr of sizes used = ',nagr
-  write(2,'(A20,F9.6,A7)') '# Material density =',xigrain,' g/cm^3'
+  write(2,'(A19)') '# Material density:'
+  call write_dens(xigrain)
   write(2,*) 1     ! Format number
   write(2,*) nlam
   write(2,*) nan
@@ -351,6 +486,45 @@ program bhmakeopac
   enddo
   close(2)
   !
+  ! Write the simpler dustkappa_*.inp file
+  !
+  filename = 'dustkappa_'//trim(material)//'.inp'
+  open(unit=2,file=filename)
+  leng = len_trim(material)
+  if(leng.lt.10) then
+     write(str0,'(I1)')
+  elseif(leng.lt.100) then
+     write(str0,'(I2)')
+  elseif(leng.lt.1000) then
+     write(str0,'(I3)')
+  else
+     write(*,*) 'Dust opacity name too long'
+     stop 
+  endif
+  str1 = '(A19,A'//trim(str0)//')'
+  write(2,str1) '# Opacity file for ',trim(material)
+  write(2,'(A109)') '# Please do not forget to cite in your publications the original ' &
+       //'paper of these optical constant measurements'
+  if(ref1.ne.'') call write_ref(ref1)
+  if(ref2.ne.'') call write_ref(ref2)
+  if(ref3.ne.'') call write_ref(ref3)
+  write(2,'(A47)') '# Made with the make_scatmat_smoothed.f90 code,'
+  write(2,'(A70)') '# using the bhmie.f Mie code of Bohren and Huffman (version by Draine)'
+  write(2,'(A26)') '# Grain size distribution:'
+  write(2,'(A23,E13.6,A3)') '#   agrain_mean      = ',agrain_cm_mean,' cm'
+  write(2,'(A23,E13.6)') '#   logawidth        = ',logawidth
+  write(2,'(A23,F13.6)') '#   wfact            = ',wfact
+  write(2,'(A23,I4,A3)') '#   nr of sizes used = ',nagr
+  write(2,'(A19)') '# Material density:'
+  call write_dens(xigrain)
+  write(2,*) 3     ! Format number
+  write(2,*) nlam
+  write(2,*) 
+  do ilam=1,nlam
+     write(2,'(4(E13.6,1X))') lambda_cm(ilam)*1e4,kappa_abs(ilam),kappa_sca(ilam),kappa_g(ilam)
+  enddo
+  close(2)
+  !
   ! Just for information to the user: write out the scaling factor used
   !
   if(irescalez.gt.0) then
@@ -365,7 +539,24 @@ program bhmakeopac
   ! Deallocate stuff
   !
   deallocate(lambda_cm,optcnst_n,optcnst_k)
+  deallocate(lambda_cm_orig,optcnst_n_orig,optcnst_k_orig)
   deallocate(kappa_abs,kappa_sca,kappa_g)
   deallocate(zscat,angle,mu,scalefact)
   deallocate(agrain_cm,weight,mgrain)
 end program bhmakeopac
+
+subroutine write_ref(str)
+  implicit none
+  character*160 :: str,lenstr,fmt
+  write(lenstr,'(I3.3)') len_trim(str)
+  fmt='(A15,A'//lenstr(1:3)//')'
+  write(2,fmt) '# @reference = ',str
+end subroutine write_ref
+
+subroutine write_dens(xi)
+  implicit none
+  double precision :: xi
+  character*160 :: fmt
+  fmt='(A13,F9.6,A7)'
+  write(2,fmt) '# @density = ',xi,' g/cm^3'
+end subroutine write_dens
