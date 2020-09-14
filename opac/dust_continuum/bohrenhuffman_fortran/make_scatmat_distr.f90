@@ -386,9 +386,9 @@ program bhmakeopac
            !
            ! Put results into array
            !
-           kappa_abs(ilam) = weight(ia)*qabs*siggeom/mgrain(ia)
-           kappa_sca(ilam) = weight(ia)*qsca*siggeom/mgrain(ia)
-           kappa_g(ilam)   = weight(ia)*GSCA*qsca*siggeom/mgrain(ia)
+           kappa_abs(ilam) = kappa_abs(ilam) + weight(ia)*qabs*siggeom/mgrain(ia)
+           kappa_sca(ilam) = kappa_sca(ilam) + weight(ia)*qsca*siggeom/mgrain(ia)
+           kappa_g(ilam)   = kappa_g(ilam)   + weight(ia)*GSCA*qsca*siggeom/mgrain(ia)
            !
            ! Compute conversion factor from the Sxx matrix elements
            ! from the Bohren & Huffman code to the Zxx matrix elements we
