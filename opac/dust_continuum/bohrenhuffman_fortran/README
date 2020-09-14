@@ -107,7 +107,7 @@ files (as they are in the default setup).
 For comparing to the Python Mie code
 ------------------------------------
 In the RADMC-3D package there is also a Python version of the entire
-Mie code machinery. See ../../bohrenhuffman_python/ . To facilitate
+Mie code machinery. See ../bohrenhuffman_python/ . To facilitate
 a direct comparison between the results from the Fortran90 codes and
 the Python code, a copy of the python codes (bhmie.py, makedustopac.py,
 and the corresponding calling script python_version.py) are also
