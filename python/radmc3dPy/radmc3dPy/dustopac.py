@@ -117,6 +117,8 @@ class radmc3dDustOpac(object):
         self.z44 = []
         self.scatang = []
         self.nang = []
+        self.references = []
+        self.materialdensity = []
 
     def writeOpac(self, fname=None, ext=None, idust=None, scatmat=False):
         """
@@ -291,11 +293,26 @@ class radmc3dDustOpac(object):
                 fname = 'dustkapscatmat_' + ext[i] + '.inp'
                 print('Reading ' + fname)
 
+                references = ""
+                glue = ""
+                rhomat = None
                 with open(fname, 'r') as rfile:
 
                     # Check the file format (skipping comments)
                     iformat_str = rfile.readline()
                     while iformat_str[0]=='#':
+                        if(iformat_str[2:12]=='@reference'):
+                            ref = iformat_str[12:].strip()
+                            if(ref[0]=='='): ref=ref[1:]
+                            ref=ref.strip()
+                            references = references+glue+ref
+                            glue='\n'
+                        elif(iformat_str[2:10]=='@density'):
+                            rhomat = iformat_str[10:].strip()
+                            if(rhomat[0]=='='): rhomat=rhomat[1:]
+                            rhomat=rhomat.strip()
+                            rhomat.split(' ')
+                            rhomat=float(rhomat[0])
                         iformat_str = rfile.readline()
                     iformat = int(iformat_str)
                     if iformat != 1:
@@ -314,6 +331,9 @@ class radmc3dDustOpac(object):
                 self.nang.append(nang)
                 self.ext.append(ext[i])
                 self.idust.append(idust[i])
+
+                self.references.append(references)
+                self.materialdensity.append(rhomat)
 
                 # Get the opacities
                 data_opac = np.reshape(data[:nlam*4], [nlam, 4])
@@ -343,11 +363,26 @@ class radmc3dDustOpac(object):
 
                     print('Reading '+fname)
 
+                    references = ""
+                    glue = ""
+                    rhomat = None
                     with open(fname, 'r') as rfile:
 
                         # Check the file format (skipping comments)
                         iformat_str = rfile.readline()
                         while iformat_str[0]=='#':
+                            if(iformat_str[2:12]=='@reference'):
+                                ref = iformat_str[12:].strip()
+                                if(ref[0]=='='): ref=ref[1:]
+                                ref=ref.strip()
+                                references = references+glue+ref
+                                glue='\n'
+                            elif(iformat_str[2:10]=='@density'):
+                                rhomat = iformat_str[10:].strip()
+                                if(rhomat[0]=='='): rhomat=rhomat[1:]
+                                rhomat=rhomat.strip()
+                                rhomat.split(' ')
+                                rhomat=float(rhomat[0])
                             iformat_str = rfile.readline()
                         iformat = int(iformat_str)
                         if (iformat < 1) | (iformat > 3):
@@ -364,6 +399,9 @@ class radmc3dDustOpac(object):
                     self.idust.append(idust[i])
                     self.nwav.append(nlam)
                     self.nfreq.append(nlam)
+
+                    self.references.append(references)
+                    self.materialdensity.append(rhomat)
 
                     # If only the absorption coefficients are specified
                     if iformat == 1:
