@@ -52,6 +52,8 @@ def create_dustkapscatmat_file(a,species,nsample=20,logawidth=0.05,       \
         f.write("{}          ; Error tolerance for testing kappa_scat integral\n".format(errortol))
         f.write("0           ; Keep this to 0 (only for backward compatibility with old version)\n")
         f.write("{}          ; Chopping angle\n".format(chopangle))
+        f.write("wavelength_micron.inp\n")
+        f.write("1e4         ; Maximum value of x for Mie; beyond that we use a scaling relation\n")
     os.system(command)
     if renametosize:
         astr      = ("{0:"+sizeformat+"}").format(a)

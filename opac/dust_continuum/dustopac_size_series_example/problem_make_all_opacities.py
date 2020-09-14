@@ -1,12 +1,12 @@
 import numpy as np
 from makedustopacfortran import *
 
-n_grains        = 20         # How many separate grain size opacity files to make
-a_gr_mic_min    = 0.1        # Smallest grain size in micron
-a_gr_mic_max    = 1e3        # Largest grain size in micron
+n_grains        = 7          # How many separate grain size opacity files to make
+a_gr_mic_min    = 1e-1       # Smallest grain size in micron
+a_gr_mic_max    = 1e5        # Largest grain size in micron
 sizeformat      = "8.2e"     # Format of the grain size in the filenames
 species         = "olivine"  # Name of the optical constants file for olivine: olivine.lnk
-errortol        = 1e7        # The errors come from super-forward-scattering. With chopping we fix that.
+errortol        = 1e99       # The errors come from super-forward-scattering. With chopping we fix that.
 chopangle       = 5.         # The chopping angle cone.
 lammin          = 0.1        # Smallest wavelength in micron
 lammax          = 1e4        # Largest wavelength in micron
