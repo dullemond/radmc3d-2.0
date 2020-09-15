@@ -5,7 +5,7 @@ import os
 #
 def create_dustkapscatmat_file(a,species,nsample=20,logawidth=0.05,       \
                                errortol=0.1,chopangle=5.,renametosize=True,sizeformat="", \
-                               command="./makeopac_smoothed"):
+                               command="./makeopac_smoothed",scatmat=True,kappa=False):
     """
     Make a dust opacity file. Make sure that you type "make" to compile the fortran code
     makeopac_smoothed in this directory.
@@ -36,6 +36,11 @@ def create_dustkapscatmat_file(a,species,nsample=20,logawidth=0.05,       \
       sizeformat        The format string how to format the size into a string. 
                         Default = "". Another option could be e.g. "8.2e" or "9.3e".
       command           This is the command to be used to call the Fortran90 Mie code.
+      scatmat           If True and if renametosize is True, then copy the 
+                        dustkapscatmat_<species>.inp files to dustkapscatmat_<size>.inp
+      kappa             If True and if renametosize is True, then copy the 
+                        dustkappat_<species>.inp files to dustkappa_<size>.inp
+
     
     """
     if(not os.path.isfile(command)):
@@ -57,6 +62,13 @@ def create_dustkapscatmat_file(a,species,nsample=20,logawidth=0.05,       \
     os.system(command)
     if renametosize:
         astr      = ("{0:"+sizeformat+"}").format(a)
-        file_from = "dustkapscatmat_"+species+".inp"
-        file_to   = "dustkapscatmat_"+astr+".inp"
-        os.system("mv -f "+file_from+" "+file_to)
+        if scatmat:
+            file_from = "dustkapscatmat_"+species+".inp"
+            file_to   = "dustkapscatmat_"+astr+".inp"
+            os.system("mv -f "+file_from+" "+file_to)
+        if kappa:
+            file_from = "dustkapscatmat_"+species+".inp"
+            file_to   = "dustkapscatmat_"+astr+".inp"
+            os.system("mv -f "+file_from+" "+file_to)
+        os.system("rm -f dustkappa_"+species+".inp")
+        os.system("rm -f dustkapscatmat_"+species+".inp")
