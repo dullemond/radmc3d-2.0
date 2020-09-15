@@ -5,6 +5,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import readfargo as fg
+from makedustopacfortran import create_dustkapscatmat_file
+import os
 #
 # A simple grid refinement function
 #
@@ -324,6 +326,34 @@ with open('wavelength_micron.inp','w+') as f:
     f.write('%d\n'%(nlam))
     for value in lam:
         f.write('%13.6e\n'%(value))
+
+#
+# Make sure that the dust opacity files have been created properly
+#
+sizeformat      = "8.2e"     # Format of the grain size in the filenames
+species         = "olivine"  # Name of the optical constants file for olivine: olivine.lnk
+errortol        = 1e99       # The errors come from super-forward-scattering. With chopping we fix that.
+chopangle       = 5.         # The chopping angle cone.
+
+remakeopacs     = True
+if(os.path.isfile("dustspecies.inp")):
+    with open("dustspecies.inp","r") as f:
+        if(f.readline().strip()==species):
+            remakeopacs = False
+if remakeopacs:
+    os.system('rm -f dustkap*.inp')
+with open("dustspecies.inp","w") as f:
+    f.write(species+"\n")
+for acm in a_grains:
+    amic = acm*1e4
+    astr = ('{0:'+sizeformat+'}').format(amic).strip()
+    opacfilename = 'dustkapscatmat_'+astr+'.inp'
+    if(not os.path.isfile(opacfilename)):
+        astr = ("{0:"+sizeformat+"}").format(amic)
+        print("Creating opacity for grain size "+astr+" micron radius")
+        create_dustkapscatmat_file(amic,species,sizeformat=sizeformat, \
+                                   errortol=errortol,chopangle=chopangle)
+        
 #
 #
 # Write the stars.inp file
@@ -370,9 +400,9 @@ with open('dustopac.inp','w+') as f:
     f.write('{}               Nr of dust species\n'.format(nrspec))
     f.write('============================================================================\n')
     for agr in a_grains_mic:
-        f.write('1               Way in which this dust species is read\n')
+        f.write('10              Way in which this dust species is read\n')
         f.write('0               0=Thermal grain\n')
-        f.write('{}_micron      Extension of name of dustkappa_***.inp file\n'.format(agr))
+        f.write(('{0:'+sizeformat+'}        Extension of name of dustkapscatmat_***.inp file\n').format(agr))
         f.write('----------------------------------------------------------------------------\n')
 #
 # Write the radmc3d.inp control file
