@@ -1,0 +1,4 @@
+!wavelength_micron.inp
+dustkap*.inp
+makeopac*
+!param*.inp
