@@ -160,7 +160,7 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
                 rhomat = str[10:].strip()
                 if(rhomat[0]=='='): rhomat=rhomat[1:]
                 rhomat=rhomat.strip()
-                rhomat.split(' ')
+                rhomat=rhomat.split(' ')
                 rhomat=float(rhomat[0])
             str = f.readline()
     #
