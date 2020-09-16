@@ -22,8 +22,6 @@ na        = 20            # Use 20 grain size samples
 chop      = 5.            # Remove forward scattering within an angle of 5 degrees
 optconst  = "olivine_amorph_mg50_jaeger94dorschner95"
 descript  = "Amorphous Olivine with 50% Mg and 50% Fe"
-reference = "Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655; Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520."
-matdens   = 3.71
 extrapol  = True          # Extrapolate optical constants beyond its wavelength grid, if necessary
 verbose   = True          # If True, then write out status information
 ntheta    = 181           # Number of scattering angle sampling points
@@ -52,11 +50,9 @@ for isize in range(len(agraincm)):
     sz           = '{}'.format(agraincm[isize]/1e-4)
     optc         = optconst
     optconstfile = optc+'.lnk'
-    name         = descript
-    ref          = reference
-    dens         = matdens
+    descr        = descript
     print("Running the code. Please wait...")
-    opac       = compute_opac_mie(optconstfile,dens,agr,lamcm,theta=theta,
+    opac       = compute_opac_mie(optconstfile,None,agr,lamcm,theta=theta,
                               extrapolate=extrapol,logawidth=logawidth,na=na,
                               chopforward=chop,verbose=verbose)
     opaclist.append(copy.deepcopy(opac))
@@ -66,13 +62,13 @@ for isize in range(len(agraincm)):
     # ...The full scattering matrix file
     #
     print("Writing the opacity to scatmat file")
-    write_radmc3d_scatmat_file(opac,sz,name,ref)
+    write_radmc3d_scatmat_file(opac,sz,descr=descr)
     #
     # ...Only the opacity file with simple scattering info
     #    (uncomment the next two commands if you wish to use this)
     #
     print("Writing the opacity to kappa file")
-    write_radmc3d_kappa_file(opac,sz,name,ref)
+    write_radmc3d_kappa_file(opac,sz,descr=descr)
     #
     # Note that RADMC-3D does not like it when both files are there, so
     # you must choose whether you want to do the full scattering or not
