@@ -395,6 +395,10 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
             dum = 0.5 * zav*dmu
             sum = dum.sum() * 4 * math.pi
             kscat[i] = sum
+            muav = 0.5 * (mu[1:]+mu[:-1])
+            dumg = 0.5 * zav*muav*dmu
+            sumg = dumg.sum() * 4 * math.pi
+            gscat[i] = sumg/sum
     #
     # If error found, then warn
     #
