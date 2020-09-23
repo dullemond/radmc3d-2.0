@@ -1,4 +1,5 @@
 module camera_module
+  !$ use omp_lib
   use rtglobal_module
   use amrray_module
   use dust_module
@@ -298,6 +299,11 @@ module camera_module
   !
   double precision :: camera_maxdphi = 0.d0
   !
+  ! OpenMP Parallellization:
+  ! Global variables used in subroutine calls within the parallel region which are threadprivate
+  !
+  !!!!!!$OMP THREADPRIVATE(camera_nrrefine)
+  !$OMP THREADPRIVATE(camera_intensity_iquv)
 contains
 
 
@@ -465,11 +471,13 @@ subroutine camera_init()
      write(stdo,*) 'ERROR in camera module: Could not allocate spectrum array.'
      stop
   endif
+  !$OMP PARALLEL
   allocate(camera_intensity_iquv(1:camera_nrfreq,1:4),STAT=ierr)
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in camera module: Could not allocate camera_intensity_iquv() array'
      stop
   endif
+  !$OMP END PARALLEL
   !
   ! Now allocate the image array for the rectangular images
   !
@@ -570,7 +578,9 @@ subroutine camera_partial_cleanup()
   if(allocated(camera_rect_image_iquv)) deallocate(camera_rect_image_iquv)
   if(allocated(camera_circ_image_iquv)) deallocate(camera_circ_image_iquv)
   if(allocated(camera_spectrum_iquv)) deallocate(camera_spectrum_iquv)
+  !$OMP PARALLEL
   if(allocated(camera_intensity_iquv)) deallocate(camera_intensity_iquv)
+  !$OMP END PARALLEL
   if(allocated(camera_xstop)) deallocate(camera_xstop)
   if(allocated(camera_ystop)) deallocate(camera_ystop)
   if(allocated(camera_zstop)) deallocate(camera_zstop)
@@ -2744,6 +2754,10 @@ recursive subroutine camera_compute_one_pixel(nrfreq,inu0,inu1,px,py,pdx,pdy,  &
   integer :: nrfreq,istar
   double precision :: intensity(nrfreq,1:4)
   double precision :: intensdum(nrfreq,1:4)
+  double precision :: intensdum11(nrfreq,1:4)
+  double precision :: intensdum12(nrfreq,1:4)
+  double precision :: intensdum13(nrfreq,1:4)
+  double precision :: intensdum14(nrfreq,1:4)
   double precision :: intensdum2(nrfreq,1:4)
   double precision :: px,py,pdx,pdy
   double precision :: x1,y1,dx1,dy1
@@ -2751,6 +2765,8 @@ recursive subroutine camera_compute_one_pixel(nrfreq,inu0,inu1,px,py,pdx,pdy,  &
   double precision :: celldxmin,dum1,factor,rmin
   integer :: nrrefine,idum,inu0,inu1,inu,ns,istar1,is
   logical :: flag,todo,donerefine
+  integer :: id
+  !$ integer OMP_get_thread_num
   !
   ! Check
   !
@@ -2793,7 +2809,11 @@ recursive subroutine camera_compute_one_pixel(nrfreq,inu0,inu1,px,py,pdx,pdy,  &
   !
   ! Increase the counter
   !
+  ! Need critical to get the sub-pixeling numbers correct, but slows down the
+  ! parallelization a lot. I would suggest not using. - Patrick Sheehan
+  !!!!!!$OMP CRITICAL
   camera_subpixeling_npixtot = camera_subpixeling_npixtot + 1
+  !!!!!!$OMP END CRITICAL
   !
   ! Check if we need to refine our pixel
   !
@@ -2811,27 +2831,48 @@ recursive subroutine camera_compute_one_pixel(nrfreq,inu0,inu1,px,py,pdx,pdy,  &
         dy1  = 0.5d0*pdy
         intensity(inu0:inu1,1:4) = 0.d0
         !
+        ! OPENMP PARALLELIZATION HERE TO SPEED THINGS UP.
+        !
+        !$OMP TASK PRIVATE(x1,y1) SHARED(intensdum11) &
+        !$OMP FIRSTPRIVATE(nrfreq,inu0,inu1,dx1,dy1,idum,istar)
         x1   = px-0.25d0*pdx
         y1   = py-0.25d0*pdy
-        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum,istar)
-        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum(inu0:inu1,1:4)
+        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum11,istar)
+        !intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum11(inu0:inu1,1:4)
+        !$OMP END TASK
         !
+        !$OMP TASK PRIVATE(x1,y1) SHARED(intensdum12) &
+        !$OMP FIRSTPRIVATE(nrfreq,inu0,inu1,dx1,dy1,idum,istar)
         x1   = px+0.25d0*pdx
         y1   = py-0.25d0*pdy
-        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum,istar)
-        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum(inu0:inu1,1:4)
+        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum12,istar)
+        !intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum12(inu0:inu1,1:4)
+        !$OMP END TASK
         !
+        !$OMP TASK PRIVATE(x1,y1) SHARED(intensdum13) &
+        !$OMP FIRSTPRIVATE(nrfreq,inu0,inu1,dx1,dy1,idum,istar)
         x1   = px-0.25d0*pdx
         y1   = py+0.25d0*pdy
-        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum,istar)
-        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum(inu0:inu1,1:4)
+        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum13,istar)
+        !intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum13(inu0:inu1,1:4)
+        !$OMP END TASK
         !
+        !$OMP TASK PRIVATE(x1,y1) SHARED(intensdum14) &
+        !$OMP FIRSTPRIVATE(nrfreq,inu0,inu1,dx1,dy1,idum,istar)
         x1   = px+0.25d0*pdx
         y1   = py+0.25d0*pdy
-        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum,istar)
-        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum(inu0:inu1,1:4)
+        call camera_compute_one_pixel(nrfreq,inu0,inu1,x1,y1,dx1,dy1,idum,intensdum14,istar)
+        !intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum14(inu0:inu1,1:4)
+        !$OMP END TASK
         !
+        !$OMP TASKWAIT
+        !
+        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum11(inu0:inu1,1:4)
+        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum12(inu0:inu1,1:4)
+        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum13(inu0:inu1,1:4)
+        intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) + intensdum14(inu0:inu1,1:4)
         intensity(inu0:inu1,1:4) = intensity(inu0:inu1,1:4) * 0.25d0
+        !
         donerefine = .true.
      else
         !
@@ -2845,7 +2886,9 @@ recursive subroutine camera_compute_one_pixel(nrfreq,inu0,inu1,px,py,pdx,pdy,  &
      ! No refinement was done, so this pixel also counts as a "fine" pixel
      ! So increase that counter (this is just for diagnostics; it's non-essential)
      !
+     !!!!!!$OMP CRITICAL
      camera_subpixeling_npixfine = camera_subpixeling_npixfine + 1
+     !!!!!!$OMP END CRITICAL
   endif
   !
   ! Include stellar spheres
@@ -3134,6 +3177,7 @@ subroutine camera_make_rect_image(img,tausurf)
   character*80 :: strint
   integer :: iact,icnt,ilinesub
   logical :: redo
+  double precision :: seconds
   !
   ! If "tausurf" is set, then the purpose of this subroutine
   ! changes from being an imager to being a "tau=1 surface finder".
@@ -3827,6 +3871,7 @@ subroutine camera_make_rect_image(img,tausurf)
      ! If necessary, then do the scattering source functions at all
      ! frequencies beforehand.  WARNING: This can be a very large array!
      !
+     !$ seconds = omp_get_wtime()
      if(domc) then
         if(allocated(mc_frequencies)) deallocate(mc_frequencies)
         mc_nrfreq=camera_nrfreq
@@ -3869,6 +3914,7 @@ subroutine camera_make_rect_image(img,tausurf)
            stop 8762
         endif
      endif
+     !$ write(stdo,*)"Total elapsed time:",omp_get_wtime() - seconds;
      !
      ! Pre-compute which lines and which levels for line transfer may
      ! contribute to these wavelengths. Note that this only has to be
@@ -4164,6 +4210,12 @@ subroutine camera_make_rect_image(img,tausurf)
     integer :: inuu
     integer :: backup_nrrefine,backup_tracemode
     logical :: warn_tausurf_problem,flag_quv_too_big
+    integer :: id,nthreads
+    double precision :: seconds
+    integer :: pixel_count = 0
+    !$ integer OMP_get_num_threads
+    !$ integer OMP_get_thread_num
+    !$ integer OMP_get_num_procs
     !
     ! Reset some non-essential counters
     !
@@ -4179,7 +4231,23 @@ subroutine camera_make_rect_image(img,tausurf)
        !
        ! *** NEAR FUTURE: PUT OPENMP DIRECTIVES HERE (START) ***
        !
+       !$ seconds = omp_get_wtime()
+       !
+       !$OMP PARALLEL &
+       !
+       !!$ Local variables from this function.
+       !
+       !$OMP PRIVATE(px,py,id,nthreads,pixel_count)
+       !
+       !$ pixel_count = 0
+       !
+       !$ id=OMP_get_thread_num()
+       !$ nthreads=OMP_get_num_threads()
+       !$ write(stdo,*) 'Thread Nr',id,'of',nthreads,'threads in total'
        flag_quv_too_big = .false.
+       !
+       !$OMP DO COLLAPSE(2) SCHEDULE(dynamic)
+       !
        do iy=1,camera_image_ny
           do ix=1,camera_image_nx
              !
@@ -4229,13 +4297,23 @@ subroutine camera_make_rect_image(img,tausurf)
                 enddo
              endif
              !
+             !$ pixel_count = pixel_count + 1
           enddo
        enddo
+       !
+       !$OMP END DO
+       !
        if(flag_quv_too_big) then
           write(stdo,*) 'WARNING: While making an image, I found an instance of Q^2+U^2+V^2>I^2...'
        endif
        !
        ! *** NEAR FUTURE: PUT OPENMP DIRECTIVES HERE (FINISH) ***
+       !
+       !$   write(stdo,*) 'Thread:',id,'raytraced:',pixel_count,'pixels'
+       !
+       !$OMP END PARALLEL
+       !
+       !$ write(stdo,*)"Elapsed time:",omp_get_wtime() - seconds;
        !
     else
        !

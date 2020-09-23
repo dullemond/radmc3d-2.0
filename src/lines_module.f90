@@ -36,6 +36,7 @@
 !
 !=======================================================================
 module lines_module
+!$ use omp_lib
 use amr_module
 use rtglobal_module
 use ioput_module
@@ -5416,8 +5417,10 @@ end subroutine lines_compute_maxrellineshift
 subroutine lines_serial_init_raytrace(action)
   implicit none
   integer :: action
+  !$OMP PARALLEL
   ray_ns    = 1
   ray_nsmax = 1
+  !$OMP END PARALLEL
   call lines_ray1d_init_raytrace(action)
 end subroutine lines_serial_init_raytrace
 
@@ -5448,19 +5451,23 @@ subroutine lines_ray1d_init_raytrace(action)
   !
   ! First clean up things
   !
+  !$OMP PARALLEL
   if(allocated(lines_ray_levpop)) deallocate(lines_ray_levpop)
   if(allocated(lines_ray_nrdens)) deallocate(lines_ray_nrdens)
   if(allocated(lines_ray_temp)) deallocate(lines_ray_temp)
   if(allocated(lines_ray_turb)) deallocate(lines_ray_turb)
   if(allocated(lines_ray_doppler)) deallocate(lines_ray_doppler)
+  !$OMP END PARALLEL
   !lines_warn_lineleap = .false.
   !
   ! Check some basic things
   !
+  !$OMP PARALLEL
   if(ray_nsmax.lt.1) then
      write(stdo,*) 'ERROR in line module: ray_nsmax not set.'
      stop
   endif
+  !$OMP END PARALLEL
   !
   ! Check if the rest is allocated
   !
@@ -5472,42 +5479,54 @@ subroutine lines_ray1d_init_raytrace(action)
   !
   ! Allocate the various arrays
   !  
+  !$OMP PARALLEL
   allocate(lines_ray_levpop(lines_maxnrlevels,lines_nr_species,ray_nsmax),STAT=ierr)
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in lines module: Could not allocate '
      write(stdo,*) '      lines_ray_levpop(:,:,:).'
      stop 
   endif
+  !$OMP END PARALLEL
+  !$OMP PARALLEL
   allocate(lines_ray_nrdens(lines_nr_species,ray_nsmax),STAT=ierr)
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in lines module: Could not allocate '
      write(stdo,*) '      lines_ray_nrdens(:,:).'
      stop 
   endif
+  !$OMP END PARALLEL
+  !$OMP PARALLEL
   allocate(lines_ray_temp(ray_nsmax),STAT=ierr) 
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in lines module: Could not allocate '
      write(stdo,*) '      lines_ray_temp(:).'
      stop 
   endif
+  !$OMP END PARALLEL
+  !$OMP PARALLEL
   allocate(lines_ray_turb(ray_nsmax),STAT=ierr) 
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in lines module: Could not allocate '
      write(stdo,*) '      lines_ray_turb(:).'
      stop 
   endif
+  !$OMP END PARALLEL
+  !$OMP PARALLEL
   allocate(lines_ray_doppler(ray_nsmax),STAT=ierr) 
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in lines module: Could not allocate '
      write(stdo,*) '      lines_ray_doppler(:).'
      stop 
   endif
+  !$OMP END PARALLEL
+  !$OMP PARALLEL
   allocate(lines_ray_lorentz_delta(ray_nsmax),STAT=ierr) 
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in lines module: Could not allocate '
      write(stdo,*) '      lines_ray_lorentz_delta(:).'
      stop 
   endif
+  !$OMP END PARALLEL
   !
 end subroutine lines_ray1d_init_raytrace
 
