@@ -26,7 +26,7 @@ program bhmakeopac
   implicit none
   integer, parameter :: MXNANG=1000
   integer :: IREADEP,J,NAN,NANG
-  doubleprecision :: DANG,PI,sum,error,errmax
+  doubleprecision :: DANG,PI,sum,error,errmax,summu
   real :: QABS,QBACK,QEXT,QSCA,RAD,REFMED,GSCA,POL
   real :: S11,S12,S33,S34,WAVEL,X,XMAX
   complex :: REFREL,CXEPS,S1(2*MXNANG-1),S2(2*MXNANG-1)
@@ -471,6 +471,13 @@ program bhmakeopac
            enddo
            sum = sum * 4*PI
            kappa_sca(ilam) = sum
+           summu = 0.d0
+           do j=2,nan
+              summu = summu + 0.25d0*(zscat(1,j-1,ilam)+zscat(1,j,ilam))* &
+                   0.5d0*(mu(j)+mu(j-1))*abs(mu(j)-mu(j-1))
+           enddo
+           summu = summu * 4*PI
+           kappa_g(ilam) = summu/sum
         endif
      endif
   enddo
