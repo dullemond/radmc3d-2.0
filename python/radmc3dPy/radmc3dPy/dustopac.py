@@ -311,7 +311,7 @@ class radmc3dDustOpac(object):
                             rhomat = iformat_str[10:].strip()
                             if(rhomat[0]=='='): rhomat=rhomat[1:]
                             rhomat=rhomat.strip()
-                            rhomat.split(' ')
+                            rhomat=rhomat.split(' ')
                             rhomat=float(rhomat[0])
                         iformat_str = rfile.readline()
                     iformat = int(iformat_str)
@@ -381,7 +381,7 @@ class radmc3dDustOpac(object):
                                 rhomat = iformat_str[10:].strip()
                                 if(rhomat[0]=='='): rhomat=rhomat[1:]
                                 rhomat=rhomat.strip()
-                                rhomat.split(' ')
+                                rhomat=rhomat.split(' ')
                                 rhomat=float(rhomat[0])
                             iformat_str = rfile.readline()
                         iformat = int(iformat_str)

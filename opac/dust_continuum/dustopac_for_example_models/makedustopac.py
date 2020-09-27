@@ -21,7 +21,9 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
                       in micron, then the n-coefficient and then the 
                       k-coefficient. See Jena optical constants database:
                       http://www.astro.uni-jena.de/Laboratory/Database/databases.html
-      matdens       = Material density in g/cm^3
+      matdens       = Material density in g/cm^3. If set to None, then 
+                      it will be attempted to obtain this information
+                      from the header of the optical constants file
       agraincm      = Grain radius in cm (float or numpy array). If array, then
                       the weighting must be set as well (see wgt).
       wgt           = Optional: sets the grain size weighting when multiple grain
@@ -139,6 +141,44 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
     wavmic, ncoef, kcoef = data.T
     assert wavmic.size > 1, "Error: Optical constants file must have at least two rows with two different wavelengths."
     assert wavmic[1]!=wavmic[0], "Error: Optical constants file must have at least two rows with two different wavelengths."
+    #
+    # Attempt to parse header
+    #
+    references = ""
+    glue = ""
+    rhomat = None
+    with open(optconst_file,'r') as f:
+        str = f.readline()
+        while(str[0]=='#'):
+            if(str[2:12]=='@reference'):
+                ref = str[12:].strip()
+                if(ref[0]=='='): ref=ref[1:]
+                ref=ref.strip()
+                references = references+glue+ref
+                glue='\n'
+            elif(str[2:10]=='@density'):
+                rhomat = str[10:].strip()
+                if(rhomat[0]=='='): rhomat=rhomat[1:]
+                rhomat=rhomat.strip()
+                rhomat=rhomat.split(' ')
+                rhomat=float(rhomat[0])
+            str = f.readline()
+    #
+    # Now set the material density, either from the optical constants file or specified in the arguments
+    #
+    if rhomat is not None:
+        if matdens is not None:
+            if(rhomat!=matdens):
+                msg  = "Warning: Material density {} specified in call to compute_opac_mie()".format(matdens)
+                msg += " is not the same as the material density {} specified in the optical constants file.".format(rhomat)
+                msg += " Taking the one given as argument to compute_opac_mie()."
+                print(msg)
+        else:
+            matdens = rhomat
+    else:
+        if matdens is None:
+            msg = "Material density is not specified, neither in call to compute_opac_mie() nor in the optical constants file."
+            raise ValueError(msg)
     #
     # Check range, and if needed and requested, extrapolate the
     # optical constants to longer or shorter wavelengths
@@ -355,6 +395,10 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
             dum = 0.5 * zav*dmu
             sum = dum.sum() * 4 * math.pi
             kscat[i] = sum
+            muav = 0.5 * (mu[1:]+mu[:-1])
+            dumg = 0.5 * zav*muav*dmu
+            sumg = dumg.sum() * 4 * math.pi
+            gscat[i] = sumg/sum
     #
     # If error found, then warn
     #
@@ -367,7 +411,8 @@ def compute_opac_mie(optconst_file,matdens,agraincm,lamcm,wgt=None,
     # Now return what we computed in a dictionary
     #
     package = {"lamcm":lamcm, "kabs":kabs, "kscat":kscat, 
-               "gscat":gscat, "matdens":matdens, "agraincm":agraincm}
+               "gscat":gscat, "matdens":matdens, "agraincm":agraincm,
+               "references":references,}
     if theta is not None:
         package["zscat"] = np.copy(zscat)
         package["theta"] = np.copy(angles)
@@ -404,10 +449,15 @@ def write_radmc3d_scatmat_file(package,name,descr=None,ref=None):
         if ref is not None:
             f.write('# Optical constants from '+ref+'\n')
         f.write('# Please do not forget to cite in your publications the original paper of these optical constant measurements\n')
+        if(package["references"]!=''):
+            refs = package["references"].split('\n')
+            for r in refs:
+                f.write('# @references = '+r+'\n')
         f.write('# Made with the makedustopac.py code by Cornelis Dullemond\n')
         f.write('# using the bhmie.py Mie code of Bohren and Huffman (python version by Cornelis Dullemond, from original bhmie.f code by Bruce Draine)\n')
         f.write('# Grain size = %13.6e cm\n'%(package['agraincm']))
-        f.write('# Material density = %6.3f g/cm^3\n'%(package['matdens']))
+        f.write('# Material density:\n')
+        f.write('# @density = %6.3f g/cm^3\n'%(package['matdens']))
         f.write('1\n')  # Format number
         f.write('%d\n'%(package['lamcm'].size))
         f.write('%d\n'%(package['theta'].size))
@@ -449,10 +499,15 @@ def write_radmc3d_kappa_file(package,name,descr=None,ref=None):
         if ref is not None:
             f.write('# Optical constants from '+ref+'\n')
         f.write('# Please do not forget to cite in your publications the original paper of these optical constant measurements\n')
+        if(package["references"]!=''):
+            refs = package["references"].split('\n')
+            for r in refs:
+                f.write('# @references = '+r+'\n')
         f.write('# Made with the makedustopac.py code by Cornelis Dullemond\n')
         f.write('# using the bhmie.py Mie code of Bohren and Huffman (python version by Cornelis Dullemond, from original bhmie.f code by Bruce Draine)\n')
         f.write('# Grain size = %13.6e cm\n'%(package['agraincm']))
-        f.write('# Material density = %6.3f g/cm^3\n'%(package['matdens']))
+        f.write('# Material density:\n')
+        f.write('# @density = %6.3f g/cm^3\n'%(package['matdens']))
         f.write('3\n')  # Format number
         f.write('%d\n'%(package['lamcm'].size))
         f.write('\n')
