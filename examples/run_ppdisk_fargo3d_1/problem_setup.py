@@ -101,7 +101,7 @@ ri       = np.hstack([2*ri[0]-ri[1],ri,2*ri[-1]-ri[-2]])
 rc       = 0.5 * ( ri[:-1] + ri[1:] )
 nr       = len(rc)   # Recompute nr, because of refinement at inner edge
 r        = rc        # The radial grid of the analytic disk model (below)
-phii     = 0.5*(fargo.phi[1:]+fargo.phi[:-1])
+phii     = 0.5*(fargo.phi[1:]+fargo.phi[:-1])+np.pi
 phii     = np.hstack([2*phii[0]-phii[1],phii,2*phii[-1]-phii[-2]])
 phic     = 0.5 * ( phii[:-1] + phii[1:] )
 nphi     = len(phic)
@@ -302,7 +302,7 @@ for St,Sig in zip(Stokes_mid_2d,sigma_dust_2d):
 #
 # Monte Carlo parameters
 #
-nphot    = 1000000
+nphot    = 10000000     # Very minimal value for 3-D models
 
 #
 # Write the wavelength_micron.inp file
@@ -373,8 +373,8 @@ with open('amr_grid.inp','w+') as f:
     f.write('0\n')                       # AMR grid style  (0=regular grid, no AMR)
     f.write('100\n')                     # Coordinate system: spherical
     f.write('0\n')                       # gridinfo
-    f.write('1 1 0\n')                   # Include r,theta coordinates
-    f.write('%d %d %d\n'%(nr,ntheta,1))  # Size of grid
+    f.write('1 1 1\n')                   # Include r,theta coordinates
+    f.write('%d %d %d\n'%(nr,ntheta,nphi))  # Size of grid
     for value in ri:
         f.write('%13.6e\n'%(value))      # X coordinates (cell walls)
     for value in thetai:
