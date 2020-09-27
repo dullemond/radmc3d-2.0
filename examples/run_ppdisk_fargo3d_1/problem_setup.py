@@ -302,7 +302,8 @@ for St,Sig in zip(Stokes_mid_2d,sigma_dust_2d):
 #
 # Monte Carlo parameters
 #
-nphot    = 10000000     # Very minimal value for 3-D models
+nphot_therm    = 10000000     # Very minimal value for 3-D models
+nphot_scat     = 1000000      # Very minimal value for 3-D models
 
 #
 # Write the wavelength_micron.inp file
@@ -408,6 +409,7 @@ with open('dustopac.inp','w+') as f:
 # Write the radmc3d.inp control file
 #
 with open('radmc3d.inp','w+') as f:
-    f.write('nphot = %d\n'%(nphot))
+    f.write('nphot_therm = %d\n'%(nphot_therm))
+    f.write('nphot_scat = %d\n'%(nphot_scat))
     f.write('scattering_mode_max = 1\n')
     f.write('iranfreqmode = 1\n')
