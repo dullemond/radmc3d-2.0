@@ -960,7 +960,7 @@ subroutine read_dustkappa_file(ispec,filename)
      numin = nu(nlam)
      numax = nu(1)
   endif
-  if((frmin.lt.numin).or.(frmax.gt.numax)) then
+  if((frmin.lt.numin*(1.d0-1d-3)).or.(frmax.gt.numax*(1.d0+1d-3))) then
      write(stdo,*) 'Note: Opacity file ',filename(1:filename_len),' does not cover the '
      write(stdo,*) '      complete wavelength range of the model (i.e. the range'
      write(stdo,*) '      in the file frequency.inp or wavelength_micron.inp).'
@@ -1360,7 +1360,7 @@ subroutine read_dustkapscatmat_file(ispec,filename)
      numin = dust_kappa_arrays(ispec)%freq(nlam)
      numax = dust_kappa_arrays(ispec)%freq(1)
   endif
-  if((frmin.lt.numin).or.(frmax.gt.numax)) then
+  if((frmin.lt.numin*(1.d0-1d-3)).or.(frmax.gt.numax*(1.d0+1d-3))) then
      write(stdo,*) 'Note: Opacity file ',filename(1:filename_len),' does not cover the '
      write(stdo,*) '      complete wavelength range of the model (i.e. the range'
      write(stdo,*) '      in the file frequency.inp or wavelength_micron.inp).'
@@ -1854,7 +1854,7 @@ subroutine read_optconst_file(ispec,filename)
      numin = dust_kappa_arrays(ispec)%freq(nlam)
      numax = dust_kappa_arrays(ispec)%freq(1)
   endif
-  if((frmin.lt.numin).or.(frmax.gt.numax)) then
+  if((frmin.lt.numin*(1.d0-1d-3)).or.(frmax.gt.numax*(1.d0+1d-3))) then
      write(stdo,*) 'Note: Opacity file ',filename(1:filename_len),' does not cover the '
      write(stdo,*) '      complete wavelength range of the model (i.e. the range'
      write(stdo,*) '      in the file frequency.inp or wavelength_micron.inp).'
