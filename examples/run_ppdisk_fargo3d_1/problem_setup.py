@@ -374,7 +374,7 @@ with open('amr_grid.inp','w+') as f:
     f.write('0\n')                       # AMR grid style  (0=regular grid, no AMR)
     f.write('100\n')                     # Coordinate system: spherical
     f.write('0\n')                       # gridinfo
-    f.write('1 1 1\n')                   # Include r,theta coordinates
+    f.write('1 1 1\n')                   # Include r,theta,phi coordinates
     f.write('%d %d %d\n'%(nr,ntheta,nphi))  # Size of grid
     for value in ri:
         f.write('%13.6e\n'%(value))      # X coordinates (cell walls)
