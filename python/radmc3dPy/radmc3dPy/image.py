@@ -954,6 +954,37 @@ class radmc3dImage(object):
 
         return res
 
+    def compute_brightness_temperature(self,linear=True):
+        """
+        Compute, from the image intensity, the corresponding brightness temperature in Kelvin.
+
+        OPTIONAL ARGUMENT:
+
+          linear         If set, then just use the linear conversion factor, not 
+                         taking into account the exponential Wien part of the 
+                         Planck spectrum. If unset, then compute the true brightness
+                         temperature, using the full Planck spectrum.
+        """
+        tbright = np.zeros((self.nx,self.ny,self.nfreq))
+        for inu in range(self.nfreq):
+            freq = self.freq[inu]
+            if self.nfreq == 1:
+                if self.stokes:
+                    img = self.image[:,:,0]
+                else:
+                    img = self.image[:,:]
+            else:
+                if self.stokes:
+                    img = self.image[:,:,inu,0]
+                else:
+                    img = self.image[:,:,inu]
+            img = np.squeeze(img)
+            if linear:
+                tbright[:,:,inu] = img*(nc.cc**2)/(2*(freq**2)*nc.kk)
+            else:
+                tbright[:,:,inu] = nc.hh*freq/(nc.kk*np.log(2*nc.hh*freq**3/nc.cc**2*1./img+1.))
+        return tbright
+
 
 def getPSF(nx=None, ny=None, psfType='gauss', pscale=None, fwhm=None, pa=None, tdiam_prim=8.2, tdiam_sec=0.94,
            wav=None):
