@@ -263,27 +263,23 @@ for acm in a_grains:
 # dust grains, and assuming no settling. This calculation is done to
 # estimate the required vertical extent of the theta-grid.
 #
-sigma_smalldust = sigma_dust_2d[0][:,0]
-astr            = ("{0:"+sizeformat+"}").format(a_grains[0]*1e4)
-osmall          = readOpac(ext=astr,scatmat=True)
-lamstar         = 0.45   # Representative wavelength for stellar radiation
-kappa           = np.interp(lamstar,osmall.wav[0],osmall.kabs[0]+osmall.ksca[0])
-args            = (0.01,ri,sigma_smalldust,hpr,kappa)
-
 def ftauroot(theta,tau0,ri,sg,hpr,kap):
     rho   = (sg/(np.sqrt(2*pi)*hpr*r))*np.exp(-0.5*((np.pi/2-theta)/hpr)**2)
     dr    = ri[1:]-ri[:-1]
     tau   = kap*(rho*dr).sum()
     return tau-tau0
 
-thetaup   = bisect(ftauroot, 0.2, np.pi/2, args=args, xtol=1e-6, rtol=1e-6)
+sigma_smalldust = sigma_dust_2d[0]
+astr            = ("{0:"+sizeformat+"}").format(a_grains[0]*1e4)
+osmall          = readOpac(ext=astr,scatmat=True)
+lamstar         = 0.45   # Representative wavelength for stellar radiation
+kappa           = np.interp(lamstar,osmall.wav[0],osmall.kabs[0]+osmall.ksca[0])
 
-#
-# Vertical grid parameters (theta-grid in spherical coordinates)
-#
-ntheta   = 32
-#zrmax    = 0.5                     # You may need to fine tune this
-#thetaup  = np.pi*0.5 - zrmax
+thetaup         = np.zeros(nphi)
+for iphi in range(nphi):
+    args          = (0.01,ri,sigma_smalldust[:,iphi],hpr,kappa)
+    thetaup[iphi] = bisect(ftauroot, 0.2, np.pi/2, args=args, xtol=1e-6, rtol=1e-6)
+thetaup         = thetaup.min()   # Min, because pi/2-thetaup must be max
 
 #
 # Make the theta coordinate, and refine near the midplane
@@ -295,6 +291,7 @@ ntheta   = 32
 #       distribution of the largest grains remains resolved
 #       by the theta-grid.
 #
+ntheta   = 32
 thetai   = np.linspace(thetaup,0.5e0*np.pi,ntheta+1)
 zr       = thetai[::-1]
 nlev_zr  = 7         # Grid refinement at the midplane: nr of cycles
