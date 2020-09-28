@@ -57,4 +57,26 @@ plt.ylabel(r'$\pi/2-\theta$')
 norm=colors.Normalize(vmin=z.min(),vmax=z.max())
 cbar=fig.colorbar(cm.ScalarMappable(norm=norm,cmap=cmap), ax=ax)
 cbar.set_label(r'$T\;[\mathrm{K}]$')
+
+#
+# Compute the tau=1 surface for stellar radiation
+# We focus only on the small grain component here
+#
+osmall  = readOpac(ext='1.00e-01',scatmat=True)
+lamstar = 0.45
+kappa   = np.interp(lamstar,osmall.wav[0],osmall.kabs[0]+osmall.ksca[0])
+alpha   = kappa*a.rhodust[:,:,:,0]
+rri,tt,pp = np.meshgrid(a.grid.xi,a.grid.y,a.grid.z,indexing='ij')
+drr     = rri[1:,:,:]-rri[:-1,:,:]
+taurad  = (alpha*drr).cumsum(axis=0)
+tausurf = np.zeros((a.grid.ny,a.grid.nz))
+for iz in range(a.grid.nz):
+    for iy in range(a.grid.ny):
+        tausurf[iy,iz] = np.interp(1.0,taurad[:,iy,iz],rri[:-1,iy,iz])
+mask = tausurf>a.grid.xi[-3]
+tausurf[mask] = 1.1*a.grid.xi[-1]
+assert len(mask[0])>0, "ERROR in setup: Vertical extent of the grid too small (upper layers of disk are cut off)."
+
+plt.plot(np.log10(tausurf[:,0]/au),np.pi/2-a.grid.y,color='blue')
+
 plt.show()
