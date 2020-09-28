@@ -1835,10 +1835,6 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
             msg = 'lambdarange must have two and only two elements'
             raise ValueError(msg)
 
-    if sizeau is None:
-        msg = 'Unknown sizeau.'
-        raise ValueError(msg)
-
     #
     # Kees' fix for the case when a locally compiled radmc3d exists in the current directory
     #
@@ -1850,7 +1846,8 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
     # com = 'radmc3d image'
     com = com + ' npix ' + str(int(npix))
     com = com + ' incl ' + str(incl)
-    com = com + ' sizeau ' + str(sizeau)
+    if sizeau is not None:
+        com = com + ' sizeau ' + str(sizeau)
 
     if wav is not None:
         com = com + ' lambda ' + str(wav)
