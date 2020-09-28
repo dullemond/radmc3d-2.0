@@ -275,11 +275,11 @@ osmall          = readOpac(ext=astr,scatmat=True)
 lamstar         = 0.45   # Representative wavelength for stellar radiation
 kappa           = np.interp(lamstar,osmall.wav[0],osmall.kabs[0]+osmall.ksca[0])
 
-thetaup         = np.zeros(nphi)
+thetaupp        = np.zeros(nphi)
 for iphi in range(nphi):
-    args          = (0.01,ri,sigma_smalldust[:,iphi],hpr,kappa)
-    thetaup[iphi] = bisect(ftauroot, 0.2, np.pi/2, args=args, xtol=1e-6, rtol=1e-6)
-thetaup         = thetaup.min()   # Min, because pi/2-thetaup must be max
+    args           = (0.01,ri,sigma_smalldust[:,iphi],hpr,kappa)
+    thetaupp[iphi] = bisect(ftauroot, 0.2, np.pi/2, args=args, xtol=1e-6, rtol=1e-6)
+thetaup         = thetaupp.min()   # Min, because pi/2-thetaup must be max
 
 #
 # Make the theta coordinate, and refine near the midplane
