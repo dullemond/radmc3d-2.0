@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import readfargo as fg
 from makedustopacfortran import create_dustkapscatmat_file
 import os
+from radmc3dPy.analyze import readOpac
+from scipy.optimize import bisect
 #
 # A simple grid refinement function
 #
@@ -206,11 +208,82 @@ alpha_turb   = nu_cgs/(cs**2/omk)                # Just for fun: what would the 
 D_cgs        = nu_cgs                            # We assume the diffusion by turbulence = viscosity by turbulence
 
 #
+# Write the wavelength_micron.inp file
+#
+lam1     = 0.1e0
+lam2     = 7.0e0
+lam3     = 25.e0
+lam4     = 1.0e4
+n12      = 20
+n23      = 100
+n34      = 30
+lam12    = np.logspace(np.log10(lam1),np.log10(lam2),n12,endpoint=False)
+lam23    = np.logspace(np.log10(lam2),np.log10(lam3),n23,endpoint=False)
+lam34    = np.logspace(np.log10(lam3),np.log10(lam4),n34,endpoint=True)
+lam      = np.concatenate([lam12,lam23,lam34])
+nlam     = lam.size
+#
+# Write the wavelength file
+#
+with open('wavelength_micron.inp','w+') as f:
+    f.write('%d\n'%(nlam))
+    for value in lam:
+        f.write('%13.6e\n'%(value))
+
+#
+# Make sure that the dust opacity files have been created properly
+#
+sizeformat      = "8.2e"     # Format of the grain size in the filenames
+species         = "olivine"  # Name of the optical constants file for olivine: olivine.lnk
+errortol        = 1e99       # The errors come from super-forward-scattering. With chopping we fix that.
+chopangle       = 5.         # The chopping angle cone.
+
+remakeopacs     = True
+if(os.path.isfile("dustspecies.inp")):
+    with open("dustspecies.inp","r") as f:
+        if(f.readline().strip()==species):
+            remakeopacs = False
+if remakeopacs:
+    os.system('rm -f dustkap*.inp')
+with open("dustspecies.inp","w") as f:
+    f.write(species+"\n")
+for acm in a_grains:
+    amic = acm*1e4
+    astr = ('{0:'+sizeformat+'}').format(amic).strip()
+    opacfilename = 'dustkapscatmat_'+astr+'.inp'
+    if(not os.path.isfile(opacfilename)):
+        astr = ("{0:"+sizeformat+"}").format(amic)
+        print("Creating opacity for grain size "+astr+" micron radius")
+        create_dustkapscatmat_file(amic,species,sizeformat=sizeformat, \
+                                   errortol=errortol,chopangle=chopangle)
+
+#
+# Estimate the maximum vertical thickness of the disk based on the
+# radial path of the stellar light, and focusing only on the smallest
+# dust grains, and assuming no settling. This calculation is done to
+# estimate the required vertical extent of the theta-grid.
+#
+sigma_smalldust = sigma_dust_2d[0][:,0]
+astr            = ("{0:"+sizeformat+"}").format(a_grains[0]*1e4)
+osmall          = readOpac(ext=astr,scatmat=True)
+lamstar         = 0.45   # Representative wavelength for stellar radiation
+kappa           = np.interp(lamstar,osmall.wav[0],osmall.kabs[0]+osmall.ksca[0])
+args            = (0.01,ri,sigma_smalldust,hpr,kappa)
+
+def ftauroot(theta,tau0,ri,sg,hpr,kap):
+    rho   = (sg/(np.sqrt(2*pi)*hpr*r))*np.exp(-0.5*((np.pi/2-theta)/hpr)**2)
+    dr    = ri[1:]-ri[:-1]
+    tau   = kap*(rho*dr).sum()
+    return tau-tau0
+
+thetaup   = bisect(ftauroot, 0.2, np.pi/2, args=args, xtol=1e-6, rtol=1e-6)
+
+#
 # Vertical grid parameters (theta-grid in spherical coordinates)
 #
 ntheta   = 32
-zrmax    = 0.5                     # You may need to fine tune this
-thetaup  = np.pi*0.5 - zrmax
+#zrmax    = 0.5                     # You may need to fine tune this
+#thetaup  = np.pi*0.5 - zrmax
 
 #
 # Make the theta coordinate, and refine near the midplane
@@ -321,56 +394,6 @@ if azav:
 nphot_therm    = 10000000     # Very minimal value for 3-D models
 nphot_scat     = 1000000      # Very minimal value for 3-D models
 
-#
-# Write the wavelength_micron.inp file
-#
-lam1     = 0.1e0
-lam2     = 7.0e0
-lam3     = 25.e0
-lam4     = 1.0e4
-n12      = 20
-n23      = 100
-n34      = 30
-lam12    = np.logspace(np.log10(lam1),np.log10(lam2),n12,endpoint=False)
-lam23    = np.logspace(np.log10(lam2),np.log10(lam3),n23,endpoint=False)
-lam34    = np.logspace(np.log10(lam3),np.log10(lam4),n34,endpoint=True)
-lam      = np.concatenate([lam12,lam23,lam34])
-nlam     = lam.size
-#
-# Write the wavelength file
-#
-with open('wavelength_micron.inp','w+') as f:
-    f.write('%d\n'%(nlam))
-    for value in lam:
-        f.write('%13.6e\n'%(value))
-
-#
-# Make sure that the dust opacity files have been created properly
-#
-sizeformat      = "8.2e"     # Format of the grain size in the filenames
-species         = "olivine"  # Name of the optical constants file for olivine: olivine.lnk
-errortol        = 1e99       # The errors come from super-forward-scattering. With chopping we fix that.
-chopangle       = 5.         # The chopping angle cone.
-
-remakeopacs     = True
-if(os.path.isfile("dustspecies.inp")):
-    with open("dustspecies.inp","r") as f:
-        if(f.readline().strip()==species):
-            remakeopacs = False
-if remakeopacs:
-    os.system('rm -f dustkap*.inp')
-with open("dustspecies.inp","w") as f:
-    f.write(species+"\n")
-for acm in a_grains:
-    amic = acm*1e4
-    astr = ('{0:'+sizeformat+'}').format(amic).strip()
-    opacfilename = 'dustkapscatmat_'+astr+'.inp'
-    if(not os.path.isfile(opacfilename)):
-        astr = ("{0:"+sizeformat+"}").format(amic)
-        print("Creating opacity for grain size "+astr+" micron radius")
-        create_dustkapscatmat_file(amic,species,sizeformat=sizeformat, \
-                                   errortol=errortol,chopangle=chopangle)
-        
 #
 #
 # Write the stars.inp file
