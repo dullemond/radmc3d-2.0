@@ -372,8 +372,8 @@ for St,Sig in zip(Stokes_mid_2d,sigma_dust_2d):
 #
 # Monte Carlo parameters
 #
-nphot_therm    = 10000000     # Very minimal value for 3-D models
-nphot_scat     = 1000000      # Very minimal value for 3-D models
+nphot_therm    = 100000000     # Very minimal value for 3-D models
+nphot_scat     = 10000000      # Very minimal value for 3-D models
 
 #
 #
