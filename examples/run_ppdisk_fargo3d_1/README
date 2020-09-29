@@ -1,0 +1,134 @@
+This model setup reads a 2-D (r,phi) FARGO3D hydrodynamic model (possibly with dynamic dust
+components) and converts it into 3-D (r,theta,phi), and written into the input files for
+RADMC-3D. The python script that does the conversion and writes these files is:
+
+  problem_setup.py
+
+The model requires you to do some handwork editing of this script file:
+
+  - Specify the directory 'dir' where the FARGO3D model is located.
+
+  - Set the time frame index 'itime' of the FARGO3D snapshot you wish to read.
+  
+  - Set the stellar parameters mstar, rstar and tstar. They are here set to 2.4*Msun,
+    2.4*Rsun and 10^4 K respectively.
+
+  - Set the characteristic radius r0 (which is also the initial semi-major axis
+    of the planet in the standard FARGO3D model). This is here set to 60*au. The
+    combination of the stellar parameters and the r0 allow the script to convert
+    the dimensionless model of FARGO3D into a real model with CGS units for
+    RADMC-3D.
+
+  - Specify the dust-to-gas ratio 'dtg_smalldust' for the small-grain population.
+    The surface density of this small-grain population is then always assumed to
+    be proportional to dtg_smalldust times the gas surface density. This is therefore
+    NOT one of the dynamic dust components of FARGO3D.
+
+  - If your FARGO3D model has no dynamic dust components, you need to specify only
+    a single grain size. If it has N dynamic dust components, you need to specify
+    N+1 grain sizes (the first one for the one mentioned above with the dtg_smalldust,
+    the next N ones for the N dynamic dust components). These grain sizes are
+    specified in 'a_grains_mic' as a numpy array, in microns. The first grain size
+    can be taken to be whatever you like. The other N grain sizes are more tricky,
+    because they have to be chosen such that they are roughly consistent with the
+    Stokes numbers of the N dynamic components in the FARGO3D model. You can check
+    this by inspecting the Stokes_mid_2d list. The standard example of dynamic dust
+    components in FARGO3D specify the Stokes number, not the grain size. For radiative
+    transfer one has to specify the grain size, not the Stokes number. This is a
+    tricky incompatibility that can be solved in two possible ways: either you just
+    take a grain size that _roughly_ gives the right Stokes numbers (which will
+    vary with r and phi), or one modifies FARGO3D to keep fixed the grain size
+    and compute the Stokes number locally. Unfortunately this all requires a bit
+    of hand-work.
+
+  - To be able to convert properly from grain size to Stokes number you also have
+    to specify the grain material density 'xi_grains' in g/cm^3.
+
+  - Specify a guess of the flaring irradiation incidence angle in radians 'flang'.
+    Here it is set to 0.05, which is just a guess.
+
+  - For the computation of the vertical settling/mixing of the dust, you need to
+    specify the turbulent viscosity 'nu_fargo'. FARGO3D in its standard
+    configuration specifies the kinematic viscosity nu (in code units), instead
+    of the alpha_turb. You have to set it here to the value you use in the
+    FARGO3D model, assuming that the turbulence is isotropic. If you assume that
+    the turbulence is anisotropic, e.g. that it is 30x stronger in vertical
+    direction than in horizontal direction (e.g. for the VSI), then you have to
+    insert here for 'nu_fargo' the 30 times higher value as used in FARGO3D. It
+    is up to you, as long as you consciously decide this.
+
+  - You have to specify the dust opacity optical constant file. Currently the
+    optical constant file 'olivine.lnk' is used, so the variable 'species' is
+    set to 'olivine'.
+
+  - You can do some fine-tuning of the vertical grid by fiddling with the
+    ntheta, nlev_zr, nspan_zr parameters. The current settings are reasonable,
+    however.
+
+  - To fine-tune the Monte Carlo noise level you can fiddle with the parameters
+    nphot_therm and nphot_scat. 
+
+Now you're all set to start the setup:
+
+   python problem_setup.py
+   radmc3d mctherm
+   ipython --matplotlib
+   %run plot_images.py
+
+Note that the model is set up in the following way: The FARGO3D model is 2-D, so
+it has to be vertically "inflated" to 3-D using a model of the vertical
+structure. First the gas vertical structure is estimated (a Gaussian model based
+on an estimate of the local midplane temperature). Then the dust vertical
+structure is computed based on a simple settling/mixing model:
+
+  - The _gas_ vertical structure is computed based on an estimate of the temperature
+    structure based on a simple Chiang & Goldreich like irradiated disk model. It is
+    important to realize that this is not iterated with the actual resulting midplane
+    dust temperatures computed by RADMC-3D. One may want to do an aposteriori check
+    that the temperature on which the vertical structure of the gas is based is not
+    too far off from the result from RADMC-3D. If the results are too far off, you
+    can adjust, for instance, the 'flang' parameter.
+
+  - By setting the turbulent strength and the grain sizes (see above) it becomes
+    possible to compute, at each r, phi location, the vertical settling/mixing
+    equilibrium solution from Fromang & Nelson (2009) A&A 496, 597.
+
+  - The script also computes the dust opacity files for the grain sizes specified
+    (see above). These are the dustkapscatmat_xxxx.inp. If the file already
+    exists, it is not recomputed. So if you decide to change the dust material
+    (e.g. to abandon olivine and instead use pyroxene), you have to remove
+    the dustkapscatmat_*.inp files, so as to force the script to recompute
+    them.
+
+The model setup has some caveats:
+
+  (1) The radial grid is that of the FARGO3D model. Since most FARGO3D models
+      attempt to model only a certain part of the disk (say between 10 and 100
+      au), and assume that the disk in fact continues inward all the way to
+      the star, this "all the way to the star" part is not included in the model,
+      and will also not be included in the RADMC3D model. This may not be what
+      you want. If you want to include this inner part, you will have to extend
+      the model inward somehow.
+
+  (2) The inner edge of the FARGO3D model typically does not have radial grid
+      refinement. That is ok for the hydrodynamics, but it is not very good for
+      the radiative transfer. The "unresolved inner rim effect" (see RADMC-3D
+      manual) then becomes apparent. If this inner rim is not your concern,
+      and you are not interested in the SED of the model, then you can ignore
+      this. But if you need to create a consistent SED, you need to add refinement
+      to the inner edge (and see point (1), too). The refinement is demonstrated
+      in e.g. run_ppdisk_analytic_1/.
+
+  (3) The gas around the planet is vertically equally extended as the gas far
+      away from the planet at the same orbit. This is unphysical, since in
+      reality the planet has its own gravity, which tends to pull the gas
+      down. The unphysical effect in the scattered light image is that
+      the planet blob is seen very prominently in the scattered light image,
+      and it casts a shadow onto the outer disk. Both these effects are
+      unrealistic. The circumplanetary disk should be much flatter, and
+      thus it is hardly irradiated (lying in the shadow of the inner part
+      of the circumstellar disk) and does not cast a shadow. To do this
+      better, one would have to include the flattening of the material
+      due to the planet's gravity, which is not (yet) part of this model.
+
+2020.09.29
