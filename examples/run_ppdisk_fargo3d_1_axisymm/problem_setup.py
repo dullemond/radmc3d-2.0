@@ -388,8 +388,8 @@ if azav:
 #
 # Monte Carlo parameters
 #
-nphot_therm    = 10000000     # Very minimal value for 3-D models
-nphot_scat     = 1000000      # Very minimal value for 3-D models
+nphot_therm    = 10000000
+nphot_scat     = 1000000
 
 #
 #
