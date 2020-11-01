@@ -7212,13 +7212,35 @@ subroutine camera_make_circ_image()
     integer :: backup_nrrefine,backup_tracemode
     logical :: warn_tausurf_problem,flag_quv_too_big
     double precision :: r,phi
+    integer :: id,nthreads
+    double precision :: seconds
+    integer :: pixel_count = 0
+    !$ integer OMP_get_num_threads
+    !$ integer OMP_get_thread_num
+    !$ integer OMP_get_num_procs
     !
     ! *** NEAR FUTURE: PUT OPENMP DIRECTIVES HERE (START) ***
     !
+    !$ seconds = omp_get_wtime()
+    !
+    !$OMP PARALLEL &
+    !
+    !!$ Local variables from this function.
+    !
+    !$OMP PRIVATE(px,py,r,phi,id,nthreads,pixel_count)
+    !
+    !$ pixel_count = 0
+    !
+    !$ id=OMP_get_thread_num()
+    !$ nthreads=OMP_get_num_threads()
+    !$ write(stdo,*) 'Thread Nr',id,'of',nthreads,'threads in total'
     flag_quv_too_big = .false.
+    !
+    !$OMP DO COLLAPSE(2) SCHEDULE(dynamic)
+    !
     do ir=1,camera_image_nr
-       r = cim_rc(ir)
        do iphi=1,camera_image_nphi
+          r = cim_rc(ir)
           phi = cim_pc(iphi)
           !
           ! Set the ray variables
@@ -7277,14 +7299,23 @@ subroutine camera_make_circ_image()
              enddo
           endif
           !
+          !$ pixel_count = pixel_count + 1
        enddo
     enddo
+    !
+    !$OMP END DO
     !
     ! *** NEAR FUTURE: PUT OPENMP DIRECTIVES HERE (FINISH) ***
     !
     if(flag_quv_too_big) then
        write(stdo,*) 'WARNING: While making an image, I found an instance of Q^2+U^2+V^2>I^2...'
     endif
+    !
+    !$   write(stdo,*) 'Thread:',id,'raytraced:',pixel_count,'pixels'
+    !
+    !$OMP END PARALLEL
+    !
+    !$ write(stdo,*)"Elapsed time:",omp_get_wtime() - seconds;
     !
     ! Add the central star (star 1)
     ! 
