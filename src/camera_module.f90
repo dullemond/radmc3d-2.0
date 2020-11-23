@@ -7227,7 +7227,7 @@ subroutine camera_make_circ_image()
     !
     !!$ Local variables from this function.
     !
-    !$OMP PRIVATE(px,py,r,phi,id,nthreads,pixel_count)
+    !$OMP PRIVATE(ir,iphi,px,py,x,y,z,dirx,diry,dirz,distance,r,phi,id,nthreads,pixel_count)
     !
     !$ pixel_count = 0
     !
