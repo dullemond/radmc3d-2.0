@@ -27,11 +27,24 @@ Now, as usual set up the model and compute the dust temperature:
 
 Now in Python make the image figures:
 
-   %run plot_images.py
+   %run plot_images_0.2_micron.py
 
 This will create two images: one with isotropic scattering assumption and one
 with full scattering treatment (anisotropic). The forwardly-peaked scattering is
 clearly seen.
+
+For comparison, you can also do:
+
+   %run plot_images_2_micron.py
+
+This does the same, but now at 2 micron, where the scattering is almost
+isotropic. Note, however, that even at large wavelengths (or equivalently
+small grains), the scattering is never truly isotropic: it has the famous
+0.5*(1+cos(theta)^2) shape of Rayleigh scattering. That is why, in the
+comparison at 2 microns along the major axis the isotropic scattering case
+is a bit brighter, while along the minor axis the isotropic scattering case
+is a bit dimmer than the real scattering case. This can be seen in the
+cross section figure.
 
 You may wonder why the full scattering Monte Carlo is so very much slower than
 the isotropic treatment. The reason is that for isotropic scattering, the
@@ -63,4 +76,4 @@ photon package initially moves away from us, then gets scattered to the left,
 then its contribution to the source function will be different on the left than
 on the right side of the disk.
 
-2020-09-01
+2020-09-01, 2020-09-13

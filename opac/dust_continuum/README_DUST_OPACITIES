@@ -1,44 +1,51 @@
-For dust continuum radiative transfer RADMC-3D requires dust opacities,
-which are typically given in tabulated form as a function of wavelength (one
-line per wavelength point). For each wavelength point the absorption opacity
-(kappa_abs in units of cm^2/gram-of-dust) and the scattering opacity
-(kappa_scat in units of cm^2/gram-of-dust) is given, and perhaps also some
-information about the scattering phase function.
+For dust continuum radiative transfer RADMC-3D requires dust opacities, which
+are typically given in tabulated form as a function of wavelength (one line per
+wavelength point). For each wavelength point the absorption opacity (kappa_abs
+in units of cm^2/gram-of-dust) and the scattering opacity (kappa_scat in units
+of cm^2/gram-of-dust) is given, and perhaps also some information about the
+scattering phase function.
 
 Some of these opacity tables can be downloaded directly from the web, but
 usually the web databases give merely the "optical constants" of the
 material. To convert these into opacity tables requires some more software.
 Things are explained more deeply in the sub-directories.
 
-Currently the recommended method of computing your own opacities is by
-using the Mie code of Bohren & Huffman. The python version of that code,
-including the necessary "wrappers", is in the directory:
 
-  bohrenhuffman_python/
+METHOD 1
+--------
 
-Older fortran versions can be found in:
+This RADMC-3D package provides some wrappers around the BHMIE code from the
+Bohren & Huffmann book, a fortran version of which was written by Bruce Draine,
+which is included here with his permission. The code is provided in fortran and
+in python form:
 
   bohrenhuffman_fortran/
+  bohrenhuffman_python/
 
-23.03.2011
-19.02.2017
+The fortran version is, of course, much faster than the Python version.
+Typically we use the optical constants from the Jena database:
 
-----------------
+  https://www.astro.uni-jena.de/Laboratory/Database/databases.html
 
-NOTE: Recently a new database for solid state optical data has been
-put online:
+These directories have python scripts to create and to plot the opacities.
 
-https://www.sshade.eu
 
-2018.06.06
+METHOD 2
+--------
 
-----------------
+An alternative to the Bohren & Huffman code would be a nifty tool by Carsten
+Dominik called "optool", which is based on the DIANA OpacityTool written by
+Michiel Min, including some earlier work by Joop Hovenier. You can obtain the
+code from github:
 
-The well-known astronomical silicate of Laor & Draine (1993) and of Draine (2003)
-are added in their separate directories. Read the README_HOWTO files.
+  git clone https://github.com/cdominik/optool.git
 
-2018.06.12
+This code includes, in addition to Mie, also more sophisticated models such as
+the DHS (distribution of hollow spheres) model (Min, Hovenier & de Koter, 2005,
+A&A 432, 909), and can treat porosity and ice mantels.  The "optool" code has a
+"-radmc" option to generate RADMC-3D compatible opacity files directly. We
+therefore highly recommend its use, also because it produces opacities that are
+compatible with the DIANA project (https://dianaproject.wp.st-andrews.ac.uk).
 
-Added an example of simple mixing
 
-2018.06.13
+2020-09-17

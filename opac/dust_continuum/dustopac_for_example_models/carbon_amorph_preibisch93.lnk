@@ -1,11 +1,13 @@
-# Optical constants for amorphous carbon, from Preibisch, Ossenkopf,
-# Yorke and Henning (1993) A&A 279, 577. Their table 1, "aC" columns.
+# Optical constants for amorphous carbon, from:
+# @reference = Preibisch, Ossenkopf,Yorke and Henning (1993) A&A 279, 577.
+# Their table 1, "aC" columns.
 # The material density is not given in the paper, but the paper
 # gets some data from Buccoletti et al. (1987) which say that they
 # measured the material density to be 1.85 g/cm^3. Jaeger et al. 1998
 # measure various densities, depending on conditions, ranging between
 # 1.4 and 2.0 g/cm^3. So a value of something like 1.8 g/cm^3 should
-# be ok.
+# be ok:
+# @density = 1.8 g/cm^3.
 # When you use this file, please cite the above paper.
 # Columns are: lambda [micron], n, k
       0.1046200      1.4146000      0.7960500

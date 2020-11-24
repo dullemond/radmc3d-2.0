@@ -32,12 +32,6 @@ optconst  = ["pyroxene_amorph_mg70_jaeger94dorschner95",
 descript  = ["Amorphous Pyroxene with 70% Mg and 30% Fe",
              "Amorphous Olivine with 50% Mg and 50% Fe",
              "Amorphous Carbon"]
-reference = ["Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655; Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520.",
-             "Jaeger, Mutschke, Begemann, Dorschner, Henning (1994) A&A 292, 641-655; Dorschner, Begemann, Henning, Jaeger, Mutschke (1995) A&A 300, 503-520.",
-             "Preibisch, Ossenkopf, Yorke and Henning (1993) A&A 279, 577"]
-matdens   = [3.00,
-             3.71,
-             1.8]         # The material density in gram / cm^3
 extrapol  = True          # Extrapolate optical constants beyond its wavelength grid, if necessary
 verbose   = False         # If True, then write out status information
 ntheta    = 181           # Number of scattering angle sampling points
@@ -66,11 +60,9 @@ for ispec in range(len(optconst)):
     #
     optc         = optconst[ispec]
     optconstfile = optc+'.lnk'
-    name         = descript[ispec]
-    ref          = reference[ispec]
-    dens         = matdens[ispec]
+    descr        = descript[ispec]
     print("Running the code. Please wait...")
-    opac       = compute_opac_mie(optconstfile,dens,agraincm,lamcm,theta=theta,
+    opac       = compute_opac_mie(optconstfile,None,agraincm,lamcm,theta=theta,
                               extrapolate=extrapol,logawidth=logawidth,na=na,
                               chopforward=chop,verbose=verbose)
     opaclist.append(copy.deepcopy(opac))
@@ -80,13 +72,13 @@ for ispec in range(len(optconst)):
     # ...The full scattering matrix file
     #
     print("Writing the opacity to scatmat file")
-    write_radmc3d_scatmat_file(opac,optc,name,ref)
+    write_radmc3d_scatmat_file(opac,optc,descr=descr)
     #
     # ...Only the opacity file with simple scattering info
     #    (uncomment the next two commands if you wish to use this)
     #
     print("Writing the opacity to kappa file")
-    write_radmc3d_kappa_file(opac,optc,name,ref)
+    write_radmc3d_kappa_file(opac,optc,descr=descr)
     #
     # Note that RADMC-3D does not like it when both files are there, so
     # you must choose whether you want to do the full scattering or not

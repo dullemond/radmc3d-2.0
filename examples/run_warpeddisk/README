@@ -1,0 +1,123 @@
+This is the RADMC-3D version of Katherine Rosenfeld's warped disk model
+(though at a lower spatial resolution):
+
+Rosenfeld et al. "Kinematics of the CO Gas in the Inner Regions of the TW
+Hya Disk". The Astrophysical Journal (2012) vol. 757 pp. 129
+
+The model is set up mainly in the userdef_module.f90 file, i.e. it is an
+internally generated model. This makes it easier to implement the AMR
+oct-tree refinement. The userdef_module.f90 contains a whole suite of
+subroutines, most of which are not used (they are for other purposes).
+But if you look into the file you will see which subroutines are "filled"
+with model-related stuff. Note that the model is set up such that the
+parameters of the model can be given in two ways:
+
+ 1. The subroutine userdef_defaults() contains default values of the 
+    model. If you want to tune the model, you could change these 
+    values and recompile. But a more elegant way is:
+
+ 2. The subroutine userdef_parse_main_namelist() reads these parameters
+    in from the radmc3d.inp file. If a parameter is NOT listed in the
+    radmc3d.inp file, then the default value is used. If you put an
+    entry like "userdef_r0 = 1e14" in the radmc3d.inp file, it will
+    use that value instead, and it will thus override the default.
+
+The model is that of a disk with radial Lynden-Bell & Pringle profile,
+vertical Gaussian profile, and a warp. 
+
+HOW TO START
+------------
+On a shell type
+
+ python problem_setup.py
+
+This will simply create some of the input files for RADMC-3D. 
+
+Now compile the code locally. To do this you must edit the Makefile, 
+in particular you must edit the line:
+
+SRC = /Users/cornelisdullemond/science/prog/radmc-3d/version_2.0/src
+
+to point to the appropriate location of the src directory. Then type
+
+ make
+
+This should create a local (!!) copy of radmc3d in the current directory.
+It is important that from this point on you call radmc3d always as:
+
+  ./radmc3d <<ARGUMENTS>>
+
+(i.e. with the "./") so that it will not accidently call the globally
+accessible general version of radmc3d. Your model is compiled into the
+local copy.
+
+
+ABOUT THE AMR-REFINEMENT
+------------------------
+The AMR refinement is done by the userdef_check_and_refine() subroutine.
+The idea is simply that if a criterion is not met, the cell will split into
+2x2x2 subcells. The current criteria that are built in are one for the
+vertical resolution and one for the radial resolution. If either of the two
+criteria is not met, the cell is split. You can edit this subroutine if you
+want a different kind of criterion (e.g. one based on the density). You
+are completely free to do this in the way you want.
+
+The way RADMC-3D does the AMR refinement is tricky in one respect: You must
+make an estimate of how many cells and branches you will need for your
+AMR-refined model. This is because, before the start of the refinement,
+RADMC-3D already needs memory allocated for various quantities such as
+density etc. So it needs to do an allocation of arrays before it even starts
+the refinement process. You will have to tell RADMC-3D how many cells it has
+to reserve. If the refinement process then runs out of cells, it will stop
+and give you a notification that you will have to increase that
+estimate. The AMR stuff is initialized in the userdef_prep_model()
+subroutine. The estimate is done in the lines:
+
+  nbase  = userdef_nx*userdef_ny*userdef_nz  ! Nr of base grid cells
+  nlftot = nbase * userdef_nrefinefact       ! Estimated max nr of leafs
+  nbrtot = nlftot + nlftot / 6               ! Estimated max nr of branches
+
+You can set userdef_nrefinefact to a higher value if you need it. When
+RADMC-3D runs you get a status report of the AMR memory usage:
+
+ Grid information (current status):
+   We have 126472 branches, of which 110788 are actual grid cells.
+   ---> 36.135% mem use for branches, and 36.929% mem use for actual cells.
+   Top refinement level of the grid = 9
+
+In this example you see that you have more memory allocated that strictly
+needed (only 36% used). As long as your computer has sufficient memory that
+is fine. If you are low on memory you could lower userdef_nrefinefact if you
+wish.
+
+
+USING SUBBOX TO VIEW THE GRID AND THE MODEL
+-------------------------------------------
+Because it is not entirely easy to visualize AMR data, especially if they
+are generated from within the RADMC-3D code itself, RADMC-3D has a special
+method called "subbox". It allows you to create a regularly spaced data
+cube from the AMR-based data. This is illustrated in the following three
+python scripts:
+
+   plot_subbox.py
+   plot_subbox_volrender.py
+   plot_subplane.py
+
+
+USING PARAVIEW TO VIEW THE GRID AND THE MODEL
+---------------------------------------------
+Note that you may want to carefully play with the AMR refinement, to 
+be sure that it is fine enough for your purpose. One way to visualize
+the grid is to call:
+
+  ./radmc3d vtk_grid
+
+and open the model.vtk with paraview (http://www.paraview.org/). You
+can also view the density distribution:
+
+  ./radmc3d vtk_dust_density 1
+
+The "1" stands for "dust species 1". 
+
+
+06.03.2012, 06.09.2020

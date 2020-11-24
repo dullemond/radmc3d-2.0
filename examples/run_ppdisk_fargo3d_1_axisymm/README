@@ -1,0 +1,6 @@
+This model is based on run_ppdisk_fargo3d_1, but aximuthally averaged, to make
+it 2-D (r,theta). The reason why this can be useful is to make a less
+computationally heavy version of the model, so that with fewer photon packages
+you can see at least the azimuthally averaged structures.
+
+2020.09.27
