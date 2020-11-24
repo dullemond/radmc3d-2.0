@@ -1,0 +1,44 @@
+The run_ppdisk_analytic_* series of models represents a bit more self-consistent
+series of models. Here the vertical structure is computed from a radial midplane
+temperature profile that is computed from a simple analytic flaring disk model
+of the kind similar to Chiang & Goldreich (1997). The hydrostatic structure is
+not fully self-consistent, as the temperature used for the computation of
+the vertical scale height of the gas (and the dust) is the analytic one, not
+the one resulting from RADMC-3D's thermal Monte Carlo. In principle you could
+iterate the procedure: use the resulting midplane temperature and re-compute
+the vertical scale height (the array hp in problem_setup.py) from those values.
+But this procedure can lead to strange effects near the inner edge. So use it
+with care.
+
+The normal model setup is like this:
+
+   python problem_setup.py
+   radmc3d mctherm
+
+You can speed it up by running RADMC-3D in parallel with
+
+   radmc3d mctherm setthreads 4
+
+(using 4 OpenMP threads).
+
+If you want to check the density and temperature structure:
+
+   ipython --matplotlib
+   %run plot_structure.py
+
+This gives four plots showing the structure of the model. With
+
+   %run plot_opacity.py
+
+You can see what the opacity model looks like. With
+
+   %run plot_images.py
+
+you get two plots showing images at 1300 micron and 1 micron.
+And finally, with
+
+   %run plot_spectra.py
+
+(takes a while) you can view the SED of the model.
+
+September / November 2020

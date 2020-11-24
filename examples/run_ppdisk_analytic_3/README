@@ -1,0 +1,10 @@
+As run_ppdisk_analytic_2, but now with two grain sizes: One small grain size
+population, which is distributed vertically in the same way as the gas. The
+other a big grain population, which is settled very close to the midplane.
+To ensure that both dust populations are spatially well resolved, the vertical
+grid (or better: the theta-grid) is refined near the midplane. The procedure
+of refinement is the same as used for the inner edge (see run_ppdisk_simple_3),
+but here applied to theta. Run the plot_structure.py script to see how the
+refinement is done.
+
+September / November 2020

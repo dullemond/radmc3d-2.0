@@ -1,0 +1,5 @@
+Like run_ppdisk_analytic_1, but now for a Herbig Ae star and for a much smaller
+inner radius of the disk (0.8 au instead of 10 au). See the README of the 
+run_ppdisk_analytic_1 directory for more information.
+
+September / November 2020

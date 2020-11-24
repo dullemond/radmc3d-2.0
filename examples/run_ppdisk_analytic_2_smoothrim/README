@@ -1,0 +1,4 @@
+Same as run_ppdisk_analytic_2, but now with a smoothed inner rim, to ensure a
+better treatment of the radiative transfer in the inner rim.
+
+September / November 2020
