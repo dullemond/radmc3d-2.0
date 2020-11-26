@@ -70,7 +70,7 @@ class radmc3dImage(object):
     nx          : int
                   Number of pixels in the horizontal direction
 
-    ny          : int   
+    ny          : int
                   Number of pixels in the vertical direction
 
     sizepix_x   : float
@@ -138,10 +138,10 @@ class radmc3dImage(object):
             * u      : spatial frequency along the x axis of the image
             * v      : spatial frequency along the v axis of the image
             * vis    : complex visibility at points (u,v)
-            * amp    : correlation amplitude 
+            * amp    : correlation amplitude
             * phase  : Fourier phase
             * cp     : closure phase
-            * wav    : wavelength 
+            * wav    : wavelength
             * nwav   : number of wavelengths
 
         Notes
@@ -212,9 +212,9 @@ class radmc3dImage(object):
             * u      : spatial frequency along the x axis of the image
             * v      : spatial frequency along the v axis of the image
             * vis    : complex visibility at points (u,v)
-            * amp    : correlation amplitude 
+            * amp    : correlation amplitude
             * phase  : Fourier phase
-            * wav    : wavelength 
+            * wav    : wavelength
             * nwav   : number of wavelengths
         """
 
@@ -279,7 +279,7 @@ class radmc3dImage(object):
     # --------------------------------------------------------------------------------------------------
     def writeFits(self, fname='', dpc=1., coord='03h10m05s -10d05m30s', bandwidthmhz=2000.0,
                   casa=False, nu0=0., stokes='I', fitsheadkeys=[], ifreq=None):
-        """Writes out a RADMC-3D image data in fits format. 
+        """Writes out a RADMC-3D image data in fits format.
 
         Parameters
         ----------
@@ -289,29 +289,29 @@ class radmc3dImage(object):
 
         dpc          : float
                         Distance of the source in pc
-                        
+
         coord        : str
                         Image center coordinates
 
         bandwidthmhz : float
                         Bandwidth of the image in MHz (equivalent of the CDELT keyword in the fits header)
 
-        casa         : bool 
+        casa         : bool
                         If set to True a CASA compatible four dimensional image cube will be written
 
         nu0          : float
                         Rest frequency of the line (for channel maps)
 
         stokes       : {'I', 'Q', 'U', 'V', 'PI'}
-                       Stokes parameter to be written if the image contains Stokes IQUV (possible 
+                       Stokes parameter to be written if the image contains Stokes IQUV (possible
                        choices: 'I', 'Q', 'U', 'V', 'PI' -Latter being the polarized intensity)
 
         fitsheadkeys : dictionary
-                        Dictionary containing all (extra) keywords to be added to the fits header. If 
+                        Dictionary containing all (extra) keywords to be added to the fits header. If
                         the keyword is already in the fits header (e.g. CDELT1) it will be updated/changed
-                        to the value in fitsheadkeys, if the keyword is not present the keyword is added to 
-                        the fits header. 
-                       
+                        to the value in fitsheadkeys, if the keyword is not present the keyword is added to
+                        the fits header.
+
         ifreq        : int
                        Frequency index of the image array to write. If set only this frequency of a multi-frequency
                        array will be written to file.
@@ -387,7 +387,7 @@ class radmc3dImage(object):
                 for inu in range(self.nfreq):
                     data[inu, 0, :, :] = self.image[:, :, inu] * conv
         else:
-            data = np.zeros([self.nfreq, self.ny, self.nx], dtype=float)
+            data = np.zeros([self.nfreq, self.nx, self.ny], dtype=float)
             if self.stokes:
                 if stokes.strip().upper() != 'PI':
                     if self.nfreq == 1:
@@ -532,7 +532,7 @@ class radmc3dImage(object):
         ----------
 
         moment : int
-                 Moment of the channel maps to be calculated 
+                 Moment of the channel maps to be calculated
 
         nu0    : float
                  Rest frequency of the line in Hz
@@ -628,7 +628,7 @@ class radmc3dImage(object):
         ----------
 
         moment : int
-                 Moment of the channel maps to be calculated 
+                 Moment of the channel maps to be calculated
 
         nu0    : float
                  Rest frequency of the line in Hz
@@ -670,7 +670,7 @@ class radmc3dImage(object):
         return dum.sum(2)
 
     def readImage(self, fname=None, binary=False, old=False):
-        """Reads an image calculated by RADMC-3D 
+        """Reads an image calculated by RADMC-3D
 
         Parameters
         ----------
@@ -679,7 +679,7 @@ class radmc3dImage(object):
                  File name of the radmc3d output image (if omitted 'image.out' is used)
 
         old     : bool
-                 If set to True it reads old radmc-2d style image        
+                 If set to True it reads old radmc-2d style image
 
         binary  : bool, optional
                  False - the image format is formatted ASCII if True - C-compliant binary (omitted if old=True)
@@ -710,8 +710,8 @@ class radmc3dImage(object):
                 self.image = np.zeros([self.nx, self.ny, self.nwav], dtype=np.float64)
                 for iwav in range(self.nwav):
                     dum = rfile.readline()
-                    for iy in range(self.nx):
-                        for ix in range(self.ny):
+                    for iy in range(self.ny):
+                        for ix in range(self.nx):
                             self.image[ix, iy, iwav] = float(rfile.readline())
 
         else:
@@ -789,8 +789,8 @@ class radmc3dImage(object):
                         for iwav in range(self.nwav):
                             # Blank line
                             dum = rfile.readline()
-                            for iy in range(self.nx):
-                                for ix in range(self.ny):
+                            for iy in range(self.ny):
+                                for ix in range(self.nx):
                                     self.image[ix, iy, iwav] = float(rfile.readline())
 
                     # If we have the full stokes image
@@ -800,8 +800,8 @@ class radmc3dImage(object):
                         for iwav in range(self.nwav):
                             # Blank line
                             dum = rfile.readline()
-                            for iy in range(self.nx):
-                                for ix in range(self.ny):
+                            for iy in range(self.ny):
+                                for ix in range(self.nx):
                                     dum = rfile.readline().split()
                                     imstokes = [float(i) for i in dum]
                                     self.image[ix, iy, 0, iwav] = float(dum[0])
@@ -826,7 +826,7 @@ class radmc3dImage(object):
                       Distance of the source in pc.
 
         psfType     : {'gauss', 'airy'}
-                      Shape of the PSF. If psfType='gauss', fwhm and pa should also be given. If psfType='airy', the 
+                      Shape of the PSF. If psfType='gauss', fwhm and pa should also be given. If psfType='airy', the
                       tdiam_prim, tdiam_sec and wav parameters should also be specified.
 
         fwhm        : list, optional
@@ -834,21 +834,21 @@ class radmc3dImage(object):
                       The unit is assumed to be arcsec. (should only be set if psfType='gauss')
 
         pa          : float, optional
-                      Position angle of the psf ellipse (counts from North counterclockwise, should only be set 
+                      Position angle of the psf ellipse (counts from North counterclockwise, should only be set
                       if psfType='gauss')
 
         tdiam_prim  : float, optional
                       Diameter of the primary aperture of the telescope in meter. (should be set only if psfType='airy')
 
         tdiam_sec   : float, optional
-                      Diameter of the secondary mirror (central obscuration), if there is any, in meter. If no 
-                      secondary mirror/obscuration is present, this parameter should be set to zero. 
+                      Diameter of the secondary mirror (central obscuration), if there is any, in meter. If no
+                      secondary mirror/obscuration is present, this parameter should be set to zero.
                       (should only be set if psfType='airy')
 
         Returns
         -------
 
-        Returns a radmc3dImage 
+        Returns a radmc3dImage
         """
 
         dx = self.sizepix_x / nc.au / dpc
@@ -960,8 +960,8 @@ class radmc3dImage(object):
 
         OPTIONAL ARGUMENT:
 
-          linear         If set, then just use the linear conversion factor, not 
-                         taking into account the exponential Wien part of the 
+          linear         If set, then just use the linear conversion factor, not
+                         taking into account the exponential Wien part of the
                          Planck spectrum. If unset, then compute the true brightness
                          temperature, using the full Planck spectrum.
         """
@@ -999,7 +999,7 @@ def getPSF(nx=None, ny=None, psfType='gauss', pscale=None, fwhm=None, pa=None, t
                   Image size in the second dimension
 
     psfType     : {'gauss', 'airy'}
-                  Shape of the PSF. If psfType='gauss', fwhm and pa should also be given. If psfType='airy', the 
+                  Shape of the PSF. If psfType='gauss', fwhm and pa should also be given. If psfType='airy', the
                   tdiam_prim, tdiam_sec and wav parameters should also be specified.
 
     pscale      : list
@@ -1009,7 +1009,7 @@ def getPSF(nx=None, ny=None, psfType='gauss', pscale=None, fwhm=None, pa=None, t
                   Full width at half maximum of the psf along the two axis (should be set only if psfType='gauss')
 
     pa          : float, optional
-                  Position angle of the gaussian if the gaussian is not symmetric 
+                  Position angle of the gaussian if the gaussian is not symmetric
                   (should be set only if psfType='gauss')
 
     tdiam_prim  : float, optional
@@ -1017,7 +1017,7 @@ def getPSF(nx=None, ny=None, psfType='gauss', pscale=None, fwhm=None, pa=None, t
 
     tdiam_sec   : float, optional
                   Diameter of the secondary mirror (central obscuration), if there is any, in meter. If no secondary
-                  mirror/obscuration is present, this parameter should be set to zero. 
+                  mirror/obscuration is present, this parameter should be set to zero.
                   (should be set only if psfType='airy')
 
     wav         : float, optional
@@ -1032,9 +1032,9 @@ def getPSF(nx=None, ny=None, psfType='gauss', pscale=None, fwhm=None, pa=None, t
         * psf : ndarray
                 The two dimensional psf
         * x   : ndarray
-                The x-axis of the psf 
+                The x-axis of the psf
         * y   : ndarray
-                The y-axis of the psf 
+                The y-axis of the psf
     """
     # --------------------------------------------------------------------------------------------------
 
@@ -1132,7 +1132,7 @@ def readImage(fname=None, binary=False, old=False):
                  File name of the radmc3d output image (if omitted 'image.out' is used)
 
         old     : bool
-                 If set to True it reads old radmc-2d style image        
+                 If set to True it reads old radmc-2d style image
 
         binary  : bool, optional
                  False - the image format is formatted ASCII if True - C-compliant binary (omitted if old=True)
@@ -1151,7 +1151,7 @@ def plotPolDir(image=None, arcsec=False, au=False, dpc=None, ifreq=0, cmask_rad=
     ----------
 
     image         : radmc3dImage
-                    A radmc3dImage class returned by readimage   
+                    A radmc3dImage class returned by readimage
 
     arcsec        : bool
                     If True image axis will have the unit arcsec (NOTE: dpc keyword should also be set!)
@@ -1169,9 +1169,9 @@ def plotPolDir(image=None, arcsec=False, au=False, dpc=None, ifreq=0, cmask_rad=
     cmask_rad     : float
                     Simulates coronographyic mask : sets the image values to zero within this radius of the image center
                     The unit is the same as the image axis (au, arcsec, cm)
-                    NOTE: this works only on the plot, the image array is not changed (for that used the cmask() 
+                    NOTE: this works only on the plot, the image array is not changed (for that used the cmask()
                     function)
-                    
+
     color         : str
                     Color for the polarisation direction plot
 
@@ -1253,7 +1253,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
     Parameters
     ----------
     image         : radmc3dImage
-                    A radmc3dImage class returned by readimage   
+                    A radmc3dImage class returned by readimage
 
     arcsec        : bool
                     If True image axis will have the unit arcsec (NOTE: dpc keyword should also be set!)
@@ -1285,7 +1285,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
     cmask_rad     : float
                     Simulates coronographyic mask : sets the image values to zero within this radius of the image center
                     The unit is the same as the image axis (au, arcsec, cm)
-                    NOTE: this works only on the plot, the image array is not changed (for that used the cmask() 
+                    NOTE: this works only on the plot, the image array is not changed (for that used the cmask()
                     function)
 
     interpolation : str
@@ -1302,36 +1302,36 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
 
 
     fig           : matplotlig.figure.Figure, optional
-                   An instance of a matplotlib Figure. If not provided a new Figure will be generated. If provided 
+                   An instance of a matplotlib Figure. If not provided a new Figure will be generated. If provided
                    plotImage will add a single Axes to the Figure, using add_subplots() with the appropriate projection.
-                   If the desired plot is to be made for a multi-panel plot, the appropriate Axes instance can be 
+                   If the desired plot is to be made for a multi-panel plot, the appropriate Axes instance can be
                    passed to the ax keyword. This keyword is only used for circular images.
 
     ax            : matplotlib.axes.Axes, optional
-                   An instance of a matplotlib Axes to draw the plot on. Note, that the projection of the axes should 
-                   be the same as the projection keyword passed to plotImage. This keyword is only used for circular 
+                   An instance of a matplotlib Axes to draw the plot on. Note, that the projection of the axes should
+                   be the same as the projection keyword passed to plotImage. This keyword is only used for circular
                    images.
 
     projection    : {'polar', 'cartesian'}
-                   Projection of the plot. For cartesian plots a rectangular plot will be drawn, with the horizontal 
-                   axis being the azimuth angle, and the vertical axis the radius. 
+                   Projection of the plot. For cartesian plots a rectangular plot will be drawn, with the horizontal
+                   axis being the azimuth angle, and the vertical axis the radius.
 
     deg           : bool
                    If True the unit of the azimuthal coordinates will degree, if False it will be radian. Used only for
-                   circular images and for cartesian projection. 
+                   circular images and for cartesian projection.
 
     rmax          : float
                    Maximum value of the radial coordinate for polar projection. Used only for circular images.
 
     rlog          : bool
-                   If True the radial coordiante axis will be set to logarithmic for cartesian projection. Used only 
+                   If True the radial coordiante axis will be set to logarithmic for cartesian projection. Used only
                    for circular images.
 
 
     Example
     -------
 
-    result = plotImage(image='image.out', arcsec=True, au=False, log=True, dpc=140, maxlog=-6., 
+    result = plotImage(image='image.out', arcsec=True, au=False, log=True, dpc=140, maxlog=-6.,
              saturate=0.1, bunit='Jy')
     """
 
@@ -1723,7 +1723,7 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
               fluxcons=True, nostar=False, noscat=False,
               widthkms=None, linenlam=None, vkms=None, iline=None,
               lambdarange=None, nlam=None, stokes=False, binary=False, setthreads=None):
-    """Calculates a rectangular image with RADMC-3D 
+    """Calculates a rectangular image with RADMC-3D
 
     Parameters
     ----------
@@ -1769,15 +1769,15 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
                   Number of wavelengths to be calculated in lambdarange
 
     fluxcons    : bool, optional
-                  This should not even be a keyword argument, it ensures flux conservation 
+                  This should not even be a keyword argument, it ensures flux conservation
                   (adaptive subpixeling) in the rectangular images
 
     nostar      : bool, optional
                   If True the calculated images will not contain stellar emission
 
     noscat      : bool, optional
-                  If True, scattered emission will be neglected in the source function, however, 
-                   extinction will contain scattering if kappa_scat is not zero.  
+                  If True, scattered emission will be neglected in the source function, however,
+                   extinction will contain scattering if kappa_scat is not zero.
 
     stokes      : bool, optional
                   If True, images in all four stokes parameters (IQUV) will be calculated, if
@@ -1788,13 +1788,13 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
                   the image format will be ASCII
 
     setthreads  : integer, optional
-                  If set, then do the Monte Carlo with OpenMP parallellization, with 
+                  If set, then do the Monte Carlo with OpenMP parallellization, with
                   the integer setthreads being the number of parallel threads.
 
     Example
     -------
 
-    makeImage(npix=100, incl=60.0, wav=10.0, sizeau=300., phi=0., posang=15., 
+    makeImage(npix=100, incl=60.0, wav=10.0, sizeau=300., phi=0., posang=15.,
         pointau=[0., 0.,0.], fluxcons=True, nostar=False, noscat=False)
 
     """
@@ -1903,7 +1903,7 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
     #
     print("Executing RADMC-3D Command:")
     print(com)
-    
+
     #
     # Now finally run radmc3d and calculate the image
     #
@@ -1924,7 +1924,7 @@ def cmask(im=None, rad=0.0, au=False, arcsec=False, dpc=None):
             A radmc3dImage class containing the image
 
     rad    : float
-            The raadius of the mask 
+            The raadius of the mask
 
     au     : bool
             If true the radius is taken to have a unit of AU
@@ -1996,7 +1996,7 @@ class radmc3dCircimage(object):
     nr          : int
                   Number of pixels in the radial direction
 
-    nphi        : int   
+    nphi        : int
                   Number of pixels in the azimuthal direction
 
     nfreq       : int
@@ -2070,7 +2070,7 @@ class radmc3dCircimage(object):
                           Name of the file to be read.
 
         old             : bool
-                          If True the image format of the old 2D code (radmc) will be used. If False (default) the 
+                          If True the image format of the old 2D code (radmc) will be used. If False (default) the
                           RADMC-3D format is used.
         """
 
@@ -2219,7 +2219,7 @@ def readcircimage(filename='circimage.out', old=False):
                       Name of the file to be read.
 
     old             : bool
-                      If True the image format of the old 2D code (radmc) will be used. If False (default) the 
+                      If True the image format of the old 2D code (radmc) will be used. If False (default) the
                       RADMC-3D format is used.
     """
     dum = radmc3dCircimage()
