@@ -387,7 +387,7 @@ class radmc3dImage(object):
                 for inu in range(self.nfreq):
                     data[inu, 0, :, :] = self.image[:, :, inu] * conv
         else:
-            data = np.zeros([self.nfreq, self.ny, self.nx], dtype=float)
+            data = np.zeros([self.nfreq, self.nx, self.ny], dtype=float)
             if self.stokes:
                 if stokes.strip().upper() != 'PI':
                     if self.nfreq == 1:
