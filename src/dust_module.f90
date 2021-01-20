@@ -518,7 +518,8 @@ subroutine read_dustdata(action)
             stop
          endif
       endif
-      read(3,*) comstring                
+      read(3,*,end=738) comstring
+738   continue
   enddo
   !
   ! Set the scattering mode to the default
