@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Aug 29, 2020}
+\date{Feb 07, 2021}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -9091,13 +9091,25 @@ You can call \sphinxcode{\sphinxupquote{radmc3d}} directly from the shell asking
 the subbox. Here is an example:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}dust\PYGZus{}temperature} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15}
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}dust\PYGZus{}density} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15}
 \end{sphinxVerbatim}
 
+which creates a regularly sampled 64x64x64 datacube of the dust density, with \(x\) grid
+between \(-2\times 10^{15}\;\mathrm{cm}\) and  \(+2\times 10^{15}\;\mathrm{cm}\) and
+likewise for \(y\) and \(z\) (note that these box boundaries are the walls of the
+regularly spaced cells of the subbox). For the dust temperature the command is
+\sphinxcode{\sphinxupquote{./radmc3d subbox\_dust\_temperature}}. You can also rotate the box along three angles:
+\(\phi_1\), \(\theta\), and \(\phi_2\), for example:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}dust\PYGZus{}temperature} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{n}{subbox\PYGZus{}phi1} \PYG{l+m+mi}{30} \PYG{n}{subbox\PYGZus{}theta} \PYG{l+m+mi}{60}  \PYG{n}{subbox\PYGZus{}phi2} \PYG{l+m+mi}{45}
+\end{sphinxVerbatim}
+
+(Note that as of version 2.0 of RADMC\sphinxhyphen{}3D these angles are in degrees instead of radian).
 An example for the level populations would be:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}levelpop} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15}
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}levelpop} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15}
 \end{sphinxVerbatim}
 
 \sphinxstyleemphasis{Note about subbox for level populations:} By default all level populations will
@@ -9106,11 +9118,12 @@ call to RADMC\sphinxhyphen{}3D for making an image or spectrum, then it will onl
 the level populations that have been used for that image. Example:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{image} \PYG{k}{lambda} \PYG{l+m+mi}{2600} \PYG{n}{subbox\PYGZus{}levelpop} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{n}{d15} \PYG{l+m+mf}{2.}\PYG{n}{d15}
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{image} \PYG{k}{lambda} \PYG{l+m+mi}{2600} \PYG{n}{subbox\PYGZus{}levelpop} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15}
 \end{sphinxVerbatim}
 
 would give a much smaller \sphinxcode{\sphinxupquote{\textquotesingle{}levelpop\_co\_subbox.out\textquotesingle{}}} file, because only the
-first two levels are included (remember that \(\lambda=2600\,\mu\) for more information
+first two levels are included (remember that \(\lambda=2600\,\mu\)m is the
+J1\sphinxhyphen{}0 line of CO). See Section {\hyperref[\detokenize{lineradtrans:sec-calcstore-levpop}]{\sphinxcrossref{\DUrole{std,std-ref}{Background information: Calculation and storage of level populations}}}} for more information
 on how RADMC\sphinxhyphen{}3D automatically selects a subset of levels for storage in the
 global array (and thus also for writing out to file).
 
@@ -10254,8 +10267,8 @@ unformatted files this must be 4\sphinxhyphen{}byte integer.
 \item {} 
 \sphinxcode{\sphinxupquote{coordsystem}}: If \sphinxcode{\sphinxupquote{coordsystem \textless{} 100}} the coordinate system is
 cartesian. If \sphinxcode{\sphinxupquote{100 \textless{}= coordsystem \textless{} 200}} the coordinate system is spherical
-(polar).  If \sphinxcode{\sphinxupquote{200 \textless{}= coordsystem \textless{} 300}} the coordinate system is
-cylindrical. For unformatted files this must be 4\sphinxhyphen{}byte integer.
+(polar). Cylindrical coordinates have not yet been built in in this
+version. For unformatted files this must be 4\sphinxhyphen{}byte integer.
 
 \item {} 
 \sphinxcode{\sphinxupquote{gridinfo}}: If \sphinxcode{\sphinxupquote{gridinfo==1}} there will be
