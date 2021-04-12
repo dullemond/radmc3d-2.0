@@ -637,7 +637,7 @@ def plotSpectrum(a, ev=False, kev=False, micron=False, jy=False, lsun=False,
         else:
             freq0 = mol.freq[ilin - 1]
             xcoord = nc.cc * (freq0 - freq) / freq0 / 1.e5
-            xtitle = '$\Delta v [\mathrm{km/h}]$'
+            xtitle = '$\Delta v [\mathrm{km/s}]$'
     #
     # Which plot to make? Lum or flux?
     #
