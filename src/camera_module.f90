@@ -102,6 +102,18 @@ module camera_module
   double precision, allocatable :: camera_tausurface_y(:,:,:)
   double precision, allocatable :: camera_tausurface_z(:,:,:)
   !
+  ! For the camera_spymode
+  !
+  integer :: camera_spymode=0, camera_spy_maxraylength=0
+  double precision, allocatable :: camera_spy_x(:)
+  double precision, allocatable :: camera_spy_y(:)
+  double precision, allocatable :: camera_spy_z(:)
+  double precision, allocatable :: camera_spy_intensity_iquv(:,:)
+  double precision, allocatable :: camera_spy_rect_image_x(:,:,:)
+  double precision, allocatable :: camera_spy_rect_image_y(:,:,:)
+  double precision, allocatable :: camera_spy_rect_image_z(:,:,:)
+  double precision, allocatable :: camera_spy_rect_image_iquv(:,:,:,:)
+  !
   ! Variables and arrays
   !
   !   The camera-local frequency array
@@ -493,6 +505,28 @@ subroutine camera_init()
      camera_circ_image_iquv(:,:,:,:) = 0.d0
   endif
   !
+  ! If spy mode, then allocate these arrays too
+  !
+  if(camera_spymode.ne.0) then
+     if((camera_image_nr.ge.1).and.(camera_image_nphi.ge.1)) then
+        write(stdo,*) 'Error: For the moment the spymode of the camera module works only with rectangular images. Aborting.'
+        stop
+     endif
+     if((camera_image_nx.ge.1).and.(camera_image_ny.ge.1)) then
+        if(camera_spy_maxraylength.le.0) then
+           camera_spy_maxraylength = 2*3*amr_nxyzfmax+2
+        endif
+        allocate(camera_spy_x(1:camera_spy_maxraylength))
+        allocate(camera_spy_y(1:camera_spy_maxraylength))
+        allocate(camera_spy_z(1:camera_spy_maxraylength))
+        allocate(camera_spy_intensity_iquv(1:camera_spy_maxraylength,1:4))
+        allocate(camera_spy_rect_image_x(1:camera_image_nx,1:camera_image_ny,1:camera_spy_maxraylength))
+        allocate(camera_spy_rect_image_y(1:camera_image_nx,1:camera_image_ny,1:camera_spy_maxraylength))
+        allocate(camera_spy_rect_image_z(1:camera_image_nx,1:camera_image_ny,1:camera_spy_maxraylength))
+        allocate(camera_spy_rect_image_iquv(1:camera_image_nx,1:camera_image_ny,1:camera_spy_maxraylength,1:4))
+     endif
+  endif
+  !
   ! Some further comments:
   !
   ! If using second order integration in spherical coordinates, then
@@ -571,6 +605,14 @@ subroutine camera_partial_cleanup()
   if(allocated(camera_circ_image_iquv)) deallocate(camera_circ_image_iquv)
   if(allocated(camera_spectrum_iquv)) deallocate(camera_spectrum_iquv)
   if(allocated(camera_intensity_iquv)) deallocate(camera_intensity_iquv)
+  if(allocated(camera_spy_x)) deallocate(camera_spy_x)
+  if(allocated(camera_spy_y)) deallocate(camera_spy_y)
+  if(allocated(camera_spy_z)) deallocate(camera_spy_z)
+  if(allocated(camera_spy_intensity_iquv)) deallocate(camera_spy_intensity_iquv)
+  if(allocated(camera_spy_rect_image_x)) deallocate(camera_spy_rect_image_x)
+  if(allocated(camera_spy_rect_image_y)) deallocate(camera_spy_rect_image_y)
+  if(allocated(camera_spy_rect_image_z)) deallocate(camera_spy_rect_image_z)
+  if(allocated(camera_spy_rect_image_iquv)) deallocate(camera_spy_rect_image_iquv)
   if(allocated(camera_xstop)) deallocate(camera_xstop)
   if(allocated(camera_ystop)) deallocate(camera_ystop)
   if(allocated(camera_zstop)) deallocate(camera_zstop)
@@ -1101,7 +1143,7 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
   doubleprecision :: nstp,nu,nu0,nu0_prev,nu0_curr
   doubleprecision :: ap,jp(1:4),sp(1:4),ac,jc(1:4),sc(1:4),theomax(1:4),qdr(1:4)
   doubleprecision :: duc,eps,eps1,eps0,temp,resol,margin
-  integer :: nsteps,iline,ilactive,istep,idir
+  integer :: nsteps,iline,ilactive,istep,idir,ispy
   integer :: ixx,iyy,izz,bc_idir,bc_ilr
   double precision :: xbk,ybk,zbk,spx,spy,spz,rx1,ry1,rz1,rx0,ry0,rz0
   !
@@ -1122,6 +1164,20 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
      write(stdo,*) 'ERROR: With second order integration it is impossible to '
      write(stdo,*) 'raytrace multiple frequencies at the same time'
      stop
+  endif
+  if(camera_spymode.ne.0) then
+     if(camera_nrrefine.gt.0) then
+        write(stdo,*) 'In spy mode for images you cannot use subpixeling. Use keyword nofluxcons on command line. Aborting.'
+        stop
+     endif
+     if(nrfreq.ne.1) then
+        write(stdo,*) 'In spy mode for images you can only do one frequency at a time. Aborting.'
+        stop
+     endif
+     if(.not.allocated(camera_spy_intensity_iquv)) then
+        write(stdo,*) 'Internal error: in spy mode for images the camera_spy_intensity_iquv must be allocated. Aborting.'
+        stop
+     endif
   endif
   !
   ! Set defaults
@@ -1398,10 +1454,36 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
      stop
   endif
   !
+  ! If spy mode, then set the intensity everywhere in the spy array to unphysical
+  !
+  if(camera_spymode.ne.0) then
+     camera_spy_x(:) = 0.d0
+     camera_spy_y(:) = 0.d0
+     camera_spy_z(:) = 0.d0
+     camera_spy_intensity_iquv(:,:) = -1d90
+  endif
+  !
   ! Now trace
   !
+  ispy = 1
   arrived = .false.
   do while(.not.arrived)
+     !
+     ! In spy mode we store the intensity at each location, useful for inspection of a model
+     ! and better understanding of results of a calculation.
+     !
+     if(camera_spymode.ne.0) then
+        if(ispy.le.camera_spy_maxraylength) then
+           camera_spy_x(ispy) = ray_cart_x
+           camera_spy_y(ispy) = ray_cart_y
+           camera_spy_z(ispy) = ray_cart_z
+           camera_spy_intensity_iquv(ispy,1:4) = camera_intensity_iquv(1,1:4)
+        else
+           write(stdo,*) 'Spy mode: Sorry, exceeded camera_spy_maxraylength. Set spymaxlength to a higher value. Aborting.'
+           stop
+        endif
+        ispy = ispy + 1
+     endif
      !
      ! Back up the current position
      !
@@ -4229,6 +4311,15 @@ subroutine camera_make_rect_image(img,tausurf)
                 enddo
              endif
              !
+             ! For the spy mode, put the entire spy array into the big array
+             !
+             if(camera_spymode.ne.0) then
+                camera_spy_rect_image_x(ix,iy,:) = camera_spy_x(:)
+                camera_spy_rect_image_y(ix,iy,:) = camera_spy_y(:)
+                camera_spy_rect_image_z(ix,iy,:) = camera_spy_z(:)
+                camera_spy_rect_image_iquv(ix,iy,:,1:4) = camera_spy_intensity_iquv(:,1:4)
+             endif
+             !
           enddo
        enddo
        if(flag_quv_too_big) then
@@ -4633,6 +4724,123 @@ subroutine camera_write_image(img,ifill,noclip)
   endif
   !
 end subroutine camera_write_image
+
+
+!-------------------------------------------------------------------------
+!                        WRITE THE SPY MODE IMAGE
+!-------------------------------------------------------------------------
+subroutine camera_spy_write_image()
+  implicit none
+  character*80 :: filename,base,ext
+  integer :: ix,iy,is,ns,ispy
+  double precision :: dummy(1:7)
+  integer(kind=8) :: iformat, nn, kk
+  !
+  ! Check
+  !
+  if(.not.allocated(camera_spy_rect_image_iquv)) then
+     write(stdo,*) 'ERROR: Write spy image, but spy image not allocated.'
+     stop
+  endif
+  !
+  ! Open file
+  !
+  if(writeimage_unformatted) then
+     if(rto_style.eq.2) then
+        write(stdo,*) 'Fortran unformatted output not supported for spy images.'
+        stop
+     else
+        open(unit=fflo,file='spy_image.bout',status='replace',access='stream')
+     endif
+  else
+     open(unit=fflo,file='spy_image.out')
+  endif
+  !
+  ! Decide how many of the Stokes components we have to write
+  !
+  if(camera_stokesvector) then
+     ns=4
+  else
+     ns=1
+  endif
+  !
+  ! Now decide whether unformatted or formatted
+  !
+  if(writeimage_unformatted) then
+     if(camera_stokesvector) then
+        if(camera_localobserver) then
+           iformat = 4           ! Format number: size units in radian (angular) + Stokes
+        else
+           iformat = 3           ! Format number: size units in cm (spatial size) + Stokes
+        endif
+     else
+        if(camera_localobserver) then
+           iformat = 2           ! Format number: size units in radian (angular)
+        else
+           iformat = 1           ! Format number: size units in cm (spatial size)
+        endif
+     endif
+     write(fflo) iformat
+     nn = camera_image_nx
+     kk = camera_image_ny
+     write(fflo) nn, kk
+     nn = camera_spy_maxraylength
+     write(fflo) nn
+     write(fflo) 2.d0*camera_image_halfsize_x/(1.d0*camera_image_nx), &
+                 2.d0*camera_image_halfsize_y/(1.d0*camera_image_ny)
+     write(fflo) 1d4*cc/camera_frequencies(1)
+     do is=1,ns
+        write(fflo) (((camera_rect_image_iquv(ix,iy,ispy,is),  &
+             ispy=1,camera_spy_maxraylength), &
+             ix=1,camera_image_nx),iy=1,camera_image_ny)
+     enddo
+  else
+     if(camera_stokesvector) then
+        if(camera_localobserver) then
+           write(fflo,*) 4           ! Format number: size units in radian (angular)
+        else
+           write(fflo,*) 3           ! Format number: size units in cm (spatial size)
+        endif
+     else
+        if(camera_localobserver) then
+           write(fflo,*) 2           ! Format number: size units in radian (angular)
+        else
+           write(fflo,*) 1           ! Format number: size units in cm (spatial size)
+        endif
+     endif
+     write(fflo,*) camera_image_nx,camera_image_ny
+     write(fflo,*) camera_spy_maxraylength
+     write(fflo,*) 2.d0*camera_image_halfsize_x/(1.d0*camera_image_nx), &
+                   2.d0*camera_image_halfsize_y/(1.d0*camera_image_ny)
+     write(fflo,320) 1d4*cc/camera_frequencies(1)
+320  format(E21.14)
+     write(fflo,*) ' '
+     do iy=1,camera_image_ny
+        do ix=1,camera_image_nx
+           do ispy=1,camera_spy_maxraylength
+              if(ns.eq.1) then
+                 dummy(1) = camera_spy_rect_image_x(ix,iy,ispy)
+                 dummy(2) = camera_spy_rect_image_y(ix,iy,ispy)
+                 dummy(3) = camera_spy_rect_image_z(ix,iy,ispy)
+                 dummy(4) = camera_spy_rect_image_iquv(ix,iy,ispy,1)
+                 write(fflo,333) dummy(1:4)
+333              format(4(E21.14,1X))
+              else
+                 dummy(1)   = camera_spy_rect_image_x(ix,iy,ispy)
+                 dummy(2)   = camera_spy_rect_image_y(ix,iy,ispy)
+                 dummy(3)   = camera_spy_rect_image_z(ix,iy,ispy)
+                 dummy(4:7) = camera_spy_rect_image_iquv(ix,iy,ispy,1:4)
+                 write(fflo,334) dummy(1:7)
+334              format(7(E21.14,1X))
+              endif
+           enddo
+        enddo
+        write(fflo,*) ' '
+     enddo
+  endif
+  close(1)
+  !
+end subroutine camera_spy_write_image
 
 
 !-------------------------------------------------------------------------
@@ -6379,6 +6587,13 @@ subroutine camera_make_circ_image()
   !
   if(nstars.gt.1) then
      write(stdo,*) 'ERROR: In circular images at the moment only one star allowed.'
+     stop
+  endif
+  !
+  ! For the moment, spy mode not allowed in spherical images
+  !
+  if(camera_spymode.ne.0) then
+     write(stdo,*) 'ERROR: In circular images at the moment no spy mode allowed.'
      stop
   endif
   !

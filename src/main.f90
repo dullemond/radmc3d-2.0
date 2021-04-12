@@ -1178,6 +1178,10 @@ program radmc3d
            else
               call camera_write_circ_image(.false.)
            endif
+           if(camera_spymode.ne.0) then
+              write(stdo,*) 'Writing the spy image data to file...'
+              call camera_spy_write_image()
+           endif
         endif
         !
         ! Make statement about the scattering mode used
@@ -3541,6 +3545,21 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         ! (instead of the default first order). Will reset after each action.
         !
         camera_secondorder = .true.
+     elseif(buffer(1:7).eq.'spymode') then
+        !
+        ! Spy mode is a diagnostic method for imaging
+        !
+        camera_spymode = 1
+     elseif(buffer(1:11).eq.'spymaxlength') then
+        !
+        ! Normally the camera_spy_maxraylength is set automatically
+        ! but for memory or file length optimation it might be useful
+        ! to set it by hand
+        !
+        call ggetarg(iarg,buffer,fromstdi)
+        iarg = iarg+1
+        read(buffer,*) idum
+        camera_spy_maxraylength = idum
      elseif(buffer(1:11).eq.'diag_subpix') then
         !
         ! Dump diagnostics for subpixeling

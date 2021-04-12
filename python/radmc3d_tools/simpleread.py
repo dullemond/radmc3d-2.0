@@ -692,3 +692,144 @@ def read_mollevelpop(molecule,indexorder='fortran'):
 
     # Return the mollevelpop object
     return mollevelpop
+
+def read_spy_image(indexorder='fortran',usenan=True):
+    """
+    Reading the spy_image.out file. A spy image is a 3D data block
+    where for each pixel of an image the intermediate intensities 
+    along the entire ray belonging to that pixel are stored as well.
+    The ray length typically varies, because each point is a crossing
+    of the ray with a grid wall. That varies from ray to ray. The
+    data block has a maximum ray length that should (hopefully) be
+    long enough so that all rays have a length (in number of points)
+    less than that. That also means that the spy image has a lot of
+    empty points (because the full array, including the non-used
+    points, is stored). These are marked with an intensity value 
+    of -1e90. To make it easier to handle using numpy as matplotlib,
+    the read_spy_image() function will put all values of these 
+    empty/not-used points to np.nan ('not a number').
+
+    ARGUMENTS:
+      indexorder        If 'fortran' then converting array to fortran 
+                        index order (default). Else use Python/C order.
+      usenan            If set to True, then all not-used datapoints are
+                        set to np.nan. If False, then the not-used datapoints
+                        are recognized by a value of -1e90 for the intensity.
+
+    RETURNS:
+      Data object containing:
+
+        .freq           Frequency at which the image is taken
+        .intensity      An array with the intensity at each point along
+                        the ray of each pixel in erg/(s.cm^2.Hz.ster)
+        .x              The x location of each point at which the .intensity is given
+        .y              The y location of each point at which the .intensity is given
+        .z              The z location of each point at which the .intensity is given
+
+    EXAMPLE:
+
+      radmc3d image lambda 10 incl 70 phi 30 nofluxcons spymode
+      ipython --matplotlib
+      from simpleread import *
+      a = read_spy_image()
+      ix_pixel = a.nx//2   # The middle of the image
+      iy_pixel = a.ny//2   # The middle of the image
+      plt.figure()
+      plt.semilogy(a.z[1:,ix_pixel,iy_pixel],a.intensity[1:,ix_pixel,iy_pixel],'.-')
+      plt.ylim(ymin=1e-6*a.intensity_max)
+      plt.xlabel('x coordinate along ray [cm]')
+      plt.ylabel(r'$I_\nu\;[\mathrm{erg}\,\mathrm{cm}^{-2}\mathrm{s}^{-1}\mathrm{Hz}^{-1}\mathrm{ster}^{-1}]$')
+      plt.show()
+
+    """
+    pc        = 3.08572e18     # Parsec                  [cm]
+    cc        = 2.99792458e10  # Light speed             [cm/s]
+    image     = simplereaddataobject('spy_image')
+    fname     = 'spy_image.out'
+    print('Reading '+ fname)
+    with open(fname, 'r') as rfile:
+        dum = ''
+
+        # Format number
+        iformat = int(rfile.readline())
+
+        # Nr of pixels
+        dum = rfile.readline()
+        dum = dum.split()
+        image.nx = int(dum[0])
+        image.ny = int(dum[1])
+
+        # Max nr of points along each ray
+        image.raylen = int(rfile.readline())
+
+        # Nr of wavelength is always 1 for spy images
+        image.nfreq = 1
+        image.nwav = 1
+
+        # Pixel sizes
+        dum = rfile.readline()
+        dum = dum.split()
+        image.sizepix_x = float(dum[0])
+        image.sizepix_y = float(dum[1])
+
+        # Wavelength of the image
+        image.wav = float(rfile.readline())
+        image.freq = cc / image.wav * 1e4
+
+        # Read the rest of the data
+        data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
+        
+    # Convert the rest of the data to the proper shape
+    if iformat == 1:
+        # We have a normal total intensity image
+        image.stokes = False
+        data = np.reshape(data, [image.ny, image.nx, image.raylen, 4])
+        image.x = data[:,:,:,0].squeeze()
+        image.y = data[:,:,:,1].squeeze()
+        image.z = data[:,:,:,2].squeeze()
+        image.intensity = data[:,:,:,3].squeeze()
+        if indexorder=='fortran':
+            image.x = np.swapaxes(image.x, 0, 2)
+            image.y = np.swapaxes(image.y, 0, 2)
+            image.z = np.swapaxes(image.z, 0, 2)
+            image.intensity = np.swapaxes(image.intensity, 0, 2)
+
+    elif iformat == 3:
+        # We have the full stokes image
+        image.stokes = True
+        data = np.reshape(data, [image.ny, image.nx, image.raylen, 7])
+        image.x = data[:,:,:,0].squeeze()
+        image.y = data[:,:,:,1].squeeze()
+        image.z = data[:,:,:,2].squeeze()
+        image.intensity = data[:,:,:,3:6]
+        if indexorder=='fortran':
+            image.x = np.swapaxes(image.x, 0, 3)
+            image.y = np.swapaxes(image.y, 0, 3)
+            image.z = np.swapaxes(image.z, 0, 3)
+            image.x = np.swapaxes(image.x, 1, 2)
+            image.y = np.swapaxes(image.y, 1, 2)
+            image.z = np.swapaxes(image.z, 1, 2)
+            image.intensity = np.swapaxes(image.intensity, 0, 3)
+            image.intensity = np.swapaxes(image.intensity, 1, 2)
+    else:
+        msg = 'Unknown format number in spy_image.out'
+        raise ValueError(msg)
+
+    # Determine the maximum value
+    image.intensity_max = image.intensity.max()
+
+    # Set non-used points to np.nan
+    if usenan:
+        mask=image.intensity<0
+        image.intensity[mask]=np.nan
+        image.x[mask]=np.nan
+        image.y[mask]=np.nan
+        image.z[mask]=np.nan
+    
+    # Create the image plane x and y axes in units of cm
+    image.image_x = ((np.arange(image.nx, dtype=np.float64) + 0.5) - image.nx / 2) * image.sizepix_x
+    image.image_y = ((np.arange(image.ny, dtype=np.float64) + 0.5) - image.ny / 2) * image.sizepix_y
+    
+    # Return object
+    return image
+
