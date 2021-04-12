@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Feb 07, 2021}
+\date{Apr 13, 2021}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -7257,6 +7257,80 @@ Example usage:
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{radmc3d} \PYG{n}{tausurf} \PYG{l+m+mi}{1} \PYG{k}{lambda} \PYG{l+m+mi}{10} \PYG{n}{incl} \PYG{l+m+mi}{45} \PYG{n}{phi} \PYG{l+m+mi}{30}
 \end{sphinxVerbatim}
+
+
+\section{Seeing how an image is integrated: The “spy mode”}
+\label{\detokenize{imagesspectra:seeing-how-an-image-is-integrated-the-spy-mode}}\label{\detokenize{imagesspectra:sec-spy-image}}
+Sometimes you obtain an image and you do not understand how the observed
+intensity comes about. Where is the majority of the intensity produced?
+Why is the image so dim? Where does the extinction occur? Such questions
+may lead you to wish to be able to “spy on RADMC\sphinxhyphen{}3D” as it is integrating
+the intensity along the rays to produce the image, to find out exactly
+how the intensity seen in the image is produced along the rays.
+
+This is where the spy mode comes in. It produces, in addition to the
+\sphinxcode{\sphinxupquote{image.out}} file, also an \sphinxcode{\sphinxupquote{spy\_image.out}} file, which stores the 3D
+location \((x,y,z)\) of each node of each ray as the ray crosses
+the cell walls of the model, and the intensity \(I_\nu\) at these
+locations. For each pixel, this therefore involves a long 1\sphinxhyphen{}D array
+of \((x,y,z,I_\nu)\) values (where in polarized mode \(I_\nu\)
+has 4 values, otherwise just one value). The number of points along
+each ray will be different. To still keep the data structure simple,
+a maximum number of points along the ray \sphinxcode{\sphinxupquote{maxraylen}} is estimated, and the
+resulting data block is an array with size \sphinxcode{\sphinxupquote{{[}maxraylen,nx,ny{]}}}
+where \sphinxcode{\sphinxupquote{nx}} is the number of image pixels horizontally, and
+\sphinxcode{\sphinxupquote{ny}} is the number of image pixels vertically. For polarized light
+it is an array with size \sphinxcode{\sphinxupquote{{[}4,maxraylen,nx,ny{]}}}. To mark those point
+that are unused: the intensity at those points is set to \sphinxcode{\sphinxupquote{\sphinxhyphen{}1e90}}.
+
+Example usage (for instance in the \sphinxcode{\sphinxupquote{examples/run\_simple\_1/}} directory
+after you have done the thermal Monte Carlo run):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{radmc3d} \PYG{n}{image} \PYG{k}{lambda} \PYG{l+m+mi}{10} \PYG{n}{incl} \PYG{l+m+mi}{70} \PYG{n}{phi} \PYG{l+m+mi}{30} \PYG{n}{nofluxcons} \PYG{n}{spymode}
+\end{sphinxVerbatim}
+
+This produces the \sphinxcode{\sphinxupquote{spy\_image.out}} file, which can be quite big.
+To make it easy to read this file, you can find a python reader function
+in the \sphinxcode{\sphinxupquote{python/radmc3d\_tools/simpleread.py}}. The function is
+called \sphinxcode{\sphinxupquote{read\_spy\_image()}}. In Python (making sure that Python
+finds the simpleread.py library):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{simpleread} \PYG{k}{import} \PYG{n}{read\PYGZus{}spy\PYGZus{}image}
+\PYG{n}{a} \PYG{o}{=} \PYG{n}{read\PYGZus{}spy\PYGZus{}image}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{ix\PYGZus{}pixel} \PYG{o}{=} \PYG{n}{a}\PYG{o}{.}\PYG{n}{nx}\PYG{o}{/}\PYG{o}{/}\PYG{l+m+mi}{2}   \PYG{c+c1}{\PYGZsh{} The middle of the image, just as an example}
+\PYG{n}{iy\PYGZus{}pixel} \PYG{o}{=} \PYG{n}{a}\PYG{o}{.}\PYG{n}{ny}\PYG{o}{/}\PYG{o}{/}\PYG{l+m+mi}{2}   \PYG{c+c1}{\PYGZsh{} The middle of the image, just as an example}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{semilogy}\PYG{p}{(}\PYG{n}{a}\PYG{o}{.}\PYG{n}{z}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{p}{,}\PYG{n}{ix\PYGZus{}pixel}\PYG{p}{,}\PYG{n}{iy\PYGZus{}pixel}\PYG{p}{]}\PYG{p}{,}\PYG{n}{a}\PYG{o}{.}\PYG{n}{intensity}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{p}{,}\PYG{n}{ix\PYGZus{}pixel}\PYG{p}{,}\PYG{n}{iy\PYGZus{}pixel}\PYG{p}{]}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{.\PYGZhy{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylim}\PYG{p}{(}\PYG{n}{ymin}\PYG{o}{=}\PYG{l+m+mf}{1e\PYGZhy{}6}\PYG{o}{*}\PYG{n}{a}\PYG{o}{.}\PYG{n}{intensity\PYGZus{}max}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{z coordinate along ray [cm]}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{\PYGZdl{}I\PYGZus{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{nu}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{;[}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{mathrm}\PYG{l+s+si}{\PYGZob{}erg\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{,}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{mathrm}\PYG{l+s+si}{\PYGZob{}cm\PYGZcb{}}\PYG{l+s+s1}{\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}2\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{mathrm}\PYG{l+s+si}{\PYGZob{}s\PYGZcb{}}\PYG{l+s+s1}{\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}1\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{mathrm}\PYG{l+s+si}{\PYGZob{}Hz\PYGZcb{}}\PYG{l+s+s1}{\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}1\PYGZcb{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{mathrm}\PYG{l+s+si}{\PYGZob{}ster\PYGZcb{}}\PYG{l+s+s1}{\PYGZca{}}\PYG{l+s+s1}{\PYGZob{}}\PYG{l+s+s1}{\PYGZhy{}1\PYGZcb{}]\PYGZdl{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+The \sphinxcode{\sphinxupquote{read\_spy\_image()}} function will, by the way, convert all
+non\sphinxhyphen{}used points into not\sphinxhyphen{}a\sphinxhyphen{}number values (\sphinxcode{\sphinxupquote{numpy.nan}}). This
+makes it easier to plot things without being bothered by the
+unused points.
+
+In the above example, the datapoints were plotted from \sphinxcode{\sphinxupquote{1:}} onward.
+The reason is that RADMC\sphinxhyphen{}3D starts its integration rather far behind
+the model grid. If we would not exclude the first point (you can try),
+then the interesting part of the plot would be on the very right of the
+figure, and much smaller than desired.
+
+Note: The \((x,y,z)\) are the 3\sphinxhyphen{}D coordinates (Cartesian) of the
+points along the rays. The object returned by \sphinxcode{\sphinxupquote{read\_spy\_image()}} also
+has \sphinxcode{\sphinxupquote{image\_x}} and \sphinxcode{\sphinxupquote{image\_y}}: these are the x and y in the image,
+not in the 3\sphinxhyphen{}D space.
+
+To keep the data file from becoming too large, this mode only works
+for images with a single wavelength. Also, for now, it is only
+implemented for rectangular (normal) images. And finally, this
+mode requires you to set \sphinxcode{\sphinxupquote{nofluxcons}} on the command\sphinxhyphen{}line,
+to switch off sub\sphinxhyphen{}pixeling, because that would make it impossible
+to associate a single ray to a single pixel.
 
 
 \section{For public outreach work: local observers inside the model}

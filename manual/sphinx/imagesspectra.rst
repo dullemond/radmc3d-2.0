@@ -1226,6 +1226,80 @@ Example usage:
 
 
 
+.. _sec-spy-image:
+
+Seeing how an image is integrated: The "spy mode"
+=================================================
+
+Sometimes you obtain an image and you do not understand how the observed
+intensity comes about. Where is the majority of the intensity produced?
+Why is the image so dim? Where does the extinction occur? Such questions
+may lead you to wish to be able to "spy on RADMC-3D" as it is integrating
+the intensity along the rays to produce the image, to find out exactly
+how the intensity seen in the image is produced along the rays.
+
+This is where the spy mode comes in. It produces, in addition to the
+``image.out`` file, also an ``spy_image.out`` file, which stores the 3D
+location :math:`(x,y,z)` of each node of each ray as the ray crosses
+the cell walls of the model, and the intensity :math:`I_\nu` at these
+locations. For each pixel, this therefore involves a long 1-D array
+of :math:`(x,y,z,I_\nu)` values (where in polarized mode :math:`I_\nu`
+has 4 values, otherwise just one value). The number of points along
+each ray will be different. To still keep the data structure simple,
+a maximum number of points along the ray ``maxraylen`` is estimated, and the
+resulting data block is an array with size ``[maxraylen,nx,ny]``
+where ``nx`` is the number of image pixels horizontally, and
+``ny`` is the number of image pixels vertically. For polarized light
+it is an array with size ``[4,maxraylen,nx,ny]``. To mark those point
+that are unused: the intensity at those points is set to ``-1e90``.
+
+Example usage (for instance in the ``examples/run_simple_1/`` directory
+after you have done the thermal Monte Carlo run):
+::
+
+  radmc3d image lambda 10 incl 70 phi 30 nofluxcons spymode
+
+This produces the ``spy_image.out`` file, which can be quite big.
+To make it easy to read this file, you can find a python reader function
+in the ``python/radmc3d_tools/simpleread.py``. The function is
+called ``read_spy_image()``. In Python (making sure that Python
+finds the simpleread.py library):
+::
+
+   from simpleread import read_spy_image
+   a = read_spy_image()
+   ix_pixel = a.nx//2   # The middle of the image, just as an example
+   iy_pixel = a.ny//2   # The middle of the image, just as an example
+   plt.figure()
+   plt.semilogy(a.z[1:,ix_pixel,iy_pixel],a.intensity[1:,ix_pixel,iy_pixel],'.-')
+   plt.ylim(ymin=1e-6*a.intensity_max)
+   plt.xlabel('z coordinate along ray [cm]')
+   plt.ylabel(r'$I_\nu\;[\mathrm{erg}\,\mathrm{cm}^{-2}\mathrm{s}^{-1}\mathrm{Hz}^{-1}\mathrm{ster}^{-1}]$')
+   plt.show()
+   
+The ``read_spy_image()`` function will, by the way, convert all
+non-used points into not-a-number values (``numpy.nan``). This
+makes it easier to plot things without being bothered by the
+unused points. 
+
+In the above example, the datapoints were plotted from ``1:`` onward.
+The reason is that RADMC-3D starts its integration rather far behind
+the model grid. If we would not exclude the first point (you can try),
+then the interesting part of the plot would be on the very right of the
+figure, and much smaller than desired.
+
+Note: The :math:`(x,y,z)` are the 3-D coordinates (Cartesian) of the
+points along the rays. The object returned by ``read_spy_image()`` also
+has ``image_x`` and ``image_y``: these are the x and y in the image,
+not in the 3-D space. 
+
+To keep the data file from becoming too large, this mode only works
+for images with a single wavelength. Also, for now, it is only
+implemented for rectangular (normal) images. And finally, this
+mode requires you to set ``nofluxcons`` on the command-line,
+to switch off sub-pixeling, because that would make it impossible
+to associate a single ray to a single pixel. 
+
 
 
 .. _sec-local-observer:

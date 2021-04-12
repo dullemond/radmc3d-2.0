@@ -127,6 +127,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#circular-images">Circular images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualizing-the-tau-1-surface">Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seeing-how-an-image-is-integrated-the-spy-mode">Seeing how an image is integrated: The “spy mode”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#for-public-outreach-work-local-observers-inside-the-model">For public outreach work: local observers inside the model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multiple-vantage-points-the-movie-mode">Multiple vantage points: the ‘Movie’ mode</a></li>
 </ul>
@@ -1209,6 +1210,70 @@ the case of observer-at-infinity).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">tausurf</span> <span class="mi">1</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="seeing-how-an-image-is-integrated-the-spy-mode">
+<span id="sec-spy-image"></span><h2>Seeing how an image is integrated: The “spy mode”<a class="headerlink" href="#seeing-how-an-image-is-integrated-the-spy-mode" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you obtain an image and you do not understand how the observed
+intensity comes about. Where is the majority of the intensity produced?
+Why is the image so dim? Where does the extinction occur? Such questions
+may lead you to wish to be able to “spy on RADMC-3D” as it is integrating
+the intensity along the rays to produce the image, to find out exactly
+how the intensity seen in the image is produced along the rays.</p>
+<p>This is where the spy mode comes in. It produces, in addition to the
+<code class="docutils literal notranslate"><span class="pre">image.out</span></code> file, also an <code class="docutils literal notranslate"><span class="pre">spy_image.out</span></code> file, which stores the 3D
+location <span class="math notranslate nohighlight">\((x,y,z)\)</span> of each node of each ray as the ray crosses
+the cell walls of the model, and the intensity <span class="math notranslate nohighlight">\(I_\nu\)</span> at these
+locations. For each pixel, this therefore involves a long 1-D array
+of <span class="math notranslate nohighlight">\((x,y,z,I_\nu)\)</span> values (where in polarized mode <span class="math notranslate nohighlight">\(I_\nu\)</span>
+has 4 values, otherwise just one value). The number of points along
+each ray will be different. To still keep the data structure simple,
+a maximum number of points along the ray <code class="docutils literal notranslate"><span class="pre">maxraylen</span></code> is estimated, and the
+resulting data block is an array with size <code class="docutils literal notranslate"><span class="pre">[maxraylen,nx,ny]</span></code>
+where <code class="docutils literal notranslate"><span class="pre">nx</span></code> is the number of image pixels horizontally, and
+<code class="docutils literal notranslate"><span class="pre">ny</span></code> is the number of image pixels vertically. For polarized light
+it is an array with size <code class="docutils literal notranslate"><span class="pre">[4,maxraylen,nx,ny]</span></code>. To mark those point
+that are unused: the intensity at those points is set to <code class="docutils literal notranslate"><span class="pre">-1e90</span></code>.</p>
+<p>Example usage (for instance in the <code class="docutils literal notranslate"><span class="pre">examples/run_simple_1/</span></code> directory
+after you have done the thermal Monte Carlo run):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">70</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">nofluxcons</span> <span class="n">spymode</span>
+</pre></div>
+</div>
+<p>This produces the <code class="docutils literal notranslate"><span class="pre">spy_image.out</span></code> file, which can be quite big.
+To make it easy to read this file, you can find a python reader function
+in the <code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/simpleread.py</span></code>. The function is
+called <code class="docutils literal notranslate"><span class="pre">read_spy_image()</span></code>. In Python (making sure that Python
+finds the simpleread.py library):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">simpleread</span> <span class="k">import</span> <span class="n">read_spy_image</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">read_spy_image</span><span class="p">()</span>
+<span class="n">ix_pixel</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span>   <span class="c1"># The middle of the image, just as an example</span>
+<span class="n">iy_pixel</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ny</span><span class="o">//</span><span class="mi">2</span>   <span class="c1"># The middle of the image, just as an example</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="n">ix_pixel</span><span class="p">,</span><span class="n">iy_pixel</span><span class="p">],</span><span class="n">a</span><span class="o">.</span><span class="n">intensity</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="n">ix_pixel</span><span class="p">,</span><span class="n">iy_pixel</span><span class="p">],</span><span class="s1">&#39;.-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="mf">1e-6</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">intensity_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;z coordinate along ray [cm]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$I_\nu\;[\mathrm</span><span class="si">{erg}</span><span class="s1">\,\mathrm</span><span class="si">{cm}</span><span class="s1">^{-2}\mathrm</span><span class="si">{s}</span><span class="s1">^{-1}\mathrm</span><span class="si">{Hz}</span><span class="s1">^{-1}\mathrm</span><span class="si">{ster}</span><span class="s1">^{-1}]$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">read_spy_image()</span></code> function will, by the way, convert all
+non-used points into not-a-number values (<code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code>). This
+makes it easier to plot things without being bothered by the
+unused points.</p>
+<p>In the above example, the datapoints were plotted from <code class="docutils literal notranslate"><span class="pre">1:</span></code> onward.
+The reason is that RADMC-3D starts its integration rather far behind
+the model grid. If we would not exclude the first point (you can try),
+then the interesting part of the plot would be on the very right of the
+figure, and much smaller than desired.</p>
+<p>Note: The <span class="math notranslate nohighlight">\((x,y,z)\)</span> are the 3-D coordinates (Cartesian) of the
+points along the rays. The object returned by <code class="docutils literal notranslate"><span class="pre">read_spy_image()</span></code> also
+has <code class="docutils literal notranslate"><span class="pre">image_x</span></code> and <code class="docutils literal notranslate"><span class="pre">image_y</span></code>: these are the x and y in the image,
+not in the 3-D space.</p>
+<p>To keep the data file from becoming too large, this mode only works
+for images with a single wavelength. Also, for now, it is only
+implemented for rectangular (normal) images. And finally, this
+mode requires you to set <code class="docutils literal notranslate"><span class="pre">nofluxcons</span></code> on the command-line,
+to switch off sub-pixeling, because that would make it impossible
+to associate a single ray to a single pixel.</p>
 </div>
 <div class="section" id="for-public-outreach-work-local-observers-inside-the-model">
 <span id="sec-local-observer"></span><h2>For public outreach work: local observers inside the model<a class="headerlink" href="#for-public-outreach-work-local-observers-inside-the-model" title="Permalink to this headline">¶</a></h2>

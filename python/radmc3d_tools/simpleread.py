@@ -737,7 +737,7 @@ def read_spy_image(indexorder='fortran',usenan=True):
       plt.figure()
       plt.semilogy(a.z[1:,ix_pixel,iy_pixel],a.intensity[1:,ix_pixel,iy_pixel],'.-')
       plt.ylim(ymin=1e-6*a.intensity_max)
-      plt.xlabel('x coordinate along ray [cm]')
+      plt.xlabel('z coordinate along ray [cm]')
       plt.ylabel(r'$I_\nu\;[\mathrm{erg}\,\mathrm{cm}^{-2}\mathrm{s}^{-1}\mathrm{Hz}^{-1}\mathrm{ster}^{-1}]$')
       plt.show()
 
