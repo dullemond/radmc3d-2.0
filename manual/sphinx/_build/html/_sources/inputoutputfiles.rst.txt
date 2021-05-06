@@ -406,8 +406,8 @@ The meaning of the entries are:
 
 * ``coordsystem``: If ``coordsystem < 100`` the coordinate system is
   cartesian. If ``100 <= coordsystem < 200`` the coordinate system is spherical
-  (polar).  If ``200 <= coordsystem < 300`` the coordinate system is
-  cylindrical. For unformatted files this must be 4-byte integer.
+  (polar). Cylindrical coordinates have not yet been built in in this
+  version. For unformatted files this must be 4-byte integer.
 
 * ``gridinfo``: If ``gridinfo==1`` there will be
   abundant grid information written into this file, possibly useful for

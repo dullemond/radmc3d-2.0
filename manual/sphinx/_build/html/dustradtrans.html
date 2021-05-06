@@ -345,6 +345,21 @@ so the more cell crossings are made, the less effective the MRW becomes.</p>
 an approximation. However, if RADMC-3D thinks that the MRW may help speed up the
 thermal Monte Carlo, it will make the suggestion to the user to switch on the
 MRW method.</p>
+<p><em>NOTE:</em> So far the MRW method is only implemented using the Planck mean opacity
+for estimating the ‘large step’. This could, under certain conditions, be
+inaccurate. The reason why the (more accurate) Rosseland mean opacity is not
+used is that this precludes the precomputation and tabulation of the mean
+opacities if multiple independent dust species are used. Strictly speaking,
+even the Rosseland mean opacity is not entirely correct, but it is a good
+approximation (see Min et al. 2009). So far these simplifications do not seem
+to matter a lot. But if strong effects are seen, please report these. Conditions
+under which it is likely to make a difference (i.e.  the present implementation
+becoming inaccurate) are when an internal heat source inside a super-optically
+thick region is introduced (e.g. viscous heating in a disk), and/or when the
+opacities are extremely wavelength-dependent (varying by orders of magnitude in
+small distances in wavelengths). So please use MRW with care. Upon request we
+may implement the true MRW: with the Rosseland mean, which, however, may make
+the code slower.</p>
 <p>You can switch on the MRW by adding the following line to the
 <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified_random_walk</span> <span class="o">=</span> <span class="mi">1</span>
