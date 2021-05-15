@@ -1037,11 +1037,7 @@ class radmc3dData(object):
                 fname = 'numberdens_' + ispec + '.inp'
 
         print('Writing ' + fname)
-        if octree:
-            self._scalarfieldWriter(data=self.grid.convArrTree2Leaf(self.ndens_mol), fname=fname, binary=binary,
-                                    octree=True)
-        else:
-            self._scalarfieldWriter(data=self.ndens_mol, fname=fname, binary=binary, octree=False)
+        self._scalarfieldWriter(data=self.ndens_mol, fname=fname, binary=binary)
 
     def writeGasTemp(self, fname='', binary=True):
         """Writes the gas temperature.

@@ -255,10 +255,8 @@ class radmc3dModel(object):
                                    + ' dust_density.inp cannot be written')
 
             if writeToFile:
-                if self.par.ppar['grid_style'] == 1:
-                    self.data.writeDustDens(binary=self.binary, octree=True)
-                else:
-                    self.data.writeDustDens(binary=self.binary, old=self.old)
+                self.data.octree = (self.par.ppar['grid_style'] == 1)
+                self.data.writeDustDens(binary=self.binary, old=self.old)
         # --------------------------------------------------------------------------------------------
         # Create the dust temperature distribution if the model has such function
         # --------------------------------------------------------------------------------------------
@@ -276,10 +274,8 @@ class radmc3dModel(object):
                                    + ' dust_temperature.inp cannot be written')
 
             if writeToFile:
-                if self.par.ppar['grid_style'] == 1:
-                    self.data.writeDustTemp(binary=self.binary, octree=True)
-                else:
-                    self.data.writeDustTemp(binary=self.binary)
+                self.data.octree = (self.par.ppar['grid_style'] == 1)
+                self.data.writeDustTemp(binary=self.binary)
 
         # --------------------------------------------------------------------------------------------
         # Create the molecular abundance
@@ -306,22 +302,13 @@ class radmc3dModel(object):
 
             if writeToFile:
                 # Write the gas density
-                if self.par.ppar['grid_style'] == 1:
-                    for imol in range(len(self.par.ppar['gasspec_mol_name'])):
-                        self.data.writeGasDens(ispec=self.par.ppar['gasspec_mol_name'][imol], binary=self.binary,
-                                               octree=True)
+                self.data.octree = (self.par.ppar['grid_style'] == 1)
+                for imol in range(len(self.par.ppar['gasspec_mol_name'])):
+                    self.data.writeGasDens(ispec=self.par.ppar['gasspec_mol_name'][imol], binary=self.binary)
 
-                    if abs(self.par.ppar['lines_mode']) > 2:
-                        for icp in range(len(self.par.ppar['gasspec_colpart_name'])):
-                            self.data.writeGasDens(ispec=self.par.ppar['gasspec_colpart_name'][icp],
-                                                   binary=self.binary, octree=True)
-                else:
-                    for imol in range(len(self.par.ppar['gasspec_mol_name'])):
-                        self.data.writeGasDens(ispec=self.par.ppar['gasspec_mol_name'][imol], binary=self.binary)
-
-                    if abs(self.par.ppar['lines_mode']) > 2:
-                        for icp in range(len(self.par.ppar['gasspec_colpart_name'])):
-                            self.data.writeGasDens(ispec=self.par.ppar['gasspec_colpart_name'][icp], binary=self.binary)
+                if abs(self.par.ppar['lines_mode']) > 2:
+                    for icp in range(len(self.par.ppar['gasspec_colpart_name'])):
+                        self.data.writeGasDens(ispec=self.par.ppar['gasspec_colpart_name'][icp], binary=self.binary)
 
         # --------------------------------------------------------------------------------------------
         # Get the gas velocity field
@@ -336,10 +323,8 @@ class radmc3dModel(object):
 
             if writeToFile:
                 # Write the gas velocity
-                if self.par.ppar['grid_style'] == 1:
-                    self.data.writeGasVel(binary=self.binary, octree=True)
-                else:
-                    self.data.writeGasVel(binary=self.binary)
+                self.data.octree = (self.par.ppar['grid_style'] == 1)
+                self.data.writeGasVel(binary=self.binary)
         # --------------------------------------------------------------------------------------------
         # Get the kinetik gas temperature
         # --------------------------------------------------------------------------------------------
@@ -354,10 +339,8 @@ class radmc3dModel(object):
 
             if writeToFile:
                 # Write the gas temperature
-                if self.par.ppar['grid_style'] == 1:
-                    self.data.writeGasTemp(binary=self.binary, octree=True)
-                else:
-                    self.data.writeGasTemp(binary=self.binary)
+                self.data.octree = (self.par.ppar['grid_style'] == 1)
+                self.data.writeGasTemp(binary=self.binary)
         # --------------------------------------------------------------------------------------------
         # Get the turbulent velocity field
         # --------------------------------------------------------------------------------------------
@@ -376,10 +359,8 @@ class radmc3dModel(object):
                     self.data.vturb[:, :, :] = 0.
 
             if writeToFile:
-                if self.par.ppar['grid_style'] == 1:
-                    self.data.writeVTurb(binary=self.binary, octree=True)
-                else:
-                    self.data.writeVTurb(binary=self.binary)
+                self.data.octree = (self.par.ppar['grid_style'] == 1)
+                self.data.writeVTurb(binary=self.binary)
 
     def makeGrid(self, sgrid=True, wgrid=True, writeToFile=False, **kwargs):
         """
