@@ -400,19 +400,11 @@ def getGasAbundance(x=None, y=None, z=None, grid=None, ppar=None, ispec=''):
         # Read the dust density and temperature
         try:
             data = analyze.radmc3dData(grid)
-            data.readDustDens(binary=True, octree=False)
-            data.readDustTemp(binary=True, octree=False)
-
-            # data = analyze.readData(ddens=True, dtemp=True, binary=True, octree=False)
+            data.readDustDens()
+            data.readDustTemp()
         except:
-            try: 
-                # data = analyze.readData(ddens=True, dtemp=True, binary=False, octree=False)
-                data = analyze.radmc3dData(grid)
-                data.readDustDens(binary=False, octree=False)
-                data.readDustTemp(binary=False, octree=False)
-            except:
-                raise RuntimeError('Gas abundance cannot be calculated as the required dust density and/or temperature '
-                                   + 'could not be read in binary or in formatted ascii format.')
+            raise RuntimeError('Gas abundance cannot be calculated as the required dust density and/or temperature '
+                               + 'could not be read in binary or in formatted ascii format.')
 
         nspec = len(ppar['gasspec_mol_name'])
         if ispec in ppar['gasspec_mol_name']:
@@ -443,24 +435,19 @@ def getGasAbundance(x=None, y=None, z=None, grid=None, ppar=None, ispec=''):
     elif ppar['grid_style'] == 1:
 
         # Read the dust density and temperature
-        try: 
-            # data = analyze.readData(ddens=True, dtemp=True, binary=True, octree=True)
+        try:
             data = analyze.radmc3dData(grid)
-            data.readDustTemp(binary=True, octree=True)
+            data.readDustTemp()
+            data.dusttemp = grid.convArrLeaf2Tree(data.dusttemp)
         except:
-            try: 
-                data = analyze.radmc3dData(grid)
-                data.readDustTemp(binary=False, octree=True)
-                data.dusttemp = grid.convArrLeaf2Tree(data.dusttemp)
-            except:
-                raise RuntimeError('Gas abundance cannot be calculated as the required dust density and/or temperature '
-                                   + 'could not be read in binary or in formatted ascii format.')
+            raise RuntimeError('Gas abundance cannot be calculated as the required dust density and/or temperature '
+                               + 'could not be read in binary or in formatted ascii format.')
 
         nspec = len(ppar['gasspec_mol_name'])
         if ispec in ppar['gasspec_mol_name']:
 
             sid = ppar['gasspec_mol_name'].index(ispec)
-            gasabun = np.zeros(nx, dtype=np.float64)  
+            gasabun = np.zeros(nx, dtype=np.float64)
             
             for spec in range(nspec):
                 gasabun[:] = ppar['gasspec_mol_abun'][sid]

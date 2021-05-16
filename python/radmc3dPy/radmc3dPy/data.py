@@ -81,7 +81,10 @@ def readGrid(sgrid=True, wgrid=True, sgrid_fname=None, wgrid_fname=None, old=Fal
         if sgrid_fname is None:
             sgrid_fname = 'amr_grid.inp'
 
-        grid.readWavelengthGrid(fname=wgrid_fname, old=old)
+        if isinstance(grid, radmc3dOctree):
+            grid.readWavelengthGrid(fname=wgrid_fname)
+        else:
+            grid.readWavelengthGrid(fname=wgrid_fname, old=old)
 
     return grid
 
@@ -1037,7 +1040,10 @@ class radmc3dData(object):
                 fname = 'numberdens_' + ispec + '.inp'
 
         print('Writing ' + fname)
-        self._scalarfieldWriter(data=self.ndens_mol, fname=fname, binary=binary)
+        if octree:
+            self._scalarfieldWriter(data=self.grid.convArrTree2Leaf(self.ndens_mol), fname=fname, binary=binary)
+        else:
+            self._scalarfieldWriter(data=self.ndens_mol, fname=fname, binary=binary)
 
     def writeGasTemp(self, fname='', binary=True):
         """Writes the gas temperature.
