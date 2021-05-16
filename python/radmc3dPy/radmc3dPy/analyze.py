@@ -1439,13 +1439,14 @@ def plotSlice2D(data=None, var='ddens', plane='xy', crd3=0.0, icrd3=None, ispec=
         plot_z = None
 
     if 'x' in plane:
+
         # xy plane
-        if data.grid.nx <= 1:
+        if data.grid.x.shape[0] <= 1:
             msg = 'The x dimension is switched off or has only a single grid cell, thus a 2D slice plot cannot ' \
                   'be done in the '+plane+' plane.'
             raise ValueError(msg)
         if 'y' in plane:
-            if data.grid.ny <= 1:
+            if data.grid.y.shape[0] <= 1:
                 msg = 'The y dimension is switched off or has only a single grid cell, thus a 2D slice plot cannot ' \
                       'be done in the '+plane+' plane.'
                 raise ValueError(msg)
@@ -1492,7 +1493,7 @@ def plotSlice2D(data=None, var='ddens', plane='xy', crd3=0.0, icrd3=None, ispec=
                 idata = interpolateOctree(data, x=plot_x / xnorm, y=plot_y / ynorm, z=plot_z, var=var, nproc=nproc)
         # xz plane
         elif 'z' in plane:
-            if data.grid.nz <= 1:
+            if data.grid.z.shape[0] <= 1:
                 msg = 'The z dimension is switched off or has only a single grid cell, thus a 2D slice plot cannot ' \
                       'be done in the '+plane+' plane.'
                 raise ValueError(msg)
@@ -1533,12 +1534,12 @@ def plotSlice2D(data=None, var='ddens', plane='xy', crd3=0.0, icrd3=None, ispec=
                 idata = interpolateOctree(data, x=plot_x / xnorm, y=plot_z, z=plot_y / ynorm, var=var, nproc=nproc)
     # yz plane
     else:
-        if data.grid.ny <= 1:
+        if data.grid.y.shape[0] <= 1:
             msg = 'The y dimension is switched off or has only a single grid cell, thus a 2D slice plot cannot ' \
                   'be done in the '+plane+' plane.'
             raise ValueError(msg)
 
-        if data.grid.nz <= 1:
+        if data.grid.z.shape[0] <= 1:
             msg = 'The z dimension is switched off or has only a single grid cell, thus a 2D slice plot cannot ' \
                   'be done in the '+plane+' plane.'
             raise ValueError(msg)
