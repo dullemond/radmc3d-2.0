@@ -692,3 +692,64 @@ def read_mollevelpop(molecule,indexorder='fortran'):
 
     # Return the mollevelpop object
     return mollevelpop
+
+def read_mean_intensity(indexorder='fortran'):
+    """
+    Reading the mean_intensity.out file, but only for regular grids, and only
+    for text data format (not binary).
+
+    ARGUMENTS:
+      indexorder        If 'fortran' then converting array to fortran
+                        index order (default). Else use Python/C order.
+
+    RETURNS:
+      Data object containing:
+
+        .grid           A grid object (see read_grid())
+        .meanint        An array with the mean intensity
+    """
+    grid      = read_grid()
+    meanint   = simplereaddataobject('mean_intensity')
+    meanint.grid = grid
+    fname     = 'mean_intensity.out'
+    print('Reading '+fname)
+    data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+
+    # Read the header
+    hdr       = np.array(data[:3], dtype=np.int)
+    data      = data[3:]
+
+    # Get the frequencies
+    nwav      = hdr[-1]
+    freq      = data[:nwav]
+    data      = data[nwav:]
+    meanint.freq = freq
+
+    # Check the file format
+    if hdr[0] != 2:
+        msg = 'Unknown format number in mean_intensity.out'
+        raise RuntimeError(msg)
+
+    # Get the number of cells, and check against
+    nrcells = grid.nx*grid.ny*grid.nz
+    if(hdr[1]!=nrcells):
+        msg = 'Number of grid cells in gas_temperature.inp inconsistent with amr_grid.inp'
+        raise RuntimeError(msg)
+
+    # Convert the rest of the data to the proper shape
+    data = np.reshape(data, [nwav,grid.nz, grid.ny, grid.nx])
+
+    # If indexorder is set to 'fortran', then the inner index of the array
+    # should be left (even though in Python the inner index is right). This
+    # is to assure that the index order in the Python arrays is the same as
+    # in the RADMC-3D code. But by setting indexorder to anything else, you
+    # can keep Python natural order (which is equal to C index order), in
+    # which the inner index is the rightmost index.
+    if indexorder=='fortran':
+        data = np.swapaxes(data, 1, 3)
+
+    # Now add this to the object
+    meanint.meanint = data
+
+    # Return the meanint object
+    return meanint
