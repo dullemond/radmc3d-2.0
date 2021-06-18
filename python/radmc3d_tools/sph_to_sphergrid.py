@@ -17,14 +17,18 @@ def kernel1d(r,h):
     return w
 
 def kernel3d(dlgr,dth,dphi,hr):
-    n_r   = (int(2*hr/dlgr)//2)*2+1
-    n_th  = (int(2*hr/dth)//2)*2+1
-    n_phi = (int(2*hr/dphi)//2)*2+1
-    rc    = np.arange(-n_r//2+1,n_r//2+1)*dlgr
-    thc   = np.arange(-n_th//2+1,n_th//2+1)*dth
-    phic  = np.arange(-n_phi//2+1,n_phi//2+1)*dphi
+    if np.isscalar(hr):
+        hr3 = hr*np.array([1,1,1])
+    else:
+        hr3 = hr
+    n_r   = (int(2*hr3[0]/dlgr)//2)*2+1
+    n_th  = (int(2*hr3[1]/dth)//2)*2+1
+    n_phi = (int(2*hr3[2]/dphi)//2)*2+1
+    rc    = np.arange(-n_r//2+1,n_r//2+1)*dlgr/hr3[0]
+    thc   = np.arange(-n_th//2+1,n_th//2+1)*dth/hr3[1]
+    phic  = np.arange(-n_phi//2+1,n_phi//2+1)*dphi/hr3[2]
     r     = np.sqrt(rc[:,None,None]**2+thc[None,:,None]**2+phic[None,None,:]**2)
-    w     = kernel1d(r,hr)
+    w     = kernel1d(r,1)
     w     = w / w.sum()
     return w
 
@@ -43,7 +47,8 @@ rng     = default_rng()
 #
 mdisk      = 1e-5*MS
 hpr        = 0.05
-hrkernel   = 0.03
+#hrkernel   = 0.03
+hrkernel   = 0.03*np.array([2,1,20])
 
 #
 # Dummy model for the SPH particles
@@ -57,7 +62,7 @@ sph_lr     = np.log(sph_r)
 #
 # Set up the grid
 #
-grid_nr    = 100
+grid_nr    = 200
 grid_nth   = 100
 grid_nph   = 100
 grid_rin   = 1*au
@@ -112,6 +117,20 @@ print('Convolving with SPH kernel using scipy.signal.fftconvolve')
 grid_convolve = fftconvolve(grid_count,kern)
 
 #
+# Implement the periodic boundary in phi
+#
+nrg = (kern.shape[0]-1)//2
+ntg = (kern.shape[1]-1)//2
+npg = (kern.shape[2]-1)//2
+grid_convolve[:,:,npg:2*npg]   += grid_convolve[:,:,-npg:]
+grid_convolve[:,:,-2*npg:-npg] += grid_convolve[:,:,:npg]
+
+#
+# Cut off the padding
+#
+grid_convolve = grid_convolve[nrg:-nrg,ntg:-ntg,npg:-npg]
+
+#
 # Show
 #
 print('Plotting the two grids')
@@ -119,4 +138,6 @@ plt.figure()
 plt.imshow(grid_count.sum(axis=2).T,origin='lower')
 plt.figure()
 plt.imshow(grid_convolve.sum(axis=2).T,origin='lower')
+plt.figure()
+plt.plot(grid_convolve[100,50,:])
 plt.show()
