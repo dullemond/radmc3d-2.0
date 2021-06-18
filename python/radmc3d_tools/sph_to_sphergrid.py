@@ -2,6 +2,7 @@ import numpy as np
 from natconst import *
 from numpy.random import default_rng
 import matplotlib.pyplot as plt
+from scipy.signal import fftconvolve
 
 def kernel1d(r,h):
     # Spline kernel of Gadget-2 (Springel MNRAS 364, 1105, 2005, Eq. 4)
@@ -27,10 +28,22 @@ def kernel3d(dlgr,dth,dphi,hr):
     w     = w / w.sum()
     return w
 
-rng = default_rng()
+def uniform_spher_loggrid(rin,rout,hrup,nr,nth,nph):
+    ri    = rin * (rout/rin)**np.linspace(0,1,nr+1)
+    thup  = np.pi/2-hrup
+    thlo  = np.pi/2+hrup
+    thi   = thup + (thlo-thup)*np.linspace(0,1,nth+1)
+    phi   = 2*np.pi*np.linspace(0,1,nph+1)
+    return ri,thi,phi
 
-mdisk   = 1e-5*MS
-hpr     = 0.05
+rng     = default_rng()
+
+#
+# Parameters of the dummy model
+#
+mdisk      = 1e-5*MS
+hpr        = 0.05
+hrkernel   = 0.03
 
 #
 # Dummy model for the SPH particles
@@ -45,19 +58,13 @@ sph_lr     = np.log(sph_r)
 # Set up the grid
 #
 grid_nr    = 100
+grid_nth   = 100
+grid_nph   = 100
 grid_rin   = 1*au
 grid_rout  = 100*au
-grid_ri    = grid_rin * (grid_rout/grid_rin)**np.linspace(0,1,grid_nr+1)
+grid_hrup  = 0.3
+grid_ri, grid_thi, grid_phi = uniform_spher_loggrid(grid_rin,grid_rout,grid_hrup,grid_nr,grid_nth,grid_nph)
 grid_lri   = np.log(grid_ri)
-
-hrup       = 0.3
-grid_nth   = 100
-grid_thup  = np.pi/2-hrup
-grid_thlo  = np.pi/2+hrup
-grid_thi   = grid_thup + (grid_thlo-grid_thup)*np.linspace(0,1,grid_nth+1)
-
-grid_nph   = 100
-grid_phi   = 2*np.pi*np.linspace(0,1,grid_nph+1)
 
 #
 # Find particles in the grid
@@ -82,6 +89,7 @@ assert len(np.where(sph_phi_eps>1)[0])==0, 'Error in phi-grid-finding'
 #
 # Add particles to the grid
 #
+print('Adding particles to the grid')
 grid_count = np.zeros((grid_nr,grid_nth,grid_nph))
 for isph in range(nsph):
     ir   = sph_ir[isph]
@@ -90,8 +98,25 @@ for isph in range(nsph):
     grid_count[ir,ith,iphi] += 1
 
 #
+# Create a kernel
+#
+dlgr = grid_lri[1]-grid_lri[0]
+dth  = grid_thi[1]-grid_thi[0]
+dphi = grid_phi[1]-grid_phi[0]
+kern = kernel3d(dlgr,dth,dphi,hrkernel)
+
+#
+# Convolve
+#
+print('Convolving with SPH kernel using scipy.signal.fftconvolve')
+grid_convolve = fftconvolve(grid_count,kern)
+
+#
 # Show
 #
+print('Plotting the two grids')
 plt.figure()
 plt.imshow(grid_count.sum(axis=2).T,origin='lower')
+plt.figure()
+plt.imshow(grid_convolve.sum(axis=2).T,origin='lower')
 plt.show()
