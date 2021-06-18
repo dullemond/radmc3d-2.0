@@ -160,6 +160,11 @@ class sph_to_sphergrid(object):
         # Finally, compute the densities
 
         self.compute_density()
+
+        # Give warning if necessary
+
+        if(len(self.sph_excluded)>0):
+            print('WARNING: Some SPH particles are outside of the domain (see self.sph_excluded)')
         
     def uniform_spher_loggrid(self,rin,rout,hrup,nr,nth,nph):
         ri    = rin * (rout/rin)**np.linspace(0,1,nr+1)
@@ -314,13 +319,13 @@ grid_nth   = 100
 grid_nph   = 100
 grid_rin   = 1*au
 grid_rout  = 100*au
-grid_hrup  = 0.3
+grid_hrup  = 0.2
 
 #
 # Make the object to convert to spherical grid
 #
 sphgrid    = sph_to_sphergrid(rthph=rthphi,masses=1,rin=grid_rin,rout=grid_rout,nr=grid_nr,
-                              ntheta=grid_nth,nphi=grid_nph,hrup=0.15,hrkernel=hrkernel)
+                              ntheta=grid_nth,nphi=grid_nph,hrup=grid_hrup,hrkernel=hrkernel)
 
 #
 # Show
