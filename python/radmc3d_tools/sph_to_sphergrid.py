@@ -310,6 +310,7 @@ sph_th     = np.pi/2 - hpr*rng.standard_normal(size=nsph)
 sph_phi    = 2*np.pi*rng.uniform(size=nsph)
 sph_lr     = np.log(sph_r)
 rthphi     = np.vstack((sph_r,sph_th,sph_phi)).T
+masses     = mdisk/nsph
 
 #
 # Set up the grid
@@ -317,14 +318,14 @@ rthphi     = np.vstack((sph_r,sph_th,sph_phi)).T
 grid_nr    = 200
 grid_nth   = 100
 grid_nph   = 100
-grid_rin   = 1*au
-grid_rout  = 100*au
-grid_hrup  = 0.2
+grid_rin   = 0.9*au
+grid_rout  = 110*au
+grid_hrup  = 0.25
 
 #
 # Make the object to convert to spherical grid
 #
-sphgrid    = sph_to_sphergrid(rthph=rthphi,masses=1,rin=grid_rin,rout=grid_rout,nr=grid_nr,
+sphgrid    = sph_to_sphergrid(rthph=rthphi,masses=masses,rin=grid_rin,rout=grid_rout,nr=grid_nr,
                               ntheta=grid_nth,nphi=grid_nph,hrup=grid_hrup,hrkernel=hrkernel)
 
 #
