@@ -1,0 +1,72 @@
+This model setup demonstrates how to map a 3D SPH (Smooth Particle Hydrodynamics) model
+of a protoplanetary disk or circumstellar envelope onto a spherical grid for doing
+RADMC-3D calculations. The mapping is done using python/radmc3d_tools/sph_to_sphergrid.py
+which is an efficient but very simple SPH-to-grid mapping code. It can only map onto a
+spherical grid with equal spacing in log(r), theta and phi. For circumstellar envelopes
+and disks this is usually sufficient, but it may be necessary to add more grid refinement
+near the inner edge _after_ the mapping to avoid optical depth issues near the inner edge
+(see example run_ppdisk_analytic_2). This can only be done after the mapping, because the
+mapping code uses an FFT convolution method with a global kernel, which strictly enforces
+equal spacing in log(r), theta and phi.
+
+This example does not read in any real SPH model. A "dummy SPH model" is generated
+internally, just as a demo. But given that an SPH dataset is merely a list of positions
+of particles and their masses, it should be easy to replace the dummy model with a
+real SPH dataset of any SPH code (or other code types such as Arepo). However, this
+setup is not suited for arbitrary model geometries such as 3-D SPH simulations of
+Giant Molecular Clouds, because they are not well mapped onto a regular spherical grid.
+
+The python script that does the conversion from a list of SPH particles to a RADMC-3D
+model is:
+
+   problem_setup.py
+
+To run this model:
+
+   python problem_setup.py
+   radmc3d mctherm
+   ipython --matplotlib
+   %run plot_images.py
+
+To view the structure, you can play with plot_structure.py and plot_structure_widget.py
+
+IMPORTANT NOTE OF CAUTION:
+
+   Note that the structures you see in the lambda = 1 micron image are purely
+   the result of the low number statistics of the "SPH particles" (here just a
+   dummy model). This issue will be more serious the more optically thick the
+   disk is, and/or the fewer SPH particles you have. In fact, for very optically
+   thick disks it may be impossible to properly sample the surface layers where
+   the scattering happens, because of the minimum mass of the SPH
+   particles. Consider this: If your disk model is, on average, vertically
+   resolved by "only" 100 SPH particles of equal mass, and if the disk has a
+   scattering optical depth of 1e5, then the scattering tau=1 surface would be
+   in the upper 1e-5 of the column depth, which is completely unresolved by the
+   100 SPH particles (each of which contributes an optical depth of
+   1e5/100=1e3). This is why SPH models may have problems handling short
+   wavelength (i.e. high-kappa) radiative transfer, unless the SPH model somehow
+   splits SPH particles into smaller-mass ones to resolve the upper layers.
+   This is a problem that also appears for other RT methods, for instance those
+   that use Voronoi grids. It is a fundamental limitation of SPH models, unless
+   they use sophisticated particle-splitting schemes so that they can
+   dynamically resolve the flimsy surface layers of the disk. The physical
+   origin of this problem is that one needs only an exceedingly small amount of
+   fine-grained dust to create high optical depths: From the opacity file you
+   can see that dust can have an opacity at optical wavelengths easily of order
+   3x10^4. That means that a disk with a surface density Sigma_gas = 10^3 (for
+   e.g. the minimum mass solar nebula at 1 au) you would have Sigma_dust =~ 10
+   (rough estimate, assuming dust-to-gas ratio of 0.01), which leads to a
+   vertical optical depth of 10*3x10^4 = 3x10^5.  The fraction of the surface
+   density above the upper tau=1 layer is then the inverse of that, i.e. roughly
+   3x10^{-6}. That is 5 pressure scale heights above the midplane!
+   (exp(-5^2/2)=3.7266e-6). Even for grid-based hydrodynamics codes it is
+   already challenging enough to model up to 5 scale heights without the code
+   crashing. For SPH this challenge will be even higher. Fortunately the
+   problem is less severe for larger radii (~100 au) and for lower disk
+   masses and/or strong dust depletion. But one has to take care of this
+   potential SPH resolution issue for scattered light and/or infrared thermal
+   emission. For ALMA wavelengths this is much less an issue (or no issue
+   at all) given that the optical depths at those wavelengths are much less
+   high.
+
+2021.06.19
