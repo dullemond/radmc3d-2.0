@@ -6,7 +6,7 @@ from scipy.signal import fftconvolve
 from tqdm import tqdm   # Progress bar
 
 class sph_to_sphergrid(object):
-    def __init__(self,rthph=None,xyz=None,masses=1,rin=None,rout=None,nr=100,ntheta=100,nphi=100,
+    def __init__(self,rthphi=None,xyz=None,masses=1,rin=None,rout=None,nr=100,ntheta=100,nphi=100,
                  hrup=0.15,hrkernel=0.03):
         """
         Simple conversion of SPH model of a circumstellar disk to spherical coordinates 
@@ -210,7 +210,7 @@ class sph_to_sphergrid(object):
         print('Adding particles to the grid (may take a while)')
         self.sph_excluded = []
         self.cellmass_unconvolved = np.zeros((self.grid_nr,self.grid_ntheta,self.grid_nphi))
-        for isph in tqdm(range(nsph)):
+        for isph in tqdm(range(self.nsph)):
             ir   = sph_ir[isph]
             ith  = sph_ith[isph]
             iphi = sph_iphi[isph]
@@ -241,17 +241,26 @@ class sph_to_sphergrid(object):
         print('Convolving with SPH kernel using scipy.signal.fftconvolve')
         self.cellmass = fftconvolve(self.cellmass_unconvolved,self.kern)
         
-        # Implement the periodic boundary in phi
+        # Compute the number of ghost (padding) cells
 
         nrg = (self.kern.shape[0]-1)//2
         ntg = (self.kern.shape[1]-1)//2
         npg = (self.kern.shape[2]-1)//2
-        self.cellmass[:,:,npg:2*npg]   += self.cellmass[:,:,-npg:]
-        self.cellmass[:,:,-2*npg:-npg] += self.cellmass[:,:,:npg]
+        
+        # Implement the periodic boundary in phi
+
+        if npg>0:
+            self.cellmass[:,:,npg:2*npg]   += self.cellmass[:,:,-npg:]
+            self.cellmass[:,:,-2*npg:-npg] += self.cellmass[:,:,:npg]
         
         # Cut off the padding
 
-        self.cellmass = self.cellmass[nrg:-nrg,ntg:-ntg,npg:-npg]
+        if nrg>0:
+            self.cellmass = self.cellmass[nrg:-nrg,:,:]
+        if ntg>0:
+            self.cellmass = self.cellmass[:,ntg:-ntg,:]
+        if npg>0:
+            self.cellmass = self.cellmass[:,:,npg:-npg]
 
     def kernel1d(self,r,h):
         
@@ -288,56 +297,59 @@ class sph_to_sphergrid(object):
 
     def compute_density(self):
         self.rho = self.cellmass / self.grid_vol
-        
-#
-# Creat the random number generator for creating the dummy SPH model
-#
-rng     = default_rng()
 
-#
-# Parameters of the dummy model
-#
-mdisk      = 1e-5*MS
-hpr        = 0.05
-hrkernel   = 0.03*np.array([2,1,20])
-
-#
-# Dummy model for the SPH particles
-#
-nsph       = 1000000
-sph_r      = au*10**(2*rng.uniform(size=nsph))
-sph_th     = np.pi/2 - hpr*rng.standard_normal(size=nsph)
-sph_phi    = 2*np.pi*rng.uniform(size=nsph)
-sph_lr     = np.log(sph_r)
-rthphi     = np.vstack((sph_r,sph_th,sph_phi)).T
-masses     = mdisk/nsph
-
-#
-# Set up the grid
-#
-grid_nr    = 200
-grid_nth   = 100
-grid_nph   = 100
-grid_rin   = 0.9*au
-grid_rout  = 110*au
-grid_hrup  = 0.25
-
-#
-# Make the object to convert to spherical grid
-#
-sphgrid    = sph_to_sphergrid(rthph=rthphi,masses=masses,rin=grid_rin,rout=grid_rout,nr=grid_nr,
-                              ntheta=grid_nth,nphi=grid_nph,hrup=grid_hrup,hrkernel=hrkernel)
-
-#
-# Show
-#
-print('Plotting the two grids')
-plt.figure()
-plt.imshow(sphgrid.cellmass_unconvolved.sum(axis=2).T,origin='lower')
-plt.figure()
-plt.imshow(sphgrid.cellmass.sum(axis=2).T,origin='lower')
-plt.figure()
-plt.imshow((sphgrid.rho.mean(axis=2)*sphgrid.grid_rc[:,None]**3).T,origin='lower')
-plt.figure()
-plt.plot(sphgrid.rho[100,50,:])
-plt.show()
+# #
+# # UNCOMMENT THE FOLLOWING FOR AN EXAMPLE OF USAGE
+# #
+# #
+# # Creat the random number generator for creating the dummy SPH model
+# #
+# rng     = default_rng()
+# 
+# #
+# # Parameters of the dummy model
+# #
+# mdisk      = 1e-5*MS
+# hpr        = 0.05
+# hrkernel   = 0.03*np.array([2,1,20])
+# 
+# #
+# # Dummy model for the SPH particles
+# #
+# nsph       = 1000000
+# sph_r      = au*10**(2*rng.uniform(size=nsph))
+# sph_th     = np.pi/2 - hpr*rng.standard_normal(size=nsph)
+# sph_phi    = 2*np.pi*rng.uniform(size=nsph)
+# sph_lr     = np.log(sph_r)
+# rthphi     = np.vstack((sph_r,sph_th,sph_phi)).T
+# masses     = mdisk/nsph
+# 
+# #
+# # Set up the grid
+# #
+# grid_nr    = 200
+# grid_nth   = 100
+# grid_nph   = 100
+# grid_rin   = 0.9*au
+# grid_rout  = 110*au
+# grid_hrup  = 0.25
+# 
+# #
+# # Make the object to convert to spherical grid
+# #
+# sphgrid    = sph_to_sphergrid(rthph=rthphi,masses=masses,rin=grid_rin,rout=grid_rout,nr=grid_nr,
+#                               ntheta=grid_nth,nphi=grid_nph,hrup=grid_hrup,hrkernel=hrkernel)
+# 
+# #
+# # Show
+# #
+# print('Plotting the two grids')
+# plt.figure()
+# plt.imshow(sphgrid.cellmass_unconvolved.sum(axis=2).T,origin='lower')
+# plt.figure()
+# plt.imshow(sphgrid.cellmass.sum(axis=2).T,origin='lower')
+# plt.figure()
+# plt.imshow((sphgrid.rho.mean(axis=2)*sphgrid.grid_rc[:,None]**3).T,origin='lower')
+# plt.figure()
+# plt.plot(sphgrid.rho[100,50,:])
+# plt.show()

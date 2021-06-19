@@ -5,6 +5,7 @@
 """
 from . import simpleread
 from . import simpleplot
+from . import sph_to_sphergrid
 
 __version__ = "2.00.0"
 __author__ = "Cornelis Dullemond"
