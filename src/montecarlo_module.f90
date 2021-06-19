@@ -8323,6 +8323,19 @@ subroutine montecarlo_random_pos_in_cell(icell)
         rn         = ran2(iseed)
         dum        = axi(2,3) - axi(1,3)
         ray_cart_z = axi(1,3) + dum * rn
+        ! BUGFIX 1-D plane-parallel and 2-D pencil-parallel modes 19.06.2021
+        ! Must set x and y to 0, otherwise the ray segment length cannot be
+        ! properly computed, because x and y become of order 1e90 large.
+        ! It has no consequences for the normal RADMC-3D functionality, only
+        ! for the 1-D plane-parallel and 2-D pencil-parallel modes.
+        ! Thanks, Til Birnstiel, for spotting and reporting the error.
+        if(igrid_coord.eq.10) then
+           ray_cart_x = 0.d0
+           ray_cart_y = 0.d0
+        endif
+        if(igrid_coord.eq.20) then
+           ray_cart_x = 0.d0
+        endif
      elseif(igrid_coord.lt.200) then
         !
         ! Spherical coordinates
