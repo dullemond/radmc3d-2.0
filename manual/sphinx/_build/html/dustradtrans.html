@@ -134,6 +134,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#effect-of-aligned-grains-on-the-scattering">Effect of aligned grains on the scattering</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#grain-size-distributions">Grain size distributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-summary-of-how-to-implement-grain-sizes">Quick summary of how to implement grain sizes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-1-size-distribution-in-the-opacity-file-faster">Method 1: Size distribution in the opacity file (faster)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-2-size-distribution-in-the-density-file-better">Method 2: Size distribution in the density file (better)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-mathematics-of-grain-size-distributions">The mathematics of grain size distributions</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lineradtrans.html">Line radiative transfer</a></li>
@@ -479,7 +486,7 @@ below). The file <code class="docutils literal notranslate"><span class="pre">du
 density distributions: one density distribution for each dust species.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code>: One or more dust opacity files (where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> should in
 fact be a tag name you define, for instance <code class="docutils literal notranslate"><span class="pre">dustkappa_silicate.inp</span></code>). The
-labels are listed in the <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file. ee Section
+labels are listed in the <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file. See Section
 <a class="reference internal" href="inputoutputfiles.html#sec-opacities"><span class="std std-ref">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</span></a> for more information.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">camera_wavelength_micron.inp</span> <span class="pre">(optional)</span></code>: This file is only needed if you
 want to create a spectrum at a special set of wavelengths (otherwise use
@@ -2285,6 +2292,151 @@ emission.</p>
 <div class="section" id="effect-of-aligned-grains-on-the-scattering">
 <span id="sec-align-scat"></span><h3>Effect of aligned grains on the scattering<a class="headerlink" href="#effect-of-aligned-grains-on-the-scattering" title="Permalink to this headline">¶</a></h3>
 <p><em>This is, currently, not yet implemented.</em></p>
+</div>
+</div>
+<div class="section" id="grain-size-distributions">
+<span id="sec-grain-size-distributions"></span><h2>Grain size distributions<a class="headerlink" href="#grain-size-distributions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="quick-summary-of-how-to-implement-grain-sizes">
+<span id="sec-grain-size-distributions-overview"></span><h3>Quick summary of how to implement grain sizes<a class="headerlink" href="#quick-summary-of-how-to-implement-grain-sizes" title="Permalink to this headline">¶</a></h3>
+<p>A common application of RADMC-3D is continuum radiative transfer in media with a
+grain size distribution. RADMC-3D does not know the concept of “grain size
+distribution”, and it does not care. You have to provide RADMC-3D will all the
+information it needs, such that it will handle the dust size distribution you
+want. All the responsibility lies with you, the user.</p>
+<p>There are basically two ways by which you can make RADMC-3D treat a grain size
+distribution:</p>
+<ul class="simple">
+<li><p>Method 1: Mixing the dust opacities into a single opacity file, having
+RADMC-3D think that there is only one dust species. Fast and simple.</p></li>
+<li><p>Method 2: Computing <span class="math notranslate nohighlight">\(N\)</span> dust opacity files, having <span class="math notranslate nohighlight">\(N\)</span> independent
+dust species. Slower but more realistic and flexible.</p></li>
+</ul>
+<p>In the following subsections we will discuss both methods.</p>
+</div>
+<div class="section" id="method-1-size-distribution-in-the-opacity-file-faster">
+<span id="sec-grain-size-distributions-method-1"></span><h3>Method 1: Size distribution in the opacity file (faster)<a class="headerlink" href="#method-1-size-distribution-in-the-opacity-file-faster" title="Permalink to this headline">¶</a></h3>
+<p>The simplest way is to compute a single dust opacity table (see Section
+<a class="reference internal" href="inputoutputfiles.html#sec-opacities"><span class="std std-ref">INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp</span></a>) for a single dust species. You compute the weighted dust
+opacity and put that into the file <code class="docutils literal notranslate"><span class="pre">dustkappa_XXX.inp</span></code> (for instance let’s
+call it <code class="docutils literal notranslate"><span class="pre">dustkappa_sizedistrib.inp</span></code>) or <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_XXX.inp</span></code> (for
+instance let’s call it <code class="docutils literal notranslate"><span class="pre">dustkapscatmat_sizedistrib.inp</span></code>).  All the information
+about the size distribution shape is then encoded in this opacity file, and
+RADMC-3D will never know that it is, in fact, a size distribution. The file
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> will then only contain the spatial distribution of a single
+grain species: that of the mixture of sizes. Advantage: it is the
+easiest. Disadvantage: the size distribution will be identical
+everywhere. Another disadvantage: each grain size will have the same temperature
+(because RADMC-3D does not know that these are different dust sizes).</p>
+<p>This method be useful to save computer time. You essentially do all the work of
+computing the opacity of the size distribution beforehand (even before you start
+RADMC-3D), so that you get a single opacity file that already contains the
+size-distribution-weighted opacities. You must then be sure that you do the
+weighting such that the opacity is “cross section per gram of dust”, where
+“dust” is already the entire grain size distribution. The dust density in the
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file must then also be the density of the entire grain size
+distribution. See Section <a class="reference internal" href="#sec-math-of-grain-size-distributions"><span class="std std-ref">The mathematics of grain size distributions</span></a> for more
+information about size distributions.</p>
+</div>
+<div class="section" id="method-2-size-distribution-in-the-density-file-better">
+<span id="sec-grain-size-distributions-method-2"></span><h3>Method 2: Size distribution in the density file (better)<a class="headerlink" href="#method-2-size-distribution-in-the-density-file-better" title="Permalink to this headline">¶</a></h3>
+<p>RADMC-3D can handle multiple dust species simultaneously and co-spatially. So
+you can have <span class="math notranslate nohighlight">\(N\)</span> grain sizes, each represented by its own opacity file and
+its own spatial density distribution. So if we, for example, have two sizes, 1
+micron and 1 millimeter (i.e. <span class="math notranslate nohighlight">\(N=2\)</span>) then we would have, for instance, two
+opacity files, <code class="docutils literal notranslate"><span class="pre">dustkappa_1micron.inp</span></code> and <code class="docutils literal notranslate"><span class="pre">dustkappa_1mm.inp</span></code> (don’t forget
+to mark them both in <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> too), and within the <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code>
+file we have two density fields. This allows you, for instance, to have the
+large grains near the midplane of a disk and the small grains vertically more
+extended, because you can determine the density <span class="math notranslate nohighlight">\(\rho\)</span> of each dust
+species completely independent from the others.</p>
+<p>We have now two choices how to handle these species: (a) thermally coupled (set
+<code class="docutils literal notranslate"><span class="pre">itempdecoup</span> <span class="pre">=</span> <span class="pre">0</span></code> in <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>, see section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>, or (b)
+thermally decoupled (default, but you can set <code class="docutils literal notranslate"><span class="pre">itempdecoup</span> <span class="pre">=</span> <span class="pre">1</span></code> in
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> to make sure). The default is thermally decoupled, because that
+is for most cases more realistic. If the grains are thermally decoupled, then,
+in the optically thin regions exposed to hot stellar radiation, the small grains
+tend to be hotter than the large ones. However, in optically thick regions the
+small and large grains will tend to automatically acquire similar or the same
+temperature(s).</p>
+<p>Compared to the first method (with a single dust species), this method is more
+flexible (allowing different spatial distributions for different grain sizes)
+but also more costly (requiring the radiative transfer code to handle the
+interaction of the radiation with <span class="math notranslate nohighlight">\(N\)</span> independent dust species). You must
+then calculate each grain opacity file separately, and keep these normalized to
+“cross section per gram of this particular dust species or size”. Here, the
+weighting is not done in the opacity files, but in the fact that each grain size
+(or species) <span class="math notranslate nohighlight">\(i\)</span> has its own density <span class="math notranslate nohighlight">\(\rho_i\)</span>. You would then need
+to make sure that these <span class="math notranslate nohighlight">\(\rho_i\)</span> are following the size distribution you
+wish. See Section <a class="reference internal" href="#sec-math-of-grain-size-distributions"><span class="std std-ref">The mathematics of grain size distributions</span></a> for more
+information about size distributions.</p>
+</div>
+<div class="section" id="the-mathematics-of-grain-size-distributions">
+<span id="sec-math-of-grain-size-distributions"></span><h3>The mathematics of grain size distributions<a class="headerlink" href="#the-mathematics-of-grain-size-distributions" title="Permalink to this headline">¶</a></h3>
+<p>Grain size distributions can be confusing, so here is a small tutorial.
+Suppose we have the famous MRN (Mathis, Rumpl, Nordsieck) size distribution:</p>
+<div class="math notranslate nohighlight">
+\[n(a)da \propto a^{-7/2}da\]</div>
+<p>with <span class="math notranslate nohighlight">\(a\)</span> the radius of the grain, <span class="math notranslate nohighlight">\(n(a)da\)</span> the number of grains
+between sizes <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(a+da\)</span> per volume. We say that this
+powerlaw goes from <span class="math notranslate nohighlight">\(a=a_{\mathrm{min}}\)</span> to <span class="math notranslate nohighlight">\(a=a_{\mathrm{max}}\)</span>,
+and we keep in mind that <span class="math notranslate nohighlight">\(a_{\mathrm{max}}\)</span> can be (but does not
+have to) orders of magnitude larger than <span class="math notranslate nohighlight">\(a_{\mathrm{min}}\)</span>.
+The total dust density <span class="math notranslate nohighlight">\(\rho\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[\rho = \int_{a_{\mathrm{min}}}^{a_{\mathrm{max}}} m(a)n(a)da\]</div>
+<p>where <span class="math notranslate nohighlight">\(m(a)\)</span> is the mass of the grain:</p>
+<div class="math notranslate nohighlight">
+\[m(a) = \rho_s \frac{4\pi}{3}a^3\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho_s\)</span> is the material density of the grain material (typically
+somewhere between 1 and 3.6 <span class="math notranslate nohighlight">\(\mathrm{gram}/\mathrm{cm}^3\)</span>, dependent on the material).</p>
+<p>For RADMC-3D we have to disretize this into <span class="math notranslate nohighlight">\(N\)</span> bins. Since we can have
+<span class="math notranslate nohighlight">\(a_{\mathrm{max}}\gg a_{\mathrm{min}}\)</span>, it is best to take a logarithmic
+grid in <span class="math notranslate nohighlight">\(a\)</span>, i.e. equal spacing in <span class="math notranslate nohighlight">\(\ln(a)\)</span>.  So we divide the
+interval <span class="math notranslate nohighlight">\([\ln(a_{\mathrm{min}}),\ln(a_{\mathrm{max}})]\)</span> up into <span class="math notranslate nohighlight">\(N\)</span>
+equal size bins, numbering <span class="math notranslate nohighlight">\(i=0\)</span> to <span class="math notranslate nohighlight">\(i=N-1\)</span>, with cell centers
+denoted as <span class="math notranslate nohighlight">\(\ln(a_i)\)</span> and the cell walls are denoted as
+<span class="math notranslate nohighlight">\(\ln(a_{i-1/2})\)</span> for the left- and <span class="math notranslate nohighlight">\(\ln(a_{i+1/2})\)</span> for the
+right-hand cell wall. We have <span class="math notranslate nohighlight">\(\ln(a_{-1/2})=\ln(a_{\mathrm{min}})\)</span> and
+<span class="math notranslate nohighlight">\(\ln(a_{N-1/2})=\ln(a_{\mathrm{max}})\)</span>. For any <span class="math notranslate nohighlight">\(i\)</span> we have the same
+cell width in log-space:
+<span class="math notranslate nohighlight">\(\Delta\ln(a)=\Delta\ln(a_i)=\ln(a_{i+1/2})-\ln(a_{i-1/2})\)</span>.
+Now the density for each bin is:</p>
+<div class="math notranslate nohighlight">
+\[\rho_i = \int_{a_{i-1/2}}^{a_{i+1/2}} m(a)\,n(a)\,da = \int_{\ln(a_{i-1/2})}^{\ln(a_{i+1/2})} a\,m(a)\,n(a)\,d\ln(a)\]</div>
+<p>If the bin width <span class="math notranslate nohighlight">\(\Delta\ln(a)\)</span> is small enough, this can be approximated
+as</p>
+<div class="math notranslate nohighlight">
+\[\rho_i \simeq a_i m(a_i)n(a_i)\Delta\ln(a)\]</div>
+<p>The total dust density is then</p>
+<div class="math notranslate nohighlight">
+\[\rho = \sum_{i=0}^{N-1} \rho_i\]</div>
+<p>The opacity for bin <span class="math notranslate nohighlight">\(i\)</span> at some frequency <span class="math notranslate nohighlight">\(\nu\)</span> is approximately <span class="math notranslate nohighlight">\(\kappa_\nu(a_i)\)</span>
+if a small enough bin size is used. That means that the extinction coefficient</p>
+<div class="math notranslate nohighlight">
+\[\alpha_\nu = \sum_{i=0}^{N-1} \rho_i\kappa_\nu(a_i)\]</div>
+<p>In method 2 (Section <a class="reference internal" href="#sec-grain-size-distributions-method-2"><span class="std std-ref">Method 2: Size distribution in the density file (better)</span></a>) this is exactly what happens:
+you specify <span class="math notranslate nohighlight">\(N\)</span> tables of <span class="math notranslate nohighlight">\(\kappa_\nu(a_i)\)</span> (each table containing all frequencies
+for which you want to use the opacity), and the “mixing” happens in each grid cell on-the-fly
+depending on the local values of <span class="math notranslate nohighlight">\(\rho_i\)</span>. The values of <span class="math notranslate nohighlight">\(\rho_i\)</span> in the file
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> are exactly these <span class="math notranslate nohighlight">\(\rho_i\)</span>.</p>
+<p>On the contrary, in method 1 (Section <a class="reference internal" href="#sec-grain-size-distributions-method-1"><span class="std std-ref">Method 1: Size distribution in the opacity file (faster)</span></a>), you compute
+a nomalized <span class="math notranslate nohighlight">\(\hat n(a_i)\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\sum_{i=0}^{N-1}  a_i m(a_i)\hat n(a_i)\Delta\ln(a) = 1\]</div>
+<p>so that with</p>
+<div class="math notranslate nohighlight">
+\[\hat\rho_i \simeq a_i m(a_i)\hat n(a_i)\Delta\ln(a)\]</div>
+<p>we get</p>
+<div class="math notranslate nohighlight">
+\[\sum_{i=0}^{N-1}  \hat\rho_i = 1\]</div>
+<p>Now we can compute a grain-size-mean opacity:</p>
+<div class="math notranslate nohighlight">
+\[\hat\kappa_\nu = \sum_{i=0}^{N-1} \hat\rho_i\kappa_\nu(a_i)\]</div>
+<p>which is computed before running RADMC-3D, and will be valid at all locations in the spatial grid.
+At each cell we only have the total dust density <span class="math notranslate nohighlight">\(\rho\)</span>. The extinction coefficient is
+then</p>
+<div class="math notranslate nohighlight">
+\[\alpha_\nu = \rho\hat\kappa_\nu\]</div>
 </div>
 </div>
 </div>

@@ -21,6 +21,6 @@ subdirectories for details.
 Note also that Carsten Dominik made a very nice and easy-to-use tool to
 generate dust opacities on the Linux/Mac command line. It is called
 ``optool``, and can be found on github at
-[https://github.com/cdominik/optool](https://github.com/cdominik/optool) .
+https://github.com/cdominik/optool .
 It can produce RADMC-3D-ready dust opacity files.
 

@@ -18,4 +18,9 @@ the most common WWW databases, we provide Python routines for the conversion.
 Please read the ``README_*`` files in this directory and its
 subdirectories for details.
 
+Note also that Carsten Dominik made a very nice and easy-to-use tool to
+generate dust opacities on the Linux/Mac command line. It is called
+``optool``, and can be found on github at
+https://github.com/cdominik/optool .
+It can produce RADMC-3D-ready dust opacity files.
 

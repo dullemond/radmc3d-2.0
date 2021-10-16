@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{May 06, 2021}
+\date{Oct 17, 2021}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -2211,7 +2211,7 @@ density distributions: one density distribution for each dust species.
 \item {} 
 \sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}}: One or more dust opacity files (where \sphinxcode{\sphinxupquote{XXX}} should in
 fact be a tag name you define, for instance \sphinxcode{\sphinxupquote{dustkappa\_silicate.inp}}). The
-labels are listed in the \sphinxcode{\sphinxupquote{dustopac.inp}} file. ee Section
+labels are listed in the \sphinxcode{\sphinxupquote{dustopac.inp}} file. See Section
 {\hyperref[\detokenize{inputoutputfiles:sec-opacities}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required for dust transfer): dustopac.inp and dustkappa\_*.inp or dustkapscatmat\_*.inp or dust\_optnk\_*.inp}}}} for more information.
 
 \item {} 
@@ -4286,6 +4286,177 @@ emission.
 \label{\detokenize{dustradtrans:effect-of-aligned-grains-on-the-scattering}}\label{\detokenize{dustradtrans:sec-align-scat}}
 \sphinxstyleemphasis{This is, currently, not yet implemented.}
 
+
+\section{Grain size distributions}
+\label{\detokenize{dustradtrans:grain-size-distributions}}\label{\detokenize{dustradtrans:sec-grain-size-distributions}}
+
+\subsection{Quick summary of how to implement grain sizes}
+\label{\detokenize{dustradtrans:quick-summary-of-how-to-implement-grain-sizes}}\label{\detokenize{dustradtrans:sec-grain-size-distributions-overview}}
+A common application of RADMC\sphinxhyphen{}3D is continuum radiative transfer in media with a
+grain size distribution. RADMC\sphinxhyphen{}3D does not know the concept of “grain size
+distribution”, and it does not care. You have to provide RADMC\sphinxhyphen{}3D will all the
+information it needs, such that it will handle the dust size distribution you
+want. All the responsibility lies with you, the user.
+
+There are basically two ways by which you can make RADMC\sphinxhyphen{}3D treat a grain size
+distribution:
+\begin{itemize}
+\item {} 
+Method 1: Mixing the dust opacities into a single opacity file, having
+RADMC\sphinxhyphen{}3D think that there is only one dust species. Fast and simple.
+
+\item {} 
+Method 2: Computing \(N\) dust opacity files, having \(N\) independent
+dust species. Slower but more realistic and flexible.
+
+\end{itemize}
+
+In the following subsections we will discuss both methods.
+
+
+\subsection{Method 1: Size distribution in the opacity file (faster)}
+\label{\detokenize{dustradtrans:method-1-size-distribution-in-the-opacity-file-faster}}\label{\detokenize{dustradtrans:sec-grain-size-distributions-method-1}}
+The simplest way is to compute a single dust opacity table (see Section
+{\hyperref[\detokenize{inputoutputfiles:sec-opacities}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (required for dust transfer): dustopac.inp and dustkappa\_*.inp or dustkapscatmat\_*.inp or dust\_optnk\_*.inp}}}}) for a single dust species. You compute the weighted dust
+opacity and put that into the file \sphinxcode{\sphinxupquote{dustkappa\_XXX.inp}} (for instance let’s
+call it \sphinxcode{\sphinxupquote{dustkappa\_sizedistrib.inp}}) or \sphinxcode{\sphinxupquote{dustkapscatmat\_XXX.inp}} (for
+instance let’s call it \sphinxcode{\sphinxupquote{dustkapscatmat\_sizedistrib.inp}}).  All the information
+about the size distribution shape is then encoded in this opacity file, and
+RADMC\sphinxhyphen{}3D will never know that it is, in fact, a size distribution. The file
+\sphinxcode{\sphinxupquote{dust\_density.inp}} will then only contain the spatial distribution of a single
+grain species: that of the mixture of sizes. Advantage: it is the
+easiest. Disadvantage: the size distribution will be identical
+everywhere. Another disadvantage: each grain size will have the same temperature
+(because RADMC\sphinxhyphen{}3D does not know that these are different dust sizes).
+
+This method be useful to save computer time. You essentially do all the work of
+computing the opacity of the size distribution beforehand (even before you start
+RADMC\sphinxhyphen{}3D), so that you get a single opacity file that already contains the
+size\sphinxhyphen{}distribution\sphinxhyphen{}weighted opacities. You must then be sure that you do the
+weighting such that the opacity is “cross section per gram of dust”, where
+“dust” is already the entire grain size distribution. The dust density in the
+\sphinxcode{\sphinxupquote{dust\_density.inp}} file must then also be the density of the entire grain size
+distribution. See Section {\hyperref[\detokenize{dustradtrans:sec-math-of-grain-size-distributions}]{\sphinxcrossref{\DUrole{std,std-ref}{The mathematics of grain size distributions}}}} for more
+information about size distributions.
+
+
+\subsection{Method 2: Size distribution in the density file (better)}
+\label{\detokenize{dustradtrans:method-2-size-distribution-in-the-density-file-better}}\label{\detokenize{dustradtrans:sec-grain-size-distributions-method-2}}
+RADMC\sphinxhyphen{}3D can handle multiple dust species simultaneously and co\sphinxhyphen{}spatially. So
+you can have \(N\) grain sizes, each represented by its own opacity file and
+its own spatial density distribution. So if we, for example, have two sizes, 1
+micron and 1 millimeter (i.e. \(N=2\)) then we would have, for instance, two
+opacity files, \sphinxcode{\sphinxupquote{dustkappa\_1micron.inp}} and \sphinxcode{\sphinxupquote{dustkappa\_1mm.inp}} (don’t forget
+to mark them both in \sphinxcode{\sphinxupquote{dustopac.inp}} too), and within the \sphinxcode{\sphinxupquote{dust\_density.inp}}
+file we have two density fields. This allows you, for instance, to have the
+large grains near the midplane of a disk and the small grains vertically more
+extended, because you can determine the density \(\rho\) of each dust
+species completely independent from the others.
+
+We have now two choices how to handle these species: (a) thermally coupled (set
+\sphinxcode{\sphinxupquote{itempdecoup = 0}} in \sphinxcode{\sphinxupquote{radmc3d.inp}}, see section {\hyperref[\detokenize{inputoutputfiles:sec-radmc-inp}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT: radmc3d.inp}}}}, or (b)
+thermally decoupled (default, but you can set \sphinxcode{\sphinxupquote{itempdecoup = 1}} in
+\sphinxcode{\sphinxupquote{radmc3d.inp}} to make sure). The default is thermally decoupled, because that
+is for most cases more realistic. If the grains are thermally decoupled, then,
+in the optically thin regions exposed to hot stellar radiation, the small grains
+tend to be hotter than the large ones. However, in optically thick regions the
+small and large grains will tend to automatically acquire similar or the same
+temperature(s).
+
+Compared to the first method (with a single dust species), this method is more
+flexible (allowing different spatial distributions for different grain sizes)
+but also more costly (requiring the radiative transfer code to handle the
+interaction of the radiation with \(N\) independent dust species). You must
+then calculate each grain opacity file separately, and keep these normalized to
+“cross section per gram of this particular dust species or size”. Here, the
+weighting is not done in the opacity files, but in the fact that each grain size
+(or species) \(i\) has its own density \(\rho_i\). You would then need
+to make sure that these \(\rho_i\) are following the size distribution you
+wish. See Section {\hyperref[\detokenize{dustradtrans:sec-math-of-grain-size-distributions}]{\sphinxcrossref{\DUrole{std,std-ref}{The mathematics of grain size distributions}}}} for more
+information about size distributions.
+
+
+\subsection{The mathematics of grain size distributions}
+\label{\detokenize{dustradtrans:the-mathematics-of-grain-size-distributions}}\label{\detokenize{dustradtrans:sec-math-of-grain-size-distributions}}
+Grain size distributions can be confusing, so here is a small tutorial.
+Suppose we have the famous MRN (Mathis, Rumpl, Nordsieck) size distribution:
+\begin{equation*}
+\begin{split}n(a)da \propto a^{-7/2}da\end{split}
+\end{equation*}
+with \(a\) the radius of the grain, \(n(a)da\) the number of grains
+between sizes \(a\) and \(a+da\) per volume. We say that this
+powerlaw goes from \(a=a_{\mathrm{min}}\) to \(a=a_{\mathrm{max}}\),
+and we keep in mind that \(a_{\mathrm{max}}\) can be (but does not
+have to) orders of magnitude larger than \(a_{\mathrm{min}}\).
+The total dust density \(\rho\) is:
+\begin{equation*}
+\begin{split}\rho = \int_{a_{\mathrm{min}}}^{a_{\mathrm{max}}} m(a)n(a)da\end{split}
+\end{equation*}
+where \(m(a)\) is the mass of the grain:
+\begin{equation*}
+\begin{split}m(a) = \rho_s \frac{4\pi}{3}a^3\end{split}
+\end{equation*}
+where \(\rho_s\) is the material density of the grain material (typically
+somewhere between 1 and 3.6 \(\mathrm{gram}/\mathrm{cm}^3\), dependent on the material).
+
+For RADMC\sphinxhyphen{}3D we have to disretize this into \(N\) bins. Since we can have
+\(a_{\mathrm{max}}\gg a_{\mathrm{min}}\), it is best to take a logarithmic
+grid in \(a\), i.e. equal spacing in \(\ln(a)\).  So we divide the
+interval \([\ln(a_{\mathrm{min}}),\ln(a_{\mathrm{max}})]\) up into \(N\)
+equal size bins, numbering \(i=0\) to \(i=N-1\), with cell centers
+denoted as \(\ln(a_i)\) and the cell walls are denoted as
+\(\ln(a_{i-1/2})\) for the left\sphinxhyphen{} and \(\ln(a_{i+1/2})\) for the
+right\sphinxhyphen{}hand cell wall. We have \(\ln(a_{-1/2})=\ln(a_{\mathrm{min}})\) and
+\(\ln(a_{N-1/2})=\ln(a_{\mathrm{max}})\). For any \(i\) we have the same
+cell width in log\sphinxhyphen{}space:
+\(\Delta\ln(a)=\Delta\ln(a_i)=\ln(a_{i+1/2})-\ln(a_{i-1/2})\).
+Now the density for each bin is:
+\begin{equation*}
+\begin{split}\rho_i = \int_{a_{i-1/2}}^{a_{i+1/2}} m(a)\,n(a)\,da = \int_{\ln(a_{i-1/2})}^{\ln(a_{i+1/2})} a\,m(a)\,n(a)\,d\ln(a)\end{split}
+\end{equation*}
+If the bin width \(\Delta\ln(a)\) is small enough, this can be approximated
+as
+\begin{equation*}
+\begin{split}\rho_i \simeq a_i m(a_i)n(a_i)\Delta\ln(a)\end{split}
+\end{equation*}
+The total dust density is then
+\begin{equation*}
+\begin{split}\rho = \sum_{i=0}^{N-1} \rho_i\end{split}
+\end{equation*}
+The opacity for bin \(i\) at some frequency \(\nu\) is approximately \(\kappa_\nu(a_i)\)
+if a small enough bin size is used. That means that the extinction coefficient
+\begin{equation*}
+\begin{split}\alpha_\nu = \sum_{i=0}^{N-1} \rho_i\kappa_\nu(a_i)\end{split}
+\end{equation*}
+In method 2 (Section {\hyperref[\detokenize{dustradtrans:sec-grain-size-distributions-method-2}]{\sphinxcrossref{\DUrole{std,std-ref}{Method 2: Size distribution in the density file (better)}}}}) this is exactly what happens:
+you specify \(N\) tables of \(\kappa_\nu(a_i)\) (each table containing all frequencies
+for which you want to use the opacity), and the “mixing” happens in each grid cell on\sphinxhyphen{}the\sphinxhyphen{}fly
+depending on the local values of \(\rho_i\). The values of \(\rho_i\) in the file
+\sphinxcode{\sphinxupquote{dust\_density.inp}} are exactly these \(\rho_i\).
+
+On the contrary, in method 1 (Section {\hyperref[\detokenize{dustradtrans:sec-grain-size-distributions-method-1}]{\sphinxcrossref{\DUrole{std,std-ref}{Method 1: Size distribution in the opacity file (faster)}}}}), you compute
+a nomalized \(\hat n(a_i)\) such that
+\begin{equation*}
+\begin{split}\sum_{i=0}^{N-1}  a_i m(a_i)\hat n(a_i)\Delta\ln(a) = 1\end{split}
+\end{equation*}
+so that with
+\begin{equation*}
+\begin{split}\hat\rho_i \simeq a_i m(a_i)\hat n(a_i)\Delta\ln(a)\end{split}
+\end{equation*}
+we get
+\begin{equation*}
+\begin{split}\sum_{i=0}^{N-1}  \hat\rho_i = 1\end{split}
+\end{equation*}
+Now we can compute a grain\sphinxhyphen{}size\sphinxhyphen{}mean opacity:
+\begin{equation*}
+\begin{split}\hat\kappa_\nu = \sum_{i=0}^{N-1} \hat\rho_i\kappa_\nu(a_i)\end{split}
+\end{equation*}
+which is computed before running RADMC\sphinxhyphen{}3D, and will be valid at all locations in the spatial grid.
+At each cell we only have the total dust density \(\rho\). The extinction coefficient is
+then
+\begin{equation*}
+\begin{split}\alpha_\nu = \rho\hat\kappa_\nu\end{split}
+\end{equation*}
 
 \chapter{Line radiative transfer}
 \label{\detokenize{lineradtrans:line-radiative-transfer}}\label{\detokenize{lineradtrans:chap-line-transfer}}\label{\detokenize{lineradtrans::doc}}
@@ -12734,6 +12905,12 @@ from opacity data downloaded from the web, we now feature a new directory
 the most common WWW databases, we provide Python routines for the conversion.
 Please read the \sphinxcode{\sphinxupquote{README\_*}} files in this directory and its
 subdirectories for details.
+
+Note also that Carsten Dominik made a very nice and easy\sphinxhyphen{}to\sphinxhyphen{}use tool to
+generate dust opacities on the Linux/Mac command line. It is called
+\sphinxcode{\sphinxupquote{optool}}, and can be found on github at
+\sphinxurl{https://github.com/cdominik/optool} .
+It can produce RADMC\sphinxhyphen{}3D\sphinxhyphen{}ready dust opacity files.
 
 
 \chapter{Version tracker: Development history}
