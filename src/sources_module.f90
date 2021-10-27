@@ -1,4 +1,5 @@
 module sources_module
+  !$ use omp_lib
   use rtglobal_module
   use amrray_module
   use dust_module
@@ -71,6 +72,9 @@ module sources_module
   double precision, allocatable :: sources_local_line_nup_end(:)
   double precision, allocatable :: sources_local_line_ndown_end(:)
 
+  !$OMP THREADPRIVATE(sources_dustdens,sources_dusttemp)
+  !!!!!!$OMP THREADPRIVATE(sources_dustkappa_a,sources_dustkappa_s)
+  !$OMP THREADPRIVATE(sources_alpha_a,sources_alpha_s)
 contains
 
 !-------------------------------------------------------------------
@@ -103,16 +107,20 @@ subroutine sources_init(nrfreq,frequencies,secondorder,doppcatch)
   ! Allocate the arrays for the dust 
   !
   if(rt_incl_dust) then
+     !$OMP PARALLEL
      allocate(sources_dustdens(1:dust_nr_species),STAT=ierr)
      if(ierr.ne.0) then
         write(stdo,*) 'ERROR in sources module: Could not allocate sources_dustdens() array'
         stop
      endif
+     !$OMP END PARALLEL
+     !$OMP PARALLEL
      allocate(sources_dusttemp(1:dust_nr_species),STAT=ierr)
      if(ierr.ne.0) then
         write(stdo,*) 'ERROR in sources module: Could not allocate sources_dusttemp() array'
         stop
      endif
+     !$OMP END PARALLEL
      allocate(sources_dustkappa_a(1:nrfreq,1:dust_nr_species),STAT=ierr)
      if(ierr.ne.0) then
         write(stdo,*) 'ERROR in sources module: Could not allocate sources_dustkappa_a()'
@@ -123,16 +131,20 @@ subroutine sources_init(nrfreq,frequencies,secondorder,doppcatch)
         write(stdo,*) 'ERROR in sources module: Could not allocate sources_dustkappa_s()'
         stop 
      endif
+     !$OMP PARALLEL
      allocate(sources_alpha_a(1:dust_nr_species),STAT=ierr)
      if(ierr.ne.0) then
         write(stdo,*) 'ERROR in sources module: Could not allocate sources_alpha_a()'
         stop 
      endif
+     !$OMP END PARALLEL
+     !$OMP PARALLEL
      allocate(sources_alpha_s(1:dust_nr_species),STAT=ierr)
      if(ierr.ne.0) then
         write(stdo,*) 'ERROR in sources module: Could not allocate sources_alpha_s()'
         stop 
      endif
+     !$OMP END PARALLEL
      !
      ! Get the dust opacities 
      !
@@ -308,12 +320,16 @@ end subroutine sources_init
 !-------------------------------------------------------------------
 subroutine sources_partial_cleanup()
   implicit none
+  !$OMP PARALLEL
   if(allocated(sources_dustdens)) deallocate(sources_dustdens)
   if(allocated(sources_dusttemp)) deallocate(sources_dusttemp)
+  !$OMP END PARALLEL
   if(allocated(sources_dustkappa_a)) deallocate(sources_dustkappa_a)
   if(allocated(sources_dustkappa_s)) deallocate(sources_dustkappa_s)
+  !$OMP PARALLEL
   if(allocated(sources_alpha_a)) deallocate(sources_alpha_a)
   if(allocated(sources_alpha_s)) deallocate(sources_alpha_s)
+  !$OMP END PARALLEL
   if(allocated(sources_align_mu)) deallocate(sources_align_mu)
   if(allocated(sources_align_orth)) deallocate(sources_align_orth)
   if(allocated(sources_align_para)) deallocate(sources_align_para)

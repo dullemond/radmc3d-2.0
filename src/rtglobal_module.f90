@@ -1,4 +1,5 @@
 module rtglobal_module
+  !$ use omp_lib
   use constants_module
   use amr_module
   !
@@ -424,6 +425,9 @@ module rtglobal_module
   !$OMP THREADPRIVATE(ray_dsend,ray_ds,ray_index,ray_indexnext)
   !$OMP THREADPRIVATE(ray_inu,ray_ns,ray_nsmax)
   !
+  !$OMP THREADPRIVATE(lines_ray_levpop,lines_ray_nrdens,lines_ray_temp)
+  !$OMP THREADPRIVATE(lines_ray_turb,lines_ray_doppler,lines_ray_lorentz_delta)
+  !
 contains
 
 
@@ -830,12 +834,14 @@ subroutine rtglobal_cleanup
   !
   if(allocated(lines_levelpop)) deallocate(lines_levelpop)
   if(allocated(gasvelocity)) deallocate(gasvelocity)
+  !$OMP PARALLEL
   if(allocated(lines_ray_levpop)) deallocate(lines_ray_levpop)
   if(allocated(lines_ray_nrdens)) deallocate(lines_ray_nrdens)
   if(allocated(lines_ray_temp)) deallocate(lines_ray_temp)
   if(allocated(lines_ray_turb)) deallocate(lines_ray_turb)
   if(allocated(lines_ray_doppler)) deallocate(lines_ray_doppler)
   if(allocated(lines_ray_lorentz_delta)) deallocate(lines_ray_lorentz_delta)
+  !$OMP END PARALLEL
   if(allocated(lines_microturb)) deallocate(lines_microturb)
   if(allocated(lines_escprob_lengthscale)) deallocate(lines_escprob_lengthscale)
   if(allocated(gas_chemspec_numberdens)) deallocate(gas_chemspec_numberdens)
