@@ -89,7 +89,7 @@ are marked with [-]. Those that are currently being developed are marked with
 #. Front-end Python packages:
 
    #. [+] Python simple tools for RADMC-3D
-   #. [+] Python RADMC-3D library {\small\tt radmc3dPy} (author: A. Juhasz)
+   #. [+] Python RADMC-3D library ``radmc3dPy`` (author: A. Juhasz)
 
 #.
 
@@ -104,7 +104,7 @@ Version tracker
 The RADMC-3D software package in under continuous development. A very
 detailed development log-book is found in the git repository.
 A more user-friendly overview of the development history can be 
-found in this manual, in appendix \ref{chap-development-history}.
+found in this manual, in appendix :ref:`chap-development-history`.
 
 
 Copyright
@@ -127,8 +127,11 @@ or the github repository:
 
 https://github.com/dullemond/radmc3d-2.0
 
-The github repository will always have the latest version, but it may
-not be always the most stable version (though usually it is). 
+The github repository will always have the latest version, and the
+entire history. So if you use git clone you will also easily be able
+to go back to earlier commits. You can also try out some of the
+branches, which contain new features that are still in the testing
+phase. The ``master`` branch should, however, be the most stable version.
 
 Contributing authors
 ====================
@@ -143,6 +146,7 @@ are from:
 * Attila Juhasz
 * Adriana Pohl
 * Rahul Shetty
+* Patrick Sheehan
 * Farzin Sereshti
 * Thomas Peters
 * Benoit Commercon

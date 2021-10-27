@@ -270,7 +270,8 @@ or by adding the following keyword to the ``radmc3d.inp`` file::
 
 which means that four threads are used for the thermal Monte Carlo computation.
 
-For the image or spectrum you can do the same: just add ``setthreads 4`` or so
+For the Monte Carlo source function calculation during the production of
+an image or spectrum you can do the same: just add ``setthreads 4`` or so
 on the command line or put ``setthreads = 4`` into the ``radmc3d.inp`` file.
 
 Make sure that you have included the ``-fopenmp`` keyword in the ``Makefile``

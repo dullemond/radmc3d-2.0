@@ -409,4 +409,5 @@ This version overview is very rough, and has only been started as of version
     (ascii) format or binary format. 
   * The manual is now converted to Sphinx, from which the LaTeX version
     and the HTML version can be automatically created.
-
+  * Patrick Sheehan implemented OpenMP-parallellization for the
+    image and spectrum rendering.

@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Oct 17, 2021}
+\date{Oct 27, 2021}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -288,7 +288,7 @@ Front\sphinxhyphen{}end Python packages:
 {[}+{]} Python simple tools for RADMC\sphinxhyphen{}3D
 
 \item {} 
-{[}+{]} Python RADMC\sphinxhyphen{}3D library \{smalltt radmc3dPy\} (author: A. Juhasz)
+{[}+{]} Python RADMC\sphinxhyphen{}3D library \sphinxcode{\sphinxupquote{radmc3dPy}} (author: A. Juhasz)
 
 \end{enumerate}
 
@@ -313,7 +313,7 @@ Front\sphinxhyphen{}end Python packages:
 The RADMC\sphinxhyphen{}3D software package in under continuous development. A very
 detailed development log\sphinxhyphen{}book is found in the git repository.
 A more user\sphinxhyphen{}friendly overview of the development history can be
-found in this manual, in appendix ref\{chap\sphinxhyphen{}development\sphinxhyphen{}history\}.
+found in this manual, in appendix {\hyperref[\detokenize{versiontracker:chap-development-history}]{\sphinxcrossref{\DUrole{std,std-ref}{Version tracker: Development history}}}}.
 
 
 \section{Copyright}
@@ -335,8 +335,11 @@ or the github repository:
 
 \sphinxurl{https://github.com/dullemond/radmc3d-2.0}
 
-The github repository will always have the latest version, but it may
-not be always the most stable version (though usually it is).
+The github repository will always have the latest version, and the
+entire history. So if you use git clone you will also easily be able
+to go back to earlier commits. You can also try out some of the
+branches, which contain new features that are still in the testing
+phase. The \sphinxcode{\sphinxupquote{master}} branch should, however, be the most stable version.
 
 
 \section{Contributing authors}
@@ -358,6 +361,9 @@ Adriana Pohl
 
 \item {} 
 Rahul Shetty
+
+\item {} 
+Patrick Sheehan
 
 \item {} 
 Farzin Sereshti
@@ -2169,7 +2175,8 @@ or by adding the following keyword to the \sphinxcode{\sphinxupquote{radmc3d.inp
 
 which means that four threads are used for the thermal Monte Carlo computation.
 
-For the image or spectrum you can do the same: just add \sphinxcode{\sphinxupquote{setthreads 4}} or so
+For the Monte Carlo source function calculation during the production of
+an image or spectrum you can do the same: just add \sphinxcode{\sphinxupquote{setthreads 4}} or so
 on the command line or put \sphinxcode{\sphinxupquote{setthreads = 4}} into the \sphinxcode{\sphinxupquote{radmc3d.inp}} file.
 
 Make sure that you have included the \sphinxcode{\sphinxupquote{\sphinxhyphen{}fopenmp}} keyword in the \sphinxcode{\sphinxupquote{Makefile}}
@@ -7730,6 +7737,40 @@ actual value of the initial seed in the \sphinxcode{\sphinxupquote{radmc3d.inp}}
 file. Note also that if your movie goes through different wavelengths, the
 resetseed will likely not help fixing the noisiness, because the paths of
 photons will change for different wavelengths, even with the same initial seed.
+
+
+\section{OpenMP parallelized images and spectra / SEDs}
+\label{\detokenize{imagesspectra:openmp-parallelized-images-and-spectra-seds}}\label{\detokenize{imagesspectra:sec-omp-camera}}
+Thanks to Patrick Sheehan, the camera module of RADMC\sphinxhyphen{}3D is now also
+OpenMP\sphinxhyphen{}parallellized (a big thanks to Patrick!).
+
+The default value for the number of threads in the parallel version is set to
+one, so that the program is identical with the serial version.
+The user can change the value by either typing
+\sphinxcode{\sphinxupquote{setthreads \textless{}nr\textgreater{}}}, where \sphinxcode{\sphinxupquote{\textless{}nr\textgreater{}}} is the number of requested threads (integer
+value) in the command line or by adding a corresponding line to the
+\sphinxcode{\sphinxupquote{radmc3d.inp}} file. If the chosen number of threads is larger than the
+available number of processor cores, the user is asked to reduce it.
+
+For example, you can ask \sphinxcode{\sphinxupquote{radmc3d}} to do the parallelized image rendering
+for you by typing in a shell:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{radmc3d} \PYG{n}{image} \PYG{k}{lambda} \PYG{l+m+mi}{100} \PYG{n}{theta} \PYG{l+m+mi}{60} \PYG{n}{phi} \PYG{l+m+mi}{30} \PYG{n}{setthreads} \PYG{l+m+mi}{4}
+\end{sphinxVerbatim}
+
+or by adding the following keyword to the \sphinxcode{\sphinxupquote{radmc3d.inp}} file:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{setthreads} \PYG{o}{=} \PYG{l+m+mi}{4}
+\end{sphinxVerbatim}
+
+which means that four threads are used for the image computation.
+
+Make sure that you have included the \sphinxcode{\sphinxupquote{\sphinxhyphen{}fopenmp}} keyword in the \sphinxcode{\sphinxupquote{Makefile}}
+and have compiled the whole \sphinxcode{\sphinxupquote{radmc3d}} source code with this additional command
+before using the OpenMP parallelized thermal Monte Carlo version (cf. Section
+{\hyperref[\detokenize{installation:sec-makeing}]{\sphinxcrossref{\DUrole{std,std-ref}{Compiling the code with ‘make’}}}}).
 
 
 \chapter{More information about the gridding}
@@ -13512,6 +13553,10 @@ and will remove it from the code in later versions. Use either text
 \item {} 
 The manual is now converted to Sphinx, from which the LaTeX version
 and the HTML version can be automatically created.
+
+\item {} 
+Patrick Sheehan implemented OpenMP\sphinxhyphen{}parallellization for the
+image and spectrum rendering.
 
 \end{itemize}
 

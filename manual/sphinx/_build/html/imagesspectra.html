@@ -129,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#visualizing-the-tau-1-surface">Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#for-public-outreach-work-local-observers-inside-the-model">For public outreach work: local observers inside the model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multiple-vantage-points-the-movie-mode">Multiple vantage points: the ‘Movie’ mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#openmp-parallelized-images-and-spectra-seds">OpenMP parallelized images and spectra / SEDs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="gridding.html">More information about the gridding</a></li>
@@ -1435,6 +1436,32 @@ actual value of the initial seed in the <code class="docutils literal notranslat
 file. Note also that if your movie goes through different wavelengths, the
 resetseed will likely not help fixing the noisiness, because the paths of
 photons will change for different wavelengths, even with the same initial seed.</p>
+</div>
+<div class="section" id="openmp-parallelized-images-and-spectra-seds">
+<span id="sec-omp-camera"></span><h2>OpenMP parallelized images and spectra / SEDs<a class="headerlink" href="#openmp-parallelized-images-and-spectra-seds" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to Patrick Sheehan, the camera module of RADMC-3D is now also
+OpenMP-parallellized (a big thanks to Patrick!).</p>
+<p>The default value for the number of threads in the parallel version is set to
+one, so that the program is identical with the serial version.
+The user can change the value by either typing
+<code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">&lt;nr&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;nr&gt;</span></code> is the number of requested threads (integer
+value) in the command line or by adding a corresponding line to the
+<code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file. If the chosen number of threads is larger than the
+available number of processor cores, the user is asked to reduce it.</p>
+<p>For example, you can ask <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to do the parallelized image rendering
+for you by typing in a shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">100</span> <span class="n">theta</span> <span class="mi">60</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">setthreads</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>or by adding the following keyword to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setthreads</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>which means that four threads are used for the image computation.</p>
+<p>Make sure that you have included the <code class="docutils literal notranslate"><span class="pre">-fopenmp</span></code> keyword in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>
+and have compiled the whole <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> source code with this additional command
+before using the OpenMP parallelized thermal Monte Carlo version (cf. Section
+<a class="reference internal" href="installation.html#sec-makeing"><span class="std std-ref">Compiling the code with ‘make’</span></a>).</p>
 </div>
 </div>
 

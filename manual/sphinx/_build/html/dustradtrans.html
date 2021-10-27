@@ -457,7 +457,8 @@ Carlo run for you by typing in a shell:</p>
 </pre></div>
 </div>
 <p>which means that four threads are used for the thermal Monte Carlo computation.</p>
-<p>For the image or spectrum you can do the same: just add <code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">4</span></code> or so
+<p>For the Monte Carlo source function calculation during the production of
+an image or spectrum you can do the same: just add <code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">4</span></code> or so
 on the command line or put <code class="docutils literal notranslate"><span class="pre">setthreads</span> <span class="pre">=</span> <span class="pre">4</span></code> into the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p>
 <p>Make sure that you have included the <code class="docutils literal notranslate"><span class="pre">-fopenmp</span></code> keyword in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>
 and have compiled the whole <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> source code with this additional command
