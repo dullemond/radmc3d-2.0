@@ -14,5 +14,10 @@ To learn what can be done with RADMC-3D and how to use it, please consult the ex
 
 Simple example models are found in the `examples/` directory. The README files in these directories explain how to run the models.
 
+## Branches
+Updates to RADMC-3D are done carefully. A major new features is typically first offered in a branch (git branch, in github, see the button that says 'master'; if you click on it, you will see other branches).
+
+A branch of particular interest is `camera_openmp`, which is the OpenMP parallellization of the images and spectra, which was implemented by Patrick Sheehan. You are strongly encouraged to try out this branch and test it. If I do not receive bug reports within the coming months, I will merge this into the master branch.
+
 ## Website
 For more information, please consult the website http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d

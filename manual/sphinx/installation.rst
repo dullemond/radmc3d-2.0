@@ -308,7 +308,7 @@ several sub libraries such as ``radmc3dPy.analyze`` and
 distribution, you could do this::
 
   from radmc3dPy import analyze
-  d = readData(ddens=True)
+  d = analyze.readData(ddens=True)
 
 The ``d.rhodust`` array now contains the dust density.
 

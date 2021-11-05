@@ -370,6 +370,13 @@ program radmc3d
   !
   call read_radmcinp_file()
   !
+  ! Check that SED and lines are not on simultaneously
+  !
+  if(rt_incl_lines.and.do_raytrace_spectrum.and.camera_setfreq_global) then
+     write(stdo,*) 'ERROR: Cannot make SED with line mode on.'
+     stop
+  endif
+  !
   ! If OMP, then immediately set the nr of threads here, now that we
   ! know which value it should have: the setthreads variable.
   ! Bugfix by Jon Ramsey 22.03.2016
@@ -3902,22 +3909,6 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         write(stdo,*) '         So I ignore this option now.'
         endif
   endif
-  !
-  ! Check that SED and lines are not on simultaneously
-  !
-  if(rt_incl_lines.and.do_raytrace_spectrum.and.camera_setfreq_global) then
-     write(stdo,*) 'ERROR: Cannot make SED with line mode on.'
-     stop
-  endif
-  !
-  ! If spectrum is on, and line is on, and nr of frequencies is 1, then 
-  ! we put nr of freqs to 100 per default
-  !
-!  if(rt_incl_lines.and.do_raytrace_spectrum.and.(lines_user_nrfreq.le.1)) then
-!     write(stdo,*) 'For line spectra we take nr of frequencies to 100 by default'
-!     write(stdo,*) '   Specify with linenlam or linenfreq if you want another nr.'
-!     lines_user_nrfreq = 100
-!  endif
   !
   ! Check for camera 
   !

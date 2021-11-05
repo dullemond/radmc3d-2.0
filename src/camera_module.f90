@@ -5741,7 +5741,7 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
   integer :: inu,ierr,i,iformat
   integer, intent(in), optional :: nfr
   double precision, intent(in), optional :: freq1,freq2
-  logical :: fex1,fex2
+  logical :: fex1,fex2,gotit
   !
   ! Do some checks
   !
@@ -5812,8 +5812,13 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
      !
      ! Now make decisions where to get our frequency grid from
      !
+     gotit = .false.
      if((camera_lambdamic.gt.0.d0).and.(camera_lambdamic1.gt.0.d0).and. &
           (camera_range_nlam.gt.1)) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Make a simple regular grid between lambdamic and lambdamic1
         ! using logarithmic spacing
@@ -5830,8 +5835,14 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
                 (camera_lambdamic1/camera_lambdamic)**               &
                 ((inu-1.d0)/(camera_nrfreq-1.d0)) )
         enddo
+        gotit = .true.
         !
-     elseif(camera_lambdamic.gt.0.d0) then
+     endif
+     if(camera_lambdamic.gt.0.d0) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Use exactly this wavelength, given on the command line
         !
@@ -5843,8 +5854,14 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
            stop 
         endif
         camera_frequencies(1) = 1d4*cc/camera_lambdamic
+        gotit = .true.
         !
-     elseif(camera_theinu.gt.0) then
+     endif
+     if(camera_theinu.gt.0) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Use one of the global frequency array frequencies, selected
         ! on the command line
@@ -5858,10 +5875,16 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
            stop 
         endif
         camera_frequencies(1) = freq_nu(camera_theinu)
+        gotit = .true.
         !
-     elseif((lines_user_nrfreq.ge.1).and. &
+     endif
+     if((lines_user_nrfreq.ge.1).and. &
         (lines_user_ispec.gt.0).and.(lines_user_iline.gt.0).and.        &
         rt_incl_lines) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Use the line user-parameters to set the frequency grid 
         !
@@ -5911,7 +5934,13 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
            camera_frequencies(1) = lines_nu0(lines_user_iline,lines_user_ispec) * &
                 (1.d0-lines_user_kms0*1d5/cc)
         endif
-     elseif(camera_loadlambdas) then
+        gotit = .true.
+     endif
+     if(camera_loadlambdas) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Read frequencies / wavelengths from a file
         !
@@ -5953,7 +5982,13 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
            write(stdo,*) '       camera_frequency.inp file.'
            stop
         endif
-     elseif(camera_loadcolor) then
+        gotit = .true.
+     endif
+     if(camera_loadcolor) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Use a subset of wavelengths from the global frequency array
         !
@@ -5994,7 +6029,13 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
            camera_frequencies(i) = freq_nu(inu)
         enddo
         close(1)
-     elseif(camera_setfreq_global) then
+        gotit = .true.
+     endif
+     if(camera_setfreq_global) then
+        if(gotit) then
+           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
+           stop
+        endif
         !
         ! Use the global frequency array
         !
@@ -6008,7 +6049,9 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
         do inu=1,camera_nrfreq
            camera_frequencies(inu) = freq_nu(inu)
         enddo
-     else
+        gotit = .true.
+     endif
+     if(.not.gotit) then
         write(stdo,*) 'ERROR: No method specified for determining the wavelength grid'
         write(stdo,*) '       of the camera module. Use, on the command line, one of the following:'
         write(stdo,*) '          inu or ilambda followed by an integer'
