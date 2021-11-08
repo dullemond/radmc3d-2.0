@@ -67,6 +67,8 @@ program radmc3d
   do_respondwhenready        = .false.
   do_writepop                = .false.
   do_calcpop                 = .false.
+  do_write_cumulener         = .false.
+  do_write_cellvolumes       = .false.
   !
   ! Processes to include
   !
@@ -1664,6 +1666,24 @@ program radmc3d
      endif
      !
      !----------------------------------------------------------------
+     !       WRITE THE MONTE CARLO CUMULATIVE ENERGY DATA
+     !----------------------------------------------------------------
+     !
+     if(do_write_cumulener) then
+        write(stdo,*) 'Writing the cumulative energy of the last MC run to file.'
+        call write_cumulener_to_file()
+     endif
+     !
+     !----------------------------------------------------------------
+     !       WRITE THE CELL VOLUMES DATA
+     !----------------------------------------------------------------
+     !
+     if(do_write_cellvolumes) then
+        write(stdo,*) 'Writing the cell volumes to file.'
+        call write_cellvolumes_to_file()
+     endif
+     !
+     !----------------------------------------------------------------
      !          EXTRACT A REGULARLY GRIDDED SUBBOX FROM MODEL
      !                   Only for user convenience
      !----------------------------------------------------------------
@@ -2609,6 +2629,13 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
      elseif((buffer(1:8).eq.'calcpop')) then
         do_calcpop = .true.
         do_writepop = .true.
+        gotit = .true.
+     elseif((buffer(1:14).eq.'writecumulener')) then
+        do_write_cumulener = .true.
+        do_write_cellvolumes = .true.
+        gotit = .true.
+     elseif((buffer(1:16).eq.'writecellvolumes')) then
+        do_write_cellvolumes = .true.
         gotit = .true.
      elseif(buffer(1:16).eq.'respondwhenready') then
         do_respondwhenready = .true.

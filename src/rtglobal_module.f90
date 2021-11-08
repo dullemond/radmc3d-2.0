@@ -162,6 +162,8 @@ module rtglobal_module
   integer :: vtk_dust_ispec              ! If writing dust VTK data, which dust species to write
   integer :: vtk_lines_ispec             ! If writing dust VTK data, which line species to write
   integer :: vtk_lines_ilevel            ! If writing dust VTK data, which line level to write
+  logical :: do_write_cumulener          ! After Monte Carlo run: Write the cumulener array
+  logical :: do_write_cellvolumes        ! Write the cellvolume array to file
   !
   ! Debugging options
   !

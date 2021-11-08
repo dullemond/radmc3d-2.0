@@ -1552,6 +1552,108 @@ subroutine compute_dust_mass()
 end subroutine compute_dust_mass
 
 
+!--------------------------------------------------------------------------
+!                  WRITE CELL VOLUMES TO FILE
+!--------------------------------------------------------------------------
+subroutine write_cellvolumes_to_file()
+  implicit none
+  integer :: icell,index,i,ierr,precis
+  integer(kind=8) :: nn,kk
+  logical :: fex
+  !
+  ! Check
+  !
+  if(.not.allocated(cellvolume)) then
+     write(stdo,*) 'ERROR: Cannot write out cellvolume array: not allocated.'
+     stop 7237
+  endif
+  !
+  ! Determine the precision
+  !
+  if(rto_single) then
+     precis = 4
+  else
+     precis = 8
+  endif
+  !
+  ! Now write the dust temperature
+  !
+  if(igrid_type.lt.100) then
+     !
+     ! Regular (AMR) grid
+     !
+     ! Just make sure that the cell list is complete
+     !
+     if(amr_tree_present) then
+        call amr_compute_list_all()
+     endif
+     !
+     ! Do a stupidity check
+     !
+     if(nrcells.ne.amr_nrleafs) stop 3209
+     !
+     ! Open file and write the cell volumes to it
+     !
+     if(rto_style.eq.1) then
+        !
+        ! Write the cell volumes in ascii form
+        !
+        open(unit=1,file='cell_volumes.out')
+        write(1,*) 1                                   ! Format number
+        write(1,*) nrcellsinp
+     elseif(rto_style.eq.2) then
+        !
+        ! Write the cell volumes in f77-style unformatted form,
+        ! using a record length given by rto_reclen
+        !
+        open(unit=1,file='cell_volumes.uout',form='unformatted')
+        nn = 1
+        kk = rto_reclen
+        write(1) nn,kk               ! Format number and record length
+        nn = nrcellsinp
+        write(1) nn
+     elseif(rto_style.eq.3) then
+        !
+        ! C-compliant binary
+        !
+        open(unit=1,file='cell_volumes.bout',status='replace',access='stream')
+        nn = 1
+        kk = precis
+        write(1) nn,kk               ! Format number and precision
+        nn = nrcellsinp
+        write(1) nn
+     else
+        write(stdo,*) 'ERROR: Do not know I/O style ',rto_style
+        stop
+     endif
+     !
+     ! Now write the cell volumes
+     !
+     call write_scalarfield(1,rto_style,precis,nrcellsinp, &
+          1,1,1,1,rto_reclen,scalar0=cellvolume)
+     !
+     ! Close
+     !
+     close(1)
+  else
+     !
+     ! Other grids not yet implemented
+     !
+     write(stdo,*) 'ERROR: Only regular and AMR grids implemented'
+     stop
+  endif
+  !
+  ! If the grid is internally made, then we must make sure that
+  ! the grid has been written to file, otherwise the output file
+  ! created here makes no sense.
+  !
+  if((.not.grid_was_read_from_file).and.(.not.grid_was_written_to_file)) then
+     call write_grid_file()
+     grid_was_written_to_file = .true.     ! Avoid multiple writings
+  endif
+end subroutine write_cellvolumes_to_file
+
+
 !-------------------------------------------------------------------------
 !                        WRITE DUST DENSITY
 ! Note: this file has .inp instead of .dat, because typically the dust
