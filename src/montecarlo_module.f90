@@ -272,6 +272,7 @@ logical :: mc_photon_destroyed
 !$OMP THREADPRIVATE(alpha_a_pm,mrw_dcumen)
 !$OMP THREADPRIVATE(mc_photon_destroyed)
 !$OMP THREADPRIVATE(mcscat_phasefunc)
+!$OMP THREADPRIVATE(db_cumul)
 
 contains
 
@@ -8892,11 +8893,13 @@ subroutine make_emiss_dbase(ntemp,temp0,temp1)
      write(stdo,*) 'ERROR in Montecarlo Module: Could not allocate db_cumulnorm'
      stop 
   endif
+  !$OMP PARALLEL
   allocate(db_cumul(freq_nr+1),STAT=ierr)
   if(ierr.ne.0) then
      write(stdo,*) 'ERROR in Montecarlo Module: Could not allocate db_cumul'
      stop 
   endif
+  !$OMP END PARALLEL
   !
   ! Allocate array used internally for picking random frequency
   !
@@ -9017,11 +9020,11 @@ subroutine free_emiss_dbase()
   db_ntemp=0
   if(allocated(db_temp)) deallocate(db_temp)
   if(allocated(db_cumulnorm)) deallocate(db_cumulnorm)
-  if(allocated(db_cumul)) deallocate(db_cumul)
   if(allocated(db_enertemp)) deallocate(db_enertemp)
   if(allocated(db_logenertemp)) deallocate(db_logenertemp)
   if(allocated(db_emiss)) deallocate(db_emiss)
   !$OMP PARALLEL
+  if(allocated(db_cumul)) deallocate(db_cumul)
   if(allocated(enercum)) deallocate(enercum)
   !$OMP END PARALLEL
 end subroutine free_emiss_dbase

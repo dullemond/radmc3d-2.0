@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Oct 17, 2021}
+\date{Nov 11, 2021}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -410,6 +410,9 @@ Blake Hord
 
 \item {} 
 Tilman Birnstiel
+
+\item {} 
+Uma Gorti
 
 \end{itemize}
 
@@ -1106,7 +1109,7 @@ distribution, you could do this:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{radmc3dPy} \PYG{k}{import} \PYG{n}{analyze}
-\PYG{n}{d} \PYG{o}{=} \PYG{n}{readData}\PYG{p}{(}\PYG{n}{ddens}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{d} \PYG{o}{=} \PYG{n}{analyze}\PYG{o}{.}\PYG{n}{readData}\PYG{p}{(}\PYG{n}{ddens}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
 \end{sphinxVerbatim}
 
 The \sphinxcode{\sphinxupquote{d.rhodust}} array now contains the dust density.
@@ -13512,6 +13515,16 @@ and will remove it from the code in later versions. Use either text
 \item {} 
 The manual is now converted to Sphinx, from which the LaTeX version
 and the HTML version can be automatically created.
+
+\item {} 
+{[}as of 11.11.2021{]} BUGFIX: For OpenMP parallel thermal Monte Carlo
+computation of the dust temperatures for multiple grain species or
+sizes, when \sphinxcode{\sphinxupquote{iranfreqmode=1}} (as opposed to the default value of
+\sphinxcode{\sphinxupquote{iranfreqmode=0}}), the dust temperatures could acquire errors
+because the \sphinxcode{\sphinxupquote{pick\_randomfreq\_db()}} subroutine uses the array
+\sphinxcode{\sphinxupquote{db\_cumul(:)}} as thread private, but without having it declared
+as such. This led to interference between threads. This is now
+fixed.
 
 \end{itemize}
 

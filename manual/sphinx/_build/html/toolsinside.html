@@ -192,22 +192,33 @@ the model.</p>
 <h3>Creating and reading a subbox<a class="headerlink" href="#creating-and-reading-a-subbox" title="Permalink to this headline">¶</a></h3>
 <p>You can call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> directly from the shell asking it to make
 the subbox. Here is an example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">subbox_dust_temperature</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">subbox_dust_density</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span>
 </pre></div>
 </div>
-<p>An example for the level populations would be:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">subbox_levelpop</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span>
+<p>which creates a regularly sampled 64x64x64 datacube of the dust density, with <span class="math notranslate nohighlight">\(x\)</span> grid
+between <span class="math notranslate nohighlight">\(-2\times 10^{15}\;\mathrm{cm}\)</span> and  <span class="math notranslate nohighlight">\(+2\times 10^{15}\;\mathrm{cm}\)</span> and
+likewise for <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> (note that these box boundaries are the walls of the
+regularly spaced cells of the subbox). For the dust temperature the command is
+<code class="docutils literal notranslate"><span class="pre">./radmc3d</span> <span class="pre">subbox_dust_temperature</span></code>. You can also rotate the box along three angles:
+<span class="math notranslate nohighlight">\(\phi_1\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span>, and <span class="math notranslate nohighlight">\(\phi_2\)</span>, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">subbox_dust_temperature</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="n">subbox_phi1</span> <span class="mi">30</span> <span class="n">subbox_theta</span> <span class="mi">60</span>  <span class="n">subbox_phi2</span> <span class="mi">45</span>
+</pre></div>
+</div>
+<p>(Note that as of version 2.0 of RADMC-3D these angles are in degrees instead of radian).
+An example for the level populations would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">subbox_levelpop</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span>
 </pre></div>
 </div>
 <p><em>Note about subbox for level populations:</em> By default all level populations will
 be written out. However, if you would add the <code class="docutils literal notranslate"><span class="pre">subbox_levelpop</span></code> keyword in a
 call to RADMC-3D for making an image or spectrum, then it will only write out
 the level populations that have been used for that image. Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">2600</span> <span class="n">subbox_levelpop</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span> <span class="o">-</span><span class="mf">2.</span><span class="n">d15</span> <span class="mf">2.</span><span class="n">d15</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">2600</span> <span class="n">subbox_levelpop</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span>
 </pre></div>
 </div>
 <p>would give a much smaller <code class="docutils literal notranslate"><span class="pre">'levelpop_co_subbox.out'</span></code> file, because only the
-first two levels are included (remember that <span class="math notranslate nohighlight">\(\lambda=2600\,\mu\)</span> for more information
+first two levels are included (remember that <span class="math notranslate nohighlight">\(\lambda=2600\,\mu\)</span>m is the
+J1-0 line of CO). See Section <a class="reference internal" href="lineradtrans.html#sec-calcstore-levpop"><span class="std std-ref">Background information: Calculation and storage of level populations</span></a> for more information
 on how RADMC-3D automatically selects a subset of levels for storage in the
 global array (and thus also for writing out to file).</p>
 </div>

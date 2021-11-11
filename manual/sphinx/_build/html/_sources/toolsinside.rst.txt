@@ -23,26 +23,33 @@ Creating and reading a subbox
 -----------------------------
 
 You can call ``radmc3d`` directly from the shell asking it to make
-the subbox. Here is an example:
-::
+the subbox. Here is an example::
 
-  ./radmc3d subbox_dust_temperature subbox_nxyz 64 64 64 subbox_xyz01 -2.d15 2.d15 -2.d15 2.d15 -2.d15 2.d15
+  ./radmc3d subbox_dust_density subbox_nxyz 64 64 64 subbox_xyz01 -2.e15 2.e15 -2.e15 2.e15 -2.e15 2.e15
 
-An example for the level populations would be:
-::
+which creates a regularly sampled 64x64x64 datacube of the dust density, with :math:`x` grid
+between :math:`-2\times 10^{15}\;\mathrm{cm}` and  :math:`+2\times 10^{15}\;\mathrm{cm}` and
+likewise for :math:`y` and :math:`z` (note that these box boundaries are the walls of the
+regularly spaced cells of the subbox). For the dust temperature the command is
+``./radmc3d subbox_dust_temperature``. You can also rotate the box along three angles:
+:math:`\phi_1`, :math:`\theta`, and :math:`\phi_2`, for example::
+  
+  ./radmc3d subbox_dust_temperature subbox_nxyz 64 64 64 subbox_xyz01 -2.e15 2.e15 -2.e15 2.e15 -2.e15 2.e15 subbox_phi1 30 subbox_theta 60  subbox_phi2 45
 
-  ./radmc3d subbox_levelpop subbox_nxyz 64 64 64 subbox_xyz01 -2.d15 2.d15 -2.d15 2.d15 -2.d15 2.d15
+(Note that as of version 2.0 of RADMC-3D these angles are in degrees instead of radian).
+An example for the level populations would be::
 
+  ./radmc3d subbox_levelpop subbox_nxyz 64 64 64 subbox_xyz01 -2.e15 2.e15 -2.e15 2.e15 -2.e15 2.e15
 
 *Note about subbox for level populations:* By default all level populations will
 be written out. However, if you would add the ``subbox_levelpop`` keyword in a
 call to RADMC-3D for making an image or spectrum, then it will only write out
 the level populations that have been used for that image. Example: ::
 
-  ./radmc3d image lambda 2600 subbox_levelpop subbox_nxyz 64 64 64 subbox_xyz01 -2.d15 2.d15 -2.d15 2.d15 -2.d15 2.d15
+  ./radmc3d image lambda 2600 subbox_levelpop subbox_nxyz 64 64 64 subbox_xyz01 -2.e15 2.e15 -2.e15 2.e15 -2.e15 2.e15
 
 would give a much smaller ``'levelpop_co_subbox.out'`` file, because only the
-first two levels are included (remember that :math:`\lambda=2600\,\mu`m is the
+first two levels are included (remember that :math:`\lambda=2600\,\mu`\ m is the
 J1-0 line of CO). See Section :ref:`sec-calcstore-levpop` for more information
 on how RADMC-3D automatically selects a subset of levels for storage in the
 global array (and thus also for writing out to file).
