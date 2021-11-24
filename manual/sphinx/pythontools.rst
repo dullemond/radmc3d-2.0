@@ -27,6 +27,7 @@ The RADMC-3D package has two support-libraries:
    method. This is described in the README file in that package.
 
 
+.. _sec-simpleread-tools:
 
 The simpleread.py library
 =========================
@@ -49,6 +50,8 @@ Examples of data files you can read::
   d = read_gasvelocity()
   d = read_molnumdens('co')
   d = read_mollevelpop('co')
+  d = read_subbox(name='dust_temperature')
+  d = read_subbox(name='dust_density')
 
 Of course each one only if the corresponding file is present. Note that 'co' is
 just an example molecule. In all these reading functions, except the ones for
@@ -81,6 +84,10 @@ file support is included (though this may change), no AMR octree grids can be
 read, and several other limitations. For more sophisticated Python tools,
 use the radmc3dPy library.
 
+*Note:* For the ``read_subbox()`` function, you need to read the section
+on the creation of regular-gridded datacubes of your 3D model, which is
+Section :ref:`sec-subbox`. 
+
 
 The radmc3dPy library
 =====================
@@ -109,12 +116,12 @@ way:
 
 #. Make sure to start Python 3 using {\small ipython --matplotlib} if you start
    Python from the command line. If you instead use a Jupyter notebook, make
-   sure that as a first line you use ``%matplotlibinline`` to get the plots
+   sure that as a first line you use ``%matplotlib inline`` to get the plots
    inside the notebook. These are standard Python things, so if you have
    trouble, ask your python friends or system manager.
 
 #. Once you are inside Python you can include ``radmc3dPy`` using a simple
-   ``fromradmc3dPyimport*``\ . This loads a series of radmc3dPy sub-libraries,
+   ``from radmc3dPy import *``\ . This loads a series of radmc3dPy sub-libraries,
    including ``analyze``\ , ``image`` and several others.
 
 
@@ -133,7 +140,7 @@ the RADMC-3D package, and post-process the results with ``radmc3dPy``\ .
 
 To use one of the ``radmc3dPy``\ -internal models, create a directory
 (e.g. ``mymodel``\ ), go into it, and go into iPython. Then type
-``fromradmc3dPyimport*``\ . By typing ``models.getModelNames()`` you get a list
+``from radmc3dPy import *``\ . By typing ``models.getModelNames()`` you get a list
 of available models. Suppose we choose the model 'ppdisk', then we would go
 about like this (for example): ::
 
@@ -168,11 +175,11 @@ Diagnostic tools in radmc3dPy
 No matter whether you use the ``radmc3dPy``\ -internal model set, or you create
 your own model setup, you can use the extensive tool set inside ``radmc3dPy`` to
 analyze the model itself, and the results of RADMC-3D calculations. In
-everything below, we assume that you use ``fromradmc3dPyimport*`` beforehand.
+everything below, we assume that you use ``from radmc3dPy import *`` beforehand.
 
 
 Read the ``amr_grid.inp`` file
----------------------------------------
+------------------------------
 
 Use ``grid=analyze.readGrid()`` to read the information about the
 spatial and wavelength grid. 
@@ -187,7 +194,7 @@ etc.
 
 
 Read the ``image.out`` file
------------------------------------
+---------------------------
 
 Using ``im=image.readImage()`` you read the ``image.out``
 file created by RADMC-3D (if you call radmc3d for creating an image).
@@ -196,7 +203,7 @@ the image with the proper axes and color bar.
 
 
 Read the ``spectrum.out`` file
---------------------------------------
+------------------------------
 
 Any spectrum you create (a file called ``spectrum.out`` can be
 read using ``s=analyze.readSpectrum()``\ .

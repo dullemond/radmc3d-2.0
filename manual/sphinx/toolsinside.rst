@@ -100,7 +100,33 @@ the identification numbers will be ``48``\ . For all other quantities
 (dust density, dust temperature) this line of identification numbers is simply
 ``123`` etc.
 
+Using the ``radmc3d_tools`` to read the subbox data
+---------------------------------------------------
 
+In Section :ref:`sec-simpleread-tools` a set of simple Python tools are
+discussed to read a variety of output files from RADMC-3D (as well as input
+files to RADMC-3D) for further analysis.
+
+Also for the subbox output there is now a Python function to read those.
+Example: First run RADMC-3D:
+::
+   radmc3d mctherm
+   radmc3d subbox_dust_density subbox_nxyz 64 64 64 subbox_xyz01 -2.e14 2.e14 -2.e14 2.e14 -2.e14 2.e14
+   radmc3d subbox_dust_temperature subbox_nxyz 64 64 64 subbox_xyz01 -2.e14 2.e14 -2.e14 2.e14 -2.e14 2.e14
+
+Then go into Python and do:
+::
+   from radmc3d_tools.simpleread import *
+   dustdens = read_subbox(name='dust_density')
+   dusttemp = read_subbox(name='dust_temperature')
+   grid     = dustdens.grid
+   import matplotlib.pyplot as plt
+   rhodustmin = 1e-18
+   plt.figure()
+   plt.imshow(np.log10(dustdens.data[:,:,32]+rhodustmin),extent=[grid.x[0],grid.x[-1],grid.y[0],grid.y[-1]])
+   plt.figure()
+   plt.imshow(dusttemp.data[:,:,32])
+   plt.show()
 
 .. _sec-sampling:
 
