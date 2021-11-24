@@ -795,12 +795,12 @@ def read_subbox(name='dust_temperature',indexorder='fortran'):
     nx        = int(hdr[1])
     ny        = int(hdr[2])
     nz        = int(hdr[3])
-    xmin      = hdr[4]
-    xmax      = hdr[5]
-    ymin      = hdr[6]
-    ymax      = hdr[7]
-    zmin      = hdr[8]
-    zmax      = hdr[9]
+    xmin      = hdr[5]
+    xmax      = hdr[6]
+    ymin      = hdr[7]
+    ymax      = hdr[8]
+    zmin      = hdr[9]
+    zmax      = hdr[10]
 
     # Create the grid object and link it to the subbox object
     grid      = simplereaddataobject('grid')
