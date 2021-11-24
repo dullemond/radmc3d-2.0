@@ -753,3 +753,91 @@ def read_mean_intensity(indexorder='fortran'):
 
     # Return the meanint object
     return meanint
+
+
+def read_subbox(name='dust_temperature',indexorder='fortran'):
+    """
+    Reading a subbox file. Default is subbox for the dust
+    temperature. To use it, you first need to create such a
+    dataset with RADMC-3D. For instance using the command
+
+      ./radmc3d subbox_dust_temperature subbox_nxyz 64 64 64 subbox_xyz01 -2.e15 2.e15 -2.e15 2.e15 -2.e15 2.e15
+
+    This will create the file dust_temperature_subbox.out,
+    which you can then read in python with
+
+      from radmc3d_tools import simpleread as sr
+      q = sr.read_subbox(name='dust_temperature')
+
+    ARGUMENTS:
+      name              The subbox file to read = name+"_subbox.out"
+      indexorder        If 'fortran' then converting array to fortran
+                        index order (default). Else use Python/C order.
+
+    RETURNS:
+      Data object containing:
+
+        .grid           A grid object (see read_grid())
+        .data           An array with the data
+    """
+
+    # Create the subbox object and read the basic data
+    fname     = name+'_subbox.out'
+    subbox    = simplereaddataobject(fname)
+    print('Reading '+fname)
+    data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
+
+    # Extract the header and create the main data box
+    hdr       = np.array(data[:15], dtype=np.int)
+    data      = data[15:]
+
+    # Get the grid data
+    nx        = int(hdr[1])
+    ny        = int(hdr[2])
+    nz        = int(hdr[3])
+    xmin      = hdr[4]
+    xmax      = hdr[5]
+    ymin      = hdr[6]
+    ymax      = hdr[7]
+    zmin      = hdr[8]
+    zmax      = hdr[9]
+
+    # Create the grid object and link it to the subbox object
+    grid      = simplereaddataobject('grid')
+    grid.nx   = nx
+    grid.ny   = ny
+    grid.nz   = nz
+    grid.nxi  = nx+1
+    grid.nyi  = ny+1
+    grid.nzi  = nz+1
+    grid.crd_sys = 'car'
+    grid.xi   = np.linspace(xmin,xmax,nx+1)
+    grid.yi   = np.linspace(ymin,ymax,ny+1)
+    grid.zi   = np.linspace(zmin,zmax,nz+1)
+    grid.x    = 0.5*(grid.xi[1:]+grid.xi[:-1])
+    grid.y    = 0.5*(grid.yi[1:]+grid.yi[:-1])
+    grid.z    = 0.5*(grid.zi[1:]+grid.zi[:-1])
+    subbox.grid = grid
+
+    # Check the file format
+    if hdr[0] != 2:
+        msg = 'Unknown format number in '+fname
+        raise RuntimeError(msg)
+
+    # Convert the rest of the data to the proper shape
+    data = np.reshape(data, [grid.nz, grid.ny, grid.nx])
+
+    # If indexorder is set to 'fortran', then the inner index of the array
+    # should be left (even though in Python the inner index is right). This
+    # is to assure that the index order in the Python arrays is the same as
+    # in the RADMC-3D code. But by setting indexorder to anything else, you
+    # can keep Python natural order (which is equal to C index order), in
+    # which the inner index is the rightmost index.
+    if indexorder=='fortran':
+        data = np.swapaxes(data, 0, 2)
+
+    # Now add this to the object
+    subbox.data = data
+
+    # Return the subbox object
+    return subbox
