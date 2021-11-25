@@ -5435,6 +5435,11 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
                     !
                     ! ...Now let the AMR module find the cell index
                     !
+                    if(igrid_coord.ge.100) then
+                       write(stdo,*) 'ERROR: The Modified Random Walk is called outside of cell.'
+                       write(stdo,*) '       Please warn the author of RADMC-3D.'
+                       stop
+                    endif
                     if(amr_tree_present) then
                        call amr_findcell(ray_cart_x,ray_cart_y,ray_cart_z,acell)
                        ray_index = acell%leafindex
