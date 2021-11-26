@@ -2292,6 +2292,76 @@ return
 end subroutine amr_findcell
 
 
+!-------------------------------------------------------------------------
+!                   A MORE GENERAL VERSION OF FINDCELL
+!
+! This function finds the cell independent of coordinate system and AMR
+! refinement or not. Input is the cartesian (!) location x,y,z, and if
+! spherical coordinates are used, these are automatically converted into
+! r,theta,phi. So it is advisable to always use this subroutine instead
+! of the more basic amr_findcell().
+!-------------------------------------------------------------------------
+subroutine amr_findcellindex_general(x,y,z,cellindex)
+  implicit none
+  double precision :: x,y,z,r,theta,phi
+  type(amr_branch), pointer :: a
+  integer :: ix,iy,iz,cellindex
+  !
+  cellindex=0
+  if(amr_coordsystem.lt.100) then
+     !
+     ! Cartesian coordinates
+     !
+     if(amr_tree_present) then
+        call amr_findcell(x,y,z,a)
+        if(associated(a)) then
+           cellindex = a%leafindex
+        else
+           cellindex = 0
+        endif
+     else
+        call amr_findbasecell(x,y,z,ix,iy,iz)
+        if(ix.gt.0) then
+           cellindex = ix+(iy-1)*amr_grid_nx+(iz-1)*amr_grid_nx*amr_grid_ny
+        else
+           cellindex = 0
+        endif
+     endif
+  elseif((amr_coordsystem.ge.100).and.(amr_coordsystem.lt.200)) then
+     !
+     ! Spherical coordinates
+     !
+     ! Convert x,y,z to spherical coordinates
+     !
+     call amr_xyz_to_rthphi(x,y,z,r,theta,phi)
+     !
+     ! Find the cell in which the star resides
+     !
+     if(theta.eq.pihalf) then
+        theta = pihalf - 1d-8   ! Only for cell searching
+     endif
+     if(amr_tree_present) then
+        call amr_findcell(r,theta,phi,a)
+        if(associated(a)) then
+           cellindex = a%leafindex
+        else
+           cellindex = 0
+        endif
+     else
+        call amr_findbasecell(r,theta,phi,ix,iy,iz)
+        if(ix.gt.0) then
+           cellindex = ix+(iy-1)*amr_grid_nx+(iz-1)*amr_grid_nx*amr_grid_ny
+        else
+           cellindex = 0
+        endif
+     endif
+  else
+     write(stdo,*) 'ERROR: Other coordinate not yet implemented'
+     stop 6491
+  endif
+end subroutine amr_findcellindex_general
+
+
 !--------------------------------------------------------------------------
 !                         STRING COMPARING
 !--------------------------------------------------------------------------
