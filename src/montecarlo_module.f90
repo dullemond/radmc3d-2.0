@@ -58,7 +58,7 @@ logical :: mc_openmp_parallel = .false.
 ! (Must ensure huge range here)
 !
 integer(kind=8) :: ieventcounttot
-double precision :: mc_visitcell,mc_revisitcell
+double precision :: mc_visitcell,mc_revisitcell,mc_revisitcell_max
 !
 ! Flag saying whether or not to interpolate the temperature emission
 ! database in temperature
@@ -2248,6 +2248,7 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
   ieventcounttot = 0
   mc_visitcell = 0
   mc_revisitcell = 0
+  mc_revisitcell_max = 0
   !
   ! If write statistics, then open this file
   !
@@ -2586,7 +2587,8 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
    !!$ it is necessary to ensure that only one thread at a time is writing/updating the memory
    !!$ location of the considered variable.
    !
-   !$OMP REDUCTION(+:mc_integerspec,mc_visitcell,mc_revisitcell,ieventcounttot)
+   !$OMP REDUCTION(+:mc_integerspec,mc_visitcell,mc_revisitcell,ieventcounttot) &
+   !$OMP REDUCTION(max:mc_revisitcell_max)
    !
    !$ id=OMP_get_thread_num()
    !$ nthreads=OMP_get_num_threads()
@@ -3173,7 +3175,8 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
      !!$ Global variables from 'montecarlo_module.f90' used in the subroutine 'do_monte_carlo_scattering'
      !
      !!$ Local variables from 'do_monte_carlo_scattering'
-     !$OMP REDUCTION(+:mc_integerspec,mc_visitcell,mc_revisitcell,ieventcounttot)
+     !$OMP REDUCTION(+:mc_integerspec,mc_visitcell,mc_revisitcell,ieventcounttot) &
+     !$OMP REDUCTION(max:mc_revisitcell_max)
      !
      !$ id=OMP_get_thread_num()
      !$ nthreads=OMP_get_num_threads()
@@ -4986,6 +4989,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
         !
         mc_visitcell   = mc_visitcell + count_samecell + 1
         mc_revisitcell = mc_revisitcell + count_samecell*count_samecell
+        mc_revisitcell_max = max(mc_revisitcell_max,1.d0*count_samecell)
         count_samecell = 0
      else
         !

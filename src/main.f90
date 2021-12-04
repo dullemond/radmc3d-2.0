@@ -848,6 +848,8 @@ program radmc3d
                       ieventcounttot/(1.d0*rt_mcparams%nphot_therm)
            write(stdo,*) 'Average nr of times a photon stays in the same cell  = ', &
                       mc_revisitcell/(1.d0*mc_visitcell)
+           write(stdo,*) 'Maximum nr of times a photon stayed in the same cell = ', &
+                      int(mc_revisitcell_max)
            if(.not.rt_mcparams%mod_random_walk) then
               if(mc_revisitcell/(1.d0*mc_visitcell).gt.400) then
                  write(stdo,*) '   ---> This number is very high, and therefore responsible for slow performance.'
