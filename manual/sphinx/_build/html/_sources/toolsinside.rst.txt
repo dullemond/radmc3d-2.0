@@ -19,7 +19,7 @@ possibility in ``radmc3d`` to generate 1-D, 2-D or 3-D regularly spaced
 the model. 
 
 
-Creating and reading a subbox
+Creating a subbox
 -----------------------------
 
 You can call ``radmc3d`` directly from the shell asking it to make
@@ -30,9 +30,14 @@ the subbox. Here is an example::
 which creates a regularly sampled 64x64x64 datacube of the dust density, with :math:`x` grid
 between :math:`-2\times 10^{15}\;\mathrm{cm}` and  :math:`+2\times 10^{15}\;\mathrm{cm}` and
 likewise for :math:`y` and :math:`z` (note that these box boundaries are the walls of the
-regularly spaced cells of the subbox). For the dust temperature the command is
-``./radmc3d subbox_dust_temperature``. You can also rotate the box along three angles:
-:math:`\phi_1`, :math:`\theta`, and :math:`\phi_2`, for example::
+regularly spaced cells of the subbox). The file that this creates is called ``dust_density_subbox.out``
+(see section :ref:`sec-subbox-file-format` for the format of this file).
+For the dust temperature the command is
+``./radmc3d subbox_dust_temperature``, in which case the file is called
+``dust_temperature_subbox.out``.
+
+You can also rotate the box along three angles: :math:`\phi_1`, :math:`\theta`,
+and :math:`\phi_2`, for example::
   
   ./radmc3d subbox_dust_temperature subbox_nxyz 64 64 64 subbox_xyz01 -2.e15 2.e15 -2.e15 2.e15 -2.e15 2.e15 subbox_phi1 30 subbox_theta 60  subbox_phi2 45
 
@@ -54,6 +59,9 @@ J1-0 line of CO). See Section :ref:`sec-calcstore-levpop` for more information
 on how RADMC-3D automatically selects a subset of levels for storage in the
 global array (and thus also for writing out to file).
 
+
+
+.. _sec-subbox-file-format:
 
 Format of the subbox output files
 ---------------------------------
@@ -100,7 +108,33 @@ the identification numbers will be ``48``\ . For all other quantities
 (dust density, dust temperature) this line of identification numbers is simply
 ``123`` etc.
 
+Using the ``radmc3d_tools`` to read the subbox data
+---------------------------------------------------
 
+In Section :ref:`sec-simpleread-tools` a set of simple Python tools are
+discussed to read a variety of output files from RADMC-3D (as well as input
+files to RADMC-3D) for further analysis.
+
+Also for the subbox output there is now a Python function to read those.
+Example: First run RADMC-3D:
+::
+   radmc3d mctherm
+   radmc3d subbox_dust_density subbox_nxyz 64 64 64 subbox_xyz01 -2.e14 2.e14 -2.e14 2.e14 -2.e14 2.e14
+   radmc3d subbox_dust_temperature subbox_nxyz 64 64 64 subbox_xyz01 -2.e14 2.e14 -2.e14 2.e14 -2.e14 2.e14
+
+Then go into Python and do:
+::
+   from radmc3d_tools.simpleread import *
+   dustdens = read_subbox(name='dust_density')
+   dusttemp = read_subbox(name='dust_temperature')
+   grid     = dustdens.grid
+   import matplotlib.pyplot as plt
+   rhodustmin = 1e-18
+   plt.figure()
+   plt.imshow(np.log10(dustdens.data[:,:,32]+rhodustmin),extent=[grid.x[0],grid.x[-1],grid.y[0],grid.y[-1]])
+   plt.figure()
+   plt.imshow(dusttemp.data[:,:,32])
+   plt.show()
 
 .. _sec-sampling:
 

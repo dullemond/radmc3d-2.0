@@ -73,7 +73,7 @@
 
 
 \title{radmc3d}
-\date{Nov 11, 2021}
+\date{Dec 09, 2021}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -9078,7 +9078,7 @@ method. This is described in the README file in that package.
 
 
 \section{The simpleread.py library}
-\label{\detokenize{pythontools:the-simpleread-py-library}}
+\label{\detokenize{pythontools:the-simpleread-py-library}}\label{\detokenize{pythontools:sec-simpleread-tools}}
 For the most rudimentary analysis of the output (or input) files of RADMC\sphinxhyphen{}3D you
 can use the \sphinxcode{\sphinxupquote{simpleread.py}} file, which you can find in the \sphinxcode{\sphinxupquote{python/tools/}}
 directory. If everything has been installed correctly, you should be able to
@@ -9100,6 +9100,8 @@ Examples of data files you can read:
 \PYG{n}{d} \PYG{o}{=} \PYG{n}{read\PYGZus{}gasvelocity}\PYG{p}{(}\PYG{p}{)}
 \PYG{n}{d} \PYG{o}{=} \PYG{n}{read\PYGZus{}molnumdens}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{co}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \PYG{n}{d} \PYG{o}{=} \PYG{n}{read\PYGZus{}mollevelpop}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{co}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{d} \PYG{o}{=} \PYG{n}{read\PYGZus{}subbox}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{dust\PYGZus{}temperature}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{d} \PYG{o}{=} \PYG{n}{read\PYGZus{}subbox}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{dust\PYGZus{}density}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \end{sphinxVerbatim}
 
 Of course each one only if the corresponding file is present. Note that ‘co’ is
@@ -9137,6 +9139,10 @@ file support is included (though this may change), no AMR octree grids can be
 read, and several other limitations. For more sophisticated Python tools,
 use the radmc3dPy library.
 
+\sphinxstyleemphasis{Note:} For the \sphinxcode{\sphinxupquote{read\_subbox()}} function, you need to read the section
+on the creation of regular\sphinxhyphen{}gridded datacubes of your 3D model, which is
+Section {\hyperref[\detokenize{toolsinside:sec-subbox}]{\sphinxcrossref{\DUrole{std,std-ref}{Making a regularly\sphinxhyphen{}spaced datacube (‘subbox’) of AMR\sphinxhyphen{}based models}}}}.
+
 
 \section{The radmc3dPy library}
 \label{\detokenize{pythontools:the-radmc3dpy-library}}
@@ -9166,13 +9172,13 @@ way:
 \item {} 
 Make sure to start Python 3 using \{small ipython \textendash{}matplotlib\} if you start
 Python from the command line. If you instead use a Jupyter notebook, make
-sure that as a first line you use \sphinxcode{\sphinxupquote{\%matplotlibinline}} to get the plots
+sure that as a first line you use \sphinxcode{\sphinxupquote{\%matplotlib inline}} to get the plots
 inside the notebook. These are standard Python things, so if you have
 trouble, ask your python friends or system manager.
 
 \item {} 
 Once you are inside Python you can include \sphinxcode{\sphinxupquote{radmc3dPy}} using a simple
-\sphinxcode{\sphinxupquote{fromradmc3dPyimport*}}. This loads a series of radmc3dPy sub\sphinxhyphen{}libraries,
+\sphinxcode{\sphinxupquote{from radmc3dPy import *}}. This loads a series of radmc3dPy sub\sphinxhyphen{}libraries,
 including \sphinxcode{\sphinxupquote{analyze}}, \sphinxcode{\sphinxupquote{image}} and several others.
 
 \end{enumerate}
@@ -9191,7 +9197,7 @@ the RADMC\sphinxhyphen{}3D package, and post\sphinxhyphen{}process the results w
 
 To use one of the \sphinxcode{\sphinxupquote{radmc3dPy}}\sphinxhyphen{}internal models, create a directory
 (e.g. \sphinxcode{\sphinxupquote{mymodel}}), go into it, and go into iPython. Then type
-\sphinxcode{\sphinxupquote{fromradmc3dPyimport*}}. By typing \sphinxcode{\sphinxupquote{models.getModelNames()}} you get a list
+\sphinxcode{\sphinxupquote{from radmc3dPy import *}}. By typing \sphinxcode{\sphinxupquote{models.getModelNames()}} you get a list
 of available models. Suppose we choose the model ‘ppdisk’, then we would go
 about like this (for example):
 
@@ -9231,7 +9237,7 @@ And the image can be displayed (in Python) by
 No matter whether you use the \sphinxcode{\sphinxupquote{radmc3dPy}}\sphinxhyphen{}internal model set, or you create
 your own model setup, you can use the extensive tool set inside \sphinxcode{\sphinxupquote{radmc3dPy}} to
 analyze the model itself, and the results of RADMC\sphinxhyphen{}3D calculations. In
-everything below, we assume that you use \sphinxcode{\sphinxupquote{fromradmc3dPyimport*}} beforehand.
+everything below, we assume that you use \sphinxcode{\sphinxupquote{from radmc3dPy import *}} beforehand.
 
 
 \subsection{Read the \sphinxstyleliteralintitle{\sphinxupquote{amr\_grid.inp}} file}
@@ -9275,8 +9281,8 @@ possibility in \sphinxcode{\sphinxupquote{radmc3d}} to generate 1\sphinxhyphen{}
 the model.
 
 
-\subsection{Creating and reading a subbox}
-\label{\detokenize{toolsinside:creating-and-reading-a-subbox}}
+\subsection{Creating a subbox}
+\label{\detokenize{toolsinside:creating-a-subbox}}
 You can call \sphinxcode{\sphinxupquote{radmc3d}} directly from the shell asking it to make
 the subbox. Here is an example:
 
@@ -9287,9 +9293,14 @@ the subbox. Here is an example:
 which creates a regularly sampled 64x64x64 datacube of the dust density, with \(x\) grid
 between \(-2\times 10^{15}\;\mathrm{cm}\) and  \(+2\times 10^{15}\;\mathrm{cm}\) and
 likewise for \(y\) and \(z\) (note that these box boundaries are the walls of the
-regularly spaced cells of the subbox). For the dust temperature the command is
-\sphinxcode{\sphinxupquote{./radmc3d subbox\_dust\_temperature}}. You can also rotate the box along three angles:
-\(\phi_1\), \(\theta\), and \(\phi_2\), for example:
+regularly spaced cells of the subbox). The file that this creates is called \sphinxcode{\sphinxupquote{dust\_density\_subbox.out}}
+(see section {\hyperref[\detokenize{toolsinside:sec-subbox-file-format}]{\sphinxcrossref{\DUrole{std,std-ref}{Format of the subbox output files}}}} for the format of this file).
+For the dust temperature the command is
+\sphinxcode{\sphinxupquote{./radmc3d subbox\_dust\_temperature}}, in which case the file is called
+\sphinxcode{\sphinxupquote{dust\_temperature\_subbox.out}}.
+
+You can also rotate the box along three angles: \(\phi_1\), \(\theta\),
+and \(\phi_2\), for example:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{o}{.}\PYG{o}{/}\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}dust\PYGZus{}temperature} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e15} \PYG{l+m+mf}{2.e15} \PYG{n}{subbox\PYGZus{}phi1} \PYG{l+m+mi}{30} \PYG{n}{subbox\PYGZus{}theta} \PYG{l+m+mi}{60}  \PYG{n}{subbox\PYGZus{}phi2} \PYG{l+m+mi}{45}
@@ -9319,7 +9330,7 @@ global array (and thus also for writing out to file).
 
 
 \subsection{Format of the subbox output files}
-\label{\detokenize{toolsinside:format-of-the-subbox-output-files}}
+\label{\detokenize{toolsinside:format-of-the-subbox-output-files}}\label{\detokenize{toolsinside:sec-subbox-file-format}}
 All the files produced by the subbox method have the following format:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -9362,6 +9373,38 @@ levels 4 and 8 are in this file, then \sphinxcode{\sphinxupquote{nv=2}} and the 
 the identification numbers will be \sphinxcode{\sphinxupquote{48}}. For all other quantities
 (dust density, dust temperature) this line of identification numbers is simply
 \sphinxcode{\sphinxupquote{123}} etc.
+
+
+\subsection{Using the \sphinxstyleliteralintitle{\sphinxupquote{radmc3d\_tools}} to read the subbox data}
+\label{\detokenize{toolsinside:using-the-radmc3d-tools-to-read-the-subbox-data}}
+In Section {\hyperref[\detokenize{pythontools:sec-simpleread-tools}]{\sphinxcrossref{\DUrole{std,std-ref}{The simpleread.py library}}}} a set of simple Python tools are
+discussed to read a variety of output files from RADMC\sphinxhyphen{}3D (as well as input
+files to RADMC\sphinxhyphen{}3D) for further analysis.
+
+Also for the subbox output there is now a Python function to read those.
+Example: First run RADMC\sphinxhyphen{}3D:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{radmc3d} \PYG{n}{mctherm}
+\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}dust\PYGZus{}density} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e14} \PYG{l+m+mf}{2.e14} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e14} \PYG{l+m+mf}{2.e14} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e14} \PYG{l+m+mf}{2.e14}
+\PYG{n}{radmc3d} \PYG{n}{subbox\PYGZus{}dust\PYGZus{}temperature} \PYG{n}{subbox\PYGZus{}nxyz} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{l+m+mi}{64} \PYG{n}{subbox\PYGZus{}xyz01} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e14} \PYG{l+m+mf}{2.e14} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e14} \PYG{l+m+mf}{2.e14} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.e14} \PYG{l+m+mf}{2.e14}
+\end{sphinxVerbatim}
+
+Then go into Python and do:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{radmc3d\PYGZus{}tools}\PYG{n+nn}{.}\PYG{n+nn}{simpleread} \PYG{k}{import} \PYG{o}{*}
+\PYG{n}{dustdens} \PYG{o}{=} \PYG{n}{read\PYGZus{}subbox}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{dust\PYGZus{}density}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{dusttemp} \PYG{o}{=} \PYG{n}{read\PYGZus{}subbox}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{dust\PYGZus{}temperature}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{grid}     \PYG{o}{=} \PYG{n}{dustdens}\PYG{o}{.}\PYG{n}{grid}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{n}{rhodustmin} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}18}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log10}\PYG{p}{(}\PYG{n}{dustdens}\PYG{o}{.}\PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{l+m+mi}{32}\PYG{p}{]}\PYG{o}{+}\PYG{n}{rhodustmin}\PYG{p}{)}\PYG{p}{,}\PYG{n}{extent}\PYG{o}{=}\PYG{p}{[}\PYG{n}{grid}\PYG{o}{.}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,}\PYG{n}{grid}\PYG{o}{.}\PYG{n}{x}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,}\PYG{n}{grid}\PYG{o}{.}\PYG{n}{y}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,}\PYG{n}{grid}\PYG{o}{.}\PYG{n}{y}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{dusttemp}\PYG{o}{.}\PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{l+m+mi}{32}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
 
 
 \section{Alternative to subbox: arbitrary sampling of AMR\sphinxhyphen{}based models}

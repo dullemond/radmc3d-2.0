@@ -206,7 +206,7 @@ method. This is described in the README file in that package.</p>
 </li>
 </ol>
 <div class="section" id="the-simpleread-py-library">
-<h2>The simpleread.py library<a class="headerlink" href="#the-simpleread-py-library" title="Permalink to this headline">¶</a></h2>
+<span id="sec-simpleread-tools"></span><h2>The simpleread.py library<a class="headerlink" href="#the-simpleread-py-library" title="Permalink to this headline">¶</a></h2>
 <p>For the most rudimentary analysis of the output (or input) files of RADMC-3D you
 can use the <code class="docutils literal notranslate"><span class="pre">simpleread.py</span></code> file, which you can find in the <code class="docutils literal notranslate"><span class="pre">python/tools/</span></code>
 directory. If everything has been installed correctly, you should be able to
@@ -224,6 +224,8 @@ use it within Python like this:</p>
 <span class="n">d</span> <span class="o">=</span> <span class="n">read_gasvelocity</span><span class="p">()</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">read_molnumdens</span><span class="p">(</span><span class="s1">&#39;co&#39;</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">read_mollevelpop</span><span class="p">(</span><span class="s1">&#39;co&#39;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">read_subbox</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dust_temperature&#39;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">read_subbox</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dust_density&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Of course each one only if the corresponding file is present. Note that ‘co’ is
@@ -255,6 +257,9 @@ and <code class="docutils literal notranslate"><span class="pre">radmc3d</span> 
 file support is included (though this may change), no AMR octree grids can be
 read, and several other limitations. For more sophisticated Python tools,
 use the radmc3dPy library.</p>
+<p><em>Note:</em> For the <code class="docutils literal notranslate"><span class="pre">read_subbox()</span></code> function, you need to read the section
+on the creation of regular-gridded datacubes of your 3D model, which is
+Section <a class="reference internal" href="toolsinside.html#sec-subbox"><span class="std std-ref">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</span></a>.</p>
 </div>
 <div class="section" id="the-radmc3dpy-library">
 <h2>The radmc3dPy library<a class="headerlink" href="#the-radmc3dpy-library" title="Permalink to this headline">¶</a></h2>
@@ -277,11 +282,11 @@ way:</p>
 <ol class="arabic simple">
 <li><p>Make sure to start Python 3 using {small ipython –matplotlib} if you start
 Python from the command line. If you instead use a Jupyter notebook, make
-sure that as a first line you use <code class="docutils literal notranslate"><span class="pre">%matplotlibinline</span></code> to get the plots
+sure that as a first line you use <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code> to get the plots
 inside the notebook. These are standard Python things, so if you have
 trouble, ask your python friends or system manager.</p></li>
 <li><p>Once you are inside Python you can include <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> using a simple
-<code class="docutils literal notranslate"><span class="pre">fromradmc3dPyimport*</span></code>. This loads a series of radmc3dPy sub-libraries,
+<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">radmc3dPy</span> <span class="pre">import</span> <span class="pre">*</span></code>. This loads a series of radmc3dPy sub-libraries,
 including <code class="docutils literal notranslate"><span class="pre">analyze</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code> and several others.</p></li>
 </ol>
 <p>We give here a very concise overview of the <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> package.
@@ -296,7 +301,7 @@ optional. You can equally well use the models in the <code class="docutils liter
 the RADMC-3D package, and post-process the results with <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code>.</p>
 <p>To use one of the <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code>-internal models, create a directory
 (e.g. <code class="docutils literal notranslate"><span class="pre">mymodel</span></code>), go into it, and go into iPython. Then type
-<code class="docutils literal notranslate"><span class="pre">fromradmc3dPyimport*</span></code>. By typing <code class="docutils literal notranslate"><span class="pre">models.getModelNames()</span></code> you get a list
+<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">radmc3dPy</span> <span class="pre">import</span> <span class="pre">*</span></code>. By typing <code class="docutils literal notranslate"><span class="pre">models.getModelNames()</span></code> you get a list
 of available models. Suppose we choose the model ‘ppdisk’, then we would go
 about like this (for example):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="k">import</span> <span class="o">*</span>
@@ -328,7 +333,7 @@ temperature structure, by calling (on the Linux shell):</p>
 <p>No matter whether you use the <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code>-internal model set, or you create
 your own model setup, you can use the extensive tool set inside <code class="docutils literal notranslate"><span class="pre">radmc3dPy</span></code> to
 analyze the model itself, and the results of RADMC-3D calculations. In
-everything below, we assume that you use <code class="docutils literal notranslate"><span class="pre">fromradmc3dPyimport*</span></code> beforehand.</p>
+everything below, we assume that you use <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">radmc3dPy</span> <span class="pre">import</span> <span class="pre">*</span></code> beforehand.</p>
 <div class="section" id="read-the-amr-grid-inp-file">
 <h3>Read the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file<a class="headerlink" href="#read-the-amr-grid-inp-file" title="Permalink to this headline">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">grid=analyze.readGrid()</span></code> to read the information about the
