@@ -51,3 +51,4 @@ python/radmc3dPy/build/
 temp/
 examples_quarantaine/
 *.pptx
+manual/sphinx/_build/doctrees/
