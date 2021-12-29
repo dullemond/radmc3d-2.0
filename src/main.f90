@@ -3028,6 +3028,34 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         iarg = iarg+1
         read(buffer,*) rt_mcparams%nphot_mono
         gotit = .true.
+     elseif(buffer(1:10).eq.'selectscat') then
+        !
+        ! Select which scattering to include. For instance, if you want to
+        ! see the role of multiple scattering, you can do selectscat 2 1000000.
+        ! Or if you are interested only in the second scattering you can do
+        ! selectscat 2 2. Or only first scattering: selectscat 1 1.
+        ! NOTE: Only for analysis or debugging, not for production runs!
+        !
+        if(iarg+1.gt.numarg) then
+           write(stdo,*) 'ERROR while reading command line options: cannot read selectscat.'
+           write(stdo,*) '      Expecting 2 integers after selectscat.'
+           stop
+        endif
+        call ggetarg(iarg,buffer,fromstdi)
+        iarg = iarg+1
+        read(buffer,*) selectscat_iscat_first
+        if(selectscat_iscat_first.lt.1) then
+           write(stdo,*) 'ERROR: selectscat_iscat_first must be .ge.1'
+           stop 3284
+        endif
+        call ggetarg(iarg,buffer,fromstdi)
+        iarg = iarg+1
+        read(buffer,*) selectscat_iscat_last
+        if(selectscat_iscat_last.lt.selectscat_iscat_first) then
+           write(stdo,*) 'ERROR: selectscat_iscat_last must be .ge.selectscat_iscat_first'
+           stop 3285
+        endif
+        gotit = .true.
      elseif(buffer(1:10).eq.'countwrite') then
         !
         ! Set how often RADMC-3D writes a progress line in a Monte Carlo run (default = 1000)

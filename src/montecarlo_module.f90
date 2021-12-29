@@ -236,6 +236,16 @@ double precision, allocatable :: mc_stellarsrc_templates(:,:)
 ! Global flag for Monte Carlo
 !
 logical :: mc_photon_destroyed
+!
+! For analysis or debugging: Allowing to record only e.g. second
+! to fourth scattering source or mean intensity (only for monochromatic
+! monte carlo). Note that this does not yield any real observables, but
+! it can help understand the results.
+!
+integer :: selectscat_iscat
+integer :: selectscat_iscat_first = 1
+integer :: selectscat_iscat_last  = 1000000000
+!
 !----TO-ADD----
 !
 ! Array for skipping very optically thick cells
@@ -273,6 +283,7 @@ logical :: mc_photon_destroyed
 !$OMP THREADPRIVATE(mc_photon_destroyed)
 !$OMP THREADPRIVATE(mcscat_phasefunc)
 !$OMP THREADPRIVATE(db_cumul)
+!$OMP THREADPRIVATE(selectscat_iscat)
 
 contains
 
@@ -2855,6 +2866,14 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
      write(stdo,*) 'WARNING: The mc_scat_maxtauabs is lt 2. While this is'
      write(stdo,*) '       formally OK, we advise making this at least 10.'
      stop
+  endif
+  !
+  ! For the selectscat analysis stuff (normally not important)
+  !
+  if((selectscat_iscat_first.ne.1).or.(selectscat_iscat_last.ne.1000000000)) then
+     write(stdo,*) 'ANALYSIS MODE: Scattering source and mean intensity only for iscat between ', &
+          selectscat_iscat_first,' and ',selectscat_iscat_last
+     write(stdo,*) 'THE RESULTS ARE NOT MEANT FOR PRODUCTION RUNS, ONLY FOR ANALYSIS.'
   endif
   !
   ! Initialize the Monte Carlo module by allocating the required arrays
@@ -6137,6 +6156,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
   !
   ok = .true.
   iscatevent = 0
+  selectscat_iscat = 1
 !!  ieventcount = 0         ! For debugging
   do while(ok)
      !
@@ -6255,6 +6275,10 @@ subroutine walk_full_path_scat(params,inu,ierror)
 !!     ieventcount = ieventcount + 1
      !$omp atomic
      ieventcounttot = ieventcounttot + 1
+     !
+     ! For selectscat: Increase counter
+     !
+     selectscat_iscat = selectscat_iscat + 1
      !
      ! Next event
      !
@@ -6904,6 +6928,10 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
         !
         enerav  = ener * xxtauabs
         !
+        ! For the selectscat analysis stuff (normally not important)
+        !
+        if((selectscat_iscat.ge.selectscat_iscat_first).and.(selectscat_iscat.le.selectscat_iscat_last)) then
+        !
         ! Add photons to scattering source
         !
         ! NOTE: In the original RADMC I did not divide by 4*pi yet; only
@@ -7210,6 +7238,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
            mcscat_meanint(ray_inu,ray_index) =                            &
                 mcscat_meanint(ray_inu,ray_index) + mnint
         endif
+        endif ! This endif is for the selectscat analysis stuff (normally not important)
         !
         ! Compute the location of this point
         !
@@ -7302,6 +7331,10 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
         ! Compute enerav
         !
         enerav  = ener * xxtauabs
+        !
+        ! For the selectscat analysis stuff (normally not important)
+        !
+        if((selectscat_iscat.ge.selectscat_iscat_first).and.(selectscat_iscat.le.selectscat_iscat_last)) then
         !
         ! Add photons to scattering source
         !
@@ -7568,6 +7601,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
            mcscat_meanint(ray_inu,ray_index) =                            &
                 mcscat_meanint(ray_inu,ray_index) + mnint
         endif
+        endif ! This endif is for the selectscat analysis stuff (normally not important)
         !
         ! Compute the new ener and the new tauabs
         !  
