@@ -158,6 +158,12 @@ class Voronoigrid(object):
             ax.set_zlim([bbox[2][0],bbox[2][1]])
         plt.show()
 
+    def visualize_points(self,icells,colors="C1"):
+        fig = plt.figure()
+        ax  = fig.add_subplot(projection='3d')
+        ax.scatter(grid.points[icells,0],grid.points[icells,1],grid.points[icells,2])
+        plt.show()
+        
     def write_radmc3d_unstr_grid(self,bin=False):
         self.compute_diagnostics()
         iformat=1
@@ -201,7 +207,7 @@ class Voronoigrid(object):
                 np.savetxt(f,data)                             # Write the wall support and direction vectors
                 np.savetxt(f,self.wall_cells+1,fmt='%d')       # Indices of cells are on each side of the wall (starting with 1, fortran style!)
 
-npt    = 3000
+npt    = 300
 x      = np.random.random(npt)
 y      = np.random.random(npt)
 z      = np.random.random(npt)
@@ -213,9 +219,11 @@ bbox   = [[0,1],[0,1],[0,1]]
 
 grid   = Voronoigrid(points,bbox=bbox)
 
-#icells = np.where(grid.cell_volumes>0)[0]
+icells = np.where(grid.cell_volumes>0)[0]
 #grid.visualize_cells(icells[1],alpha=0.8)
 #grid.visualize_cells(icells[10:20],alpha=0.8)
-#grid.visualize_cells(icells,alpha=0.8) #,bbox=[[-1.5,2.5],[-1.5,2.5],[-1.5,2.5]])
+grid.visualize_cells(icells,alpha=0.8) #,bbox=[[-1.5,2.5],[-1.5,2.5],[-1.5,2.5]])
 
-grid.write_radmc3d_unstr_grid(bin=True)
+grid.visualize_points(icells)
+
+#grid.write_radmc3d_unstr_grid(bin=True)
