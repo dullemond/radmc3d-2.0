@@ -123,9 +123,13 @@ class Voronoigrid(object):
             self.cell_wsign[icell].append(-1)
 
     def compute_diagnostics(self):
+        self.n_cells        = self.npnts
         self.n_cells_open   = len(np.where((self.cell_volumes<=0.0))[0])
         self.n_cells_closed = len(np.where((self.cell_volumes>0.0))[0])
+        assert self.n_cells_open+self.n_cells_closed==self.n_cells, 'Internal error.'
         self.volume_total   = self.cell_volumes.sum()
+        l=np.array([len(self.cell_walls[i]) for i in range(self.npnts)])
+        self.cell_max_nr_walls = l.max()
 
     def visualize_cells(self,icells,alpha=0.9,colors="C1",bbox=None):
         import mpl_toolkits.mplot3d as a3
@@ -152,20 +156,39 @@ class Voronoigrid(object):
             ax.set_ylim([bbox[1][0],bbox[1][1]])
             ax.set_zlim([bbox[2][0],bbox[2][1]])
         plt.show()
-        
-npt    = 300
+
+    def write_radmc3d_unstr_grid(self,bin=False):
+        assert not bin, 'Binary unstr_grid file not yet available.'
+        self.compute_diagnostics()
+        with open('unstr_grid.inp','w') as f:
+            f.write('1\n')                                 # Format number
+            f.write('{}\n'.format(self.n_cells))           # Nr of cells (both "closed" and "open" ones)
+            f.write('{}\n'.format(self.n_cells_open))      # Nr of "open" cells
+            f.write('{}\n'.format(self.cell_max_nr_walls)) # Max number of walls per cell
+            f.write('{}\n'.format(self.nwalls))            # Nr of cell walls in total
+            f.write('0\n')                                 # Nr of cell walls at the surface
+            f.write('0\n')                                 # Are the surface cell walls convex?
+            np.savetxt(f,self.points)                      # The points
+            np.savetxt(f,self.cell_volumes)                # The cell volumes (0="open" cell)
+            data=np.hstack((self.wall_v,self.wall_n))      # Glue the support and direction vectors
+            np.savetxt(f,data)                             # Write the wall support and direction vectors
+            np.savetxt(f,self.wall_cells+1,fmt='%d')       # Indices of cells are on each side of the wall (starting with 1, fortran style!)
+
+npt    = 3000
 x      = np.random.random(npt)
 y      = np.random.random(npt)
 z      = np.random.random(npt)
 
 points = np.vstack([x,y,z]).T
 
-#bbox   = [[0,1],[0,1],[0,1]]
-bbox   = None
+bbox   = [[0,1],[0,1],[0,1]]
+#bbox   = None
 
 grid   = Voronoigrid(points,bbox=bbox)
 
-icells = np.where(grid.cell_volumes>0)[0]
+#icells = np.where(grid.cell_volumes>0)[0]
 #grid.visualize_cells(icells[1],alpha=0.8)
 #grid.visualize_cells(icells[10:20],alpha=0.8)
-grid.visualize_cells(icells,alpha=0.8,bbox=[[-1.5,2.5],[-1.5,2.5],[-1.5,2.5]])
+#grid.visualize_cells(icells,alpha=0.8) #,bbox=[[-1.5,2.5],[-1.5,2.5],[-1.5,2.5]])
+
+grid.write_radmc3d_unstr_grid()
