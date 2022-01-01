@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial import Delaunay,Voronoi,ConvexHull
+import struct
 from tqdm import tqdm    # For a nice progress bar
 
 class Voronoigrid(object):
@@ -123,10 +124,10 @@ class Voronoigrid(object):
             self.cell_wsign[icell].append(-1)
 
     def compute_diagnostics(self):
-        self.n_cells        = self.npnts
-        self.n_cells_open   = len(np.where((self.cell_volumes<=0.0))[0])
-        self.n_cells_closed = len(np.where((self.cell_volumes>0.0))[0])
-        assert self.n_cells_open+self.n_cells_closed==self.n_cells, 'Internal error.'
+        self.ncells        = self.npnts
+        self.ncells_open   = len(np.where((self.cell_volumes<=0.0))[0])
+        self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
+        assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
         self.volume_total   = self.cell_volumes.sum()
         l=np.array([len(self.cell_walls[i]) for i in range(self.npnts)])
         self.cell_max_nr_walls = l.max()
@@ -158,21 +159,47 @@ class Voronoigrid(object):
         plt.show()
 
     def write_radmc3d_unstr_grid(self,bin=False):
-        assert not bin, 'Binary unstr_grid file not yet available.'
         self.compute_diagnostics()
-        with open('unstr_grid.inp','w') as f:
-            f.write('1\n')                                 # Format number
-            f.write('{}\n'.format(self.n_cells))           # Nr of cells (both "closed" and "open" ones)
-            f.write('{}\n'.format(self.n_cells_open))      # Nr of "open" cells
-            f.write('{}\n'.format(self.cell_max_nr_walls)) # Max number of walls per cell
-            f.write('{}\n'.format(self.nwalls))            # Nr of cell walls in total
-            f.write('0\n')                                 # Nr of cell walls at the surface
-            f.write('0\n')                                 # Are the surface cell walls convex?
-            np.savetxt(f,self.points)                      # The points
-            np.savetxt(f,self.cell_volumes)                # The cell volumes (0="open" cell)
-            data=np.hstack((self.wall_v,self.wall_n))      # Glue the support and direction vectors
-            np.savetxt(f,data)                             # Write the wall support and direction vectors
-            np.savetxt(f,self.wall_cells+1,fmt='%d')       # Indices of cells are on each side of the wall (starting with 1, fortran style!)
+        iformat=1
+        if bin:
+            idum   = np.array([iformat,                        # Format number
+                               8,                              # 8 means double precision
+                               self.ncells,                    # Nr of cells (both "closed" and "open" ones)
+                               self.ncells_open,               # Nr of "open" cells
+                               self.cell_max_nr_walls,         # Max number of walls per cell
+                               self.nwalls,                    # Nr of cell walls in total
+                               0,                              # Nr of cell walls at the surface
+                               0],                             # Are the surface cell walls convex?
+                              dtype='int64')                   # Create an array of integers for the header
+            data_points   = self.points.ravel()
+            data_cellvols = self.cell_volumes.ravel()
+            data_walls    = np.hstack((self.wall_v,self.wall_n)).ravel()
+            indices       = (self.wall_cells+1).ravel()
+            strp          = str(3*self.ncells)+'d'             # Create a format string for struct for the points
+            strv          = str(self.ncells)+'d'               # Create a format string for struct for the volumes
+            strw          = str(6*self.nwalls)+'d'             # Create a format string for struct for the walls
+            stri          = str(2*self.nwalls)+'Q'             # Create a format string for struct for the indices
+            sdat          = struct.pack('8Q',*idum) \
+                            +struct.pack(strp,*data_points) \
+                            +struct.pack(strv,*data_cellvols) \
+                            +struct.pack(strw,*data_walls) \
+                            +struct.pack(stri,*indices)        # Create a binary image of the data
+            with open('unstr_grid.binp','w+b') as f:
+                f.write(sdat)                                  # Write data in binary form
+        else:
+            with open('unstr_grid.inp','w') as f:
+                f.write('{}\n'.format(iformat))                # Format number
+                f.write('{}\n'.format(self.ncells))            # Nr of cells (both "closed" and "open" ones)
+                f.write('{}\n'.format(self.ncells_open))       # Nr of "open" cells
+                f.write('{}\n'.format(self.cell_max_nr_walls)) # Max number of walls per cell
+                f.write('{}\n'.format(self.nwalls))            # Nr of cell walls in total
+                f.write('0\n')                                 # Nr of cell walls at the surface
+                f.write('0\n')                                 # Are the surface cell walls convex?
+                np.savetxt(f,self.points)                      # The points
+                np.savetxt(f,self.cell_volumes)                # The cell volumes (0="open" cell)
+                data=np.hstack((self.wall_v,self.wall_n))      # Glue the support and direction vectors
+                np.savetxt(f,data)                             # Write the wall support and direction vectors
+                np.savetxt(f,self.wall_cells+1,fmt='%d')       # Indices of cells are on each side of the wall (starting with 1, fortran style!)
 
 npt    = 3000
 x      = np.random.random(npt)
@@ -191,4 +218,4 @@ grid   = Voronoigrid(points,bbox=bbox)
 #grid.visualize_cells(icells[10:20],alpha=0.8)
 #grid.visualize_cells(icells,alpha=0.8) #,bbox=[[-1.5,2.5],[-1.5,2.5],[-1.5,2.5]])
 
-grid.write_radmc3d_unstr_grid()
+grid.write_radmc3d_unstr_grid(bin=True)
