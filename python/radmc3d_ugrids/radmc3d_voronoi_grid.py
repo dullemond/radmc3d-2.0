@@ -127,15 +127,19 @@ class Voronoigrid(object):
         self.n_cells_closed = len(np.where((self.cell_volumes>0.0))[0])
         self.volume_total   = self.cell_volumes.sum()
 
-    def visualize_cell(self,icell,alpha=0.9):
+    def visualize_cells(self,icells,alpha=0.9,colors="C1"):
         import mpl_toolkits.mplot3d as a3
         vor    = self.vor
+        if np.isscalar(icells):
+            icells=np.array([icells])
         ax     = a3.Axes3D(plt.figure())
-        w      = self.cell_walls[icell]
-        colors = list(map("C{}".format, range(len(w))))
         polys  = []
-        for iwall in w:
-            polys.append(vor.vertices[vor.ridge_vertices[iwall]])
+        for icell in icells:
+            w      = self.cell_walls[icell]
+            if(len(icells)==1): 
+                colors = list(map("C{}".format, range(len(w))))
+            for iwall in w:
+                polys.append(vor.vertices[vor.ridge_vertices[iwall]])
         pc = a3.art3d.Poly3DCollection(polys, facecolor=colors, edgecolor="k", alpha=alpha)
         ax.add_collection3d(pc)
         ax.dist=10
@@ -160,4 +164,6 @@ bbox   = [[0,1],[0,1],[0,1]]
 grid   = Voronoigrid(points,bbox=bbox)
 
 icells = np.where(grid.cell_volumes>0)[0]
-grid.visualize_cell(icells[1],alpha=0.8)
+#grid.visualize_cells(icells[1],alpha=0.8)
+grid.visualize_cells(icells[10:20],alpha=0.8)
+#grid.visualize_cells(icells,alpha=0.8)
