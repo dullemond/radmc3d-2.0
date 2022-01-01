@@ -127,7 +127,7 @@ class Voronoigrid(object):
         self.n_cells_closed = len(np.where((self.cell_volumes>0.0))[0])
         self.volume_total   = self.cell_volumes.sum()
 
-    def visualize_cells(self,icells,alpha=0.9,colors="C1"):
+    def visualize_cells(self,icells,alpha=0.9,colors="C1",bbox=None):
         import mpl_toolkits.mplot3d as a3
         vor    = self.vor
         if np.isscalar(icells):
@@ -145,8 +145,9 @@ class Voronoigrid(object):
         ax.dist=10
         ax.azim=30
         ax.elev=10
-        if self.bbox is not None:
+        if bbox is None:
             bbox = self.bbox
+        if bbox is not None:
             ax.set_xlim([bbox[0][0],bbox[0][1]])
             ax.set_ylim([bbox[1][0],bbox[1][1]])
             ax.set_zlim([bbox[2][0],bbox[2][1]])
@@ -159,11 +160,12 @@ z      = np.random.random(npt)
 
 points = np.vstack([x,y,z]).T
 
-bbox   = [[0,1],[0,1],[0,1]]
+#bbox   = [[0,1],[0,1],[0,1]]
+bbox   = None
 
 grid   = Voronoigrid(points,bbox=bbox)
 
 icells = np.where(grid.cell_volumes>0)[0]
 #grid.visualize_cells(icells[1],alpha=0.8)
-grid.visualize_cells(icells[10:20],alpha=0.8)
-#grid.visualize_cells(icells,alpha=0.8)
+#grid.visualize_cells(icells[10:20],alpha=0.8)
+grid.visualize_cells(icells,alpha=0.8,bbox=[[-1.5,2.5],[-1.5,2.5],[-1.5,2.5]])
