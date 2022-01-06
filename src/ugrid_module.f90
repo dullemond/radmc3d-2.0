@@ -1241,8 +1241,15 @@ contains
                 read(1) nn
                 ugrid_wall_iverts(iwall,ivert)=nn
              enddo
+             ugrid_wall_nverts(iwall) = 0
              do ivert=1,ugrid_wall_max_nr_verts
                 if(ugrid_wall_iverts(iwall,ivert).gt.0) then
+                   if(ugrid_wall_nverts(iwall).ne.ivert-1) then
+                      write(*,*) 'Error: In list of vertices for each wall '
+                      write(*,*) '       all valid vertices must be listed contiguously.'
+                      write(*,*) '       This appears not to be the case for iwall = ',iwall
+                      stop 7344
+                   endif
                    ugrid_wall_nverts(iwall) = ivert
                 endif
              enddo
