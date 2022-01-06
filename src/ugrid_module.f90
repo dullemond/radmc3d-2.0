@@ -103,6 +103,8 @@ module ugrid_module
   integer, allocatable :: ugrid_cell_iverts(:,:)           ! For each cell: the indices of the vertices (if stored)
   integer, allocatable :: ugrid_cell_nverts(:)             ! For each cell: the number of vertices per cell (if stored)
   integer, allocatable :: ugrid_cell_nwalls(:)             ! For each cell: the number of walls
+  integer, allocatable :: ugrid_vert_icells(:,:)           ! For each vert: the indices of the cells (if stored)
+  integer, allocatable :: ugrid_vert_ncells(:)             ! For each vert: the number of cells per vertex (if stored)
   double precision, allocatable :: ugrid_cell_volume(:)    ! For each cell: the volume
   double precision, allocatable :: ugrid_cell_size(:)      ! For each cell: the "typical" linear size (useful for estimates)
   double precision, allocatable :: ugrid_wall_s(:,:)       ! For each wall: the support vector
@@ -786,9 +788,80 @@ contains
   end subroutine ugrid_find_next_location
   
   !------------------------------------------------------------------
-  !                      Subbox subroutines
+  !              Subbox and interpolation subroutines
   !------------------------------------------------------------------
 
+  subroutine ugrid_create_list_cells_per_vertex()
+    implicit none
+    integer :: icell,ivert,maxncells,iivert
+    if((ugrid_nverts.le.0).or.(.not.allocated(ugrid_vertices))) then
+       write(*,*) 'ERROR: If you want to create the list of cells per vertex'
+       write(*,*) '       you must first read the vertices.'
+       stop 4453
+    endif
+    if(.not.allocated(ugrid_cell_iverts)) then
+       write(*,*) 'ERROR: If you want to create the list of cells per vertex'
+       write(*,*) '       you must first create the list of vertices per cell.'
+       stop 4454
+    endif
+    allocate(ugrid_vert_ncells(ugrid_nverts))
+    !
+    ! First find the max nr of cells per vertex
+    !
+    do icell=1,ugrid_ncells
+       do ivert=1,ugrid_cell_nverts(icell)
+          iivert = ugrid_cell_iverts(icell,ivert)
+          if(iivert.le.0) stop 7337
+          ugrid_vert_ncells(iivert) = ugrid_vert_ncells(iivert) + 1
+       enddo
+    enddo
+    maxncells = 0
+    do ivert=1,ugrid_nverts
+       if(ugrid_vert_ncells(ivert).gt.maxncells) then
+          maxncells = ugrid_vert_ncells(ivert)
+       endif
+    enddo
+    if(maxncells.ne.ugrid_vert_max_nr_cells) then
+       write(*,*) 'NOTE: Counted ',maxncells,' max nr of cells per vertex. '
+       write(*,*) 'File said: ',ugrid_vert_max_nr_cells,'. Taking ',maxncells
+       ugrid_cell_max_nr_walls = maxncells
+    endif
+    !
+    ! Now associate the cells to the vertices
+    !
+    allocate(ugrid_vert_icells(ugrid_nverts,ugrid_cell_max_nr_walls))
+    ugrid_vert_ncells(:) = 0
+    do icell=1,ugrid_ncells
+       do ivert=1,ugrid_cell_nverts(icell)
+          iivert = ugrid_cell_iverts(icell,ivert)
+          if(iivert.le.0) stop 7337
+          ugrid_vert_ncells(iivert) = ugrid_vert_ncells(iivert) + 1
+          ugrid_vert_icells(iivert,ugrid_vert_ncells(iivert)) = icell
+       enddo
+    enddo
+  end subroutine ugrid_create_list_cells_per_vertex
+
+  subroutine ugrid_interpolate_from_cells_to_vertices(nv,ncells,nverts,funccell,funcvert)
+    implicit none
+    integer :: nv,ncells,nverts,icell,ivert,iicell
+    double precision :: funccell(nv,ncells),funcvert(nv,nverts),dum(nv)
+    if(.not.allocated(ugrid_vert_icells)) then
+       write(*,*) 'ERROR: Can only interpolate to the vertices if '
+       write(*,*) '       ugrid_vert_icells array is constructed.'
+       stop 3347
+    endif
+    do ivert=1,ugrid_nverts
+       dum(:) = 0.d0
+       do icell=1,ugrid_vert_ncells(ivert)
+          iicell = ugrid_vert_icells(ivert,icell)
+          if(iicell.le.0) stop 4438
+          dum(:) = dum(:) + funccell(:,iicell)
+       enddo
+       dum(:) = dum(:) / ugrid_vert_ncells(ivert)
+       funcvert(:,ivert) = dum(:)
+    enddo
+  end subroutine ugrid_interpolate_from_cells_to_vertices
+  
   subroutine ugrid_invert_matrix(m)
     implicit none
     double precision :: m(1:3,1:3),c(1:3,1:3),det
@@ -1520,6 +1593,8 @@ contains
     if(allocated(ugrid_cell_size))    deallocate(ugrid_cell_size)
     if(allocated(ugrid_wall_s)     )  deallocate(ugrid_wall_s)     
     if(allocated(ugrid_wall_n)     )  deallocate(ugrid_wall_n)     
+    if(allocated(ugrid_vert_ncells))  deallocate(ugrid_vert_ncells)
+    if(allocated(ugrid_vert_icells))  deallocate(ugrid_vert_icells)
     if(allocated(ugrid_vertices)   )  deallocate(ugrid_vertices)   
     if(allocated(ugrid_cellcenters))  deallocate(ugrid_cellcenters)
     if(allocated(ugrid_bary_matinv))  deallocate(ugrid_bary_matinv)
