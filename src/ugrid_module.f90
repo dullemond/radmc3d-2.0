@@ -101,6 +101,7 @@ module ugrid_module
   integer, allocatable :: ugrid_cell_iwalls(:,:)           ! For each cell: the indices of the cell walls
   integer, allocatable :: ugrid_cell_sgnwalls(:,:)         ! For each cell: the orientation of the cell walls (is n pointing outward = +1 or inward = -1)
   integer, allocatable :: ugrid_cell_iverts(:,:)           ! For each cell: the indices of the vertices (if stored)
+  integer, allocatable :: ugrid_cell_nverts(:)             ! For each cell: the number of vertices per cell (if stored)
   integer, allocatable :: ugrid_cell_nwalls(:)             ! For each cell: the number of walls
   double precision, allocatable :: ugrid_cell_volume(:)    ! For each cell: the volume
   double precision, allocatable :: ugrid_cell_size(:)      ! For each cell: the "typical" linear size (useful for estimates)
@@ -108,6 +109,7 @@ module ugrid_module
   double precision, allocatable :: ugrid_wall_n(:,:)       ! For each wall: the normal vector
   double precision, allocatable :: ugrid_vertices(:,:)     ! The 3D locations of the vertices (if stored)
   double precision, allocatable :: ugrid_cellcenters(:,:)  ! The 3D locations of the cell centers (if stored)
+  double precision, allocatable :: ugrid_bary_matinv(:,:,:)! The inverse matrices used for barycentric interpolation (only for tetraeder grid)
 
   double precision :: ugrid_reltol = 1d-10      ! The relative tolerance of out of cell / out of wall / negative ds, compared to cell size
   
@@ -784,6 +786,262 @@ contains
   end subroutine ugrid_find_next_location
   
   !------------------------------------------------------------------
+  !                      Subbox subroutines
+  !------------------------------------------------------------------
+
+  subroutine ugrid_invert_matrix(m)
+    implicit none
+    double precision :: m(1:3,1:3),c(1:3,1:3),det
+    !
+    ! Compute the cofactor matrix
+    !
+    c(1,1) = m(2,2)*m(3,3)-m(2,3)*m(3,2)
+    c(1,2) = m(2,3)*m(3,1)-m(2,1)*m(3,3)
+    c(1,3) = m(2,1)*m(3,2)-m(2,2)*m(3,1)
+    c(2,1) = m(3,2)*m(1,3)-m(3,3)*m(1,2)
+    c(2,2) = m(3,3)*m(1,1)-m(3,1)*m(1,3)
+    c(2,3) = m(3,1)*m(1,2)-m(3,2)*m(1,1)
+    c(3,1) = m(1,2)*m(2,3)-m(1,3)*m(2,2)
+    c(3,2) = m(1,3)*m(2,1)-m(1,1)*m(2,3)
+    c(3,3) = m(1,1)*m(2,2)-m(1,2)*m(2,1)
+    !
+    ! Compute the determinant
+    !
+    det    = m(1,1)*c(1,1)+m(1,2)*c(1,2)+m(1,3)*c(1,3)
+    !det    = m(2,1)*c(2,1)+m(2,2)*c(2,2)+m(2,3)*c(2,3)
+    !det    = m(3,1)*c(3,1)+m(3,2)*c(3,2)+m(3,3)*c(3,3)
+    if(det.eq.0.d0) then
+       write(*,*) 'Zero determinant in 3x3 matrix.'
+       stop 7452
+    endif
+    !
+    ! Compute the inverse
+    !
+    m(1,1) = c(1,1)/det
+    m(1,2) = c(2,1)/det
+    m(1,3) = c(3,1)/det
+    m(2,1) = c(1,2)/det
+    m(2,2) = c(2,2)/det
+    m(2,3) = c(3,2)/det
+    m(3,1) = c(1,3)/det
+    m(3,2) = c(2,3)/det
+    m(3,3) = c(3,3)/det
+  end subroutine ugrid_invert_matrix
+  
+  subroutine ugrid_setup_barycentric_matrices()
+    implicit none
+    integer :: icell,ivert,icorner
+    double precision :: m(1:3,1:3),v4(1:3),d(1:3)
+    if(ugrid_cell_max_nr_verts.ne.4) then
+       write(*,*) 'ERROR: Barycentric interpolation: Only possible for tetraeder shaped cells!'
+       stop 9345
+    endif
+    allocate(ugrid_bary_matinv(ugrid_ncells,1:3,1:3))
+    do icell=1,ugrid_ncells
+       ivert    = ugrid_cell_iverts(icell,4)
+       if(ivert.le.0) then
+          write(*,*) 'ERROR: In interpolation in ugrid: vertex missing.'
+          stop 3687
+       endif
+       v4(1:3)  = ugrid_vertices(ivert,1:3)
+       do icorner=1,3
+          ivert          = ugrid_cell_iverts(icell,icorner)
+          if(ivert.le.0) then
+             write(*,*) 'ERROR: In interpolation in ugrid: vertex missing.'
+             stop 3687
+          endif
+          m(1:3,icorner) = ugrid_vertices(ivert,1:3)-v4(1:3)
+       enddo
+       call ugrid_invert_matrix(m)
+       do icorner=1,3
+          ugrid_bary_matinv(icell,icorner,1:3) = m(icorner,1:3)
+       enddo
+    enddo
+  end subroutine ugrid_setup_barycentric_matrices
+  
+  subroutine ugrid_barycentric_coords(icell,v,lam,tol)
+    implicit none
+    integer :: icell,icorner,ivert
+    double precision :: v(1:3),lam(1:4),matrix(1:3,1:3),dum(1:3),tol
+    if(icell.le.1) stop 3443
+    if(.not.allocated(ugrid_bary_matinv)) then
+       write(*,*) 'Error: For barycentric interpolation, need ugrid_bary_matinv array.'
+       stop 8723
+    endif
+    ivert    = ugrid_cell_iverts(icell,4)
+    dum(1:3) = v(1:3) - ugrid_vertices(ivert,1:3)
+    do icorner=1,3
+       lam(icorner) = ugrid_bary_matinv(icell,icorner,1)*dum(1) + &
+                      ugrid_bary_matinv(icell,icorner,2)*dum(2) + &
+                      ugrid_bary_matinv(icell,icorner,3)*dum(3)
+    enddo
+    lam(4) = 1.d0-lam(1)-lam(2)-lam(3)
+    do icorner=1,4
+       if(lam(icorner).lt.-tol) then
+          write(*,*) 'ERROR in ugrid_barycentric_coords(): interpolation out of cell.'
+          write(*,*) 'icell = ',icell
+          write(*,*) 'lam   = ',lam(1),lam(2),lam(3),lam(4)
+          stop 6639
+       endif
+    enddo
+  end subroutine ugrid_barycentric_coords
+
+  subroutine ugrid_interpol_from_vertices(nv,nverts,x,y,z,func,res)
+    implicit none
+    integer :: nv,nverts,iv
+    double precision x,y,z
+    double precision :: func(nv,nverts),res(nv),dummy,lam(1:4),tol,v(1:3)
+    integer :: cellindex,icorner,ivert
+    if(nverts.ne.ugrid_nverts) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       physical values must be given at the vertices.'
+       if(nverts.ne.ugrid_ncells) then
+          write(*,*) '       Not at the cell centers!'
+       endif
+       write(*,*) '       The length of the array is unequal to number of vertices.'
+       stop 5652
+    endif
+    if(.not.allocated(ugrid_cell_iverts)) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       ugrid_cell_iverts array must be allocated.'
+       stop 5652
+    endif
+    if(.not.allocated(ugrid_vertices)) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       ugrid_vertices array must be allocated.'
+       stop 5652
+    endif
+    res(1:nv) = 0.d0
+    call ugrid_findcell_by_walking(x,y,z,cellindex)
+    if(cellindex.gt.0) then
+       tol = ugrid_reltol * ugrid_cell_size(cellindex)
+       if(tol.eq.0.d0) then
+          write(*,*) 'In cell ',cellindex,' cell_size is zero.'
+          stop 3699
+       endif
+       v(1) = x
+       v(2) = y
+       v(3) = z
+       call ugrid_barycentric_coords(cellindex,v,lam,tol)
+       do iv=1,nv
+          dummy = 0.d0
+          do icorner=1,4
+             ivert = ugrid_cell_iverts(cellindex,icorner)
+             if(ivert.le.0) then
+                write(*,*) 'ERROR: In interpolation in ugrid: vertex missing.'
+                stop 3687
+             endif
+             dummy = dummy + lam(icorner)*func(iv,ivert)
+          enddo
+          res(iv) = dummy
+       enddo
+    endif
+  end subroutine ugrid_interpol_from_vertices
+
+  subroutine ugrid_subbox(nv,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,  &
+                          phi1,theta,phi2,func,funcslice,    &
+                          interpol)
+    implicit none
+    integer :: nv,nc,nx,ny,nz
+    double precision :: x0,x1,y0,y1,z0,z1,x,y,z
+    double precision :: func(nv,nc),funcslice(nx,ny,nz,nv)
+    double precision :: xbk,ybk,zbk
+    double precision :: sinphi1,cosphi1,sinphi2,cosphi2,sintheta,costheta
+    double precision :: phi1,theta,phi2
+    double precision :: r,th,ph,pi,res(1:nv)
+    parameter(pi=3.14159265358979323846264338328d0)
+    integer :: ix,iy,iz,index,iv
+    logical :: interpol
+    !
+    ! Check if nc is correct
+    !
+    if(interpol) then
+       if(.not.allocated(ugrid_vertices)) then
+          write(*,*) 'If second order in ugrid_subbox(): Need to have ugrid_vertices allocated.'
+          stop 6385
+       endif
+       if(nc.ne.ugrid_nverts) then
+          write(*,*) 'In ugrid_subbox(): nc is not equal to ugrid_nverts.'
+          stop 6386
+       endif
+       if(ugrid_wall_max_nr_verts.ne.4) then
+          write(*,*) 'Sorry: In unstructured grids, interpolation only available for tetrad cells.'
+          stop 6387
+       endif
+    else
+       if(nc.ne.ugrid_ncells) then
+          write(*,*) 'In ugrid_subbox(): nc is not equal to ugrid_ncells.'
+          stop 6386
+       endif
+    endif
+    !
+    ! Rotation trigonometry of the box
+    !
+    sinphi1  = sin(phi1*pi/180.)
+    cosphi1  = cos(phi1*pi/180.)
+    sintheta = sin(theta*pi/180.)
+    costheta = cos(theta*pi/180.)
+    sinphi2  = sin(phi2*pi/180.)
+    cosphi2  = cos(phi2*pi/180.)
+    !
+    ! Loop over all subbox grid points
+    !
+    do iz=1,nz
+       do iy=1,ny
+          do ix=1,nx
+             !
+             ! Get the (x,y,z) position
+             !
+             x = x0 + (x1-x0)*(ix-0.5d0)/(nx*1.d0)
+             y = y0 + (y1-y0)*(iy-0.5d0)/(ny*1.d0)
+             z = z0 + (z1-z0)*(iz-0.5d0)/(nz*1.d0)
+             !
+             ! Now make an optional rotation
+             !
+             xbk = x
+             ybk = y
+             x   = cosphi1 * xbk + sinphi1 * ybk
+             y   =-sinphi1 * xbk + cosphi1 * ybk
+             ybk = y
+             zbk = z
+             y   = costheta * ybk - sintheta * zbk
+             z   = sintheta * ybk + costheta * zbk
+             xbk = x
+             ybk = y
+             x   = cosphi2 * xbk + sinphi2 * ybk
+             y   =-sinphi2 * xbk + cosphi2 * ybk
+             !
+             ! Now get the values from the grid
+             !
+             if(interpol) then
+                !
+                ! Interpolate in the ugrid
+                !
+                call ugrid_interpol_from_vertices(nv,ugrid_nverts,x,y,z,func,res)
+             else
+                !
+                ! Find the cell
+                !
+                call ugrid_findcell_by_walking(x,y,z,index)
+                !
+                ! Take from the cell
+                !
+                if(index.ge.1) then
+                   res(:) = func(:,index)
+                else
+                   res(:) = 0.d0
+                endif
+             endif
+             !
+             ! Put into the slice
+             !
+             funcslice(ix,iy,iz,:) = res(:)
+          enddo
+       enddo
+    enddo
+  end subroutine ugrid_subbox
+  
+  !------------------------------------------------------------------
   !                     Reading the grid file
   !------------------------------------------------------------------
 
@@ -1177,6 +1435,7 @@ contains
     if(allocated(ugrid_cell_iwalls))  deallocate(ugrid_cell_iwalls)
     if(allocated(ugrid_cell_sgnwalls))deallocate(ugrid_cell_sgnwalls)
     if(allocated(ugrid_cell_iverts))  deallocate(ugrid_cell_iverts)
+    if(allocated(ugrid_cell_nverts))  deallocate(ugrid_cell_nverts)
     if(allocated(ugrid_cell_nwalls))  deallocate(ugrid_cell_nwalls)
     if(allocated(ugrid_cell_volume))  deallocate(ugrid_cell_volume)
     if(allocated(ugrid_cell_size))    deallocate(ugrid_cell_size)
@@ -1184,6 +1443,7 @@ contains
     if(allocated(ugrid_wall_n)     )  deallocate(ugrid_wall_n)     
     if(allocated(ugrid_vertices)   )  deallocate(ugrid_vertices)   
     if(allocated(ugrid_cellcenters))  deallocate(ugrid_cellcenters)
+    if(allocated(ugrid_bary_matinv))  deallocate(ugrid_bary_matinv)
   end subroutine ugrid_cleanup
   
 end module ugrid_module
