@@ -1051,13 +1051,16 @@ contains
     logical :: fex1,fex3,success
     integer :: isavcen,isavvert,isavsize,iconv
     integer :: idum,iformat,idum1,idum2,counthullw,countopens
-    integer :: maxnwalls,iiwall
+    integer :: maxnwalls,iiwall,iivert,maxnverts,ivscan,ivcount
     integer(kind=8) :: iiformat,nn,kk,precis
     double precision :: vec1(1:3),vec2(1:3),vec3(1:3),inp
+    integer, allocatable :: iverts(:)
+    logical :: gotit
     call ugrid_cleanup()
     counthullw = 0
     countopens = 0
     maxnwalls  = 0
+    maxnverts  = 0
     !
     ! Check which file exists
     !
@@ -1414,6 +1417,75 @@ contains
     call ugrid_check_cell_wall_normals()
     if(allocated(ugrid_vertices)) then
        call ugrid_check_cell_wall_supvec()
+    endif
+    !
+    ! If the vertices are read, then link them also to the cells
+    !
+    if(isavvert.ne.0) then
+       allocate(ugrid_cell_nverts(ugrid_ncells))
+       !
+       ! Count the max number of vertices per cell
+       !
+       ivcount = ugrid_cell_max_nr_walls*ugrid_wall_max_nr_verts
+       if(ivcount.le.0) stop 9031
+       allocate(iverts(ivcount))
+       do icell=1,ugrid_ncells
+          ivcount = 0
+          do iwall=1,ugrid_cell_nwalls(icell)
+             iiwall = ugrid_cell_iwalls(icell,iwall)
+             do ivert=1,ugrid_wall_nverts(iiwall)
+                iivert = ugrid_wall_iverts(iiwall,ivert)
+                if(iivert.le.0) stop 3301
+                gotit  = .false.
+                if(ivcount.gt.0) then
+                   do ivscan=1,ivcount
+                      if(iivert.eq.iverts(ivscan)) gotit=.true.
+                   enddo
+                endif
+                if(.not.gotit) then
+                   ivcount = ivcount + 1
+                   iverts(ivcount) = iivert
+                endif
+             enddo
+          enddo
+          ugrid_cell_nverts(icell) = ivcount
+          if(ivcount.gt.maxnverts) then
+             maxnverts = ivcount
+          endif
+       enddo
+       if(maxnverts.ne.ugrid_cell_max_nr_verts) then
+          write(*,*) 'NOTE: Counted ',maxnverts,' as the max nr of vertices per cell. '
+          write(*,*) '      File said: ',ugrid_cell_max_nr_verts,'. Taking ',maxnverts
+          ugrid_cell_max_nr_verts = maxnverts
+       endif
+       !
+       ! Now insert the vertex indices into the cells
+       !
+       allocate(ugrid_cell_iverts(ugrid_ncells,ugrid_cell_max_nr_verts))
+       do icell=1,ugrid_ncells
+          ivcount = 0
+          do iwall=1,ugrid_cell_nwalls(icell)
+             iiwall = ugrid_cell_iwalls(icell,iwall)
+             do ivert=1,ugrid_wall_nverts(iiwall)
+                iivert = ugrid_wall_iverts(iiwall,ivert)
+                if(iivert.le.0) stop 3301
+                gotit  = .false.
+                if(ivcount.gt.0) then
+                   do ivscan=1,ivcount
+                      if(iivert.eq.iverts(ivscan)) gotit=.true.
+                   enddo
+                endif
+                if(.not.gotit) then
+                   ivcount = ivcount + 1
+                   iverts(ivcount) = iivert
+                endif
+             enddo
+          enddo
+          do ivert=1,ivcount
+             ugrid_cell_iverts(icell,ivert) = iverts(ivert)
+          enddo
+       enddo
+       deallocate(iverts)
     endif
     !
     ! Signal
