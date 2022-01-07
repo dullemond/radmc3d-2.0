@@ -383,6 +383,16 @@ class Delaunaygrid(object):
                     data = self.vertices
                     np.savetxt(f,data)                         # Write the vertices
 
+    def interpolate_to_cell_centers(self,q_at_vertices):
+        shape         = list(q_at_vertices.shape)
+        shape[0]      = self.ncells
+        q_in_cells    = np.zeros(shape)
+        for icorner in range(4):
+            iverts         = self.cell_iverts[:,icorner]
+            q_in_cells[:] += q_at_vertices[iverts]
+        q_in_cells /= 4
+        return q_in_cells
+
 #
 # EXAMPLE (uncomment to try)
 # 
