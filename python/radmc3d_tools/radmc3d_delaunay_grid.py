@@ -47,15 +47,6 @@ class Delaunaygrid(object):
         self.ncells_open = 0
         self.icells_open = np.array([])
         #
-        # Compute the cell volumes. This also automatically notices
-        # which points correspond to "real" cells (with a finite volume)
-        # and which points correspond to "open" regions going out to
-        # infinity (with an infinite volume). These "open" regions are
-        # marked by a volume = 0.0
-        #
-        print('Computing the cell volumes...')
-        self.compute_cell_volumes()
-        #
         # Create cell center points
         #
         self.create_cell_centers()
@@ -67,19 +58,34 @@ class Delaunaygrid(object):
         print('Linking the cell walls back to the cells...')
         self.link_walls_to_cells()
         #
+        # Link vertices to cells
+        #
+        print('Linking the vertices back to the cells...')
+        self.link_vertices_to_cells()
+        #
+        # Compute the cell volumes
+        #
+        print('Computing the cell volumes...')
+        self.compute_cell_volumes()
+        #
         # Compute some diagnostics
         #
         self.compute_diagnostics()
 
-    def compute_cell_volumes(self):
+    def compute_cell_volumes(self,useCH=False):
         """
         Compute the volume of the Delaunay cells
         """
         self.cell_volumes = np.zeros(self.ncells)
-        #for i in range(self.tri.nsimplex):  # Without progress bar
-        for i in tqdm(range(self.ncells)):
-            indices = self.tri.simplices[i]
-            self.cell_volumes[i] = ConvexHull(self.vertices[indices]).volume
+        if useCH:
+            #for i in range(self.tri.nsimplex):  # Without progress bar
+            for i in tqdm(range(self.ncells)):
+                indices = self.tri.simplices[i]
+                self.cell_volumes[i] = ConvexHull(self.vertices[indices]).volume
+        else:
+            v  = self.vertices[self.cell_iverts]
+            cp = self.crossp((v[:,1,:]-v[:,-1,:]),(v[:,2,:]-v[:,-1,:]))
+            self.cell_volumes = np.abs(((v[:,0,:]-v[:,-1,:])*cp).sum(axis=1))/6
 
     def create_cell_centers(self):
         self.cell_points = self.tri.points[self.tri.simplices,:].mean(axis=1)
@@ -235,6 +241,18 @@ class Delaunaygrid(object):
             if icell>=0:
                 self.cell_iwalls[icell].append(i)
                 self.cell_wsign[icell].append(-1)
+
+    def link_vertices_to_cells(self):
+        self.cell_iverts = [ [] for _ in range(self.ncells) ]
+        for iwall in range(self.nwalls):
+            icell = self.wall_icells[iwall,0]
+            self.cell_iverts[icell] += list(self.wall_iverts[iwall])
+            icell = self.wall_icells[iwall,1]
+            if icell>=0:
+                self.cell_iverts[icell] += list(self.wall_iverts[iwall])
+        for icell in range(self.ncells):
+            self.cell_iverts[icell] = np.array(list(set(self.cell_iverts[icell])))
+        self.cell_iverts = np.array(self.cell_iverts)
 
     def compute_diagnostics(self):
         self.ncells_closed = self.ncells
