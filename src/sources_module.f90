@@ -473,11 +473,15 @@ subroutine lines_compute_and_store_local_populations(action)
   !
   ! Now do the big loop over all cells
   !
-  call amr_resetcount()
-  call amr_nextcell(index)
-  do while(index.ge.0)
-     if(index.gt.0) then
-        !
+  ! NOTE: For some strange reason I used the amr_nextcell() method
+  !       here before 2022.01.06. But that method is only meant for
+  !       the I/O. Strange. I now make it a loop over icells again
+  !       so that it also works for the unstructured grids. I hope
+  !       that that does not accidently break the code, but I think
+  !       that it should be ok.
+  !
+  do index=1,nrcells
+     !
         ! Compute the local level populations
         !
         if(lines_mode.eq.1) then
@@ -641,8 +645,6 @@ subroutine lines_compute_and_store_local_populations(action)
            endif
         enddo
         !
-     endif
-     call amr_nextcell(index)
   enddo
   !
   ! Message about the nr of iterations
