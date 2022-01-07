@@ -649,8 +649,6 @@ program radmc3d
      if(amrray_mirror_equator) then
         igrid_mirror = 1
      endif
-  else
-     stop 1400
   endif
   !
   ! If lines are included in the model, we now check for the maximum

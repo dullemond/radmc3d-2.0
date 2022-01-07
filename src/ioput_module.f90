@@ -974,6 +974,7 @@ subroutine read_grid_file()
      if(igrid_type.lt.0) stop 4092
      igrid_coord = amr_coordsystem
   elseif(fex_ugrid) then
+     igrid_type = 201
      call ugrid_read_grid(success)
      if(.not.success) then
         write(stdo,*) 'ERROR: In read_grid_file(): Reading unstr_grid.*inp failed.'
@@ -1917,8 +1918,9 @@ subroutine do_subbox_extract_and_write(nv,nc,subboxfilename,           &
         stop 5092
      endif
   else
-     write(stdo,*) 'ERROR: No other grid types than regular are allowed yet.'
-     stop
+     call ugrid_subbox(nv,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,     &
+                          phi1,theta,phi2,func,funcslice,    &
+                          .false.)
   endif
   !
   ! Now write to a file
@@ -1974,8 +1976,9 @@ subroutine do_subbox_levelpop_extract_and_write(nvm1,nv1,nv2,nc,ispec,     &
         stop 5092
      endif
   else
-     write(stdo,*) 'ERROR: No other grid types than regular are allowed yet.'
-     stop
+     call ugrid_subbox2(nvm1,nv2,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,     &
+                          phi1,theta,phi2,func,funcslice,           &
+                          .false.)
   endif
   !
   ! Now write to a file
@@ -2089,7 +2092,7 @@ subroutine do_sample_extract_and_write(nv,nc,samplefilename,           &
         stop 5192
      endif
   else
-     write(stdo,*) 'ERROR: No other grid types than regular are allowed yet.'
+     write(stdo,*) 'ERROR: Sampling: No other grid types than regular are allowed yet.'
      stop
   endif
   !
@@ -2145,7 +2148,7 @@ subroutine do_sample_levelpop_extract_and_write(nvm1,nv1,nv2,nc,ispec, &
         stop 5192
      endif
   else
-     write(stdo,*) 'ERROR: No other grid types than regular are allowed yet.'
+     write(stdo,*) 'ERROR: Sampling: No other grid types than regular are allowed yet.'
      stop
   endif
   !

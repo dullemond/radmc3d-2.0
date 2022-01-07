@@ -385,7 +385,7 @@ contains
   subroutine ugrid_check_cell_wall_supvec()
     implicit none
     integer :: iwall,ivert,icell
-    double precision :: va(1:3),vb(1:3),vc(1:3),n(1:3),inp,tol
+    double precision :: va(1:3),vb(1:3),vc(1:3),n(1:3),inp,tol,len
     if(allocated(ugrid_vertices)) then
        do iwall=1,ugrid_nwalls
           icell   = ugrid_wall_icells(iwall,1)
@@ -401,10 +401,20 @@ contains
              n(1)    = va(2)*vb(3) - va(3)*vb(2)
              n(2)    = va(3)*vb(1) - va(1)*vb(3)
              n(3)    = va(1)*vb(2) - va(2)*vb(1)
+             len     = n(1)**2 + n(2)**2 + n(3)**2
+             n(1)    = n(1) / len
+             n(2)    = n(2) / len
+             n(3)    = n(3) / len
              inp     = abs(n(1)*vc(1)+n(2)*vc(2)+n(3)*vc(3))
              if(inp.gt.tol) then
                 write(*,*) 'Error: Cell wall ',iwall,' has support vector that is not in '
                 write(*,*) 'the plane spanned by its vertices. Inner product = ',inp
+                write(*,*) 'The three vectors va=v_1-s, vb=v_2-s and vc=v_3-s are:'
+                write(*,*) va
+                write(*,*) vb
+                write(*,*) vc
+                write(*,*) 'The normal vector of the wall is:'
+                write(*,*) n
                 stop 5942
              endif
           endif
@@ -432,6 +442,9 @@ contains
           call ugrid_point_in_wall_plane(iwallcurr,v,tol,inwall,dist)
           if(.not.inwall) then
              write(*,*) 'ERROR: Photon out of cell ',icell,'! Distance to cell wall ',iwallcurr,' = ',dist
+             write(*,*) '       Further information: Cell volume        = ',ugrid_cell_volume(icell)
+             write(*,*) '       Further information: Cell size estimate = ',ugrid_cell_size(icell)
+             write(*,*) '       Tolerance = ',tol
              stop 8520
           endif
        endif
@@ -1013,6 +1026,62 @@ contains
     endif
   end subroutine ugrid_interpol_vectorfield_from_vertices
 
+  subroutine ugrid_interpol_tensorfield_from_vertices(nv1,nv2,nverts,x,y,z,cellindex,func,res)
+    implicit none
+    integer :: nv1,nv2,nverts,iv1,iv2
+    double precision x,y,z
+    double precision :: func(nv1,nv2,nverts),res(nv1,nv2),dummy,lam(1:4),tol,v(1:3)
+    integer :: cellindex,icorner,ivert
+    if(nverts.ne.ugrid_nverts) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       physical values must be given at the vertices.'
+       if(nverts.ne.ugrid_ncells) then
+          write(*,*) '       Not at the cell centers!'
+       endif
+       write(*,*) '       The length of the array is unequal to number of vertices.'
+       stop 5652
+    endif
+    if(.not.allocated(ugrid_cell_iverts)) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       ugrid_cell_iverts array must be allocated.'
+       stop 5652
+    endif
+    if(.not.allocated(ugrid_vertices)) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       ugrid_vertices array must be allocated.'
+       stop 5652
+    endif
+    res(:,:) = 0.d0
+    if(cellindex.le.0) then
+       call ugrid_findcell_by_walking(x,y,z,cellindex)
+    endif
+    if(cellindex.gt.0) then
+       tol = ugrid_reltol * ugrid_cell_size(cellindex)
+       if(tol.eq.0.d0) then
+          write(*,*) 'In cell ',cellindex,' cell_size is zero.'
+          stop 3699
+       endif
+       v(1) = x
+       v(2) = y
+       v(3) = z
+       call ugrid_barycentric_coords(cellindex,v,lam,tol)
+       do iv1=1,nv1
+          do iv2=1,nv2
+             dummy = 0.d0
+             do icorner=1,4
+                ivert = ugrid_cell_iverts(cellindex,icorner)
+                if(ivert.le.0) then
+                   write(*,*) 'ERROR: In interpolation in ugrid: vertex missing.'
+                   stop 3687
+                endif
+                dummy = dummy + lam(icorner)*func(iv1,iv2,ivert)
+             enddo
+             res(iv1,iv2) = dummy
+          enddo
+       enddo
+    endif
+  end subroutine ugrid_interpol_tensorfield_from_vertices
+
   subroutine ugrid_interpol_scalar_from_vertices(nverts,x,y,z,cellindex,func,res)
     implicit none
     integer :: nverts
@@ -1167,6 +1236,109 @@ contains
        enddo
     enddo
   end subroutine ugrid_subbox
+  
+  subroutine ugrid_subbox2(nv1,nv2,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,  &
+                          phi1,theta,phi2,func,funcslice,          &
+                          interpol)
+    implicit none
+    integer :: nv1,nv2,nc,nx,ny,nz
+    double precision :: x0,x1,y0,y1,z0,z1,x,y,z
+    double precision :: func(nv1,nv2,nc),funcslice(nx,ny,nz,nv1,nv2)
+    double precision :: xbk,ybk,zbk
+    double precision :: sinphi1,cosphi1,sinphi2,cosphi2,sintheta,costheta
+    double precision :: phi1,theta,phi2
+    double precision :: r,th,ph,pi,res(1:nv1,1:nv2)
+    parameter(pi=3.14159265358979323846264338328d0)
+    integer :: ix,iy,iz,index,iv
+    logical :: interpol
+    !
+    ! Check if nc is correct
+    !
+    if(interpol) then
+       if(.not.allocated(ugrid_vertices)) then
+          write(*,*) 'If second order in ugrid_subbox(): Need to have ugrid_vertices allocated.'
+          stop 6385
+       endif
+       if(nc.ne.ugrid_nverts) then
+          write(*,*) 'In ugrid_subbox(): nc is not equal to ugrid_nverts.'
+          stop 6386
+       endif
+       if(ugrid_wall_max_nr_verts.ne.4) then
+          write(*,*) 'Sorry: In unstructured grids, interpolation only available for tetrad cells.'
+          stop 6387
+       endif
+    else
+       if(nc.ne.ugrid_ncells) then
+          write(*,*) 'In ugrid_subbox(): nc is not equal to ugrid_ncells.'
+          stop 6386
+       endif
+    endif
+    !
+    ! Rotation trigonometry of the box
+    !
+    sinphi1  = sin(phi1*pi/180.)
+    cosphi1  = cos(phi1*pi/180.)
+    sintheta = sin(theta*pi/180.)
+    costheta = cos(theta*pi/180.)
+    sinphi2  = sin(phi2*pi/180.)
+    cosphi2  = cos(phi2*pi/180.)
+    !
+    ! Loop over all subbox grid points
+    !
+    do iz=1,nz
+       do iy=1,ny
+          do ix=1,nx
+             !
+             ! Get the (x,y,z) position
+             !
+             x = x0 + (x1-x0)*(ix-0.5d0)/(nx*1.d0)
+             y = y0 + (y1-y0)*(iy-0.5d0)/(ny*1.d0)
+             z = z0 + (z1-z0)*(iz-0.5d0)/(nz*1.d0)
+             !
+             ! Now make an optional rotation
+             !
+             xbk = x
+             ybk = y
+             x   = cosphi1 * xbk + sinphi1 * ybk
+             y   =-sinphi1 * xbk + cosphi1 * ybk
+             ybk = y
+             zbk = z
+             y   = costheta * ybk - sintheta * zbk
+             z   = sintheta * ybk + costheta * zbk
+             xbk = x
+             ybk = y
+             x   = cosphi2 * xbk + sinphi2 * ybk
+             y   =-sinphi2 * xbk + cosphi2 * ybk
+             !
+             ! Now get the values from the grid
+             !
+             if(interpol) then
+                !
+                ! Interpolate in the ugrid
+                !
+                call ugrid_interpol_tensorfield_from_vertices(nv1,nv2,ugrid_nverts,x,y,z,-1,func,res)
+             else
+                !
+                ! Find the cell
+                !
+                call ugrid_findcell_by_walking(x,y,z,index)
+                !
+                ! Take from the cell
+                !
+                if(index.ge.1) then
+                   res(:,:) = func(:,:,index)
+                else
+                   res(:,:) = 0.d0
+                endif
+             endif
+             !
+             ! Put into the slice
+             !
+             funcslice(ix,iy,iz,:,:) = res(:,:)
+          enddo
+       enddo
+    enddo
+  end subroutine ugrid_subbox2
   
   !------------------------------------------------------------------
   !                     Reading the grid file

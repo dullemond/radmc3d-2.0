@@ -1430,12 +1430,12 @@ subroutine jitter_stars(fact)
         z1 = -1d+90
         do icell=1,ugrid_ncells
            if(ugrid_cell_volume(icell).gt.0.d0) then
-              if(ugrid_cellcenters(icell,1).lt.x0) x0 = ugrid_cell_size(icell)
-              if(ugrid_cellcenters(icell,2).lt.y0) y0 = ugrid_cell_size(icell)
-              if(ugrid_cellcenters(icell,3).lt.z0) z0 = ugrid_cell_size(icell)
-              if(ugrid_cellcenters(icell,1).gt.x1) x1 = ugrid_cell_size(icell)
-              if(ugrid_cellcenters(icell,2).gt.y1) y1 = ugrid_cell_size(icell)
-              if(ugrid_cellcenters(icell,3).gt.z1) z1 = ugrid_cell_size(icell)
+              if(ugrid_cellcenters(icell,1).lt.x0) x0 = ugrid_cellcenters(icell,1)
+              if(ugrid_cellcenters(icell,2).lt.y0) y0 = ugrid_cellcenters(icell,2)
+              if(ugrid_cellcenters(icell,3).lt.z0) z0 = ugrid_cellcenters(icell,3)
+              if(ugrid_cellcenters(icell,1).gt.x1) x1 = ugrid_cellcenters(icell,1)
+              if(ugrid_cellcenters(icell,2).gt.y1) y1 = ugrid_cellcenters(icell,2)
+              if(ugrid_cellcenters(icell,3).gt.z1) z1 = ugrid_cellcenters(icell,3)
            endif
         enddo
         szx = x1-x0
