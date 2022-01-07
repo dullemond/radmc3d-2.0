@@ -2755,6 +2755,7 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
      ! Now make next cell the current cell
      !
      ray_index = ray_indexnext
+     ray_curr_iwall = ray_next_iwall
      !
      ! Do the same for the pointers.
      ! This is grid type dependent.
@@ -2778,9 +2779,6 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
            amrray_iy_curr = -1
            amrray_iz_curr = -1
         endif
-     else
-        write(stdo,*) 'ERROR: This grid type not yet implemented'
-        stop
      endif
      !
   enddo
@@ -5710,6 +5708,7 @@ subroutine camera_ray1d_raytrace(nrfreq,x,y,z,dx,dy,dz,distance,celldxmin,&
      ! Now make next cell the current cell
      !
      ray_index = ray_indexnext
+     ray_curr_iwall = ray_next_iwall
      !
      ! Do the same for the pointers.
      ! This is grid type dependent.
@@ -5733,9 +5732,6 @@ subroutine camera_ray1d_raytrace(nrfreq,x,y,z,dx,dy,dz,distance,celldxmin,&
            amrray_iy_curr = -1
            amrray_iz_curr = -1
         endif
-     else
-        write(stdo,*) 'ERROR: This grid type not yet implemented'
-        stop
      endif
      !
   enddo

@@ -522,23 +522,6 @@ subroutine montecarlo_init(params,ierr,mcaction,resetseed)
   !
   call read_dust_density(1)
   !
-  ! Get some information about the grid
-  !
-  if(igrid_type.eq.101) then
-     !
-     ! The Delaunay triangulated grid
-     !
-     write(stdo,*) 'NOT YET READY: Delaunay unstructured grid'
-     stop
-  endif
-  if(igrid_type.eq.201) then
-     !
-     ! The Voronoi grid
-     !
-     write(stdo,*) 'NOT YET READY: Voronoi unstructured grid'
-     stop
-  endif
-  !
   ! For which kind of Monte Carlo simulation are we going to initialize?
   !
   if(mcaction.eq.1) then
@@ -3348,6 +3331,10 @@ subroutine do_lambda_starlight_single_scattering(params,ierror,scatsrc,meanint)
   !
   ! Some consistency checks
   ! 
+  if(igrid_type.ge.100) then
+     write(stdo,*) 'ERROR in single scattering mode: Unstructured grids not yet implemented.'
+     stop 9010
+  endif
   if(star_sphere) then
      write(stdo,*) 'ERROR in single scattering mode: finite-size stars not allowed.'
      stop 4096
@@ -3774,7 +3761,11 @@ subroutine do_lambda_starlight_single_scattering_simple(params,ierror,scatsrc,me
   doubleprecision :: pos(1:3),cellx0(1:3),cellx1(1:3),src4(1:4)
   !
   ! Some consistency checks
-  ! 
+  !
+  if(igrid_type.ge.100) then
+     write(stdo,*) 'ERROR in single scattering mode: Unstructured grids not yet implemented.'
+     stop 9010
+  endif
   if(star_sphere) then
      write(stdo,*) 'ERROR in single scattering mode: finite-size stars not allowed.'
      stop 4096
@@ -4221,9 +4212,16 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
         stop
      endif
   endif
+  if(params%mod_random_walk.and.(igrid_type.ge.100)) then
+     write(stdo,*) 'ERROR: Modied random walk not yet implemented with unstructured grids.'
+     write(stdo,*) '       But it should be fairly doable, so if you need it, please '
+     write(stdo,*) '       let me know.'
+     stop
+  endif
   !
   ! Reset
   !
+  ray_curr_iwall = -1
   iqactive = 0
   mc_photon_destroyed = .false.
   !
@@ -4357,6 +4355,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
            !       the grid. Otherwise it becomes a nightmare.
            !
            ray_index = 0
+           ray_curr_iwall = -1
            !
            ! Now determine a random direction for the photon. One must,
            ! however, be careful here because the direction is NOT simply a 3-D
@@ -4453,6 +4452,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
            ! Which cell is this star in, if it is in the grid?
            !
            ray_index = star_cellindex(istar)
+           ray_curr_iwall = -1
            !
         endif
         !
@@ -4554,6 +4554,11 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      !
      ! ----- We have a photon emitted by one of the thermal boundaries -----
      !       NOTE: This should only happen in Cartesian coordinates
+     !
+     if(igrid_type.ge.100) then
+        write(*,*) 'ERROR: Thermal boundaries not yet implemented in unstructured grids.'
+        stop 9301
+     endif
      !
      ! Find which boundary
      !
@@ -4709,6 +4714,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      rn = ran2(iseed)
      call hunt(stellarsrc_lumcum,nrcells+1,rn,icell)
      ray_index = cellindex(icell)
+     ray_curr_iwall = -1
      !
      ! Find the position within the cell from where to emit
      !
@@ -4766,6 +4772,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      !       centered around the center of the coordinate system.
      !
      ray_index = 0
+     ray_curr_iwall = -1
      !
      ! Find a random point on the sphere
      !
@@ -4820,6 +4827,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      rn = ran2(iseed)
      call hunt(emisquant_cum,nrcells+1,rn,icell)
      ray_index = cellindex(icell)
+     ray_curr_iwall = -1
      !
      ! Find the position within the cell from where to emit
      !
@@ -4854,6 +4862,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      rn = ran2(iseed)
      call hunt(heatsource_cum,nrcells+1,rn,icell)
      ray_index = cellindex(icell)
+     ray_curr_iwall = -1
      !
      ! Find the position within the cell from where to emit
      !
@@ -4959,9 +4968,6 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
         amrray_iy_curr = -1
         amrray_iz_curr = -1
      endif
-  else
-     write(stdo,*) 'ERROR: This grid type not yet implemented'
-     stop
   endif
   !
   ! In case we use polarization, init the photpkg structure 
@@ -5533,6 +5539,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
   !
   ! Reset
   !
+  ray_curr_iwall = -1
   iqactive = 0
   mc_photon_destroyed = .false.
   ray_inu  = inu
@@ -5646,6 +5653,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
            !       the grid. Otherwise it becomes a nightmare.
            !
            ray_index = 0
+           ray_curr_iwall = -1
            !
            ! Now determine a random direction for the photon. One must,
            ! however, be careful here because the direction is NOT simply a 3-D
@@ -5742,6 +5750,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
            ! Which cell is this star in, if it is in the grid?
            !
            ray_index = star_cellindex(istar)
+           ray_curr_iwall = -1
            !
         endif
      else
@@ -5797,6 +5806,11 @@ subroutine walk_full_path_scat(params,inu,ierror)
      !
      ! ----- We have a photon emitted by one of the thermal boundaries -----
      !       NOTE: This should only happen in Cartesian coordinates
+     !
+     if(igrid_type.ge.100) then
+        write(*,*) 'ERROR: Thermal boundaries not yet implemented in unstructured grids.'
+        stop 9301
+     endif
      !
      ! Find which boundary
      !
@@ -5941,6 +5955,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
      rn = ran2(iseed)
      call hunt(stellarsrc_lumcum,nrcells+1,rn,icell)
      ray_index = cellindex(icell)
+     ray_curr_iwall = -1
      !
      ! Find the position within the cell from where to emit
      !
@@ -5987,6 +6002,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
      !       centered around the center of the coordinate system.
      !
      ray_index = 0
+     ray_curr_iwall = -1
      !
      ! Find a random point on the sphere
      !
@@ -6029,6 +6045,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
      rn = ran2(iseed)
      call hunt(emisquant_cum,nrcells+1,rn,icell)
      ray_index = cellindex(icell)
+     ray_curr_iwall = -1
      !
      ! Find the position within the cell from where to emit
      !
@@ -6051,6 +6068,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
      rn = ran2(iseed)
      call hunt(mc_cumulthermemis,nrcells+1,rn,icell)
      ray_index = cellindex(icell)
+     ray_curr_iwall = -1
      !
      ! Find the position within the cell from where to emit
      !
@@ -6129,9 +6147,6 @@ subroutine walk_full_path_scat(params,inu,ierror)
         amrray_iy_curr = -1
         amrray_iz_curr = -1
      endif
-  else
-     write(stdo,*) 'ERROR: This grid type not yet implemented'
-     stop
   endif
   !
   ! In case we use polarization, init the photpkg structure.
@@ -6308,6 +6323,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
   !
   ! Reset
   !
+  ray_curr_iwall = -1
   tau      = 0.d0
   ierror   = 0
   !
@@ -6399,8 +6415,14 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
         endif
         !
      else
-        write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
-        stop
+        !
+        ! Unstructured grid
+        !
+        call ugrid_find_next_location(ray_dsend,                  &
+             ray_cart_x,ray_cart_y,ray_cart_z,                    &
+             ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
+             ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
+             ray_next_iwall,arrived)
      endif
      !
      ! Path length
@@ -6585,6 +6607,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
      ! Now make next cell the current cell
      !
      ray_index = ray_indexnext
+     ray_curr_iwall = ray_next_iwall
      !
      ! Do the same for the pointers.
      ! This is grid type dependent.
@@ -6608,9 +6631,6 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
            amrray_iy_curr = -1
            amrray_iz_curr = -1
         endif
-     else
-        write(stdo,*) 'ERROR: This grid type not yet implemented'
-        stop
      endif
      !
      ! Now, if this new/next segment goes off to infinity, then
@@ -6661,6 +6681,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
   !
   ! Reset
   !
+  ray_curr_iwall = -1
   tau      = 0.d0
   ierror   = 0
   !
@@ -6787,12 +6808,13 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
                  write(stdo,*) 'INTERNAL ERROR: Non-Cart coordinates not yet implemented'
                  stop 
               endif
-           else
-              !
-              ! Unstructured grids not yet active
-              !
-              write(stdo,*) 'INTERNAL ERROR: Unstructured grids not yet implemented'
-              stop            
+           !else
+           !   !
+           !   ! Unstructured grids not yet active
+           !   !
+           !   ! For unstructured grids we do not need to do this checking
+           !   ! (hopefully).   
+           !   !stop            
            endif
         endif
      endif
@@ -6854,8 +6876,14 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
            mc_photon_destroyed = .false.
         endif
      else
-        write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
-        stop
+        !
+        ! Unstructured grid
+        !
+        call ugrid_find_next_location(ray_dsend,                  &
+             ray_cart_x,ray_cart_y,ray_cart_z,                    &
+             ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
+             ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
+             ray_next_iwall,arrived)
      endif
      !
      ! Path length
@@ -7640,6 +7668,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
      ! Now make next cell the current cell
      !
      ray_index = ray_indexnext
+     ray_curr_iwall = ray_next_iwall
      !
      ! Do the same for the pointers.
      ! This is grid type dependent.
@@ -7663,9 +7692,6 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
            amrray_iy_curr = -1
            amrray_iz_curr = -1
         endif
-     else
-        write(stdo,*) 'ERROR: This grid type not yet implemented'
-        stop
      endif
      !
      ! Now, if this new/next segment goes off to infinity, then
@@ -7708,6 +7734,7 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
   !
   ! Reset
   !
+  ray_curr_iwall = -1
   tau       = 0.d0
   stot      = 0.d0
   sprev     = 0.d0
@@ -7774,12 +7801,13 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
                  write(stdo,*) 'INTERNAL ERROR: Non-Cart coordinates not yet implemented'
                  stop 
               endif
-           else
-              !
-              ! Unstructured grids not yet active
-              !
-              write(stdo,*) 'INTERNAL ERROR: Unstructured grids not yet implemented'
-              stop            
+           !else
+           !   !
+           !   ! Unstructured grids not yet active
+           !   !
+           !   ! For unstructured grids we do not need to do this checking
+           !   ! (hopefully).   
+           !   stop
            endif
         endif
      endif
@@ -7825,8 +7853,14 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
            stop 162
         endif
      else
-        write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
-        stop
+        !
+        ! Unstructured grid
+        !
+        call ugrid_find_next_location(ray_dsend,                  &
+             ray_cart_x,ray_cart_y,ray_cart_z,                    &
+             ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
+             ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
+             ray_next_iwall,arrived)
      endif
      !
      ! Path length
@@ -7885,6 +7919,7 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
      ! Now make next cell the current cell
      !
      ray_index = ray_indexnext
+     ray_curr_iwall = ray_next_iwall
      !
      ! Do the same for the pointers.
      ! This is grid type dependent.
@@ -7908,9 +7943,6 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
            amrray_iy_curr = -1
            amrray_iz_curr = -1
         endif
-     else
-        write(stdo,*) 'ERROR: This grid type not yet implemented'
-        stop
      endif
   enddo
   !
@@ -8409,27 +8441,22 @@ subroutine montecarlo_random_pos_in_cell(icell)
         stop 4955
      endif
      !
-  elseif(igrid_type.eq.101) then
-     !
-     ! The Delaunay triangulated grid
-     !
-     write(stdo,*) 'NOT YET READY: Delaunay unstructured grid'
-     stop
-  elseif(igrid_type.eq.201) then
-     !
-     ! The Voronoi grid
-     !
-     ! Here we assume that the photon is emitted from the center of the
-     ! cell (**** APPROXIMATION ****), because for this gridding mode the
-     ! cell shape is too complex to easily find a correct random position.
-     ! 
-     ! **** TO BE IMPROVED ****
-     !
-     write(stdo,*) 'NOT YET READY: Voronoi unstructured grid'
-     stop
   else
-     write(stdo,*) 'ERROR: Grid type ',igrid_type,' not known.'
-     stop
+     !
+     ! For unstructured grids this is a non-trivial problem,
+     ! except of course for the simplest kind of cells (such
+     ! as tetraeders).
+     !
+     ! However, I think (!) that it should be a reasonable
+     ! approximation to just pick the center of the cell,
+     ! instead of a random point inside the cell. So that is
+     ! what we will do here.
+     !
+     ray_cart_x     = ugrid_cellcenters(ray_index,1)
+     ray_cart_y     = ugrid_cellcenters(ray_index,2)
+     ray_cart_z     = ugrid_cellcenters(ray_index,3)
+     ray_curr_iwall = -1
+     !
   endif
 end subroutine montecarlo_random_pos_in_cell
 
@@ -8668,9 +8695,10 @@ subroutine write_meanint_to_file()
      ! Do a stupidity check
      !
      if(nrcells.ne.amr_nrleafs) stop 3209
-     !
-     ! Open file and write the mean intensity to it
-     !
+  endif
+  !
+  ! Open file and write the mean intensity to it
+  !
      if(rto_style.eq.1) then
         !
         ! Write the mean intensity in ascii form
@@ -8723,17 +8751,10 @@ subroutine write_meanint_to_file()
              mc_nrfreq,1,inu,1,rto_reclen,                    &
              scalar1=mcscat_meanint)
      enddo
-     !
-     ! Close
-     !
-     close(1)
-  else
-     !
-     ! Other grids not yet implemented
-     !
-     write(stdo,*) 'ERROR: Only regular and AMR grids implemented'
-     stop
-  endif
+  !
+  ! Close
+  !
+  close(1)
   !
   ! If the grid is internally made, then we must make sure that
   ! the grid has been written to file, otherwise the output file
@@ -8788,6 +8809,7 @@ subroutine write_photon_statistics_to_file()
      ! Do a stupidity check
      !
      if(nrcells.ne.amr_nrleafs) stop 3209
+  endif
      !
      ! Open file and write the mean intensity to it
      !
@@ -8838,13 +8860,6 @@ subroutine write_photon_statistics_to_file()
      ! Close
      !
      close(1)
-  else
-     !
-     ! Other grids not yet implemented
-     !
-     write(stdo,*) 'ERROR: Only regular and AMR grids implemented'
-     stop
-  endif
   !
   ! If the grid is internally made, then we must make sure that
   ! the grid has been written to file, otherwise the output file
