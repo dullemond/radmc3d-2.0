@@ -959,7 +959,7 @@ contains
     enddo
   end subroutine ugrid_barycentric_coords
 
-  subroutine ugrid_interpol_from_vertices(nv,nverts,x,y,z,func,res)
+  subroutine ugrid_interpol_vectorfield_from_vertices(nv,nverts,x,y,z,cellindex,func,res)
     implicit none
     integer :: nv,nverts,iv
     double precision x,y,z
@@ -985,7 +985,9 @@ contains
        stop 5652
     endif
     res(1:nv) = 0.d0
-    call ugrid_findcell_by_walking(x,y,z,cellindex)
+    if(cellindex.le.0) then
+       call ugrid_findcell_by_walking(x,y,z,cellindex)
+    endif
     if(cellindex.gt.0) then
        tol = ugrid_reltol * ugrid_cell_size(cellindex)
        if(tol.eq.0.d0) then
@@ -1009,7 +1011,59 @@ contains
           res(iv) = dummy
        enddo
     endif
-  end subroutine ugrid_interpol_from_vertices
+  end subroutine ugrid_interpol_vectorfield_from_vertices
+
+  subroutine ugrid_interpol_scalar_from_vertices(nverts,x,y,z,cellindex,func,res)
+    implicit none
+    integer :: nverts
+    double precision x,y,z
+    double precision :: func(nverts),res,dummy,lam(1:4),tol,v(1:3)
+    integer :: cellindex,icorner,ivert
+    if(nverts.ne.ugrid_nverts) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       physical values must be given at the vertices.'
+       if(nverts.ne.ugrid_ncells) then
+          write(*,*) '       Not at the cell centers!'
+       endif
+       write(*,*) '       The length of the array is unequal to number of vertices.'
+       stop 5652
+    endif
+    if(.not.allocated(ugrid_cell_iverts)) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       ugrid_cell_iverts array must be allocated.'
+       stop 5652
+    endif
+    if(.not.allocated(ugrid_vertices)) then
+       write(*,*) 'ERROR: When using ugrid_interpol_from_vertices() the '
+       write(*,*) '       ugrid_vertices array must be allocated.'
+       stop 5652
+    endif
+    res = 0.d0
+    if(cellindex.le.0) then
+       call ugrid_findcell_by_walking(x,y,z,cellindex)
+    endif
+    if(cellindex.gt.0) then
+       tol = ugrid_reltol * ugrid_cell_size(cellindex)
+       if(tol.eq.0.d0) then
+          write(*,*) 'In cell ',cellindex,' cell_size is zero.'
+          stop 3699
+       endif
+       v(1) = x
+       v(2) = y
+       v(3) = z
+       call ugrid_barycentric_coords(cellindex,v,lam,tol)
+       dummy = 0.d0
+       do icorner=1,4
+          ivert = ugrid_cell_iverts(cellindex,icorner)
+          if(ivert.le.0) then
+             write(*,*) 'ERROR: In interpolation in ugrid: vertex missing.'
+             stop 3687
+          endif
+          dummy = dummy + lam(icorner)*func(ivert)
+       enddo
+       res = dummy
+    endif
+  end subroutine ugrid_interpol_scalar_from_vertices
 
   subroutine ugrid_subbox(nv,nc,nx,ny,nz,x0,x1,y0,y1,z0,z1,  &
                           phi1,theta,phi2,func,funcslice,    &
@@ -1090,7 +1144,7 @@ contains
                 !
                 ! Interpolate in the ugrid
                 !
-                call ugrid_interpol_from_vertices(nv,ugrid_nverts,x,y,z,func,res)
+                call ugrid_interpol_vectorfield_from_vertices(nv,ugrid_nverts,x,y,z,-1,func,res)
              else
                 !
                 ! Find the cell
