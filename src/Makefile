@@ -36,6 +36,7 @@ SRCIOPUT       = $(SRC)/ioput_module.f90
 SRCSTARS       = $(SRC)/stars_module.f90
 SRCAMR         = $(SRC)/amr_module.f90
 SRCAMRRAY      = $(SRC)/amrray_module.f90
+SRCUGRID       = $(SRC)/ugrid_module.f90
 SRCCONSTANTS   = $(SRC)/constants_module.f90
 SRCCAMERA      = $(SRC)/camera_module.f90
 SRCLINES       = $(SRC)/lines_module.f90
@@ -50,9 +51,9 @@ OBJ            = main.o rtglobal_module.o montecarlo_module.o dust_module.o \
                  stars_module.o amr_module.o amrray_module.o                \
 	         constants_module.o camera_module.o lines_module.o          \
 	         namelist_module.o userdef_module.o gascontinuum_module.o   \
-	         polarization_module.o sources_module.o
+	         polarization_module.o sources_module.o ugrid_module.o
 GMODULES       = rtglobal_module.o mathroutines_module.o amr_module.o       \
-	         namelist_module.o constants_module.o
+	         namelist_module.o constants_module.o ugrid_module.o
 HMODULES       = $(GMODULES) polarization_module.o
 HIMODULES      = $(HMODULES) amrray_module.o dust_module.o 
 IMODULES       = $(HIMODULES) stars_module.o
@@ -76,7 +77,7 @@ radmc3d:            $(OBJ) Makefile
 main.o:             $(SRCMAIN) $(MODULES) Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCMAIN) -o $@
 
-rtglobal_module.o:  $(SRCRTGLOBAL) amr_module.o Makefile
+rtglobal_module.o:  $(SRCRTGLOBAL) amr_module.o ugrid_module.o Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCRTGLOBAL) -o $@
 
 montecarlo_module.o: $(SRCMONTE) $(DMODULES) Makefile
@@ -108,6 +109,9 @@ amr_module.o:       $(SRCAMR) constants_module.o Makefile
 
 amrray_module.o:    $(SRCAMRRAY) constants_module.o Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCAMRRAY) -o $@
+
+ugrid_module.o:     $(SRCUGRID) constants_module.o Makefile
+	            $(FF) -c $(FFLAGS)  $(SRCUGRID) -o $@
 
 camera_module.o:    $(SRCCAMERA) $(SMODULES) Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCCAMERA) -o $@
@@ -141,7 +145,7 @@ cleanmodel:
 	   dust_density.uinp *.uout *.udat numberdens_*inp          \
 	   amr_grid.inp stars.inp radmc3d.inp gas_temperature.*inp  \
 	   gas_velocity.inp lines.inp microturbulence.*             \
-	   *.binp *.bout *.bdat *.vtk                               \
+	   *.binp *.bout *.bdat *.vtk unstr_grid.inp                \
 	   electrons_numdens.*inp ions_numdens.*inp
 	@echo All .o, .mod, .out files and most .inp files removed.
 
@@ -153,6 +157,6 @@ cleanall:
 	   radmc3d Makefile~ *.pro~ README*~ *.f90~ *.inp~          \
 	   gas_velocity.inp lines.inp  microturbulence.*            \
 	   gas_temperature.*inp electrons_numdens.*inp              \
-	   *.binp *.bout *.bdat *.vtk                               \
+	   *.binp *.bout *.bdat *.vtk unstr_grid.inp                \
 	   ions_numdens.*inp
 	@echo Directory cleaned to basic

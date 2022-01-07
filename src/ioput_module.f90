@@ -894,9 +894,9 @@ end subroutine write_grid_file
 subroutine read_grid_file()
   implicit none
   character*160 :: filename
-  logical :: fex_amrgrid,fex_delaunaygrid,fex_voronoigrid
-  logical :: fex1,fex2,fex3
-  integer :: amr,delaunay,voronoi,icell,idir,style,idum
+  logical :: fex_amrgrid,fex_ugrid
+  logical :: fex1,fex2,fex3,success
+  integer :: amr,unstr,icell,idir,style,idum
   double precision :: dd
   !
   ! Check out which grid file is present
@@ -905,35 +905,26 @@ subroutine read_grid_file()
   inquire(file='amr_grid.uinp',exist=fex2)
   inquire(file='amr_grid.binp',exist=fex3)
   fex_amrgrid=fex1.or.fex2.or.fex3
-  inquire(file='triang_vertex_grid.inp',exist=fex1)
-  inquire(file='triang_vertex_grid.uinp',exist=fex2)
-  inquire(file='triang_vertex_grid.binp',exist=fex3)
-  fex_delaunaygrid=fex1.or.fex2.or.fex3
-  inquire(file='voronoi_grid.inp',exist=fex1)
-  inquire(file='voronoi_grid.uinp',exist=fex2)
-  inquire(file='voronoi_grid.binp',exist=fex3)
-  fex_voronoigrid=fex1.or.fex2.or.fex3
+  inquire(file='unstr_grid.inp',exist=fex1)
+  inquire(file='unstr_grid.uinp',exist=fex2)
+  inquire(file='unstr_grid.binp',exist=fex3)
+  fex_ugrid=fex1.or.fex2.or.fex3
   if(fex_amrgrid) then
      amr=2 
   else 
      amr=1
   endif
-  if(fex_delaunaygrid) then
-     delaunay=2 
+  if(fex_ugrid) then
+     unstr=2 
   else 
-     delaunay=1
+     unstr=1
   endif
-  if(fex_voronoigrid) then
-     voronoi=2 
-  else 
-     voronoi=1
-  endif
-  if(amr*delaunay*voronoi.gt.2) then
-     write(stdo,*) 'ERROR: More than one (amr/delaunay/voronoi)_grid.inp file found.'
+  if(amr*unstr.gt.2) then
+     write(stdo,*) 'ERROR: More than one (amr/unstr)_grid.inp file found.'
      write(stdo,*) '       You must choose which kind of grid you want to use.'
      stop
-  elseif(amr*delaunay*voronoi.eq.1) then
-     write(stdo,*) 'ERROR: No file (amr/delaunay/voronoi)_grid.inp found.'
+  elseif(amr*unstr.eq.1) then
+     write(stdo,*) 'ERROR: No file (amr/unstr)_grid.inp found.'
      write(stdo,*) '       I need this file to set up a grid.'
      stop
   endif
@@ -982,8 +973,14 @@ subroutine read_grid_file()
      if(igrid_type.ge.100) stop 4091
      if(igrid_type.lt.0) stop 4092
      igrid_coord = amr_coordsystem
+  elseif(fex_ugrid) then
+     call ugrid_read_grid(success)
+     if(.not.success) then
+        write(stdo,*) 'ERROR: In read_grid_file(): Reading unstr_grid.*inp failed.'
+        stop
+     endif
   else
-     write(stdo,*) 'ERROR: In read_grid_file(): unstructured grids not yet supported'
+     write(stdo,*) 'ERROR: In read_grid_file(): Did not find grid file'
      stop
   endif
   !
@@ -1007,12 +1004,12 @@ end subroutine read_grid_file
 subroutine postprocess_grid_for_use(renew)
   implicit none
   double precision :: dd
-  integer :: i,ierr,idum,idir,icell,ilev,ilevel
+  integer :: i,ierr,idum,idir,icell,ilev,ilevel,ivert
   integer :: ix,iy,iz,istar
   logical, optional :: renew
   logical :: dorenew
   character*80 :: str1,str2
-  double precision :: dummy
+  double precision :: dummy,r,margin
   !
   ! Check optional argument
   ! 
@@ -1304,7 +1301,7 @@ subroutine postprocess_grid_for_use(renew)
               cellindex(icell) = icell
            enddo
         endif
-        ! Bug? 16.11.09: Why do I allocate with nrcells and not with nrcellsmax?
+        !
         allocate(cellvolume(1:nrcells),STAT=ierr) 
         if(ierr.ne.0) then
            write(stdo,*) 'ERROR: Could not allocate cellvolume array'
@@ -1369,9 +1366,90 @@ subroutine postprocess_grid_for_use(renew)
         write(stdo,*) '  Top refinement level of the grid = ',trim(adjustl(str1))
      endif
      !
-  elseif((igrid_type.ge.100).and.(igrid_type.lt.200)) then
-     write(stdo,*) 'ERROR: In postprocess_grid_for_use(): unstructured grids not yet supported'
-     stop
+  elseif(igrid_type.ge.200) then
+     !
+     ! Unstructured grid
+     !
+     ! Copy some ugrid info to the global variables
+     !
+     igrid_coord = 1
+     nrcells     = ugrid_ncells
+     nrcellsinp  = ugrid_ncells
+     nrcellsmax  = ugrid_ncells
+     allocate(cellvolume(1:nrcells)) 
+     do i=1,nrcells
+        cellvolume(i) = ugrid_cell_volume(i)
+     enddo
+     allocate(cellindex(1:nrcells))
+     do icell=1,nrcells
+        cellindex(icell) = icell
+     enddo
+     !
+     ! Estimate the ray_nsmax
+     !
+     ! IMPORTANT: This can not be computed exactly (unless you take it to be
+     ! equal to the number of cells, which can be memory consuming)
+     !
+     ray_nsmax = 100000    ! JUST A ROUGH ESTIMATE OF MAX REASONABLE LENGTH
+     !
+     ! Compute the containing sphere
+     !
+     ! IMPORTANT: For Voronoi-type grids this can not always be computed exactly,
+     !            because the cell vertices can lie very far outside of the main
+     !            part of the grid. Therefore the 1+margin factor below.
+     !
+     margin         = 0.2    ! This is the margin mentioned above
+     grid_contsph_x = 0.d0
+     grid_contsph_y = 0.d0
+     grid_contsph_z = 0.d0
+     if(allocated(ugrid_vertices).and.(ugrid_nverts.gt.0)) then
+        do ivert=1,ugrid_nverts
+           grid_contsph_x = grid_contsph_x + ugrid_vertices(ivert,1)
+           grid_contsph_y = grid_contsph_y + ugrid_vertices(ivert,2)
+           grid_contsph_z = grid_contsph_z + ugrid_vertices(ivert,3)
+        enddo
+        grid_contsph_x = grid_contsph_x / ugrid_nverts
+        grid_contsph_y = grid_contsph_y / ugrid_nverts
+        grid_contsph_z = grid_contsph_z / ugrid_nverts
+        grid_contsph_r = 0.d0
+        do ivert=1,ugrid_nverts
+           r = sqrt((ugrid_vertices(ivert,1)-grid_contsph_x)**2+ &
+                    (ugrid_vertices(ivert,2)-grid_contsph_y)**2+ &
+                    (ugrid_vertices(ivert,3)-grid_contsph_z)**2)
+           if(r.gt.grid_contsph_r) then
+              grid_contsph_r = r
+           endif
+        enddo
+        grid_contsph_r = grid_contsph_r * (1.d0+margin)  ! A bit of margin for irregularities in the grid
+     else
+        do icell=1,nrcells
+           grid_contsph_x = grid_contsph_x + ugrid_cellcenters(icell,1)
+           grid_contsph_y = grid_contsph_y + ugrid_cellcenters(icell,2)
+           grid_contsph_z = grid_contsph_z + ugrid_cellcenters(icell,3)
+        enddo
+        grid_contsph_x = grid_contsph_x / nrcells
+        grid_contsph_y = grid_contsph_y / nrcells
+        grid_contsph_z = grid_contsph_z / nrcells
+        grid_contsph_r = 0.d0
+        do icell=1,nrcells
+           r = sqrt((ugrid_cellcenters(icell,1)-grid_contsph_x)**2+ &
+                    (ugrid_cellcenters(icell,2)-grid_contsph_y)**2+ &
+                    (ugrid_cellcenters(icell,3)-grid_contsph_z)**2)
+           if(r.gt.grid_contsph_r) then
+              grid_contsph_r = r
+           endif
+        enddo
+        grid_contsph_r = grid_contsph_r * (1.d0+margin)  ! A bit of margin for irregularities in the grid
+     endif
+     !
+     ! Do a message
+     !
+     write(stdo,*) 'Grid information: Unstructured grid'
+     write(stdo,*) '   Nr of cells                = ',nrcells
+     write(stdo,*) '   Nr of unbound (open) cells = ',ugrid_ncells_open
+     write(stdo,*) '   Nr of cell walls           = ',ugrid_nwalls
+     write(stdo,*) '   Nr of hull walls           = ',ugrid_hull_nwalls
+     write(stdo,*) '   Max nr of walls per cell   = ',ugrid_cell_max_nr_walls
   else
      write(stdo,*) 'ERROR: In postprocess_grid_for_use(): igrid_type ',igrid_type,' not known.'
      stop
@@ -1538,8 +1616,10 @@ subroutine compute_dust_mass()
   !
   ! If mirror symmetry is used, then multiply the masses by 2
   !
-  if(amrray_mirror_equator) then
-     dust_massdust(:) = dust_massdust(:) * 2
+  if(igrid_type.lt.100) then
+     if(amrray_mirror_equator) then
+        dust_massdust(:) = dust_massdust(:) * 2
+     endif
   endif
   !
   ! Now compute total dust mass
@@ -1666,63 +1746,61 @@ subroutine write_dust_temperature()
      ! Do a stupidity check
      !
      if(nrcells.ne.amr_nrleafs) stop 3209
-     !
-     ! Open file and write the temperature to it
-     !
-     if(rto_style.eq.1) then 
-        !
-        ! Write the temperatures in ascii form
-        !
-        open(unit=1,file='dust_temperature.dat')
-        write(1,*) 1                                   ! Format number
-        write(1,*) nrcellsinp
-        write(1,*) dust_nr_species
-     elseif(rto_style.eq.2) then
-        !
-        ! Write the temperatures in f77-style unformatted form,
-        ! using a record length given by rto_reclen
-        !
-        open(unit=1,file='dust_temperature.udat',form='unformatted')
-        nn = 1
-        kk = rto_reclen
-        write(1) nn,kk               ! Format number and record length
-        nn = nrcellsinp
-        kk = dust_nr_species
-        write(1) nn,kk
-     elseif(rto_style.eq.3) then
-        !
-        ! C-compatible binary style output
-        !
-        open(unit=1,file='dust_temperature.bdat',status='replace',access='stream')
-        nn = 1
-        kk = precis
-        write(1) nn,kk                ! Format number and precision
-        nn = nrcellsinp
-        kk = dust_nr_species
-        write(1) nn,kk
-     else
-        write(stdo,*) 'ERROR: Do not know I/O style ',rto_style
-        stop
-     endif
-     !
-     ! Write the data
-     !
-     do ispec=1,dust_nr_species
-        call write_scalarfield(1,rto_style,precis,nrcellsinp,dust_nr_species,1, &
-                               ispec,1,rto_reclen,scalar1=dusttemp)
-     enddo
-     !
-     ! Close file
-     !
-     close(1)
-     !
   else
      !
-     ! Other grids not yet implemented
+     ! Do a stupidity check
      !
-     write(stdo,*) 'ERROR: Only regular and AMR grids implemented'
+     if(nrcells.ne.ugrid_ncells) stop 3209
+  endif
+  !
+  ! Open file and write the temperature to it
+  !
+  if(rto_style.eq.1) then 
+     !
+     ! Write the temperatures in ascii form
+     !
+     open(unit=1,file='dust_temperature.dat')
+     write(1,*) 1                                   ! Format number
+     write(1,*) nrcellsinp
+     write(1,*) dust_nr_species
+  elseif(rto_style.eq.2) then
+     !
+     ! Write the temperatures in f77-style unformatted form,
+     ! using a record length given by rto_reclen
+     !
+     open(unit=1,file='dust_temperature.udat',form='unformatted')
+     nn = 1
+     kk = rto_reclen
+     write(1) nn,kk               ! Format number and record length
+     nn = nrcellsinp
+     kk = dust_nr_species
+     write(1) nn,kk
+  elseif(rto_style.eq.3) then
+     !
+     ! C-compatible binary style output
+     !
+     open(unit=1,file='dust_temperature.bdat',status='replace',access='stream')
+     nn = 1
+     kk = precis
+     write(1) nn,kk                ! Format number and precision
+     nn = nrcellsinp
+     kk = dust_nr_species
+     write(1) nn,kk
+  else
+     write(stdo,*) 'ERROR: Do not know I/O style ',rto_style
      stop
   endif
+  !
+  ! Write the data
+  !
+  do ispec=1,dust_nr_species
+     call write_scalarfield(1,rto_style,precis,nrcellsinp,dust_nr_species,1, &
+                            ispec,1,rto_reclen,scalar1=dusttemp)
+  enddo
+  !
+  ! Close file
+  !
+  close(1)
   !
   ! If the grid is internally made, then we must make sure that
   ! the grid has been written to file, otherwise the output file

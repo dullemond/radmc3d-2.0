@@ -2710,6 +2710,9 @@ recursive subroutine lines_amr_recursive_velo(cell,idir,velo)
   double precision :: velo,velochild
   type(amr_branch), pointer :: cell,child
   integer :: ix,iy,iz,indexchild,cnt
+  if(igrid_type.ge.100) then
+     stop 2329
+  endif
   !
   ! Reset velo
   !
@@ -2793,24 +2796,30 @@ subroutine lines_compute_velgradient(index,velgradient,maxdiff)
   !
   ! Get cell position
   !
-  if(amr_tree_present) then
-     !
-     ! The AMR tree is available, so we use it
-     !
-     !!! BUG (30.12.2011): cell  => amr_theleafs(index)%link
-     cell  => amr_index_to_leaf(index)%link
-     pos0(1) = amr_finegrid_xc(cell%ixyzf(1),1,cell%level)
-     pos0(2) = amr_finegrid_xc(cell%ixyzf(2),2,cell%level)
-     pos0(3) = amr_finegrid_xc(cell%ixyzf(3),3,cell%level)
+  if(igrid_type.lt.100) then
+     if(amr_tree_present) then
+        !
+        ! The AMR tree is available, so we use it
+        !
+        !!! BUG (30.12.2011): cell  => amr_theleafs(index)%link
+        cell  => amr_index_to_leaf(index)%link
+        pos0(1) = amr_finegrid_xc(cell%ixyzf(1),1,cell%level)
+        pos0(2) = amr_finegrid_xc(cell%ixyzf(2),2,cell%level)
+        pos0(3) = amr_finegrid_xc(cell%ixyzf(3),3,cell%level)
+     else
+        !
+        ! We have a regular grid, so we compute the position
+        ! using ixx,iyy,izz
+        !
+        call amr_regular_get_ixyz(index,ixx,iyy,izz)
+        pos0(1) = amr_finegrid_xc(ixx,1,0)
+        pos0(2) = amr_finegrid_xc(iyy,2,0)
+        pos0(3) = amr_finegrid_xc(izz,3,0)
+     endif
   else
-     !
-     ! We have a regular grid, so we compute the position
-     ! using ixx,iyy,izz
-     !
-     call amr_regular_get_ixyz(index,ixx,iyy,izz)
-     pos0(1) = amr_finegrid_xc(ixx,1,0)
-     pos0(2) = amr_finegrid_xc(iyy,2,0)
-     pos0(3) = amr_finegrid_xc(izz,3,0)
+     write(stdo,*) 'ERROR: Computing velocity gradient is not yet implemented '
+     write(stdo,*) '       in unstructured grids. But it should happen soon...'
+     stop 8445
   endif
   !
   ! Get factors for coordinate systems
@@ -4255,7 +4264,11 @@ subroutine write_levelpop()
            !
            ! Do a stupidity check
            !
-           if(nrcells.ne.amr_nrleafs) stop 3209
+           if(igrid_type.lt.100) then
+              if(nrcells.ne.amr_nrleafs) stop 3209
+           elseif(igrid_type.ge.200) then
+              if(nrcells.ne.ugrid_ncells) stop 3209
+           endif
            !
            ! Open file and write header
            !

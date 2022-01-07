@@ -229,49 +229,95 @@ subroutine sources_init(nrfreq,frequencies,secondorder,doppcatch)
      !
      ! Set up the corner vertex grid
      !
-     if(.not.allocated(amr_vertex_cells)) then
-        write(stdo,*) 'Setting up the vertices (cell corners) for second order transfer...'
-        call amr_set_up_vertices()
-        !#########################
-        !#########################
-        ! MAYBE THERE IS A BUG HERE: WE MUST MAKE A SPECIAL TREATMENT OF THE MIDPLANE IF MIRROR SYMMETRY IS PRESENT.
-        ! THIS CAN ONLY EASILY BE FIXED INSIDE AMR_SET_UP_VERTICES VIA AN OPTIONAL ARGUMENT
-        ! HOWEVER, THIS IS ONLY A MINOR PROBLEM, SINCE SRC/ALP REMAINS CORRECT; ONLY THE OPACITY OF THE CELL IS SMALLER
-        !#########################
-        !#########################
-     endif
-     !
-     ! Allocate the j_nu and alpha_nu arrays at the vertices. Note that
-     ! it would take presumably too much memory to store the entire
-     ! jnu(inu,ivert) array. So we store just one frequency at a time.
-     ! This means also that this works only in the one-wavelength-at-
-     ! a-time raytracing mode.
-     !
-     if(.not.allocated(sources_vertex_snu))                    &
-          allocate(sources_vertex_snu(1:amr_nr_vertices_max,1:4))
-     if(.not.allocated(sources_vertex_anu))                    &
-          allocate(sources_vertex_anu(1:amr_nr_vertices_max))
-     if(.not.allocated(sources_cell_snu))                      &
-          allocate(sources_cell_snu(1:amr_nr_vertices_max,1:4))
-     if(.not.allocated(sources_cell_anu))                      &
-          allocate(sources_cell_anu(1:amr_nr_vertices_max))
-     !
-     ! If we want to do doppler-catching of lines, then we must allocate
-     ! further arrays
-     !
-     if(sources_catch_doppler_line) then
-        if(.not.allocated(sources_vertex_doppler))                    &
-             allocate(sources_vertex_doppler(1:amr_nr_vertices_max))
-        if(.not.allocated(sources_cell_doppler))                    &
-             allocate(sources_cell_doppler(1:amr_nrleafs_max))
-        if(.not.allocated(sources_vertex_turb))                    &
-             allocate(sources_vertex_turb(1:amr_nr_vertices_max))
-!        if(.not.allocated(sources_cell_turb))                    &
-!             allocate(sources_cell_turb(1:amr_nrleafs_max))
-        if(.not.allocated(sources_vertex_temp))                    &
-             allocate(sources_vertex_temp(1:amr_nr_vertices_max))
-!        if(.not.allocated(sources_cell_temp))                    &
-!             allocate(sources_cell_temp(1:amr_nrleafs_max))
+     if(igrid_type.lt.100) then
+        if(.not.allocated(amr_vertex_cells)) then
+           write(stdo,*) 'Setting up the vertices (cell corners) for second order transfer...'
+           call amr_set_up_vertices()
+           !#########################
+           !#########################
+           ! MAYBE THERE IS A BUG HERE: WE MUST MAKE A SPECIAL TREATMENT OF THE MIDPLANE IF MIRROR SYMMETRY IS PRESENT.
+           ! THIS CAN ONLY EASILY BE FIXED INSIDE AMR_SET_UP_VERTICES VIA AN OPTIONAL ARGUMENT
+           ! HOWEVER, THIS IS ONLY A MINOR PROBLEM, SINCE SRC/ALP REMAINS CORRECT; ONLY THE OPACITY OF THE CELL IS SMALLER
+           !#########################
+           !#########################
+        endif
+        !
+        ! Allocate the j_nu and alpha_nu arrays at the vertices. Note that
+        ! it would take presumably too much memory to store the entire
+        ! jnu(inu,ivert) array. So we store just one frequency at a time.
+        ! This means also that this works only in the one-wavelength-at-
+        ! a-time raytracing mode.
+        !
+        if(.not.allocated(sources_vertex_snu))                    &
+             allocate(sources_vertex_snu(1:amr_nr_vertices_max,1:4))
+        if(.not.allocated(sources_vertex_anu))                    &
+             allocate(sources_vertex_anu(1:amr_nr_vertices_max))
+        ! ############# In the following two lines amr_nr_vertices_max
+        ! ############# should actually be amr_nrleafs_max, but since
+        ! ############# amr_nr_vertices_max is always (?) larger than amr_nrleafs_max
+        ! ############# we were lucky here.
+        ! ############# 2022.01.06
+        if(.not.allocated(sources_cell_snu))                      &
+             allocate(sources_cell_snu(1:amr_nr_vertices_max,1:4))
+        if(.not.allocated(sources_cell_anu))                      &
+             allocate(sources_cell_anu(1:amr_nr_vertices_max))
+        !
+        ! If we want to do doppler-catching of lines, then we must allocate
+        ! further arrays
+        !
+        if(sources_catch_doppler_line) then
+           if(.not.allocated(sources_vertex_doppler))                    &
+                allocate(sources_vertex_doppler(1:amr_nr_vertices_max))
+           if(.not.allocated(sources_cell_doppler))                    &
+                allocate(sources_cell_doppler(1:amr_nrleafs_max))
+           if(.not.allocated(sources_vertex_turb))                    &
+                allocate(sources_vertex_turb(1:amr_nr_vertices_max))
+!           if(.not.allocated(sources_cell_turb))                    &
+!                allocate(sources_cell_turb(1:amr_nrleafs_max))
+           if(.not.allocated(sources_vertex_temp))                    &
+                allocate(sources_vertex_temp(1:amr_nr_vertices_max))
+!           if(.not.allocated(sources_cell_temp))                    &
+!                allocate(sources_cell_temp(1:amr_nrleafs_max))
+        endif
+     elseif(igrid_type.ge.200) then
+        !
+        ! Create the list of cells for each vertex
+        !
+        call ugrid_create_list_cells_per_vertex()
+        !
+        ! Allocate the j_nu and alpha_nu arrays at the vertices. Note that
+        ! it would take presumably too much memory to store the entire
+        ! jnu(inu,ivert) array. So we store just one frequency at a time.
+        ! This means also that this works only in the one-wavelength-at-
+        ! a-time raytracing mode.
+        !
+        if(.not.allocated(sources_vertex_snu))                    &
+             allocate(sources_vertex_snu(1:ugrid_nverts,1:4))
+        if(.not.allocated(sources_vertex_anu))                    &
+             allocate(sources_vertex_anu(1:ugrid_nverts))
+        if(.not.allocated(sources_cell_snu))                      &
+             allocate(sources_cell_snu(1:ugrid_ncells,1:4))
+        if(.not.allocated(sources_cell_anu))                      &
+             allocate(sources_cell_anu(1:ugrid_ncells))
+        !
+        ! If we want to do doppler-catching of lines, then we must allocate
+        ! further arrays
+        !
+        if(sources_catch_doppler_line) then
+           if(.not.allocated(sources_vertex_doppler))             &
+                allocate(sources_vertex_doppler(1:ugrid_nverts))
+           if(.not.allocated(sources_cell_doppler))               &
+                allocate(sources_cell_doppler(1:ugrid_ncells))
+           if(.not.allocated(sources_vertex_turb))                &
+                allocate(sources_vertex_turb(1:ugrid_nverts))
+!           if(.not.allocated(sources_cell_turb))                  &
+!                allocate(sources_cell_turb(1:ugrid_ncells))
+           if(.not.allocated(sources_vertex_temp))                &
+                allocate(sources_vertex_temp(1:ugrid_nverts))
+!           if(.not.allocated(sources_cell_temp))                  &
+!                allocate(sources_cell_temp(1:ugrid_ncells))
+        endif
+        
      endif
      !
   endif
@@ -2240,6 +2286,74 @@ subroutine sources_find_srcalp_interpol(x,y,z,snu,anu,inclstokes)
      endif
   end select
 end subroutine sources_find_srcalp_interpol
+
+!-------------------------------------------------------------------------
+!             DO LINEAR INTERPOLATION OF ALPHA AND SOURCE
+!                    VERSION UNSTRUCTURED GRID
+!
+! This subroutine does the barymetric interpolation of the s_nu and alpha_nu
+! (snu and anu), based on the values at the cell corners (vertices). This
+! works only for terahedral grids (such as Delaunay), not for other grid
+! types. Though maybe other grids (within the unstructured grid type) will
+! later be added.
+!
+! NOTE: If sources_interpol_jnu is set, then snu = jnu rather than the
+!       source function jnu/anu. 
+! 
+! NOTE: This routine also uses information from the latest call to
+!       amrray_find_next_location_***() to determine on which cell 
+!       interface we are currently.
+!-------------------------------------------------------------------------
+subroutine sources_ugrid_find_srcalp_interpol(x,y,z,snu,anu,inclstokes,find)
+  implicit none
+  double precision :: x,y,z,snu(1:4),anu
+  logical :: inclstokes,find
+  integer :: index,iline
+  !
+  ! Which cell to use?
+  !
+  if(find) then
+     !
+     ! Go look for the cell which we are in
+     !
+     index = -1
+  else
+     !
+     ! Use the ray_index or ray_indexnext to set as the current cell
+     !
+     if(ray_index.gt.0) then
+        index = ray_index
+     elseif(ray_indexnext.gt.0) then
+        index = ray_indexnext
+     else
+        snu(1:4) = 0.d0
+        anu      = 1d-99
+        return
+     endif
+  endif
+  !
+  ! Do the interpolations
+  !
+  call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_snu(:,1),snu(1))
+  if(inclstokes) then
+     call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_snu(:,2),snu(2))
+     call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_snu(:,3),snu(3))
+     call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_snu(:,4),snu(4))
+  endif
+  call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_anu,anu)
+  if(sources_catch_doppler_line) then
+     call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_doppler,sources_local_doppler_curr)
+     call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_turb,sources_local_doppler_curr)
+     call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_temp,sources_local_temp_curr)
+     do iline=1,sources_vertex_lines_nractivetot
+        call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_line_nup(:,iline), &
+             sources_local_line_nup_curr(iline))
+        call ugrid_interpol_scalar_from_vertices(ugrid_nverts,x,y,z,index,sources_vertex_line_ndown(:,iline), &
+             sources_local_line_ndown_curr(iline))
+     enddo
+  endif
+  !
+end subroutine sources_ugrid_find_srcalp_interpol
 
 
 

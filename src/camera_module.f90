@@ -1,6 +1,7 @@
 module camera_module
   use rtglobal_module
   use amrray_module
+  use ugrid_module
   use dust_module
   use lines_module
   use gascontinuum_module
@@ -310,6 +311,38 @@ subroutine camera_init()
   integer :: ierr,inu,ispec
   double precision :: temp
   !
+  ! Check coord type
+  !
+  if(igrid_type.ge.200) then
+     !
+     ! When using unstructured grids, many special features are not available.
+     ! Check...
+     !
+     amr_dim = 3   ! Should not be necessary, but just in case
+     if(igrid_coord.ge.100) then
+        write(stdo,*) 'ERROR: With unstructured grid: Only cartesian coordinates allowed.'
+        stop
+     endif
+     if(amrray_mirror_equator) then
+        write(stdo,*) 'ERROR: With unstructured grid no equator mirroring allowed.'
+        stop
+     endif
+     if(circular_images) then
+        write(stdo,*) 'ERROR: With unstructured grid no circular images.'
+        stop
+     endif
+     if(incl_thermbc.ne.0) then
+        write(stdo,*) 'ERROR: With unstructured grid, thermal boundary conditions'
+        write(stdo,*) '       are not yet implemented. But it should be doable to'
+        write(stdo,*) '       implement it, so if you need it, ask the author.'
+        stop
+     endif
+     if(.not.allocated(ugrid_cell_size)) then
+        write(stdo,*) 'ERROR: With unstructured grid, ugrid_cell_size must be defined.'
+        stop
+     endif
+  endif
+  !
   ! Currently the polarization module is not compatible with mirror
   ! symmetry mode in spherical coordinates. 
   !
@@ -338,7 +371,7 @@ subroutine camera_init()
   ! not compatible with 2-D spherical coordinates.
   !
   if((scattering_mode.ge.2).and.(igrid_coord.ge.100).and. &
-     (amr_dim.eq.1)) then
+     (igrid_type.lt.100).and.(amr_dim.eq.1)) then
      write(stdo,*) 'ERROR: Non-isotropic scattering is incompatible with'
      write(stdo,*) '       1-D spherical coordinates.'
      stop
@@ -354,7 +387,7 @@ subroutine camera_init()
   ! you must have full 3-D spherical coordinates
   !
   if((rt_incl_lines).and.(camera_secondorder).and. &
-       (igrid_coord.ge.100).and.(amr_dim.ne.3)) then
+       (igrid_type.lt.100).and.(igrid_coord.ge.100).and.(amr_dim.ne.3)) then
      write(stdo,*) 'ERROR: Line radiative transfer with second order'
      write(stdo,*) '       integration is incompatible with'
      write(stdo,*) '       2-D spherical coordinates. Use 3-D spherical '
@@ -662,8 +695,11 @@ subroutine camera_set_ray(px,py,x,y,z,dirx,diry,dirz,distance)
         stop 612
      endif
   else
-     write(stdo,*) 'ERROR in camera module: non-regular grids not yet ready'
-     stop
+     !
+     ! Unstructured grid
+     !
+     shift = shift + 3*grid_contsph_r
+     !
   endif
   shift = shift*3        ! For safety, put it even further back
   !
@@ -1394,8 +1430,18 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
         stop
      endif
   else
-     write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
-     stop
+     !
+     ! Find cell in ugrid
+     !
+     call ugrid_findcell_by_walking(ray_cart_x,ray_cart_y,ray_cart_z,ray_index)
+     ugrid_find_cell_start = ray_index
+     ray_indexnext = 0
+     !
+     ! Reset the wall indices
+     !
+     ray_curr_iwall = 0
+     ray_next_iwall = 0
+     !
   endif
   !
   ! Now trace
@@ -1626,8 +1672,22 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
         camera_istar = amrray_ispherehit
         !   
      else
-        write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
-        stop
+        !
+        ! Unstructured grid
+        !
+        call ugrid_find_next_location(ray_dsend,                     &
+                ray_cart_x,ray_cart_y,ray_cart_z,                    &
+                ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
+                ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
+                ray_next_iwall,arrived)        
+        !
+        ! If in cell, then update celldxmin
+        !
+        if(ray_index.gt.0) then
+           if(ugrid_cell_size(ray_index).gt.0.d0) then
+              celldxmin = min(celldxmin,ugrid_cell_size(ray_index))
+           endif
+        endif
      endif
      !
      ! Path length
@@ -1716,7 +1776,13 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
                     stop 498
                  endif
               else
-                 stop 499
+                 !
+                 ! Unstructured grid
+                 !
+                 call sources_ugrid_find_srcalp_interpol(   &
+                         ray_cart_x,ray_cart_y,ray_cart_z,  &
+                         snu_curr,anu_curr,                 &
+                         camera_stokesvector,.false.)
               endif
               !
               ! If sources_interpol_jnu is set, then what we get back

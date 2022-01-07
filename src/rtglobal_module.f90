@@ -101,9 +101,8 @@ module rtglobal_module
   integer :: mc_safetymode               ! If >0 then sacrifice speed for 
   !                                      ! accuracy and safety. Default=0.
   integer :: igrid_type                  ! The type of gridding used
-  !                                      ! <100 = Regular or AMR grid
-  !                                      ! 101 = Delaunay grid
-  !                                      ! 201 = Voronoi grid
+  !                                      ! <100  = Regular or AMR grid
+  !                                      ! >=200 = Unstructured grid (Delaunay, Voronoi etc)
   integer :: igrid_coord                 ! The coordinate system
   !                                      !   0 -  99   = Cartesian 
   !                                      ! 100 - 199   = Spherical
@@ -286,6 +285,10 @@ module rtglobal_module
   ! Index of the cell
   !
   integer :: ray_index,ray_indexnext
+  !
+  ! Index of the cell wall (so far only used with unstructured grids)
+  !
+  integer :: ray_curr_iwall,ray_next_iwall
   !
   ! Frequency index
   !
@@ -1145,17 +1148,26 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
      !
      ! Formatted (ASCII) input
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        read(unit,*) dummy 
-        if(index.gt.0) then
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           read(unit,*) dummy 
+           if(index.gt.0) then
+              if(present(scalar0)) scalar0(index) = max(dummy,fl)
+              if(present(scalar1)) scalar1(iv1,index) = max(dummy,fl)
+              if(present(scalar2)) scalar2(iv1,iv2,index) = max(dummy,fl)
+           endif
+           call amr_nextcell(index)
+        enddo
+     else
+        do index=1,nrcells
+           read(unit,*) dummy 
            if(present(scalar0)) scalar0(index) = max(dummy,fl)
            if(present(scalar1)) scalar1(iv1,index) = max(dummy,fl)
            if(present(scalar2)) scalar2(iv1,iv2,index) = max(dummy,fl)
-        endif
-        call amr_nextcell(index)
-     enddo
+        enddo
+     endif
   elseif(style.eq.2) then
      !
      ! Unformatted input, old fortran style (with records)
@@ -1172,45 +1184,67 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
         write(stdo,*) 'ERROR: Could not allocate data array'
         stop
      endif
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do irec=1,(nrcellsinp-1)/reclend+1
-        read(unit) data
-        i = 1
-        do while((index.ge.0).and.(i.le.reclend))
-           if(index.gt.0) then
-              if(present(scalar0)) scalar0(index) = max(data(i),fl)
-              if(present(scalar1)) scalar1(iv1,index) = max(data(i),fl)
-              if(present(scalar2)) scalar2(iv1,iv2,index) = max(data(i),fl)
-           endif
-           i     = i + 1
-           call amr_nextcell(index)
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do irec=1,(nrcellsinp-1)/reclend+1
+           read(unit) data
+           i = 1
+           do while((index.ge.0).and.(i.le.reclend))
+              if(index.gt.0) then
+                 if(present(scalar0)) scalar0(index) = max(data(i),fl)
+                 if(present(scalar1)) scalar1(iv1,index) = max(data(i),fl)
+                 if(present(scalar2)) scalar2(iv1,iv2,index) = max(data(i),fl)
+              endif
+              i     = i + 1
+              call amr_nextcell(index)
+           enddo
         enddo
-     enddo
+     else
+        write(stdo,*) 'ERROR: Old fortran style unformatted I/O not '
+        write(stdo,*) '       available for unstructured grids'
+        stop 7337
+     endif
   elseif(style.eq.3) then
      !
      ! Binary input: C-compliant unformatted streaming data
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        if(precis.eq.4) then
-           read(unit) sdummy 
-           if(index.gt.0) then
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           if(precis.eq.4) then
+              read(unit) sdummy 
+              if(index.gt.0) then
+                 if(present(scalar0)) scalar0(index) = max(sdummy,fl)
+                 if(present(scalar1)) scalar1(iv1,index) = max(sdummy,fl)
+                 if(present(scalar2)) scalar2(iv1,iv2,index) = max(sdummy,fl)
+              endif
+           else
+              read(unit) dummy 
+              if(index.gt.0) then
+                 if(present(scalar0)) scalar0(index) = max(dummy,fl)
+                 if(present(scalar1)) scalar1(iv1,index) = max(dummy,fl)
+                 if(present(scalar2)) scalar2(iv1,iv2,index) = max(dummy,fl)
+              endif
+           endif
+           call amr_nextcell(index)
+        enddo
+     else
+        do index=1,nrcells
+           if(precis.eq.4) then
+              read(unit) sdummy 
               if(present(scalar0)) scalar0(index) = max(sdummy,fl)
               if(present(scalar1)) scalar1(iv1,index) = max(sdummy,fl)
               if(present(scalar2)) scalar2(iv1,iv2,index) = max(sdummy,fl)
-           endif
-        else
-           read(unit) dummy 
-           if(index.gt.0) then
+           else
+              read(unit) dummy 
               if(present(scalar0)) scalar0(index) = max(dummy,fl)
               if(present(scalar1)) scalar1(iv1,index) = max(dummy,fl)
               if(present(scalar2)) scalar2(iv1,iv2,index) = max(dummy,fl)
            endif
-        endif
-        call amr_nextcell(index)
-     enddo
+        enddo
+     endif
   else
      write(stdo,*) 'INTERNAL ERROR: Input style ',style,' not known.'
      stop
@@ -1281,23 +1315,39 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
      !
      ! Formatted (ASCII) input
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        read(unit,*) thedata(1:nv)
-        do i=1,nv
-           thedata(i) = max(fl,thedata(i))
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           read(unit,*) thedata(1:nv)
+           do i=1,nv
+              thedata(i) = max(fl,thedata(i))
+           enddo
+           if(index.gt.0) then
+              if(present(vector0)) vector0(1:nv,index) = thedata(1:nv)
+              if(present(vector1)) vector1(1:nv,iv1,index) = thedata(1:nv)
+           endif
+           call amr_nextcell(index)
         enddo
-        if(index.gt.0) then
+     else
+        do index=1,nrcells
+           read(unit,*) thedata(1:nv)
+           do i=1,nv
+              thedata(i) = max(fl,thedata(i))
+           enddo
            if(present(vector0)) vector0(1:nv,index) = thedata(1:nv)
            if(present(vector1)) vector1(1:nv,iv1,index) = thedata(1:nv)
-        endif
-        call amr_nextcell(index)
-     enddo
+        enddo
+     endif
   elseif(style.eq.2) then
      !
      ! F77 style unformatted input (with records)
      !
+     if(igrid_type.ge.100) then
+        write(stdo,*) 'ERROR: Old fortran style unformatted I/O not '
+        write(stdo,*) '       available for unstructured grids'
+        stop 7337
+     endif
      if(reclend.eq.0) then
         !
         ! The new way: 1 record = 1 cell
@@ -1360,24 +1410,40 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
      !
      ! Binary input: C-compliant unformatted streaming data
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        if(precis.eq.4) then
-           read(unit) thesdata(1:nv)
-           thedata(1:nv) = thesdata(1:nv)
-        else
-           read(unit) thedata(1:nv)
-        endif
-        do i=1,nv
-           thedata(i) = max(fl,thedata(i))
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           if(precis.eq.4) then
+              read(unit) thesdata(1:nv)
+              thedata(1:nv) = thesdata(1:nv)
+           else
+              read(unit) thedata(1:nv)
+           endif
+           do i=1,nv
+              thedata(i) = max(fl,thedata(i))
+           enddo
+           if(index.gt.0) then
+              if(present(vector0)) vector0(1:nv,index) = thedata(1:nv)
+              if(present(vector1)) vector1(1:nv,iv1,index) = thedata(1:nv)
+           endif
+           call amr_nextcell(index)
         enddo
-        if(index.gt.0) then
+     else
+        do index=1,nrcells
+           if(precis.eq.4) then
+              read(unit) thesdata(1:nv)
+              thedata(1:nv) = thesdata(1:nv)
+           else
+              read(unit) thedata(1:nv)
+           endif
+           do i=1,nv
+              thedata(i) = max(fl,thedata(i))
+           enddo
            if(present(vector0)) vector0(1:nv,index) = thedata(1:nv)
            if(present(vector1)) vector1(1:nv,iv1,index) = thedata(1:nv)
-        endif
-        call amr_nextcell(index)
-     enddo
+        enddo
+     endif
   else
      write(stdo,*) 'INTERNAL ERROR: Input style ',style,' not known.'
      stop
@@ -1421,23 +1487,37 @@ subroutine write_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2,reclen, &
      !
      ! Formatted (ASCII) output
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        if(index.gt.0) then
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           if(index.gt.0) then
+              if(present(scalar0)) dummy = scalar0(index)
+              if(present(scalar1)) dummy = scalar1(iv1,index)
+              if(present(scalar2)) dummy = scalar2(iv1,iv2,index)
+           else
+              dummy = 0.d0
+           endif
+           write(unit,*) dummy 
+           call amr_nextcell(index)
+        enddo
+     else
+        do index=1,nrcells
            if(present(scalar0)) dummy = scalar0(index)
            if(present(scalar1)) dummy = scalar1(iv1,index)
            if(present(scalar2)) dummy = scalar2(iv1,iv2,index)
-        else
-           dummy = 0.d0
-        endif
-        write(unit,*) dummy 
-        call amr_nextcell(index)
-     enddo
+           write(unit,*) dummy 
+        enddo
+     endif
   elseif(style.eq.2) then
      !
      ! Unformatted output, old fortran style (with records)
      !
+     if(igrid_type.ge.100) then
+        write(stdo,*) 'ERROR: Old fortran style unformatted I/O not '
+        write(stdo,*) '       available for unstructured grids'
+        stop 7337
+     endif
      if(.not.present(reclen)) then
         write(stdo,*) 'ERROR in call to write_scalarfield(): '
         write(stdo,*) '      reclen not present in argument list.'
@@ -1472,24 +1552,38 @@ subroutine write_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2,reclen, &
      !
      ! Binary output: C-compliant unformatted streaming data
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        if(index.gt.0) then
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           if(index.gt.0) then
+              if(present(scalar0)) dummy = scalar0(index)
+              if(present(scalar1)) dummy = scalar1(iv1,index)
+              if(present(scalar2)) dummy = scalar2(iv1,iv2,index)
+           else
+              dummy = 0.d0
+           endif
+           if(precis.eq.4) then
+              sdummy = dummy
+              write(unit) sdummy
+           else
+              write(unit) dummy
+           endif
+           call amr_nextcell(index)
+        enddo
+     else
+        do index=1,nrcells
            if(present(scalar0)) dummy = scalar0(index)
            if(present(scalar1)) dummy = scalar1(iv1,index)
            if(present(scalar2)) dummy = scalar2(iv1,iv2,index)
-        else
-           dummy = 0.d0
-        endif
-        if(precis.eq.4) then
-           sdummy = dummy
-           write(unit) sdummy
-        else
-           write(unit) dummy
-        endif
-        call amr_nextcell(index)
-     enddo
+           if(precis.eq.4) then
+              sdummy = dummy
+              write(unit) sdummy
+           else
+              write(unit) dummy
+           endif
+        enddo
+     endif
   else
      write(stdo,*) 'INTERNAL ERROR: Output style ',style,' not known.'
      stop
@@ -1543,29 +1637,49 @@ subroutine write_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1, &
      !
      ! Formatted (ASCII) output
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        if(index.gt.0) then
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           if(index.gt.0) then
+              if(present(vector0)) thedata(1:nv) = vector0(1:nv,index)
+              if(present(vector1)) thedata(1:nv) = vector1(1:nv,iv1,index) 
+           else
+              thedata(1:nv) = 0.d0
+           endif
+           ! Bugfix 22.02.2016
+           do ii=1,nv
+              if(abs(thedata(ii)).lt.1d-98) thedata(ii)=0.d0
+           enddo
+           ! End Bugfix 22.02.2016
+           call integer_to_string(nv,strnv)
+           form='('//trim(strnv)//'(E13.6,1X))'
+           write(unit,form) thedata(1:nv)
+           call amr_nextcell(index)
+        enddo
+     else
+        do index=1,nrcells
            if(present(vector0)) thedata(1:nv) = vector0(1:nv,index)
            if(present(vector1)) thedata(1:nv) = vector1(1:nv,iv1,index) 
-        else
-           thedata(1:nv) = 0.d0
-        endif
-        ! Bugfix 22.02.2016
-        do ii=1,nv
-           if(abs(thedata(ii)).lt.1d-98) thedata(ii)=0.d0
+           ! Bugfix 22.02.2016
+           do ii=1,nv
+              if(abs(thedata(ii)).lt.1d-98) thedata(ii)=0.d0
+           enddo
+           ! End Bugfix 22.02.2016
+           call integer_to_string(nv,strnv)
+           form='('//trim(strnv)//'(E13.6,1X))'
+           write(unit,form) thedata(1:nv)
         enddo
-        ! End Bugfix 22.02.2016
-        call integer_to_string(nv,strnv)
-        form='('//trim(strnv)//'(E13.6,1X))'
-        write(unit,form) thedata(1:nv)
-        call amr_nextcell(index)
-     enddo
+     endif
   elseif(style.eq.2) then
      !
      ! F77 style unformatted output (with records)
      !
+     if(igrid_type.ge.100) then
+        write(stdo,*) 'ERROR: Old fortran style unformatted I/O not '
+        write(stdo,*) '       available for unstructured grids'
+        stop 7337
+     endif
      call amr_resetcount()
      call amr_nextcell(index)
      do while(index.ge.0) 
@@ -1582,23 +1696,36 @@ subroutine write_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1, &
      !
      ! Binary output: C-compliant unformatted streaming data
      !
-     call amr_resetcount()
-     call amr_nextcell(index)
-     do while(index.ge.0) 
-        if(index.gt.0) then
+     if(igrid_type.lt.100) then
+        call amr_resetcount()
+        call amr_nextcell(index)
+        do while(index.ge.0) 
+           if(index.gt.0) then
+              if(present(vector0)) thedata(1:nv) = vector0(1:nv,index) 
+              if(present(vector1)) thedata(1:nv) = vector1(1:nv,iv1,index) 
+           else
+              thedata(1:nv) = 0.d0
+           endif
+           if(precis.eq.4) then
+              thesdata(1:nv) = thedata(1:nv)
+              write(unit) thesdata(1:nv)
+           else
+              write(unit) thedata(1:nv)
+           endif
+           call amr_nextcell(index)
+        enddo
+     else
+        do index=1,nrcells
            if(present(vector0)) thedata(1:nv) = vector0(1:nv,index) 
            if(present(vector1)) thedata(1:nv) = vector1(1:nv,iv1,index) 
-        else
-           thedata(1:nv) = 0.d0
-        endif
-        if(precis.eq.4) then
-           thesdata(1:nv) = thedata(1:nv)
-           write(unit) thesdata(1:nv)
-        else
-           write(unit) thedata(1:nv)
-        endif
-        call amr_nextcell(index)
-     enddo
+           if(precis.eq.4) then
+              thesdata(1:nv) = thedata(1:nv)
+              write(unit) thesdata(1:nv)
+           else
+              write(unit) thedata(1:nv)
+           endif
+        enddo
+     endif
   else
      write(stdo,*) 'INTERNAL ERROR: Output style ',style,' not known.'
      stop

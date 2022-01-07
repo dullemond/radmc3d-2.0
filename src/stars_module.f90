@@ -2,6 +2,7 @@ module stars_module
 use rtglobal_module
 use amr_module
 use amrray_module
+use ugrid_module
 use mathroutines_module
 use constants_module
 
@@ -400,6 +401,11 @@ subroutine read_stars()
      ! spheres
      !
      if(star_sphere) then
+        if(igrid_type.ge.100) then
+           write(stdo,*) 'ERROR: Star spheres (instead of points) are not yet '
+           write(stdo,*) '       implemented in the unstructured grid mode.'
+           stop 3471
+        endif
         if(nstars.gt.0) then 
            !
            ! Switch on the star sphere mode
@@ -621,7 +627,7 @@ subroutine stars_findcell()
   integer :: istar
   double precision :: r,theta,phi
   type(amr_branch), pointer :: a
-  integer :: ix,iy,iz
+  integer :: ix,iy,iz,cellindex
   !
   if(nstars.ge.1) then
      if(igrid_type.lt.100) then
@@ -734,6 +740,15 @@ subroutine stars_findcell()
            write(stdo,*) 'ERROR: Other coordinate not yet implemented'
            stop 6491
         endif
+     elseif(igrid_type.ge.200) then
+        !
+        ! Unstructured grid
+        !
+        do istar=1,nstars
+           call ugrid_findcell_by_walking(star_pos(1,istar),star_pos(2,istar),&
+                star_pos(3,istar),cellindex)
+           star_cellindex(istar) = cellindex
+        enddo
      else
         write(stdo,*) 'ERROR: Other grid types not yet implemented'
         stop 2230
@@ -1390,19 +1405,51 @@ subroutine jitter_stars(fact)
   integer :: istar
   double precision :: szx,szy,szz,fact
   double precision :: smallnumberx,smallnumbery,smallnumberz
+  double precision :: x0,y0,z0,x1,y1,z1
+  integer :: icell
   parameter(smallnumberx=0.48957949203816064943d-12)
   parameter(smallnumbery=0.38160649492048957394d-12)
   parameter(smallnumberz=0.64943484920957938160d-12)
   !
   if(nstars.ge.1) then
-     szx = amr_grid_xi(amr_grid_nx+1,1) - amr_grid_xi(1,1)
-     szy = amr_grid_xi(amr_grid_ny+1,2) - amr_grid_xi(1,2)
-     szz = amr_grid_xi(amr_grid_nz+1,3) - amr_grid_xi(1,3)
-     do istar=1,nstars
-        star_pos(1,istar) = star_pos(1,istar) + fact*szx*smallnumberx
-        star_pos(2,istar) = star_pos(2,istar) + fact*szy*smallnumbery
-        star_pos(3,istar) = star_pos(3,istar) + fact*szz*smallnumberz
-     enddo
+     if(igrid_type.lt.100) then
+        szx = amr_grid_xi(amr_grid_nx+1,1) - amr_grid_xi(1,1)
+        szy = amr_grid_xi(amr_grid_ny+1,2) - amr_grid_xi(1,2)
+        szz = amr_grid_xi(amr_grid_nz+1,3) - amr_grid_xi(1,3)
+        do istar=1,nstars
+           star_pos(1,istar) = star_pos(1,istar) + fact*szx*smallnumberx
+           star_pos(2,istar) = star_pos(2,istar) + fact*szy*smallnumbery
+           star_pos(3,istar) = star_pos(3,istar) + fact*szz*smallnumberz
+        enddo
+     elseif(igrid_type.ge.200) then
+        x0 = 1d+90
+        y0 = 1d+90
+        z0 = 1d+90
+        x1 = -1d+90
+        y1 = -1d+90
+        z1 = -1d+90
+        do icell=1,ugrid_ncells
+           if(ugrid_cell_volume(icell).gt.0.d0) then
+              if(ugrid_cellcenters(icell,1).lt.x0) x0 = ugrid_cell_size(icell)
+              if(ugrid_cellcenters(icell,2).lt.y0) y0 = ugrid_cell_size(icell)
+              if(ugrid_cellcenters(icell,3).lt.z0) z0 = ugrid_cell_size(icell)
+              if(ugrid_cellcenters(icell,1).gt.x1) x1 = ugrid_cell_size(icell)
+              if(ugrid_cellcenters(icell,2).gt.y1) y1 = ugrid_cell_size(icell)
+              if(ugrid_cellcenters(icell,3).gt.z1) z1 = ugrid_cell_size(icell)
+           endif
+        enddo
+        szx = x1-x0
+        szy = y1-y0
+        szz = z1-z0
+        if(szx.le.0.d0) stop 5011
+        if(szy.le.0.d0) stop 5011
+        if(szz.le.0.d0) stop 5011
+        do istar=1,nstars
+           star_pos(1,istar) = star_pos(1,istar) + fact*szx*smallnumberx
+           star_pos(2,istar) = star_pos(2,istar) + fact*szy*smallnumbery
+           star_pos(3,istar) = star_pos(3,istar) + fact*szz*smallnumberz
+        enddo
+     endif
   endif
 end subroutine jitter_stars
 
