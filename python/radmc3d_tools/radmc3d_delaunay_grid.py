@@ -290,10 +290,15 @@ class Delaunaygrid(object):
         n      = sign[:,None]*self.wall_n[iwalls,:]
         inp    = ((s-p)*n).sum(axis=1)
         inpmin = inp.min()
-        if(inpmin>=0): return True
-        if(not getdiag): return False
-        return False,iwalls,sign,s,n,inp
-        
+        res    = (inpmin>=0)
+        if(not getdiag): return res
+        return res,iwalls,sign,s,n,inp
+
+    def find_neighboring_cells(self,icell):
+        ineigh = self.wall_icells[grid.cell_iwalls[icell]].flatten()
+        ineigh = ineigh[ineigh!=icell]
+        return ineigh
+    
     def visualize_cells(self,icells=None,alpha=0.9,colors="C1",bbox=None):
         import mpl_toolkits.mplot3d as a3
         if icells is None: icells=np.arange(self.ncells)

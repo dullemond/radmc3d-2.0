@@ -83,6 +83,10 @@ class Voronoigrid(object):
         print('Linking the cell walls back to the cells...')
         self.link_walls_to_cells()
         #
+        # Link vertices to cells
+        #
+        self.link_vertices_to_cells(remove_nonverts=True)
+        #
         # Compute some diagnostics
         #
         self.compute_diagnostics()
@@ -128,8 +132,40 @@ class Voronoigrid(object):
             indices = set(self.vor.regions[self.vor.point_region[i]])
             if len(indices&ivout)>0:
                 self.cell_volumes[i] = 0.0
-        
-    def create_cellwalls(self):
+
+    def link_vertices_to_cells(self,remove_nonverts=True):
+        self.cell_iverts = [ [] for _ in range(self.ncells) ]
+        for i in range(self.ncells):
+            iverts = self.vor.regions[self.vor.point_region[i]]
+            iverts = np.array(iverts)
+            if remove_nonverts:
+                iverts = iverts[iverts>=0]
+            self.cell_iverts[i] = iverts
+                
+    def crossp(self,v1,v2):
+        v1 = np.array(v1)
+        v2 = np.array(v2)
+        if(len(v1.shape)==1):
+            nv = 1
+            assert(len(v2.shape)==1), 'v1 and v2 must has same shape'
+        else:
+            nv = v1.shape[0]
+            assert(len(v2.shape)==2), 'v1 and v2 must has same shape'
+            assert(v2.shape[0]==nv), 'v1 and v2 must has same shape'
+        dm = v1.shape[-1]
+        v1 = v1.reshape((nv,dm))
+        v2 = v2.reshape((nv,dm))
+        if dm==2:
+            c    = np.zeros(nv)
+            c[:] = v1[:,0]*v2[:,1] - v1[:,1]*v2[:,0]
+        else:
+            c      = np.zeros((nv,dm))
+            c[:,0] = v1[:,1]*v2[:,2] - v1[:,2]*v2[:,1]
+            c[:,1] = v1[:,2]*v2[:,0] - v1[:,0]*v2[:,2]
+            c[:,2] = v1[:,0]*v2[:,1] - v1[:,1]*v2[:,0]
+        return c
+
+    def create_cellwalls(self,remove_nonverts=True):
         points           = self.cell_points
         self.nwalls      = self.vor.ridge_points.shape[0]
         #
@@ -143,7 +179,13 @@ class Voronoigrid(object):
         l = (self.wall_n**2).sum(axis=1)**0.5
         self.wall_n     /= l[:,None]
         self.wall_icells = self.vor.ridge_points
-        self.wall_iverts = self.vor.ridge_vertices
+        self.wall_iverts = [ [] for _ in range(self.nwalls) ]
+        for i in range(self.nwalls):
+            iverts = self.vor.ridge_vertices[i]
+            iverts = np.array(iverts)
+            if remove_nonverts:
+                iverts = iverts[iverts>=0]
+            self.wall_iverts[i] = iverts
 
     def link_walls_to_cells(self):
         self.cell_iwalls = [ [] for _ in range(self.npnts) ]
@@ -170,16 +212,50 @@ class Voronoigrid(object):
         self.vert_max_nr_cells = 0
         self.hull_nwalls       = 0
 
-    def check_point_in_cell(self,p,icell,getdiag=False):
+    def check_point_in_wall_plane(self,p,iwall):
+        verts = self.wall_get_vertices(iwall,close=True)
+        if(verts.shape[0]<4): return False
+        dv    = verts[1:,:]-verts[:-1,:]
+        dvp   = p-verts[:-1,:]
+        scale = np.sqrt((dv**2).sum(axis=1)).max()
+        dv   /= scale
+        dvp  /= scale
+        cp    = self.crossp(dvp[:-1],dvp[1:])
+        err   = np.abs((cp[0:-2]*dv[2:-1]).sum(axis=1)).max()
+        tol   = 1e-12
+        return err<tol
+        
+    def check_point_in_cell(self,p,icell,iwallin=None,getdiag=False):
         iwalls = np.array(self.cell_iwalls[icell])
         sign   = np.array(self.cell_wsign[icell])
+        if iwallin is not None:
+            # Exclude wall on which the point is currently
+            mask   = iwalls!=iwallin
+            iwalls = iwalls[mask]
+            sign   = sign[mask]
+            # But then check if the point is indeed on the plane of this wall
+            onwall = self.check_point_in_wall_plane(p,iwallin)
         s      = self.wall_s[iwalls,:]
         n      = sign[:,None]*self.wall_n[iwalls,:]
         inp    = ((s-p)*n).sum(axis=1)
         inpmin = inp.min()
-        if(inpmin>=0): return True
-        if(not getdiag): return False
-        return False,iwalls,sign,s,n,inp
+        res    = (inpmin>=0)
+        if iwallin is not None:
+            res = res and onwall
+        if(not getdiag): return res
+        return res,iwalls,sign,s,n,inp
+
+    def find_neighboring_cells(self,icell):
+        ineigh = self.wall_icells[self.cell_iwalls[icell]].flatten()
+        ineigh = ineigh[ineigh!=icell]
+        return ineigh
+
+    def wall_get_vertices(self,iwall,close=True):
+        iverts = np.array(self.wall_iverts[iwall])
+        iverts = iverts[iverts>=0]
+        if close: iverts = np.hstack((iverts,iverts[0]))
+        verts  = self.vertices[iverts]
+        return verts
         
     def visualize_cells(self,icells=None,alpha=0.9,colors="C1",bbox=None):
         import mpl_toolkits.mplot3d as a3
