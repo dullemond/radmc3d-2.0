@@ -11,6 +11,9 @@ class Voronoigrid(object):
 
         Arguments:
           points      The points given as a numpy array points[npnts,3].
+                      If set to None, the present unstr_grid.*inp file will be 
+                      read, but only the points. The grid will be re-constructed
+                      from these points.
         
         Options:
           bbox               If set to [[xmin,xmax],[ymin,ymax],[zmin,zmax]] this sets
@@ -27,8 +30,18 @@ class Voronoigrid(object):
         box walls. But the additional complexity is not worth it, so instead, 
         these cells are considered empty.
         """
+        #
+        # Set flags
+        #
         self.save_cellcenters = True    # Must be!
         self.save_size        = False   # For now
+        #
+        # If points is None, then read points from a pre-existing file
+        #
+        if(points is None):
+            print('Reading cell center points from grid file...')
+            self.read_radmc3d_unstr_grid()
+            points = self.cell_points
         #
         # The Qhull algorithms are sensitive to very large numbers, so let's
         # scale everything. First compute a useful scale factor
@@ -262,6 +275,46 @@ class Voronoigrid(object):
                     data = self.cell_points
                     np.savetxt(f,data)                         # Write the cell centers
 
+    def read_radmc3d_unstr_grid(self):
+        import os.path
+        txt = os.path.isfile('unstr_grid.inp')
+        bin = os.path.isfile('unstr_grid.binp')
+        assert (bin and not txt) or (txt and not bin), 'Need either unstr_grid.inp or unstr_grid.binp to read. But not both.'
+        nihead = 14
+        if(bin):
+            with open('unstr_grid.binp','r+b') as f:
+                header            = np.fromfile(f,dtype=int,count=nihead+1)
+                self.ncells       = header[2]
+                self.nwalls       = header[3]
+                isave_cellcenters = header[11]
+                assert isave_cellcenters==1, 'Error: Cannot read unstr_grid.binp as a Voronoi because cell centers not given.'
+                # We skip the rest, except for the cell centers
+                np.fromfile(f,dtype=float,count=self.ncells)   # Skip the cell volumes
+                np.fromfile(f,dtype=float,count=self.nwalls*6) # Skip the cell walls s and n vectors
+                np.fromfile(f,dtype=int,count=self.nwalls*2)   # Skip the cell walls cell indices
+                self.cell_points  = np.fromfile(f,dtype=float,count=self.ncells*3) # Read the cell centers
+                self.cell_points  = self.cell_points.reshape((self.ncells,3))
+        else:
+            with open('unstr_grid.inp','r+') as f:
+                iformat       = int(f.readline())
+                self.ncells   = int(f.readline())
+                self.nwalls   = int(f.readline())
+                self.nverts   = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                isave_cellcenters = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                dum           = np.loadtxt(f,float,max_rows=self.ncells)    # Skip the cell volumes
+                dum           = np.loadtxt(f,float,max_rows=self.nwalls)    # Skip the wall s and n vectors
+                dum           = np.loadtxt(f,int,max_rows=self.nwalls)      # Skip the wall cell indices
+                self.cell_points = np.loadtxt(f,float,max_rows=self.ncells) # Read the cell centers
+                
 #
 # EXAMPLE (uncomment to try)
 # 

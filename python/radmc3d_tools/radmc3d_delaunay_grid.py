@@ -17,6 +17,9 @@ class Delaunaygrid(object):
 
         Arguments:
           vertices           The vertices given as a numpy array vertices[npnts,3].
+                             If set to None, the present unstr_grid.*inp file will be 
+                             read, but only the vertices. The grid will be re-constructed
+                             from these vertices.
 
         Options:
           save_vertices:     If True, then the 3D locations of the vertices are 
@@ -33,9 +36,19 @@ class Delaunaygrid(object):
                              of the cell walls.
         
         """
+        #
+        # Set flags
+        #
         self.save_cellcenters = save_cellcenters
         self.save_vertices    = save_vertices
         self.save_size        = False   # For now
+        #
+        # If vertices is None, then read vertices from a pre-existing file
+        #
+        if(vertices is None):
+            print('Reading vertices from grid file...')
+            self.read_radmc3d_unstr_grid()
+            vertices = self.vertices
         #
         # The Qhull algorithms are sensitive to very large numbers, so let's
         # scale everything. First compute a useful scale factor
@@ -390,6 +403,56 @@ class Delaunaygrid(object):
                     np.savetxt(f,self.wall_iverts+1,fmt='%d')  # Indices of vertices of each wall (starting with 1, fortran style!)
                     data = self.vertices
                     np.savetxt(f,data)                         # Write the vertices
+
+    def read_radmc3d_unstr_grid(self):
+        import os.path
+        txt = os.path.isfile('unstr_grid.inp')
+        bin = os.path.isfile('unstr_grid.binp')
+        assert (bin and not txt) or (txt and not bin), 'Need either unstr_grid.inp or unstr_grid.binp to read. But not both.'
+        nihead = 14
+        if(bin):
+            with open('unstr_grid.binp','r+b') as f:
+                header            = np.fromfile(f,dtype=int,count=nihead+1)
+                self.ncells       = header[2]
+                self.nwalls       = header[3]
+                self.nverts       = header[4]
+                self.wall_max_nr_verts = header[7]
+                assert self.wall_max_nr_verts>0, 'Error: Cannot read unstr_grid.inp as a Delaunay because max nr of vertices per wall not given.'
+                isave_cellcenters = header[11]
+                isave_vertices    = header[12]
+                assert isave_vertices==1, 'Error: Cannot read unstr_grid.binp as a Delaunay because vertices not given.'
+                # We skip the rest, except for the vertices
+                np.fromfile(f,dtype=float,count=self.ncells)   # Skip the cell volumes
+                np.fromfile(f,dtype=float,count=self.nwalls*6) # Skip the cell walls s and n vectors
+                np.fromfile(f,dtype=int,count=self.nwalls*2)   # Skip the cell walls cell indices
+                if isave_cellcenters==1: dum = np.fromfile(f,dtype=float,count=self.ncells*3) # Skip the cell centers
+                np.fromfile(f,dtype=int,count=self.nwalls*self.wall_max_nr_verts)   # Skip the cell walls vert indices
+                self.vertices = np.fromfile(f,dtype=float,count=self.nverts*3) # Read the vertices
+                self.vertices  = self.vertices.reshape((self.nverts,3))
+        else:
+            with open('unstr_grid.inp','r+') as f:
+                iformat       = int(f.readline())
+                self.ncells   = int(f.readline())
+                self.nwalls   = int(f.readline())
+                self.nverts   = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                self.wall_max_nr_verts = int(f.readline())
+                assert self.wall_max_nr_verts>0, 'Error: Cannot read unstr_grid.inp as a Delaunay because max nr of vertices per wall not given.'
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                isave_cellcenters = int(f.readline())
+                isave_vertices    = int(f.readline())
+                assert isave_vertices==1, 'Error: Cannot read unstr_grid.binp as a Delaunay because vertices not given.'
+                idum          = int(f.readline())
+                idum          = int(f.readline())
+                dum           = np.loadtxt(f,float,max_rows=self.ncells)    # Skip the cell volumes
+                dum           = np.loadtxt(f,float,max_rows=self.nwalls)    # Skip the wall s and n vectors
+                dum           = np.loadtxt(f,int,max_rows=self.nwalls)      # Skip the wall cell indices
+                if isave_cellcenters==1: dum = np.loadtxt(f,float,max_rows=self.ncells) # Skip the cell centers
+                dum           = np.loadtxt(f,float,max_rows=self.nwalls)    # Skip the vertex links to walls
+                self.vertices = np.loadtxt(f,float,max_rows=self.nverts)    # Read the vertices
 
     def interpolate_to_cell_centers(self,q_at_vertices):
         shape         = list(q_at_vertices.shape)

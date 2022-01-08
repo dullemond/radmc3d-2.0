@@ -726,6 +726,7 @@ contains
        call ugrid_point_in_cell(v,index,res)
        if(.not.res) then
           write(*,*) 'Error in ugrid_findcell_by_walking(): Cell found is inconsistent.'
+          write(*,*) 'Cell index found = ',index,', Point = ',v(:)
           stop 3788
        endif
     endif
