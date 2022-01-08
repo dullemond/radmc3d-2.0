@@ -1352,7 +1352,7 @@ contains
     integer :: idum,iformat,idum1,idum2,counthullw,countopens
     integer :: maxnwalls,iiwall,iivert,maxnverts,ivscan,ivcount
     integer(kind=8) :: iiformat,nn,kk,precis
-    double precision :: vec1(1:3),vec2(1:3),vec3(1:3),inp
+    double precision :: vec1(1:3),vec2(1:3),vec3(1:3),inp,len
     integer, allocatable :: iverts(:)
     logical :: gotit
     call ugrid_cleanup()
@@ -1709,6 +1709,17 @@ contains
        if(inp.lt.0) then
           ugrid_wall_n(iwall,1:3) = - ugrid_wall_n(iwall,1:3)
        endif
+    enddo
+    !
+    ! Make sure all normal vectors have length 1
+    !
+    do iwall=1,ugrid_nwalls
+       len = sqrt(ugrid_wall_n(iwall,1)**2 + ugrid_wall_n(iwall,2)**2 + ugrid_wall_n(iwall,3)**2)
+       if((len.lt.0.5d0).or.(len.gt.2.d0)) then
+          write(*,*) 'Normal vector of wall ',iwall,' is badly normalized: length = ',len
+          stop 934
+       endif
+       ugrid_wall_n(iwall,1:3) = ugrid_wall_n(iwall,1:3) / len
     enddo
     !
     ! Check consistency of all cell walls
