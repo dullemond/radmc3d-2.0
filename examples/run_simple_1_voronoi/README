@@ -1,0 +1,11 @@
+This is the same as the run_simple_1/ model, but now built on an unstructured
+grid. In this version a Delaunay grid is set up. A set of randomly placed points
+is created. From this, a Delaunay triangulation is generated, which creates
+tetrahedral (simplex) cells spanned by neighboring points. The centers of these
+cells are then used as the sampling points where the density of the Gaussian
+cloud is computed.
+
+The Delaunay grid is written to a file, and so is the density. The rest works
+the same as for run_simple_1/
+
+2022.01.07

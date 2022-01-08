@@ -5,7 +5,7 @@ import struct
 from tqdm import tqdm    # For a nice progress bar
 
 class Delaunaygrid(object):
-    def __init__(self,vertices,save_cellcenters=False,save_vertices=False):
+    def __init__(self,vertices,save_cellcenters=False,save_vertices=True):
         """
         Create a Delaunay grid for RADMC-3D from a set of 3D vertices. Note that
         this means that the vertices are not representative of the cells. The
@@ -37,11 +37,18 @@ class Delaunaygrid(object):
         self.save_vertices    = save_vertices
         self.save_size        = False   # For now
         #
+        # The Qhull algorithms are sensitive to very large numbers, so let's
+        # scale everything. First compute a useful scale factor
+        #
+        scale            = points.max(axis=0)-points.min(axis=0)
+        scale            = scale.max()
+        self.scale       = scale
+        #
         # Create the Delaunay Triangulation
         #
         print('Running scipy.spatial.Delaunay() to create Delaunay triangulation...')
-        self.tri         = Delaunay(vertices)
-        self.vertices    = self.tri.points
+        self.tri         = Delaunay(vertices/scale)
+        self.vertices    = self.tri.points*scale
         self.nverts      = vertices.shape[0]
         self.ncells      = self.tri.nsimplex
         self.ncells_open = 0
@@ -76,12 +83,13 @@ class Delaunaygrid(object):
         """
         Compute the volume of the Delaunay cells
         """
+        scale = self.scale
         self.cell_volumes = np.zeros(self.ncells)
         if useCH:
             #for i in range(self.tri.nsimplex):  # Without progress bar
             for i in tqdm(range(self.ncells)):
                 indices = self.tri.simplices[i]
-                self.cell_volumes[i] = ConvexHull(self.vertices[indices]).volume
+                self.cell_volumes[i] = scale**3 * ConvexHull(self.vertices[indices]/scale).volume
         else:
             v  = self.vertices[self.cell_iverts]
             cp = self.crossp((v[:,1,:]-v[:,-1,:]),(v[:,2,:]-v[:,-1,:]))

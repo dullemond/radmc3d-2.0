@@ -30,11 +30,19 @@ class Voronoigrid(object):
         self.save_cellcenters = True    # Must be!
         self.save_size        = False   # For now
         #
+        # The Qhull algorithms are sensitive to very large numbers, so let's
+        # scale everything. First compute a useful scale factor
+        #
+        scale            = points.max(axis=0)-points.min(axis=0)
+        scale            = scale.max()
+        self.scale       = scale
+        #
         # Create the Voronoi tesselation
         #
         print('Running scipy.spatial.Voronoi() to create Voronoi tesselation...')
-        self.vor         = Voronoi(points)
-        self.cell_points = self.vor.points
+        self.vor         = Voronoi(points/scale)
+        self.cell_points = self.vor.points*scale
+        self.vertices    = self.vor.vertices*scale
         self.npnts       = points.shape[0]
         self.nverts      = 0       # For now
         #
@@ -72,6 +80,7 @@ class Voronoigrid(object):
         From https://stackoverflow.com/questions/19634993/volume-of-voronoi-cell-python
         Answer by ybeltukov
         """
+        scale = self.scale
         self.cell_volumes = np.zeros(self.vor.npoints)
         #for i in range(self.npnts):  # Without progress bar
         for i in tqdm(range(self.npnts)):
@@ -79,7 +88,7 @@ class Voronoigrid(object):
             if -1 in indices: # some regions can be open
                 self.cell_volumes[i] = 0.0
             else:
-                self.cell_volumes[i] = ConvexHull(self.vor.vertices[indices]).volume
+                self.cell_volumes[i] = scale**3 * ConvexHull(self.vertices[indices]/scale).volume
 
     def bbox_reject_cells(self):
         """
@@ -93,9 +102,9 @@ class Voronoigrid(object):
         #
         # Find the Voronoi vertices that are outside of the bbox
         #
-        maskx = np.logical_or(vor.vertices[:,0]<bbox[0][0],vor.vertices[:,0]>bbox[0][1])
-        masky = np.logical_or(vor.vertices[:,1]<bbox[1][0],vor.vertices[:,1]>bbox[1][1])
-        maskz = np.logical_or(vor.vertices[:,2]<bbox[2][0],vor.vertices[:,2]>bbox[2][1])
+        maskx = np.logical_or(self.vertices[:,0]<bbox[0][0],self.vertices[:,0]>bbox[0][1])
+        masky = np.logical_or(self.vertices[:,1]<bbox[1][0],self.vertices[:,1]>bbox[1][1])
+        maskz = np.logical_or(self.vertices[:,2]<bbox[2][0],self.vertices[:,2]>bbox[2][1])
         mask  = np.logical_or(maskx,np.logical_or(masky,maskz))
         ivout = set(np.where(mask)[0])
         #
@@ -108,6 +117,7 @@ class Voronoigrid(object):
                 self.cell_volumes[i] = 0.0
         
     def create_cellwalls(self):
+        points           = self.cell_points
         self.nwalls      = self.vor.ridge_points.shape[0]
         #
         # The support vectors
@@ -134,7 +144,8 @@ class Voronoigrid(object):
 
     def compute_diagnostics(self):
         self.ncells        = self.npnts
-        self.ncells_open   = len(np.where((self.cell_volumes<=0.0))[0])
+        self.cell_iopen    = np.where((self.cell_volumes<=0.0))[0]
+        self.ncells_open   = len(self.cell_iopen)
         self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
         assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
         self.volume_total   = self.cell_volumes.sum()
@@ -160,7 +171,7 @@ class Voronoigrid(object):
             for iwall in w:
                 ivert = vor.ridge_vertices[iwall].copy()
                 ivert.pop(-1)
-                polys.append(vor.vertices[ivert])
+                polys.append(self.vertices[ivert])
         pc = a3.art3d.Poly3DCollection(polys, facecolor=colors, edgecolor="k", alpha=alpha)
         ax.add_collection3d(pc)
         if bbox is None:
