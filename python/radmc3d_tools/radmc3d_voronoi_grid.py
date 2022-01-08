@@ -143,6 +143,7 @@ class Voronoigrid(object):
         l = (self.wall_n**2).sum(axis=1)**0.5
         self.wall_n     /= l[:,None]
         self.wall_icells = self.vor.ridge_points
+        self.wall_iverts = self.vor.ridge_vertices
 
     def link_walls_to_cells(self):
         self.cell_iwalls = [ [] for _ in range(self.npnts) ]
@@ -169,9 +170,20 @@ class Voronoigrid(object):
         self.vert_max_nr_cells = 0
         self.hull_nwalls       = 0
 
+    def check_point_in_cell(self,p,icell,getdiag=False):
+        iwalls = np.array(self.cell_iwalls[icell])
+        sign   = np.array(self.cell_wsign[icell])
+        s      = self.wall_s[iwalls,:]
+        n      = sign[:,None]*self.wall_n[iwalls,:]
+        inp    = ((s-p)*n).sum(axis=1)
+        inpmin = inp.min()
+        if(inpmin>=0): return True
+        if(not getdiag): return False
+        return False,iwalls,sign,s,n,inp
+        
     def visualize_cells(self,icells=None,alpha=0.9,colors="C1",bbox=None):
         import mpl_toolkits.mplot3d as a3
-        if icells is None: icells=np.arange(grid.ncells)
+        if icells is None: icells=np.arange(self.ncells)
         vor    = self.vor
         if np.isscalar(icells):
             icells=np.array([icells])
@@ -201,7 +213,7 @@ class Voronoigrid(object):
 
     def visualize_points(self,icells=None,colors="C1"):
         import mpl_toolkits.mplot3d
-        if icells is None: icells=np.arange(grid.ncells)
+        if icells is None: icells=np.arange(self.ncells)
         fig = plt.figure()
         ax  = fig.add_subplot(projection='3d')
         ax.scatter(self.cell_points[icells,0],self.cell_points[icells,1],self.cell_points[icells,2])

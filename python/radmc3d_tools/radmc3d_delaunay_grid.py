@@ -283,9 +283,20 @@ class Delaunaygrid(object):
         self.wall_max_nr_verts = 3
         self.vert_max_nr_cells = 0
         
+    def check_point_in_cell(self,p,icell,getdiag=False):
+        iwalls = np.array(self.cell_iwalls[icell])
+        sign   = np.array(self.cell_wsign[icell])
+        s      = self.wall_s[iwalls,:]
+        n      = sign[:,None]*self.wall_n[iwalls,:]
+        inp    = ((s-p)*n).sum(axis=1)
+        inpmin = inp.min()
+        if(inpmin>=0): return True
+        if(not getdiag): return False
+        return False,iwalls,sign,s,n,inp
+        
     def visualize_cells(self,icells=None,alpha=0.9,colors="C1",bbox=None):
         import mpl_toolkits.mplot3d as a3
-        if icells is None: icells=np.arange(grid.ncells)
+        if icells is None: icells=np.arange(self.ncells)
         tri    = self.tri
         if np.isscalar(icells):
             icells=np.array([icells])
@@ -311,7 +322,7 @@ class Delaunaygrid(object):
 
     def visualize_points(self,icells=None,colors="C1"):
         import mpl_toolkits.mplot3d
-        if icells is None: icells=np.arange(grid.ncells)
+        if icells is None: icells=np.arange(self.ncells)
         fig = plt.figure()
         ax  = fig.add_subplot(projection='3d')
         ax.scatter(self.cell_points[icells,0],self.cell_points[icells,1],self.cell_points[icells,2])
@@ -319,7 +330,7 @@ class Delaunaygrid(object):
         
     def visualize_vertices(self,ivert=None,colors="C1"):
         import mpl_toolkits.mplot3d
-        if ivert is None: ivert=np.arange(grid.nverts)
+        if ivert is None: ivert=np.arange(self.nverts)
         fig = plt.figure()
         ax  = fig.add_subplot(projection='3d')
         ax.scatter(self.vertices[ivert,0],self.vertices[ivert,1],self.vertices[ivert,2])
