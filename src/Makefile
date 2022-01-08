@@ -13,7 +13,7 @@ OPTIM = -O2 -fopenmp
 FF = gfortran
 
 # Boundary check
-# BCHECK   = -fbounds-check
+BCHECK   = -fbounds-check
 
 # Glueing all the things together
 FFLAGS   = $(OPTIM) $(BCHECK)

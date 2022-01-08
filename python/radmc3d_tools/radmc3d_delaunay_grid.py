@@ -40,7 +40,7 @@ class Delaunaygrid(object):
         # The Qhull algorithms are sensitive to very large numbers, so let's
         # scale everything. First compute a useful scale factor
         #
-        scale            = points.max(axis=0)-points.min(axis=0)
+        scale            = vertices.max(axis=0)-vertices.min(axis=0)
         scale            = scale.max()
         self.scale       = scale
         #
@@ -96,7 +96,7 @@ class Delaunaygrid(object):
             self.cell_volumes = np.abs(((v[:,0,:]-v[:,-1,:])*cp).sum(axis=1))/6
 
     def create_cell_centers(self):
-        self.cell_points = self.tri.points[self.tri.simplices,:].mean(axis=1)
+        self.cell_points = self.vertices[self.tri.simplices,:].mean(axis=1)
         
     def crossp(self,v1,v2):
         v1 = np.array(v1)
@@ -142,12 +142,12 @@ class Delaunaygrid(object):
         # Compute their support vectors, pointing to the
         # center of their faces
         #
-        sv = tri.points[list_ivert,:].mean(axis=1)
+        sv = self.vertices[list_ivert,:].mean(axis=1)
         #
         # Create the normal vectors
         #
-        va = tri.points[list_ivert[:,1]]-tri.points[list_ivert[:,0]]
-        vb = tri.points[list_ivert[:,2]]-tri.points[list_ivert[:,0]]
+        va = self.vertices[list_ivert[:,1]]-self.vertices[list_ivert[:,0]]
+        vb = self.vertices[list_ivert[:,2]]-self.vertices[list_ivert[:,0]]
         n  = self.crossp(va,vb)
         l  = (n*n).sum(axis=1)
         assert(l.min()!=0), 'Error: One of the faces (cell walls) of the grid has zero surface area.'
@@ -208,12 +208,12 @@ class Delaunaygrid(object):
         # Compute the support vectors for all these inner walls, pointing to the
         # center of this face
         #
-        sv = tri.points[list_ivert,:].mean(axis=1)
+        sv = self.vertices[list_ivert,:].mean(axis=1)
         #
         # Create the normal vectors
         #
-        va = tri.points[list_ivert[:,1]]-tri.points[list_ivert[:,0]]
-        vb = tri.points[list_ivert[:,2]]-tri.points[list_ivert[:,0]]
+        va = self.vertices[list_ivert[:,1]]-self.vertices[list_ivert[:,0]]
+        vb = self.vertices[list_ivert[:,2]]-self.vertices[list_ivert[:,0]]
         n  = self.crossp(va,vb)
         l  = (n*n).sum(axis=1)
         assert(l.min()!=0), 'Error: One of the faces (cell walls) of the grid has zero surface area.'
@@ -283,7 +283,7 @@ class Delaunaygrid(object):
             if(len(icells)==1): 
                 colors = list(map("C{}".format, range(len(w))))
             for iwall in w:
-                polys.append(tri.points[self.wall_iverts[iwall,:]])
+                polys.append(self.vertices[self.wall_iverts[iwall,:]])
         pc = a3.art3d.Poly3DCollection(polys, facecolor=colors, edgecolor="k", alpha=alpha)
         ax.add_collection3d(pc)
         if bbox is not None:

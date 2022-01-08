@@ -110,7 +110,7 @@ with open('stars.inp','w+') as f:
 #
 # Write the grid file
 #
-grid.write_radmc3d_unstr_grid()
+grid.write_radmc3d_unstr_grid(bin=False)
 #
 # Write the density file
 #

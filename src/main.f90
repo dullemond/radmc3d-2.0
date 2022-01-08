@@ -3984,7 +3984,7 @@ subroutine write_banner()
   write(stdo,*) '     The reliability of this code depends on your vigilance!    '
   write(stdo,*) '                   dullemond@uni-heidelberg.de                  '
   write(stdo,*) '                                                                '
-  write(stdo,*) '  To keep up-to-date with bug-alarms and bugfixes, see          '
+  write(stdo,*) '     To keep up-to-date with bug-alarms and bugfixes, see       '
   write(stdo,*) '            https://github.com/dullemond/radmc3d-2.0            '
   write(stdo,*) '                                                                '
   write(stdo,*) '             Please visit the RADMC-3D home page at             '
