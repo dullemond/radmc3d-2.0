@@ -759,9 +759,10 @@ contains
        !   endif
        !endif
        !
-       ! Check that point is indeed in the next cell, if given
+       ! Check that point is indeed on the surface of the next cell, if given,
+       ! and if the ray has not stopped before that.
        !
-       if(nindex.gt.0) then
+       if((nindex.gt.0).and.(.not.arrived)) then
           v(1)   = x
           v(2)   = y
           v(3)   = z
@@ -1300,6 +1301,13 @@ contains
                 ! Find the cell
                 !
                 call ugrid_findcell_by_walking(x,y,z,index)
+                !
+                ! If the cell is indeed a cell, then take that for the
+                ! next search
+                !
+                if(index.gt.0) then
+                   ugrid_find_cell_start = index
+                endif
                 !
                 ! Take from the cell
                 !
