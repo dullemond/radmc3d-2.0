@@ -329,20 +329,28 @@ contains
     call ugrid_point_in_wall(iwall,vnew,res)
   end subroutine ugrid_ray_cross_wall
 
-  subroutine ugrid_point_in_cell(v,icell,res)
+  subroutine ugrid_point_in_cell(v,icell,res,iwallin)
     implicit none
     double precision :: v(1:3)
-    integer :: icell,iwall,iiwall
+    integer :: icell,iwall,iiwall,iiwallin
     double precision :: dv(1:3),n(1:3),inp
     logical :: res
+    integer, optional :: iwallin
+    if(present(iwallin)) then
+       iiwallin = iwallin
+    else
+       iiwallin = -1
+    endif
     res = .true.
     do iwall=1,ugrid_cell_nwalls(icell)
        if(ugrid_analyze) ugrid_pic_wall_cross_checks = ugrid_pic_wall_cross_checks + 1
        iiwall  = ugrid_cell_iwalls(icell,iwall)
-       n(1:3)  = ugrid_cell_sgnwalls(icell,iwall)*ugrid_wall_n(iiwall,1:3)
-       dv(1:3) = ugrid_wall_s(iiwall,1:3)-v(1:3)
-       inp     = dv(1)*n(1) + dv(2)*n(2) + dv(3)*n(3)
-       if(inp.lt.0) res=.false.
+       if(iiwall.ne.iiwallin) then
+          n(1:3)  = ugrid_cell_sgnwalls(icell,iwall)*ugrid_wall_n(iiwall,1:3)
+          dv(1:3) = ugrid_wall_s(iiwall,1:3)-v(1:3)
+          inp     = dv(1)*n(1) + dv(2)*n(2) + dv(3)*n(3)
+          if(inp.lt.0) res=.false.
+       endif
     enddo
   end subroutine ugrid_point_in_cell
 
@@ -431,12 +439,25 @@ contains
     res = 1d99
     iwallnext = -1
     icellnext = -1
+    if(icell.le.0) stop 1253
     !
-    ! If iwallcurr is set, then let's check if we are indeed
-    ! in the plane of this wall (only possible if cell size is
-    ! given).
+    ! If iwallcurr is set, then do some self-consistency checks
     !
     if(iwallcurr.gt.0) then
+       !
+       ! Check that the wall is indeed among the walls of the cell
+       !
+       do iwall=1,ugrid_cell_nwalls(icell)
+          if(ugrid_cell_iwalls(icell,iwall).eq.iwallcurr) goto 10
+       enddo
+       write(*,*) 'ERROR in ugrid_find_cell_wall_crossing(): iwallcurr ',iwallcurr
+       write(*,*) '      not cell wall of icell ',icell
+10     continue
+       !
+       ! Let's check if we are indeed
+       ! in the plane of this wall (only possible if cell size is
+       ! given).
+       !
        if(ugrid_cell_size(icell).gt.0.d0) then
           tol = ugrid_reltol * ugrid_cell_size(icell)
           call ugrid_point_in_wall_plane(iwallcurr,v,tol,inwall,dist)
@@ -683,6 +704,7 @@ contains
     implicit none
     doubleprecision :: ray_cart_x,ray_cart_y,ray_cart_z
     doubleprecision :: x,y,z,dirx,diry,dirz,ds,dsend
+    !doubleprecision :: xold,yold,zold  ! For debugging
     double precision :: v(1:3)
     integer :: index,nindex,iwall,niwall,is,cellindex
     logical :: res,arrived
@@ -706,8 +728,52 @@ contains
     ! Walk to the point of interest
     !
     do is=1,ugrid_max_ray_length
+       !
+       ! Backup current position (for debugging)
+       !
+       !xold = x
+       !yold = y 
+       !zold = z
+       !
+       ! Take a step of the walk
+       !
        call ugrid_find_next_location(dsend,x,y,z,dirx,diry,dirz,    &
             index,nindex,ds,iwall,niwall,arrived)
+       !
+       ! Check that the step is consistent (for debugging)
+       !
+       !if(index.gt.0) then
+       !   v(1)   = 0.5*(x+xold)
+       !   v(2)   = 0.5*(y+yold)
+       !   v(3)   = 0.5*(z+zold)
+       !   call ugrid_point_in_cell(v,index,res)
+       !   if(.not.res) then
+       !      write(*,*) 'Error in ugrid_findcell_by_walking(): Segment found is inconsistent.'
+       !      write(*,*) 'is = ',is,', arrived = ',arrived,', dsend = ',dsend,', dir = ',dirx,diry,dirz
+       !      write(*,*) 'index = ',index,', nindex = ',nindex,', iwall = ',iwall,', niwall = ',niwall
+       !      write(*,*) 'Cell index = ',index,', Midpoint of segment = ',v(:)
+       !      write(*,*) 'Cell center = ',ugrid_cellcenters(index,1:3)
+       !      write(*,*) 'Starting point of segment = ',xold,yold,zold
+       !      write(*,*) 'Ending point of segment   = ',x,y,z
+       !      stop 3789
+       !   endif
+       !endif
+       !
+       ! Check that point is indeed in the next cell, if given
+       !
+       if(nindex.gt.0) then
+          v(1)   = x
+          v(2)   = y
+          v(3)   = z
+          call ugrid_point_in_cell(v,nindex,res,niwall)
+          if(.not.res) then
+             write(*,*) 'Error in ugrid_findcell_by_walking(): Point not in next cell.'
+             stop 3790
+          endif
+       endif
+       !
+       ! Next
+       !
        dsend = sqrt((ray_cart_x-x)**2+(ray_cart_y-y)**2+(ray_cart_z-z)**2)
        if(arrived) goto 10
        index = nindex
@@ -784,6 +850,20 @@ contains
        !
        call ugrid_find_cell_wall_crossing(v,dir,ray_index,ray_curr_iwall,  &
             ray_next_iwall,ray_indexnext,ray_ds)
+       !
+       ! Check that if ray_ds is negative (which should actually never happen, but
+       ! could happen due to small round-off errors), it is small and not indicative
+       ! of a real error
+       !
+       if(ray_ds.lt.0.d0) then
+          if(abs(ray_ds).gt.ugrid_reltol*ray_dsend) then
+             write(*,*) 'ERROR in ugrid_find_next_location(): Found negative ds...'
+             write(*,*) '  icell = ',ray_index,', ds = ',ray_ds,', dsend = ',ray_dsend
+             write(*,*) '  v = ',v,', dir = ',dir,', iwall = ',ray_curr_iwall,', niwall = ',ray_next_iwall
+             write(*,*) '  index_next = ',ray_indexnext
+             stop 4893
+          endif
+       endif
        !
        ! Check if arrived
        !
