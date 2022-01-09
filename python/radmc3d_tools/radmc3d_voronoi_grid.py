@@ -164,8 +164,8 @@ class Voronoigrid(object):
                 self.cell_volumes[i] = 0.0
 
     def link_vertices_to_cells(self,remove_nonverts=True):
-        self.cell_iverts = [ [] for _ in range(self.ncells) ]
-        for i in range(self.ncells):
+        self.cell_iverts = [ [] for _ in range(self.npnts) ]
+        for i in range(self.npnts):
             iverts = self.vor.regions[self.vor.point_region[i]]
             iverts = np.array(iverts)
             if remove_nonverts:
