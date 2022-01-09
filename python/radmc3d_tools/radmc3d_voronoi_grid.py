@@ -282,7 +282,7 @@ class Voronoigrid(object):
         self.vert_max_nr_cells = 0
         self.hull_nwalls       = 0
 
-    def check_point_in_wall_plane(self,p,iwall):
+    def check_point_in_wall_plane(self,p,iwall,getdiag=False):
         verts = self.wall_get_vertices(iwall,close=True)
         if(verts.shape[0]<4): return False
         dv    = verts[1:,:]-verts[:-1,:]
@@ -293,7 +293,9 @@ class Voronoigrid(object):
         cp    = self.crossp(dvp[:-1],dvp[1:])
         err   = np.abs((cp[0:-2]*dv[2:-1]).sum(axis=1)).max()
         tol   = 1e-12
-        return err<tol
+        res   = err<tol
+        if(not getdiag): return res
+        return res,verts,dv,dvp,cp,err
         
     def check_point_in_cell(self,p,icell,iwallin=None,getdiag=False):
         iwalls = np.array(self.cell_iwalls[icell])
@@ -327,24 +329,47 @@ class Voronoigrid(object):
         verts  = self.vertices[iverts]
         return verts
         
-    def visualize_cells(self,icells=None,alpha=0.9,colors="C1",bbox=None):
-        import mpl_toolkits.mplot3d as a3
+    def visualize_cells(self,icells=None,alpha=0.9,colors="C1",bbox=None,wireframe=False,ax=None):
         if icells is None: icells=np.arange(self.ncells)
         vor    = self.vor
         if np.isscalar(icells):
             icells=np.array([icells])
-        ax     = a3.Axes3D(plt.figure())
-        polys  = []
+        iwalls = []
         for icell in icells:
             w      = self.cell_iwalls[icell]
-            if(len(icells)==1): 
-                colors = list(map("C{}".format, range(len(w))))
-            for iwall in w:
-                ivert = vor.ridge_vertices[iwall].copy()
-                ivert.pop(-1)
-                polys.append(self.vertices[ivert])
-        pc = a3.art3d.Poly3DCollection(polys, facecolor=colors, edgecolor="k", alpha=alpha)
-        ax.add_collection3d(pc)
+            iwalls += list(w)
+        iwalls = list(set(iwalls))
+        if(len(icells)==1): 
+            colors = list(map("C{}".format, range(len(iwalls))))
+        polys  = []
+        opens  = []
+        for iwall in iwalls:
+            ivert = self.wall_iverts[iwall] # vor.ridge_vertices[iwall].copy()
+            o = -1 in vor.ridge_vertices[iwall]
+            polys.append(self.vertices[ivert])
+            opens.append(o)
+        if wireframe:
+            if ax is None:
+                import mpl_toolkits.mplot3d
+                fig = plt.figure()
+                ax  = fig.add_subplot(projection='3d')
+            for i in range(len(polys)):
+                if np.isscalar(colors):
+                    color = colors
+                else:
+                    color = colors[i]
+                p = polys[i]
+                p = np.vstack((p,p[0]))
+                if opens[i]:
+                    ax.plot(p[:,0],p[:,1],p[:,2],':',color=color)
+                else:
+                    ax.plot(p[:,0],p[:,1],p[:,2],color=color)
+        else:
+            if ax is None:
+                import mpl_toolkits.mplot3d as a3
+                ax = a3.Axes3D(plt.figure())
+            pc = a3.art3d.Poly3DCollection(polys, facecolor=colors, edgecolor="k", alpha=alpha)
+            ax.add_collection3d(pc)
         if bbox is None:
             bbox = self.bbox
         if bbox is not None:
@@ -357,13 +382,15 @@ class Voronoigrid(object):
         plt.show()
         return ax
 
-    def visualize_points(self,icells=None,colors="C1"):
+    def visualize_points(self,icells=None,colors="C1",ax=None):
         import mpl_toolkits.mplot3d
         if icells is None: icells=np.arange(self.ncells)
-        fig = plt.figure()
-        ax  = fig.add_subplot(projection='3d')
+        if ax is None:
+            fig = plt.figure()
+            ax  = fig.add_subplot(projection='3d')
         ax.scatter(self.cell_points[icells,0],self.cell_points[icells,1],self.cell_points[icells,2])
         plt.show()
+        return ax
         
     def write_radmc3d_unstr_grid(self,bin=False):
         self.compute_diagnostics()
