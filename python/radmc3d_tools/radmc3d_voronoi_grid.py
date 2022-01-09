@@ -60,14 +60,9 @@ class Voronoigrid(object):
         self.npnts       = points.shape[0]
         self.nverts      = 0       # For now
         #
-        # Compute the cell volumes. This also automatically notices
-        # which points correspond to "real" cells (with a finite volume)
-        # and which points correspond to "open" regions going out to
-        # infinity (with an infinite volume). These "open" regions are
-        # marked by a volume = 0.0
+        # Find all open cells
         #
-        print('Computing the cell volumes...')
-        self.compute_cell_volumes()
+        self.find_open_cells()
         #
         # If bbox is given, then reject all cells that have Voronoi vertices
         # that are outside of the box. 
@@ -81,17 +76,51 @@ class Voronoigrid(object):
         #
         print('Creating the cell walls...')
         self.create_cellwalls()
+        #
+        # Create the Delaunay triangulation for completing the cell wall list
+        #
+        print('Running scipy.spatial.Delaunay() to create Delaunay triangulation (for wall completeness check)...')
+        self.tri = Delaunay(points/scale,qhull_options=qhull_options)
+        #
+        # Link cell walls back to cells
+        #
         print('Linking the cell walls back to the cells...')
+        self.link_walls_to_cells()
+        #
+        # Complete the cell wall list
+        #
+        print('Completing the cell walls of the open cells...')
+        self.complete_cellwalls()
+        #
+        # Link cell walls back to cells again
+        #
+        print('Linking the cell walls back to the cells again...')
         self.link_walls_to_cells()
         #
         # Link vertices to cells
         #
+        print('Linking the vertices back to the cells...')
         self.link_vertices_to_cells(remove_nonverts=True)
+        #
+        # Compute the cell volumes. This also automatically notices
+        # which points correspond to "real" cells (with a finite volume)
+        # and which points correspond to "open" regions going out to
+        # infinity (with an infinite volume). These "open" regions are
+        # marked by a volume = 0.0
+        #
+        print('Computing the cell volumes...')
+        self.compute_cell_volumes()
         #
         # Compute some diagnostics
         #
         self.compute_diagnostics()
 
+    def find_open_cells(self):
+        self.cell_iopen = []
+        for i in range(self.npnts):
+            indices = self.vor.regions[self.vor.point_region[i]]
+            if -1 in indices: self.cell_iopen.append(i)
+    
     def compute_cell_volumes(self):
         """
         Compute the volume of the Voronoi regions.
@@ -188,6 +217,46 @@ class Voronoigrid(object):
                 iverts = iverts[iverts>=0]
             self.wall_iverts[i] = iverts
 
+    def complete_cellwalls(self):
+        points          = self.cell_points
+        indptr, indices = self.tri.vertex_neighbor_vertices
+        add_wall_s      = []
+        add_wall_n      = []
+        add_wall_icells = []
+        add_wall_iverts = []
+        for icell in self.cell_iopen:
+            neighbors_voronoi  = list(self.find_neighboring_cells(icell))
+            lneighvor = len(neighbors_voronoi)
+            neighbors_delaunay = list(indices[indptr[icell]:indptr[icell+1]])
+            lneighdel = len(neighbors_delaunay)
+            assert lneighdel>=lneighvor, 'ERROR: Nr of Ridges of Voronoi larger than nr of neighbors in Delaunay'
+            if lneighdel>lneighvor:
+                icell_missing = list(set(neighbors_delaunay)-set(neighbors_voronoi))
+                ss = ""
+                for i in icell_missing:
+                    ss += " {}".format(i)
+                print('In open cell {} missing neighbors are: '.format(icell)+ss)
+                for i in icell_missing:
+                    if i>icell:  # Avoid double counting
+                        add_wall_s.append(0.5*(points[i,:] + points[icell,:]))
+                        n = points[i,:] - points[icell,:]
+                        l = ((n**2).sum())**0.5
+                        n /= l
+                        add_wall_n.append(n)
+                        add_wall_icells.append(np.array([icell,i]))
+                        add_wall_iverts.append([-1])
+        addnwall = len(add_wall_n)
+        add_wall_s = np.array(add_wall_s)
+        add_wall_n = np.array(add_wall_n)
+        add_wall_icells = np.array(add_wall_icells)
+        if(addnwall>0):
+            self.wall_s = np.vstack((self.wall_s,add_wall_s))
+            self.wall_n = np.vstack((self.wall_n,add_wall_n))
+            self.wall_icells = np.vstack((self.wall_icells,add_wall_icells))
+            self.wall_iverts = self.wall_iverts + add_wall_iverts
+            self.nwalls += addnwall
+        assert self.nwalls==len(self.tri.vertex_neighbor_vertices[1])//2,'ERROR: Something went wrong with the completion of the cell walls'
+
     def link_walls_to_cells(self):
         self.cell_iwalls = [ [] for _ in range(self.npnts) ]
         self.cell_wsign  = [ [] for _ in range(self.npnts) ]
@@ -201,7 +270,7 @@ class Voronoigrid(object):
 
     def compute_diagnostics(self):
         self.ncells        = self.npnts
-        self.cell_iopen    = np.where((self.cell_volumes<=0.0))[0]
+        #self.cell_iopen    = np.where((self.cell_volumes<=0.0))[0]
         self.ncells_open   = len(self.cell_iopen)
         self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
         assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
