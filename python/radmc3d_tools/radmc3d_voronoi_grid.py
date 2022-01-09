@@ -5,22 +5,22 @@ import struct
 from tqdm import tqdm    # For a nice progress bar
 
 class Voronoigrid(object):
-    def __init__(self,points,bbox=None):
+    def __init__(self,points,bbox=None,qhull_options=None):
         """
         Create a Voronoi grid for RADMC-3D from a set of 3D points.
 
         Arguments:
-          points      The points given as a numpy array points[npnts,3].
-                      If set to None, the present unstr_grid.*inp file will be 
-                      read, but only the points. The grid will be re-constructed
-                      from these points.
-        
+          points             The points given as a numpy array points[npnts,3].
+                             If set to None, the present unstr_grid.*inp file will be 
+                             read, but only the points. The grid will be re-constructed
+                             from these points.
         Options:
           bbox               If set to [[xmin,xmax],[ymin,ymax],[zmin,zmax]] this sets
                              the bounding box: only cells that fit entirely inside this
                              box are considered actual cells (with finite volume). The
                              cells that have >=1 point outside the box are treated as
                              "open regions", see below.
+          qhull_options      For passing to the Voronoi generator of SciPy
 
         Note on "open regions": These are "cells" that are not closed, and thus 
         have an infinite volume. These regions are still useful for guiding the
@@ -35,6 +35,7 @@ class Voronoigrid(object):
         #
         self.save_cellcenters = True    # Must be!
         self.save_size        = False   # For now
+        self.qhull_options    = qhull_options
         #
         # If points is None, then read points from a pre-existing file
         #
@@ -53,7 +54,7 @@ class Voronoigrid(object):
         # Create the Voronoi tesselation
         #
         print('Running scipy.spatial.Voronoi() to create Voronoi tesselation...')
-        self.vor         = Voronoi(points/scale)
+        self.vor         = Voronoi(points/scale,qhull_options=qhull_options)
         self.cell_points = self.vor.points*scale
         self.vertices    = self.vor.vertices*scale
         self.npnts       = points.shape[0]

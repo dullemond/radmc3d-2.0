@@ -5,7 +5,7 @@ import struct
 from tqdm import tqdm    # For a nice progress bar
 
 class Delaunaygrid(object):
-    def __init__(self,vertices,save_cellcenters=False,save_vertices=True):
+    def __init__(self,vertices,save_cellcenters=False,save_vertices=True,qhull_options=None):
         """
         Create a Delaunay grid for RADMC-3D from a set of 3D vertices. Note that
         this means that the vertices are not representative of the cells. The
@@ -20,6 +20,7 @@ class Delaunaygrid(object):
                              If set to None, the present unstr_grid.*inp file will be 
                              read, but only the vertices. The grid will be re-constructed
                              from these vertices.
+          qhull_options      For passing to the Delaunay generator of SciPy
 
         Options:
           save_vertices:     If True, then the 3D locations of the vertices are 
@@ -42,6 +43,7 @@ class Delaunaygrid(object):
         self.save_cellcenters = save_cellcenters
         self.save_vertices    = save_vertices
         self.save_size        = False   # For now
+        self.qhull_options    = qhull_options
         #
         # If vertices is None, then read vertices from a pre-existing file
         #
@@ -60,7 +62,7 @@ class Delaunaygrid(object):
         # Create the Delaunay Triangulation
         #
         print('Running scipy.spatial.Delaunay() to create Delaunay triangulation...')
-        self.tri         = Delaunay(vertices/scale)
+        self.tri         = Delaunay(vertices/scale,qhull_options=qhull_options)
         self.vertices    = self.tri.points*scale
         self.nverts      = vertices.shape[0]
         self.ncells      = self.tri.nsimplex
