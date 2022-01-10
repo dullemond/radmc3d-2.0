@@ -235,7 +235,7 @@ class Voronoigrid(object):
                 ss = ""
                 for i in icell_missing:
                     ss += " {}".format(i)
-                print('In open cell {} missing neighbors are: '.format(icell)+ss)
+                #print('In open cell {} missing neighbors are: '.format(icell)+ss)
                 for i in icell_missing:
                     if i>icell:  # Avoid double counting
                         add_wall_s.append(0.5*(points[i,:] + points[icell,:]))
@@ -250,6 +250,7 @@ class Voronoigrid(object):
         add_wall_n = np.array(add_wall_n)
         add_wall_icells = np.array(add_wall_icells)
         if(addnwall>0):
+            print('Found {} missing walls and adding them.'.format(addnwall))
             self.wall_s = np.vstack((self.wall_s,add_wall_s))
             self.wall_n = np.vstack((self.wall_n,add_wall_n))
             self.wall_icells = np.vstack((self.wall_icells,add_wall_icells))
