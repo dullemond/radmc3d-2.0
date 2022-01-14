@@ -114,6 +114,7 @@ module ugrid_module
   double precision, allocatable :: ugrid_bary_matinv(:,:,:)! The inverse matrices used for barycentric interpolation (only for tetraeder grid)
 
   double precision :: ugrid_reltol = 1d-10      ! The relative tolerance of out of cell / out of wall / negative ds, compared to cell size
+  double precision :: ugrid_center_x,ugrid_center_y,ugrid_center_z,ugrid_radius
   
   logical :: ugrid_analyze=.false.              ! Note: The analyze feature works only in serial (not openmp parallel) for now
   integer :: ugrid_cell_wall_cross_checks = 0
@@ -623,7 +624,34 @@ contains
        icellnext = -1
     endif
   end subroutine ugrid_find_hull_wall_crossing
-    
+
+  subroutine ugrid_find_center_and_radius()
+    implicit none
+    integer :: icell
+    double precision :: r
+    ugrid_center_x = 0.d0
+    ugrid_center_y = 0.d0
+    ugrid_center_z = 0.d0
+    ugrid_radius   = 0.d0
+    do icell=1,ugrid_ncells
+       ugrid_center_x = ugrid_center_x + ugrid_cellcenters(icell,1)
+       ugrid_center_y = ugrid_center_y + ugrid_cellcenters(icell,2)
+       ugrid_center_z = ugrid_center_z + ugrid_cellcenters(icell,3)
+    enddo
+    ugrid_center_x = ugrid_center_x / ugrid_ncells
+    ugrid_center_y = ugrid_center_y / ugrid_ncells 
+    ugrid_center_z = ugrid_center_z / ugrid_ncells 
+    do icell=1,ugrid_ncells
+       r =  (ugrid_cellcenters(icell,1)-ugrid_center_x)**2 + &
+            (ugrid_cellcenters(icell,2)-ugrid_center_y)**2 + &
+            (ugrid_cellcenters(icell,3)-ugrid_center_z)**2
+       r = sqrt(r)
+       if(r.gt.ugrid_radius) then
+          ugrid_radius = r
+       endif
+    enddo
+  end subroutine ugrid_find_center_and_radius
+  
   !------------------------------------------------------------------
   !                    Ray tracing subroutines
   !------------------------------------------------------------------
@@ -1886,6 +1914,10 @@ contains
        enddo
        deallocate(iverts)
     endif
+    !
+    ! Compute the overal size and mean position
+    !
+    call ugrid_find_center_and_radius()
     !
     ! Signal
     !

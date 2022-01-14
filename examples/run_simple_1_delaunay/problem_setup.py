@@ -75,6 +75,10 @@ rr       = np.sqrt((cellpts**2).sum(axis=1))
 #
 rhod     = rho0 * np.exp(-(rr**2/radius**2)/2.0)
 #
+# Make the dust temperature model (ONLY DUMMY!)
+#
+#tempd    = np.zeros_like(rhod)+40.
+#
 # Write the wavelength_micron.inp file
 #
 lam1     = 0.1e0
@@ -121,6 +125,16 @@ with open('dust_density.inp','w+') as f:
     data = rhod.ravel(order='F')         # Create a 1-D view, fortran-style indexing
     data.tofile(f, sep='\n', format="%13.6e")
     f.write('\n')
+#
+# Write the temperature file (in case we only want to make an image)
+#
+#with open('dust_temperature.dat','w+') as f:
+#    f.write('1\n')                       # Format number
+#    f.write('%d\n'%(grid.ncells))        # Nr of cells
+#    f.write('1\n')                       # Nr of dust species
+#    data = tempd.ravel(order='F')         # Create a 1-D view, fortran-style indexing
+#    data.tofile(f, sep='\n', format="%13.6e")
+#    f.write('\n')
 #
 # Dust opacity control file
 #

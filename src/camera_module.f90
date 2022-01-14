@@ -2790,9 +2790,6 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
         celldxmin = (amr_grid_xi(2,1)-amr_grid_xi(1,1)) / (2**deepestlevel)
      endif
      ! For the other coordinates celldxmin is determined on-the-fly
-  else
-     write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
-     stop
   endif
   !
 end subroutine camera_serial_raytrace

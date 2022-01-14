@@ -750,7 +750,14 @@ program radmc3d
                  stop 77
               endif
            else
-              stop 78
+              !
+              ! Unstructured grid
+              !
+              camera_image_halfsize_x     = ugrid_radius
+              camera_image_halfsize_y     = ugrid_radius
+              camera_pointing_position(1) = ugrid_center_x
+              camera_pointing_position(2) = ugrid_center_y
+              camera_pointing_position(3) = ugrid_center_z
            endif
         endif
      endif
@@ -1701,8 +1708,12 @@ program radmc3d
               stop 6503
            endif
         else
-           write(stdo,*) 'ERROR: In computing subbox default size: unstructured grids not yet supported'
-           stop
+           subbox_x0 = ugrid_center_x - 1.01d0*ugrid_radius
+           subbox_x1 = ugrid_center_x + 1.01d0*ugrid_radius
+           subbox_y0 = ugrid_center_y - 1.01d0*ugrid_radius
+           subbox_y1 = ugrid_center_y + 1.01d0*ugrid_radius
+           subbox_z0 = ugrid_center_z - 1.01d0*ugrid_radius
+           subbox_z1 = ugrid_center_z + 1.01d0*ugrid_radius
         endif
      endif
      !
