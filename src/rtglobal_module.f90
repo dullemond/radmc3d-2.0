@@ -425,6 +425,7 @@ module rtglobal_module
   !$OMP THREADPRIVATE(ray_cart_dirx,ray_cart_diry,ray_cart_dirz)
   !$OMP THREADPRIVATE(ray_cart_svec,ray_prev_x,ray_prev_y,ray_prev_z)
   !$OMP THREADPRIVATE(ray_dsend,ray_ds,ray_index,ray_indexnext)
+  !$OMP THREADPRIVATE(ray_curr_iwall,ray_next_iwall)
   !$OMP THREADPRIVATE(ray_inu,ray_ns,ray_nsmax)
   !
 contains
