@@ -60,6 +60,10 @@ logical :: mc_openmp_parallel = .false.
 integer(kind=8) :: ieventcounttot
 double precision :: mc_visitcell,mc_revisitcell,mc_revisitcell_max
 !
+! Counter for photon-out-of-cell errors
+!
+integer :: mc_photon_out_of_cell_count = 0
+!
 ! Flag saying whether or not to interpolate the temperature emission
 ! database in temperature
 !
@@ -2251,6 +2255,7 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
   nphot      = params%nphot_therm
   intplt     = params%iranfreqmode
   ievenodd   = .true.
+  mc_photon_out_of_cell_count = 0
   !
   ! Flag called 'mc_emergency_break' which is switched to .false. before the big loop.
   ! If an unrecoverable error occurs, it is switched to .true..
@@ -2643,13 +2648,12 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
          !!$ Some critical sections are hidden within this subroutine call
          call walk_full_path_bjorkmanwood(params,ierrpriv)
          !       
-         ! If ierrpriv.ne.0 then an error occurred, return with non-zero error code
+         ! If ierrpriv.ne.0 then an error occurred. This is rare, so continue
+         ! but increase the error counter.
          !
          if(ierrpriv.ne.0) then
-            !$OMP CRITICAL
-            mc_emergency_break = .true.
-            !$OMP END CRITICAL
-            write(stdo,*) '!!!!!!!!!!!!!!!!!!! MC_EMERGENCY_BREAK !!!!!!!!!!!!!!!!!!!!!!'
+            !$omp atomic
+            mc_photon_out_of_cell_count = mc_photon_out_of_cell_count + 1
          endif
          !
          ! Add photon to outgoing overall spectrum
@@ -2772,6 +2776,20 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
    ! Free the emission database
    !
    call free_emiss_dbase()
+   !
+   ! If there were out-of-cell errors, report them here
+   !
+   if(mc_photon_out_of_cell_count.gt.0) then
+      write(stdo,*) '****************************************************'
+      write(stdo,*) 'There were ',mc_photon_out_of_cell_count,' photon-out-of-cell errors'
+      if(mc_photon_out_of_cell_count.lt.1e-6*nphot) then
+         write(stdo,*) 'This number is small compared to the number of photon packages.'
+         write(stdo,*) 'so it does not seem to be serious.'
+      else
+         write(stdo,*) 'Please warn the author of RADMC-3D, C.P. Dullemond.'
+      endif
+      write(stdo,*) '****************************************************'
+   endif
    !
    ! Done...
    !
@@ -2921,6 +2939,7 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
   endif
   intplt     = params%iranfreqmode
   ieventcounttot = 0
+  mc_photon_out_of_cell_count = 0
   !
   ! Flag called 'mc_emergency_break' which is switched to .false. before the big loop.
   ! If an unrecoverable error occurs, it is switched to .true..
@@ -3237,13 +3256,12 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
         !
         call walk_full_path_scat(params,inu,ierrpriv)
         !       
-        ! If ierrpriv.ne.0 then an error occurred, return with non-zero error code
+        ! If ierrpriv.ne.0 then an error occurred. This is rare, so continue
+        ! but increase the error counter.
         !
         if(ierrpriv.ne.0) then
-           !$OMP CRITICAL
-           mc_emergency_break = .true.
-           !$OMP END CRITICAL
-           write(stdo,*) '!!!!!!!!!!!!!!!!!!! MC_EMERGENCY_BREAK !!!!!!!!!!!!!!!!!!!!!!'
+           !$omp atomic
+           mc_photon_out_of_cell_count = mc_photon_out_of_cell_count + 1
         endif
         !
         ! Write debugging stuff
@@ -3316,6 +3334,20 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
   !open(unit=1,file='radmc_save.info')
   !write(1,*) '-'
   !close(1)
+  !
+  ! If there were out-of-cell errors, report them here
+  !
+  if(mc_photon_out_of_cell_count.gt.0) then
+     write(stdo,*) '****************************************************'
+     write(stdo,*) 'There were ',mc_photon_out_of_cell_count,' photon-out-of-cell errors'
+     if(mc_photon_out_of_cell_count.lt.1e-6*nphot) then
+        write(stdo,*) 'This number is small compared to the number of photon packages.'
+        write(stdo,*) 'so it does not seem to be serious.'
+     else
+        write(stdo,*) 'Please warn the author of RADMC-3D, C.P. Dullemond.'
+     endif
+     write(stdo,*) '****************************************************'
+  endif
   !
   ! Done...
   !
@@ -3394,6 +3426,8 @@ subroutine do_lambda_starlight_single_scattering(params,ierror,scatsrc,meanint)
   else
      stop 6658
   endif
+  !
+  mc_photon_out_of_cell_count = 0
   !
   ! Message
   !
@@ -3838,6 +3872,8 @@ subroutine do_lambda_starlight_single_scattering_simple(params,ierror,scatsrc,me
   else
      stop 6658
   endif
+  !
+  mc_photon_out_of_cell_count = 0
   !
   ! Message
   !
@@ -4996,6 +5032,10 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      ! Move photon to next scattering/absorption event
      ! 
      call walk_cells_thermal(params,taupath,iqactive,arrived,therm,ispec,ierror)
+     !
+     ! If error, return
+     !
+     if(ierror.ne.0) return
      !
      ! If we are still in the same cell, then we have to count how
      ! often we have been in the same cell.
@@ -6168,6 +6208,10 @@ subroutine walk_full_path_scat(params,inu,ierror)
      ! 
      call walk_cells_scat(params,taupath,ener,inu,arrived,ispec,ierror)
      !
+     ! If error, return
+     !
+     if(ierror.ne.0) return
+     !
      ! If arrived at end-point or escaped to infinity, then return
      !
      if(arrived) then
@@ -6371,7 +6415,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
            call amrray_find_next_location_cart(ray_dsend,            &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
         elseif(igrid_coord.lt.200) then
            !
            ! We use spherical coordinates
@@ -6379,7 +6423,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
            call amrray_find_next_location_spher(ray_dsend,           &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
         else
            write(stdo,*) 'ERROR: Cylindrical coordinates not yet implemented'
            stop
@@ -6402,6 +6446,10 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
         write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
         stop
      endif
+     !
+     ! If error, return
+     !
+     if(ierror.ne.0) return
      !
      ! Path length
      ! 
@@ -6827,7 +6875,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
            call amrray_find_next_location_cart(ray_dsend,            &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
         elseif(igrid_coord.lt.200) then
            !
            ! We use spherical coordinates
@@ -6835,7 +6883,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
            call amrray_find_next_location_spher(ray_dsend,           &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
         else
            write(stdo,*) 'ERROR: Cylindrical coordinates not yet implemented'
            stop
@@ -6857,6 +6905,10 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
         write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
         stop
      endif
+     !
+     ! If error, return
+     !
+     if(ierror.ne.0) return
      !
      ! Path length
      ! 
@@ -7698,7 +7750,7 @@ end subroutine walk_cells_scat
 subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
   implicit none
   type(mc_params) :: params
-  integer :: ispec,inu,idir,iddr,index
+  integer :: ispec,inu,idir,iddr,index,ierror
   doubleprecision :: lenpath
   doubleprecision :: tau,dtau
   doubleprecision :: ds,rn,scatsrc0,mnint,sprev,stot
@@ -7803,7 +7855,7 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
            call amrray_find_next_location_cart(ray_dsend,            &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
         elseif(igrid_coord.lt.200) then
            !
            ! We use spherical coordinates
@@ -7811,7 +7863,7 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
            call amrray_find_next_location_spher(ray_dsend,           &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
         else
            write(stdo,*) 'ERROR: Cylindrical coordinates not yet implemented'
            stop
@@ -7828,6 +7880,10 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
         write(stdo,*) 'SORRY: Delaunay or Voronoi grids not yet implemented'
         stop
      endif
+     !
+     ! If error, return
+     !
+     if(ierror.ne.0) return
      !
      ! Path length
      ! 

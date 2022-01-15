@@ -1245,14 +1245,14 @@ end subroutine amrray_find_subcell
 subroutine amrray_find_next_location_cart(ray_dsend,                 &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_indexcurr,ray_indexnext,ray_ds,arrived,          &
+                ray_indexcurr,ray_indexnext,ray_ds,arrived,ierror,   &
                 distmin,levelnext)
 implicit none
 doubleprecision :: ray_cart_x,ray_cart_y,ray_cart_z
 doubleprecision :: ray_cart_dirx,ray_cart_diry,ray_cart_dirz
 doubleprecision :: ray_dsend,ray_ds,dsa,dsb
 doubleprecision, optional :: distmin
-integer :: ray_indexcurr,ray_indexnext
+integer :: ray_indexcurr,ray_indexnext,ierror
 integer,optional :: levelnext
 
 doubleprecision :: fact,xt,yt,zt,dummy,dsx,dsy,dsz,rr,ds_sphere,ds_sphere0
@@ -1268,6 +1268,7 @@ if(present(distmin)) distmin = 0.d0    ! Means: default = no fast subcell motion
 amrray_ispherehit = 0
 ds_sphere0 = 1d99
 amrray_icross = 0
+ierror = 0
 !
 ! If cell index = 0, then go look for the cell, else simply link to the cell
 !
@@ -2119,7 +2120,8 @@ if(amrray_selfcheck) then
       write(stdo,*) ray_cart_x,ray_cart_y,ray_cart_z
       if(amr_tree_present) write(stdo,*) associated(amrray_cell),amrray_cell%id
       write(stdo,*) axi
-      stop 1031
+      ierror = 1
+      !stop 1031
    endif
 endif
 !
@@ -2208,7 +2210,8 @@ endif
 if(amrray_selfcheck) then
    if((dsx.lt.0.d0).or.(dsy.lt.0.d0).or.(dsz.lt.0.d0)) then
       write(stdo,*) 'ERROR: Negative dsz, dsy or dsz'
-      stop 1040
+      ierror = 3
+      !stop 1040
    endif
 endif
 !
@@ -2737,7 +2740,7 @@ end subroutine amrray_find_next_location_cart
 subroutine amrray_find_next_location_spher(ray_dsend,                &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_indexcurr,ray_indexnext,ray_ds,arrived,          &
+                ray_indexcurr,ray_indexnext,ray_ds,arrived,ierror,   &
                 distmin,levelnext,maxdeltasina)
 implicit none
 doubleprecision :: ray_cart_x,ray_cart_y,ray_cart_z
@@ -2746,7 +2749,7 @@ doubleprecision :: ray_dsend,ray_ds
 doubleprecision, optional :: distmin
 integer,optional :: levelnext
 doubleprecision, optional :: maxdeltasina
-integer :: ray_indexcurr,ray_indexnext
+integer :: ray_indexcurr,ray_indexnext,ierror
 logical :: arrived
 integer :: ihit
 doubleprecision :: axi(1:2,1:3),bxi(1:2,1:3)
@@ -2803,12 +2806,12 @@ if(amrray_selfcheck) then
       write(stdo,*) 'ERROR: Did not initalize AMRRay yet.'
       stop
    endif
-   dummy = sqrt(ray_cart_dirx**2+ray_cart_diry**2+ray_cart_dirz**2) 
-   if(abs(dummy-1.d0).gt.1d-10) then
-      write(stdo,*) 'ERROR: Direction vector is not unit vector'
-      write(stdo,*) ray_cart_dirx,ray_cart_diry,ray_cart_dirz
-      stop 2913
-   endif
+   !dummy = sqrt(ray_cart_dirx**2+ray_cart_diry**2+ray_cart_dirz**2) 
+   !if(abs(dummy-1.d0).gt.1d-10) then
+   !   write(stdo,*) 'ERROR: Direction vector is not unit vector'
+   !   write(stdo,*) ray_cart_dirx,ray_cart_diry,ray_cart_dirz
+   !   stop 2913
+   !endif
 endif
 !
 ! Check
@@ -2827,6 +2830,7 @@ ds_sphere0 = 1d99
 amrray_ispherehit = 0
 amrray_icross = 0
 hitmaxphi = .false.
+ierror = 0
 !
 ! If mirror symmetry required, first check and if necessary, flip
 ! NOTE: Let us simply not accept ray positions that are on the wrong side.
@@ -4639,7 +4643,8 @@ else
          write(stdo,*) r0,theta0,phi0
          if(amr_tree_present) write(stdo,*) associated(amrray_cell),amrray_cell%id
          write(stdo,*) axi
-         stop 1131
+         ierror = 1
+         !stop 1131
       endif
    endif
    !
@@ -5571,7 +5576,8 @@ else
             pc    = ct2*(ray_cart_x**2+ray_cart_y**2)-st2*ray_cart_z**2
             write(stdo,*) pa,pb/r0,pc/r0**2
             write(stdo,*) 4*pa*pc/pb**2
-            stop 1132
+            ierror = 2
+            !stop 1132
          endif
       endif
    endif

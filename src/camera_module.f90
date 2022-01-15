@@ -1101,7 +1101,7 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
   doubleprecision :: nstp,nu,nu0,nu0_prev,nu0_curr
   doubleprecision :: ap,jp(1:4),sp(1:4),ac,jc(1:4),sc(1:4),theomax(1:4),qdr(1:4)
   doubleprecision :: duc,eps,eps1,eps0,temp,resol,margin
-  integer :: nsteps,iline,ilactive,istep,idir
+  integer :: nsteps,iline,ilactive,istep,idir,ierror
   integer :: ixx,iyy,izz,bc_idir,bc_ilr
   double precision :: xbk,ybk,zbk,spx,spy,spz,rx1,ry1,rz1,rx0,ry0,rz0
   !
@@ -1422,7 +1422,7 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
            call amrray_find_next_location_cart(ray_dsend,            &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived,              &
+                ray_index,ray_indexnext,ray_ds,arrived,ierror,       &
                 levelnext=levelnext)
            !
            ! Check if this cell is the smallest so far
@@ -1495,7 +1495,7 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
               call amrray_find_next_location_spher(ray_dsend,           &
                    ray_cart_x,ray_cart_y,ray_cart_z,                    &
                    ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                   ray_index,ray_indexnext,ray_ds,arrived)
+                   ray_index,ray_indexnext,ray_ds,arrived,ierror)
            else
               !
               ! The case when we want to prevent too strong jumps
@@ -1504,7 +1504,7 @@ subroutine camera_serial_raytrace(nrfreq,inu0,inu1,x,y,z,dx,dy,dz,distance,   &
               call amrray_find_next_location_spher(ray_dsend,           &
                    ray_cart_x,ray_cart_y,ray_cart_z,                    &
                    ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                   ray_index,ray_indexnext,ray_ds,arrived,              &
+                   ray_index,ray_indexnext,ray_ds,arrived,ierror,       &
                    maxdeltasina=camera_maxdphi)
            endif
            !
@@ -5237,7 +5237,7 @@ subroutine camera_ray1d_raytrace(nrfreq,x,y,z,dx,dy,dz,distance,celldxmin,&
   double precision :: x,y,z,dx,dy,dz,dum,distance,celldxmin
   double precision :: freq,alpnu,jnu,alpha_a,dummy,expt,temp,src
   integer :: ispec,nrfreq,deepestlevel
-  integer :: inu,levelnext,is
+  integer :: inu,levelnext,is,ierror
   logical :: arrived
   double precision :: intensity(nrfreq)
   double precision :: rlen,cosp,sinp,cost,sint,vx,vy,vz
@@ -5405,7 +5405,7 @@ subroutine camera_ray1d_raytrace(nrfreq,x,y,z,dx,dy,dz,distance,celldxmin,&
            call amrray_find_next_location_cart(ray_dsend,            &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived,              &
+                ray_index,ray_indexnext,ray_ds,arrived,ierror,       &
                 levelnext=levelnext)
            !
            ! Check if this cell is the smallest so far
@@ -5465,7 +5465,7 @@ subroutine camera_ray1d_raytrace(nrfreq,x,y,z,dx,dy,dz,distance,celldxmin,&
            call amrray_find_next_location_spher(ray_dsend,           &
                 ray_cart_x,ray_cart_y,ray_cart_z,                    &
                 ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
-                ray_index,ray_indexnext,ray_ds,arrived)
+                ray_index,ray_indexnext,ray_ds,arrived,ierror)
            !
            ! Check if this cell is the smallest so far
            !
