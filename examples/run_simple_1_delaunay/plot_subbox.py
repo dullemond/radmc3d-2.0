@@ -6,9 +6,9 @@ from radmc3d_tools.simpleread import *
 import os
 
 os.system('radmc3d subbox_dust_density subbox_xyz01 -1.5e14 1.5e14 -1.5e14 1.5e14 -1.5e14 1.5e14 subbox_nxyz 100 100 100')
-
 q = read_subbox(name='dust_density',indexorder='fortran')
 
-rho = q.data
+#os.system('radmc3d subbox_dust_temperature subbox_xyz01 -1.5e14 1.5e14 -1.5e14 1.5e14 -1.5e14 1.5e14 subbox_nxyz 100 100 100')
+#q = read_subbox(name='dust_temperature',indexorder='fortran')
 
-slicearr(rho)
+slicearr(q.data)

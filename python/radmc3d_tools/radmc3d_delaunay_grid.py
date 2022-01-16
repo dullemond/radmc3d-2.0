@@ -5,7 +5,8 @@ import struct
 from tqdm import tqdm    # For a nice progress bar
 
 class Delaunaygrid(object):
-    def __init__(self,vertices,save_cellcenters=False,save_vertices=True,qhull_options=None):
+    def __init__(self,vertices,save_cellcenters=False,save_vertices=True, \
+                 save_volumes=False,save_sn_vectors=False,qhull_options=None):
         """
         Create a Delaunay grid for RADMC-3D from a set of 3D vertices. Note that
         this means that the vertices are not representative of the cells. The
@@ -35,15 +36,25 @@ class Delaunaygrid(object):
                              not strictly necessary, as RADMC-3D can compute these
                              positions from the mean of the support vector positions
                              of the cell walls.
-        
+          save_volumes:      If True, then write the cell volumes to the file. This is
+                             not really necessary, because RADMC-3D can calculate the
+                             volumes of the tetraheders internally.
+          save_sn_vectors:   If True, then write the support- and normal vectors to
+                             the file. This is not really necessary, because RADMC-3D 
+                             can calculate these internally. But if save_sn_vectors=False,
+                             then save_vertices must be True. 
         """
         #
         # Set flags
         #
         self.save_cellcenters = save_cellcenters
         self.save_vertices    = save_vertices
+        self.save_volumes     = save_volumes
+        self.save_sn_vectors  = save_sn_vectors
         self.save_size        = False   # For now
         self.qhull_options    = qhull_options
+        if (not self.save_sn_vectors) or (not self.save_volumes):
+            assert self.save_vertices, 'ERROR: If you want the s and n vectors and/or the volumes to be calculated internally by RADMC-3D, you have to write out the vertices.'
         #
         # If vertices is None, then read vertices from a pre-existing file
         #
@@ -345,9 +356,11 @@ class Delaunaygrid(object):
         
     def write_radmc3d_unstr_grid(self,bin=False):
         self.compute_diagnostics()
-        iformat=1
+        iformat           = 2
         isave_cellcenters = int(self.save_cellcenters)
         isave_vertices    = int(self.save_vertices)
+        isave_volumes     = int(self.save_volumes)
+        isave_sn_vectors  = int(self.save_sn_vectors)
         isave_size        = int(self.save_size)
         if bin:
             ihdr   = np.array([iformat,                        # Format number
@@ -361,6 +374,8 @@ class Delaunaygrid(object):
                                self.vert_max_nr_cells,         # Max number of cells per vertex (0 means: not relevant)
                                self.ncells_open,               # Nr of "open" cells
                                self.hull_nwalls,               # Nr of cell walls at the surface
+                               isave_volumes,                  # Include a list of cell volumes?
+                               isave_sn_vectors,               # Include a list of s and n vectors?
                                isave_cellcenters,              # Include a list of cell center positions?
                                isave_vertices,                 # Include the list of vertices?
                                isave_size,                     # Include the list of estimated linear cell sizes?
@@ -378,10 +393,12 @@ class Delaunaygrid(object):
             data_cellvols = self.cell_volumes.ravel()
             data_walls    = np.hstack((self.wall_s,self.wall_n)).ravel()
             indices       = (self.wall_icells+1).ravel()
-            sdat          = struct.pack(strh,*ihdr) \
-                            +struct.pack(strv,*data_cellvols) \
-                            +struct.pack(strw,*data_walls) \
-                            +struct.pack(stri,*indices)        # Create a binary image of the data
+            sdat          = struct.pack(strh,*ihdr)            # Create a binary image of the data
+            if(self.save_volumes):
+                sdat     += struct.pack(strv,*data_cellvols)
+            if(self.save_sn_vectors):
+                sdat     += struct.pack(strw,*data_walls)
+            sdat         += struct.pack(stri,*indices)
             if(self.save_cellcenters):
                 data_points   = self.cell_points.ravel()
                 sdat     += struct.pack(strp,*data_points)
@@ -405,13 +422,17 @@ class Delaunaygrid(object):
                 f.write('{}\n'.format(self.vert_max_nr_cells)) # Max number of cells per vertex (0 means: not relevant)
                 f.write('{}\n'.format(self.ncells_open))       # Nr of "open" cells
                 f.write('{}\n'.format(self.hull_nwalls))       # Nr of cell walls at the surface
+                f.write('{}\n'.format(isave_volumes))          # Include a list of cell volumes?
+                f.write('{}\n'.format(isave_sn_vectors))       # Include a list of s and n vectors?
                 f.write('{}\n'.format(isave_cellcenters))      # Include a list of cell center positions?
                 f.write('{}\n'.format(isave_vertices))         # Include the list of vertices?
                 f.write('{}\n'.format(isave_size))             # Include the list of cell sizes?
                 f.write('1\n')                                 # Are the surface cell walls convex?
-                np.savetxt(f,self.cell_volumes)                # The cell volumes (0="open" cell)
-                data=np.hstack((self.wall_s,self.wall_n))      # Glue the support and direction vectors
-                np.savetxt(f,data)                             # Write the wall support and direction vectors
+                if(self.save_volumes):
+                    np.savetxt(f,self.cell_volumes)            # The cell volumes (0="open" cell)
+                if(self.save_sn_vectors):
+                    data=np.hstack((self.wall_s,self.wall_n))  # Glue the support and direction vectors
+                    np.savetxt(f,data)                         # Write the wall support and direction vectors
                 np.savetxt(f,self.wall_icells+1,fmt='%d')      # Indices of cells are on each side of the wall (starting with 1, fortran style!)
                 if(self.save_cellcenters):
                     data = self.cell_points

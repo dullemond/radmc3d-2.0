@@ -537,6 +537,8 @@ contains
        call ugrid_point_in_wall_plane(iwallcurr,v,tol,inwall,dist)
        if(.not.inwall) then
           write(*,*) 'ERROR: Photon out of cell ',icell,'! Distance to hull wall ',iwallcurr,' = ',dist
+          write(*,*) '       Cell size    = ',ugrid_cell_size(icell)
+          write(*,*) '       Wall s and n = ',ugrid_wall_s(iwallcurr,:),ugrid_wall_n(iwallcurr,:)
           stop 8520
        endif
     endif
@@ -1465,18 +1467,22 @@ contains
     implicit none
     integer :: icell,iwall,ivert
     logical :: fex1,fex3,success
-    integer :: isavcen,isavvert,isavsize,iconv
+    integer :: isavcen,isavvert,isavsize,iconv,isavvol,isavsn
     integer :: idum,iformat,idum1,idum2,counthullw,countopens
     integer :: maxnwalls,iiwall,iivert,maxnverts,ivscan,ivcount
     integer(kind=8) :: iiformat,nn,kk,precis
-    double precision :: vec1(1:3),vec2(1:3),vec3(1:3),inp,len
+    double precision :: vec1(1:3),vec2(1:3),vec3(1:3),inp,len,cp(1:3),dp
     integer, allocatable :: iverts(:)
-    logical :: gotit
+    double precision, allocatable :: vertices(:,:)
+    integer :: iv1,iv2,iv3,iv4
+    logical :: gotit,res
     call ugrid_cleanup()
     counthullw = 0
     countopens = 0
     maxnwalls  = 0
     maxnverts  = 0
+    isavvol    = 1
+    isavsn     = 1
     !
     ! Check which file exists
     !
@@ -1511,6 +1517,10 @@ contains
        read(1,*) ugrid_vert_max_nr_cells
        read(1,*) ugrid_ncells_open
        read(1,*) ugrid_hull_nwalls
+       if(iformat.ge.2) then
+          read(1,*) isavvol
+          read(1,*) isavsn
+       endif
        read(1,*) isavcen
        read(1,*) isavvert
        read(1,*) isavsize
@@ -1534,14 +1544,18 @@ contains
           allocate(ugrid_wall_iverts(ugrid_nwalls,ugrid_wall_max_nr_verts))
           allocate(ugrid_vertices(ugrid_nverts,3))
        endif
-       do icell=1,ugrid_ncells
-          read(1,*) ugrid_cell_volume(icell)
-       enddo
-       do iwall=1,ugrid_nwalls
-          read(1,*) vec1(1:3),vec2(1:3)
-          ugrid_wall_s(iwall,1:3) = vec1(1:3)
-          ugrid_wall_n(iwall,1:3) = vec2(1:3)
-       enddo
+       if(isavvol.gt.0) then
+          do icell=1,ugrid_ncells
+             read(1,*) ugrid_cell_volume(icell)
+          enddo
+       endif
+       if(isavsn.gt.0) then
+          do iwall=1,ugrid_nwalls
+             read(1,*) vec1(1:3),vec2(1:3)
+             ugrid_wall_s(iwall,1:3) = vec1(1:3)
+             ugrid_wall_n(iwall,1:3) = vec2(1:3)
+          enddo
+       endif
        do iwall=1,ugrid_nwalls
           read(1,*) idum1,idum2
           if(idum1.le.0) idum1=-1
@@ -1603,6 +1617,12 @@ contains
        ugrid_ncells_open=nn
        read(1) nn
        ugrid_hull_nwalls=nn
+       if(iiformat.ge.2) then
+          read(1) nn
+          isavvol=nn
+          read(1) nn
+          isavsn=nn
+       endif
        read(1) nn
        isavcen=nn
        read(1)nn
@@ -1630,14 +1650,18 @@ contains
           allocate(ugrid_wall_iverts(ugrid_nwalls,ugrid_wall_max_nr_verts))
           allocate(ugrid_vertices(ugrid_nverts,3))
        endif
-       do icell=1,ugrid_ncells
-          read(1) ugrid_cell_volume(icell)
-       enddo
-       do iwall=1,ugrid_nwalls
-          read(1) vec1(1:3),vec2(1:3)
-          ugrid_wall_s(iwall,1:3) = vec1(1:3)
-          ugrid_wall_n(iwall,1:3) = vec2(1:3)
-       enddo
+       if(isavvol.gt.0) then
+          do icell=1,ugrid_ncells
+             read(1) ugrid_cell_volume(icell)
+          enddo
+       endif
+       if(isavsn.gt.0) then
+          do iwall=1,ugrid_nwalls
+             read(1) vec1(1:3),vec2(1:3)
+             ugrid_wall_s(iwall,1:3) = vec1(1:3)
+             ugrid_wall_n(iwall,1:3) = vec2(1:3)
+          enddo
+       endif
        do iwall=1,ugrid_nwalls
           read(1) nn,kk
           idum1=nn
@@ -1688,6 +1712,90 @@ contains
     endif
     !
     ! Post-processing
+    !
+    ! If the s and n vectors are not read in, then try to
+    ! construct them from the information we have
+    !
+    if(isavsn.eq.0) then
+       if(isavvert.ne.0) then
+          !
+          ! We have the vertices of the cell walls, so we can construct
+          ! s and n from them
+          !
+          allocate(vertices(ugrid_wall_max_nr_verts,1:3))
+          do iwall=1,ugrid_nwalls
+             !
+             ! Create the normal vector from the first three vertices
+             !
+             iv1 = ugrid_wall_iverts(iwall,1)
+             iv2 = ugrid_wall_iverts(iwall,2)
+             iv3 = ugrid_wall_iverts(iwall,3)
+             if((iv1.lt.1).or.(iv1.gt.ugrid_nverts)) stop 8421
+             if((iv2.lt.1).or.(iv2.gt.ugrid_nverts)) stop 8422
+             if((iv3.lt.1).or.(iv3.gt.ugrid_nverts)) stop 8423
+             vec1(1:3) = ugrid_vertices(iv1,:)-ugrid_vertices(iv3,:)
+             vec2(1:3) = ugrid_vertices(iv2,:)-ugrid_vertices(iv3,:)
+             call ugrid_crossp_3d(vec1,vec2,cp)
+             len = sqrt(cp(1)**2+cp(2)**2+cp(3)**2)
+             cp(1:3) = cp(1:3) / len
+             !
+             ! Check if the polygon is really a plane (only necessary for
+             ! walls with more than 3 vertices)
+             !
+             if(ugrid_wall_nverts(iwall).gt.3) then
+                do ivert=1,ugrid_wall_nverts(iwall)
+                   vertices(ivert,1:3) = ugrid_vertices(ugrid_wall_iverts(iwall,ivert),1:3)
+                enddo
+                call ugrid_polygon_check_inplane(vertices,ugrid_wall_nverts(iwall),cp,1d-12,res)
+                if(.not.res) then
+                   write(*,*) 'ERROR: Vertices of wall ',iwall,' do not lie exactly in a plane.'
+                   stop 8399
+                endif
+             endif
+             !
+             ! Insert the normal vector into the array
+             !
+             ugrid_wall_n(iwall,1:3) = cp(1:3)
+             !
+             ! Create the support vector from the mean of the vertex positions
+             !
+             vec1(1:3) = 0.d0
+             do ivert=1,ugrid_wall_nverts(iwall)
+                vec1(1:3) = vec1(1:3) + ugrid_vertices(ugrid_wall_iverts(iwall,ivert),1:3)
+             enddo
+             vec1(1:3) = vec1(1:3) / ugrid_wall_nverts(iwall)
+             !
+             ! Insert the support vector into the array
+             !
+             ugrid_wall_s(iwall,1:3) = vec1(1:3)
+          enddo
+          deallocate(vertices)
+       else
+          !
+          ! We do not have the vertices of the cell walls, so we assume
+          ! that the cell walls are like Voronoi cell walls: in the middle
+          ! between each pair of points and perpendicular to the line
+          ! connecting the points
+          !
+          do iwall=1,ugrid_nwalls
+             idum1 = ugrid_wall_icells(iwall,1)
+             idum2 = ugrid_wall_icells(iwall,2)
+             if(idum1.le.0) then
+                write(*,*) 'ERROR: First cell index of wall ',iwall,' is <0'
+                stop 8301
+             endif
+             if(idum2.le.0) then
+                write(*,*) 'ERROR: With Voronoi-type grids each cell wall must'
+                write(*,*) '       have a cell on both sides.'
+                stop 8302
+             endif
+             ugrid_wall_s(iwall,1:3) = 0.5d0*(ugrid_cellcenters(idum1,1:3)+ugrid_cellcenters(idum2,1:3))
+             ugrid_wall_n(iwall,1:3) = ugrid_cellcenters(idum2,1:3)-ugrid_cellcenters(idum1,1:3)
+             len = sqrt(ugrid_wall_n(iwall,1)**2 + ugrid_wall_n(iwall,2)**2 + ugrid_wall_n(iwall,3)**2)
+             ugrid_wall_n(iwall,1:3) = ugrid_wall_n(iwall,1:3) / len
+          enddo
+       endif
+    endif
     !
     ! Count cell walls in each cell
     !
@@ -1744,17 +1852,6 @@ contains
        ugrid_hull_nwalls = counthullw
     endif
     !
-    ! If the ugrid_cell_size is not read, then create
-    ! This is a typical length scale appropriate for each cell, which can be used to
-    ! estimate if the image has to be refined, or if round-off errors are too large.
-    !
-    if(.not.allocated(ugrid_cell_size)) then
-       allocate(ugrid_cell_size(ugrid_ncells))
-       do icell=1,ugrid_ncells
-          ugrid_cell_size(icell) = ugrid_cell_volume(icell)**0.3333333
-       enddo
-    endif
-    !
     ! Find all the hull walls
     !
     if(ugrid_hull_nwalls.ne.0) then
@@ -1765,31 +1862,6 @@ contains
           if(icell.le.0) then
              counthullw = counthullw + 1
              ugrid_hull_iwalls(counthullw) = iwall
-          endif
-       enddo
-    endif
-    !
-    ! Count nr of open cells
-    !
-    do icell=1,ugrid_ncells
-       if(ugrid_cell_volume(icell).le.0.d0) then
-          countopens = countopens + 1
-       endif
-    enddo
-    if(countopens.ne.ugrid_ncells_open) then
-       write(*,*) 'NOTE: Counted ',countopens,' open (unbounded) cells. File said: ',ugrid_ncells_open,'. Taking ',countopens
-       ugrid_ncells_open = countopens
-    endif
-    !
-    ! Find all open cells
-    !
-    if(ugrid_ncells_open.ne.0) then
-       allocate(ugrid_cell_iopen(ugrid_ncells_open))
-       countopens = 0
-       do icell=1,ugrid_ncells
-          if(ugrid_cell_volume(icell).le.0.d0) then
-             countopens = countopens + 1
-             ugrid_cell_iopen(countopens) = icell
           endif
        enddo
     endif
@@ -1838,13 +1910,6 @@ contains
        endif
        ugrid_wall_n(iwall,1:3) = ugrid_wall_n(iwall,1:3) / len
     enddo
-    !
-    ! Check consistency of all cell walls
-    !
-    call ugrid_check_cell_wall_normals()
-    if(allocated(ugrid_vertices)) then
-       call ugrid_check_cell_wall_supvec()
-    endif
     !
     ! If the vertices are read, then link them also to the cells
     !
@@ -1913,6 +1978,86 @@ contains
           enddo
        enddo
        deallocate(iverts)
+    endif
+    !
+    ! If the cell volumes are not read in, then try to compute them
+    !
+    if(isavvol.eq.0) then
+       if(isavvert.eq.0) then
+          write(*,*) 'ERROR: Without vertices, we cannot compute the cell volumes'
+          stop 3988
+       endif
+       !
+       ! For now we can only compute the cell volumes for tetrahedral cells
+       !
+       if((ugrid_cell_max_nr_walls.ne.4).or.(ugrid_cell_max_nr_verts.ne.4)) then
+          write(*,*) 'ERROR: For the moment we can only compute the cell volumes internally'
+          write(*,*) '       for tetrahedral cells. Please provide these volumes in the '
+          write(*,*) '       unstr_grid.*inp file.'
+          stop 3988
+       endif
+       !
+       ! Now compute the cell volumes of the tetrads
+       !
+       do icell=1,ugrid_ncells
+          iv1 = ugrid_cell_iverts(icell,1)
+          iv2 = ugrid_cell_iverts(icell,2)
+          iv3 = ugrid_cell_iverts(icell,3)
+          iv4 = ugrid_cell_iverts(icell,4)
+          if((iv1.lt.1).or.(iv1.gt.ugrid_nverts)) stop 8321
+          if((iv2.lt.1).or.(iv2.gt.ugrid_nverts)) stop 8322
+          if((iv3.lt.1).or.(iv3.gt.ugrid_nverts)) stop 8323
+          if((iv4.lt.1).or.(iv4.gt.ugrid_nverts)) stop 8324
+          vec1(1:3) = ugrid_vertices(iv1,:)-ugrid_vertices(iv4,:)
+          vec2(1:3) = ugrid_vertices(iv2,:)-ugrid_vertices(iv4,:)
+          vec3(1:3) = ugrid_vertices(iv3,:)-ugrid_vertices(iv4,:)
+          call ugrid_crossp_3d(vec2,vec3,cp)
+          dp = vec1(1)*cp(1) + vec1(2)*cp(2) + vec1(3)*cp(3)
+          ugrid_cell_volume(icell) = abs(dp)/6
+       enddo
+    endif
+    !
+    ! If the ugrid_cell_size is not read, then create.
+    ! This is a typical length scale appropriate for each cell, which can be used to
+    ! estimate if the image has to be refined, or if round-off errors are too large.
+    !
+    if(.not.allocated(ugrid_cell_size)) then
+       allocate(ugrid_cell_size(ugrid_ncells))
+       do icell=1,ugrid_ncells
+          ugrid_cell_size(icell) = ugrid_cell_volume(icell)**0.3333333
+       enddo
+    endif
+    !
+    ! Count nr of open cells
+    !
+    do icell=1,ugrid_ncells
+       if(ugrid_cell_volume(icell).le.0.d0) then
+          countopens = countopens + 1
+       endif
+    enddo
+    if(countopens.ne.ugrid_ncells_open) then
+       write(*,*) 'NOTE: Counted ',countopens,' open (unbounded) cells. File said: ',ugrid_ncells_open,'. Taking ',countopens
+       ugrid_ncells_open = countopens
+    endif
+    !
+    ! Find all open cells
+    !
+    if(ugrid_ncells_open.ne.0) then
+       allocate(ugrid_cell_iopen(ugrid_ncells_open))
+       countopens = 0
+       do icell=1,ugrid_ncells
+          if(ugrid_cell_volume(icell).le.0.d0) then
+             countopens = countopens + 1
+             ugrid_cell_iopen(countopens) = icell
+          endif
+       enddo
+    endif
+    !
+    ! Check consistency of all cell walls
+    !
+    call ugrid_check_cell_wall_normals()
+    if(allocated(ugrid_vertices)) then
+       call ugrid_check_cell_wall_supvec()
     endif
     !
     ! Compute the overal size and mean position
