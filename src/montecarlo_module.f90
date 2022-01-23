@@ -6317,7 +6317,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
   doubleprecision :: taupath,fr
   doubleprecision :: tau,dtau,albedo,absorb,dum,scatsrc0,costheta
   doubleprecision :: dexp,dener,ds,dummy,alpha_tot,g,rn,dss,src4(1:4)
-  logical :: ok,arrived,therm
+  logical :: ok,arrived,therm,inrealcell
   doubleprecision :: prev_x,prev_y,prev_z
   !$ logical::continue
   !
@@ -6414,6 +6414,15 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
            mc_photon_destroyed = .false.
         endif
         !
+        ! Signal if we are in a real cell. In the AMR grid, if we
+        ! are in a cell, it is also a real cell.
+        !
+        if(ray_index.ge.1) then
+           inrealcell = .true.
+        else
+           inrealcell = .false.
+        endif
+        !
      else
         !
         ! Unstructured grid
@@ -6423,6 +6432,18 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
              ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
              ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
              ray_next_iwall,arrived)
+        !
+        ! Signal if we are in a real cell. In unstructured grid, if we
+        ! are in a cell, it could be an 'open' cell with infinite
+        ! volume (in which case volume should be 0).
+        !
+        inrealcell = .false.
+        if(ray_index.ge.1) then
+           if(ugrid_cell_volume(ray_index).gt.0) then
+              inrealcell = .true.
+           endif
+        endif
+        !
      endif
      !
      ! Path length
@@ -6435,9 +6456,9 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
      !
      ! NOTE: For non-Cartesian coordinates it can happen that we have not
      !       yet arrived, but are currently not in a cell either. Hence 
-     !       we need to check if ray_index.ge.1
+     !       we need to check if we are in a real cell
      !
-     if(ray_index.ge.1) then
+     if(inrealcell) then
         alpha_a_tot = 0.d0
         alpha_s_tot = 0.d0
         do ispec=1,dust_nr_species
@@ -6469,12 +6490,15 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
         ! Yes: reached the end point, i.e. reached new scattering or
         ! absorption event
         !
+        ! Can only happen in real cell
+        !
         ! Check...
         !
         if(debug_check_all.eq.1) then
            if(ray_index.lt.1) stop 94001
            if(dtau.eq.0.d0) stop 94002
            if(alpha_a_tot.eq.0.d0) stop 94003
+           if(.not.inrealcell) stop 94004
         endif
         !
         ! Compute the fraction of the segment we have advanced
@@ -6571,7 +6595,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
      !
      ! Endpoint of this segment.
      !
-     if(ray_index.ge.1) then
+     if(inrealcell) then
         !
         ! We are in a cell. So add energy to cell
         !
@@ -6669,7 +6693,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
   doubleprecision :: taupath,fr,ener,enerav
   doubleprecision :: tau,dtau,dum,dtauabs,dtauscat,xptauabs,xxtauabs
   doubleprecision :: ds,rn,scatsrc0,mnint,dss
-  logical :: ok,arrived
+  logical :: ok,arrived,inrealcell
   doubleprecision :: prev_x,prev_y,prev_z
   doubleprecision :: costheta,g,phasefunc,dummy,src4(1:4)
   doubleprecision :: axi(1:2,1:3),Ebk,Qbk,Ubk,Vbk
@@ -6875,6 +6899,16 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
         else
            mc_photon_destroyed = .false.
         endif
+        !
+        ! Signal if we are in a real cell. In the AMR grid, if we
+        ! are in a cell, it is also a real cell.
+        !
+        if(ray_index.ge.1) then
+           inrealcell = .true.
+        else
+           inrealcell = .false.
+        endif
+        !
      else
         !
         ! Unstructured grid
@@ -6884,6 +6918,18 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
              ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
              ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
              ray_next_iwall,arrived)
+        !
+        ! Signal if we are in a real cell. In unstructured grid, if we
+        ! are in a cell, it could be an 'open' cell with infinite
+        ! volume (in which case volume should be 0).
+        !
+        inrealcell = .false.
+        if(ray_index.ge.1) then
+           if(ugrid_cell_volume(ray_index).gt.0) then
+              inrealcell = .true.
+           endif
+        endif
+        !
      endif
      !
      ! Path length
@@ -6906,7 +6952,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
      !       scattering, e.g. if we use radmc3d mcmono, we add 1d-99 to
      !       all opacities to make sure that they are non-zero.
      !
-     if(ray_index.ge.1) then
+     if(inrealcell) then
         alpha_a_tot = 0.d0
         alpha_s_tot = 0.d0
         do ispec=1,dust_nr_species
@@ -6938,6 +6984,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
         !
         if(debug_check_all.eq.1) then
            if(ray_index.lt.1) stop 94001
+           if(.not.inrealcell) stop 94004
         endif
         !
         ! Compute dtauabs and dtauscat as well as exp(-dtauabs) and
@@ -7338,7 +7385,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
      !
      ! Endpoint of this segment.
      !
-     if(ray_index.ge.1) then
+     if(inrealcell) then
         !
         ! We are in a cell. 
         !
@@ -7728,7 +7775,7 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
   doubleprecision :: lenpath
   doubleprecision :: tau,dtau
   doubleprecision :: ds,rn,scatsrc0,mnint,sprev,stot
-  logical :: arrived
+  logical :: arrived,inrealcell
   doubleprecision :: prev_x,prev_y,prev_z
   doubleprecision :: axi(1:2,1:3)
   !
@@ -7852,6 +7899,16 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
            write(stdo,*) 'ERROR: Finite-size (non-pointlike) stars not allowed in the single-scattering mode.'
            stop 162
         endif
+        !
+        ! Signal if we are in a real cell. In the AMR grid, if we
+        ! are in a cell, it is also a real cell.
+        !
+        if(ray_index.ge.1) then
+           inrealcell = .true.
+        else
+           inrealcell = .false.
+        endif
+        !
      else
         !
         ! Unstructured grid
@@ -7861,6 +7918,18 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
              ray_cart_dirx,ray_cart_diry,ray_cart_dirz,           &
              ray_index,ray_indexnext,ray_ds,ray_curr_iwall,       &
              ray_next_iwall,arrived)
+        !
+        ! Signal if we are in a real cell. In unstructured grid, if we
+        ! are in a cell, it could be an 'open' cell with infinite
+        ! volume (in which case volume should be 0).
+        !
+        inrealcell = .false.
+        if(ray_index.ge.1) then
+           if(ugrid_cell_volume(ray_index).gt.0) then
+              inrealcell = .true.
+           endif
+        endif
+        !
      endif
      !
      ! Path length
@@ -7890,7 +7959,7 @@ subroutine walk_cells_optical_depth(params,lenpath,inu,tau)
      !       yet arrived, but are currently not in a cell either. Hence 
      !       we need to check if ray_index.ge.1
      !
-     if(ray_index.ge.1) then
+     if(inrealcell) then
         alpha_a_tot = 0.d0
         alpha_s_tot = 0.d0
         do ispec=1,dust_nr_species
