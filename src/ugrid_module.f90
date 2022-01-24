@@ -437,7 +437,7 @@ contains
     integer :: icell,iwall,iiwall,iwallcurr,iwallnext,icellnext
     double precision :: dum(1:3),n(1:3),res,ddn,dsvn,lam,tol,dist
     logical :: inwall
-    res = 1d99
+    res = 1d110
     iwallnext = -1
     icellnext = -1
     if(icell.le.0) stop 1253
