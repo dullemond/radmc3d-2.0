@@ -106,7 +106,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#scattering-of-photons-in-the-thermal-monte-carlo-run">Scattering of photons in the Thermal Monte Carlo run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scattering-of-photons-in-the-monochromatic-monte-carlo-run">Scattering of photons in the Monochromatic Monte Carlo run</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#scattered-light-in-images-and-spectra-the-scattering-monte-carlo-computation">Scattered light in images and spectra: The ‘Scattering Monte Carlo’ computation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#single-scattering-vs-multiple-scattering">Single-scattering vs. multiple-scattering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#single-scattering-vs-multiple-scattering">Single-scattering vs. multiple-scattering</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tip-analyzing-the-effect-of-multiple-scattering-using-selectscat">Tip: Analyzing the effect of multiple scattering using <code class="docutils literal notranslate"><span class="pre">selectscat</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#simplified-single-scattering-mode-spherical-coordinates">Simplified single-scattering mode (spherical coordinates)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#warning-when-using-an-isotropic-scattering">Warning when using an-isotropic scattering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#for-experts-some-more-background-on-scattering">For experts: Some more background on scattering</a></li>
@@ -471,7 +474,7 @@ before using the OpenMP parallelized thermal Monte Carlo version (cf. Section
 or <a class="reference internal" href="#sec-dust-ray-tracing"><span class="std std-ref">Making SEDs, spectra, images for dust continuum</span></a>, you must give RADMC-3D the following
 data:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>: The grid file (see Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>: The grid file (see Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp or unstr_grid.inp</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code>: The global wavelength file (see Section
 <a class="reference internal" href="inputoutputfiles.html#sec-wavelengths"><span class="std std-ref">INPUT (required): wavelength_micron.inp</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">stars.inp</span></code>: The locations and properties of stars (see Section
@@ -985,6 +988,35 @@ with full scattering and single scattering you can estimate how important the
 multiple-scattering contribution is compared to single scattering. But of
 course, it is always safer to simply increase <code class="docutils literal notranslate"><span class="pre">nphot_scat</span></code> and patiently wait
 until the Monte Carlo run is finished.</p>
+<div class="section" id="tip-analyzing-the-effect-of-multiple-scattering-using-selectscat">
+<span id="sec-select-scattering"></span><h4>Tip: Analyzing the effect of multiple scattering using <code class="docutils literal notranslate"><span class="pre">selectscat</span></code><a class="headerlink" href="#tip-analyzing-the-effect-of-multiple-scattering-using-selectscat" title="Permalink to this headline">¶</a></h4>
+<p>If you are interested in analyzing the role that multiple scattering plays in your
+image (as opposed to single scattering), you can ask RADMC-3D to compute the
+scattering source function only for, for instance, the second scattering:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mf">1.0</span> <span class="n">selectscat</span> <span class="mi">2</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>Note that this should not be used for production runs, because the image that
+is produced is unphysical (it omits the first and third, fourth etc scatterings).
+But it can be useful to get a feeling for how important multiple scattering
+is, or to investigate if certain features in your image are due to multiple
+scattering or not. You can also select only the first scattering:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mf">1.0</span> <span class="n">selectscat</span> <span class="mi">1</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>or all scatterings except the first:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mf">1.0</span> <span class="n">selectscat</span> <span class="mi">2</span> <span class="mi">100000</span>
+</pre></div>
+</div>
+<p>Note that if you make an image with <code class="docutils literal notranslate"><span class="pre">selectscat</span></code>, the thermal emission from
+the dust is still included (as is the case without <code class="docutils literal notranslate"><span class="pre">selectscat</span></code>). So if
+you want to see <em>only</em> the scattered light in the image, you need to manually
+set the dust temperature to zero everywhere (in the file <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code>,
+see Chapter <a class="reference internal" href="inputoutputfiles.html#chap-input-files"><span class="std std-ref">Main input and output files of RADMC-3D</span></a>).</p>
+<p>Also note that you can use <code class="docutils literal notranslate"><span class="pre">selectscat</span></code> also for the monochromatic
+Monte Carlo for computing the mean intensity field
+(see Section <a class="reference internal" href="#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>).</p>
+</div>
 </div>
 <div class="section" id="simplified-single-scattering-mode-spherical-coordinates">
 <span id="sec-simple-single-scattering"></span><h3>Simplified single-scattering mode (spherical coordinates)<a class="headerlink" href="#simplified-single-scattering-mode-spherical-coordinates" title="Permalink to this headline">¶</a></h3>
@@ -1648,7 +1680,7 @@ adjust the signs.</p>
 <p>In spherical coordinates it is possible in RADMC-3D to set up axially symmetric
 models. The trick is simply to set the number of <span class="math notranslate nohighlight">\(\phi\)</span> coordinate points
 <code class="docutils literal notranslate"><span class="pre">nphi</span></code> to 1 and to switch off the <span class="math notranslate nohighlight">\(\phi\)</span>-dimension in the grid (see
-Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>). For isotropic scattering this mode has always
+Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp or unstr_grid.inp</span></a>). For isotropic scattering this mode has always
 been implemented. But for anisotropic scattering things become more complex. For
 such a model the scattering remains a fully 3-D problem: the scattering source
 function has to be stored not only as a function of <span class="math notranslate nohighlight">\(r\)</span> and

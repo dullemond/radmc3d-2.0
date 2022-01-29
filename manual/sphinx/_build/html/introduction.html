@@ -202,34 +202,33 @@ already working are marked with [+], while those which are not yet (!!) built in
 are marked with [-]. Those that are currently being developed are marked with
 [.] and those that are ready, but are still in the testing phase are marked with
 [t].</p>
-<ol class="arabic simple">
-<li><p>Coordinate systems:</p></li>
-</ol>
+<ol class="arabic">
+<li><p>Coordinate systems:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>[+] Cartesian coordinates (3-D)</p></li>
 <li><p>[+] Spherical coordinates (1-D, 2-D and 3-D)</p></li>
 </ol>
 </div></blockquote>
-<ol class="arabic simple">
+</li>
 <li><p>Gridding systems (regular and adaptive mesh refinement grids are
-available for cartesian <em>and</em> spherical coordinates):</p></li>
-</ol>
+available for cartesian <em>and</em> spherical coordinates):</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>[+] Regular</p></li>
 <li><p>[+] Adaptive Mesh Refinement: oct-tree style</p></li>
 <li><p>[+] Adaptive Mesh Refinement: layered (‘patch’) style</p></li>
-<li><p>[-] Voronoi gridding <em>[To be implemented on request]</em></p></li>
+<li><p>[+] Delaunay gridding</p></li>
+<li><p>[+] Voronoi gridding</p></li>
+<li><p>[+] Flexible unstructured gridding</p></li>
 </ol>
 </div></blockquote>
-<ol class="arabic">
+</li>
 <li><p>Radiation mechanisms:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<div><ol class="arabic">
 <li><p>[+] Dust continuum, thermal emission</p></li>
-<li><p>[+] Dust continuum scattering:</p></li>
-</ol>
+<li><p>[+] Dust continuum scattering:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>[+] …in isotropic approximation</p></li>
@@ -237,7 +236,7 @@ available for cartesian <em>and</em> spherical coordinates):</p></li>
 <li><p>[+] …with full Stokes and Polarization</p></li>
 </ol>
 </div></blockquote>
-<ol class="arabic simple">
+</li>
 <li><p>[-] Dust quantum heated grains <em>[To be implemented on request]</em></p></li>
 <li><p>[t] Polarized dust emission by aligned grains <em>[first test version]</em></p></li>
 <li><p>[+] Gas line transfer (LTE)</p></li>
@@ -290,16 +289,21 @@ available for cartesian <em>and</em> spherical coordinates):</p></li>
 </div></blockquote>
 </li>
 <li><p>Front-end Python packages:</p>
-<ol class="arabic simple">
+<blockquote>
+<div><ol class="arabic simple">
 <li><p>[+] Python simple tools for RADMC-3D</p></li>
 <li><p>[+] Python RADMC-3D library {smalltt radmc3dPy} (author: A. Juhasz)</p></li>
 </ol>
+</div></blockquote>
 </li>
-<li><ol class="arabic simple">
+<li><p>Miscellaneous:</p>
+<blockquote>
+<div><ol class="arabic simple">
 <li><p>[+] Stars can be treated as point-sources or as spheres</p></li>
 <li><p>[+] Option to calculate the mean intensity <span class="math notranslate nohighlight">\(J_\nu(\vec x)\)</span> in the model</p></li>
 <li><p>[+] OpenMP parallellization of the Monte Carlo</p></li>
 </ol>
+</div></blockquote>
 </li>
 </ol>
 </div>
@@ -308,7 +312,7 @@ available for cartesian <em>and</em> spherical coordinates):</p></li>
 <p>The RADMC-3D software package in under continuous development. A very
 detailed development log-book is found in the git repository.
 A more user-friendly overview of the development history can be
-found in this manual, in appendix ref{chap-development-history}.</p>
+found in this manual, in appendix <code class="xref std std-numref docutils literal notranslate"><span class="pre">chap-development-history</span></code>.</p>
 </div>
 <div class="section" id="copyright">
 <h2>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h2>

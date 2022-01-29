@@ -360,16 +360,15 @@ is a non-exhaustive list of the variables that can be set.
 
 .. _sec-grid-input:
 
-INPUT (required): amr_grid.inp
-===============================
+INPUT (required): amr_grid.inp or unstr_grid.inp
+================================================
 
 This is the file that specifies what the spatial grid of the model looks
 like. See Chapter :ref:`chap-gridding`. This file is essential, because most
 other ``.inp`` and ``.dat`` files are simple lists of numbers which do not
 contain any information about the grid. All information about the grid is
-contained in the ``amr_grid.inp``\ , also for non-AMR regular grids. Note that
-in the future we will also allow for unstructured grids. The corresponding grid
-files will then be named differently.
+contained in the ``amr_grid.inp``\ , also for non-AMR regular grids, or alternatively
+in the ``unstr_grid.inp`` file for unstructured grids. 
 
 There are three possible AMR grid styles:
 
@@ -380,6 +379,13 @@ There are three possible AMR grid styles:
 
 * Layer-style AMR. This is grid style 10.
 
+Alternatively, there are a variety of possible unstructured grids:
+
+* Delaunay
+
+* Voronoi
+
+* Self-designed
 
 
 .. _sec-amr-grid-regular:
@@ -653,6 +659,195 @@ layer is a datacube. For memory/hardisk-friendly storage you must use the
 oct-tree refinement instead. The layers are meant to make the AMR much more
 accessible, but are somewhat more memory consuming.
 
+.. _sec-unstr-grid:
+
+Unstructured grid
+-----------------
+
+An unstructured grid (no matter whether Delaunay, Voronoi or general type) is
+specified in the file called ``unstr_grid.inp``:
+::
+  iformat                          <=== Typically 2 at present      
+  ncells                           <=== Nr of cells (both "closed" and "open" ones)
+  nwalls                           <=== Nr of walls
+  nverts                           <=== Nr of vertices
+  cell_max_nr_walls                <=== Max number of walls per cell
+  cell_max_nr_verts                <=== Max number of vertices per cell (0 means: not relevant)
+  wall_max_nr_verts                <=== Max number of vertices per wall (required if saving vertices)
+  vert_max_nr_cells                <=== Max number of cells per vertex (0 means: not relevant)
+  ncells_open                      <=== Nr of "open" cells
+  hull_nwalls                      <=== Nr of cell walls at the surface
+  isave_volumes                    <=== Include a list of cell volumes?
+  isave_sn_vectors                 <=== Include a list of s and n vectors?
+  isave_cellcenters                <=== Include a list of cell center positions?
+  isave_vertices                   <=== Include the list of vertices?
+  isave_size                       <=== Include the list of cell sizes?
+  hull_convex                      <=== Are the surface cell walls convex?
+  Volume of cell 1                 \  [If isave_volumes==1]
+  ...                              |- Cell volumes
+  Volume of cell ncells            /
+  s and n of wall 1                \  [If isave_sn_vectors==1]
+  ...                              |- Support and normal vectors of walls: s_x s_y s_z n_x n_y n_z
+  s and n of wall nwalls           /
+  idx_left idx_right wall 1        \
+  ...                              |- Left and right cell indices of each cell wall
+  idx_left idx_right wall nwalls   /
+  cell center cell 1               \  [If isave_cellcenters==1]
+  ...                              |- Center point of cells: p_x p_y p_z
+  cell center cell ncells          /
+  idx_vertices wall 1              \  [If isave_vertices==1]
+  ...                              |- Indices of vertices spanning wall (wall_max_nr_verts for each
+  idx_vertices wall nwalls         |  wall, if too many: pad with 0)
+  vertex 1                         |
+  ...                              |- Vertices: v_x v_y v_z
+  vertex nverts                    /
+
+The ``ncells`` always has to give the number of cells. The order of the cells is
+always the same as the order of the physical variables in files such as
+``dust_density.inp`` and the like.  The ``nwalls`` always has to give the number
+of cell walls separating the cells. Each cell wall can only separate two
+cells. Even if more cells lie on the same plane, each pair of adjacent cells
+must share one and only one wall. It is not a problem if more than one wall lie
+in the same plane. The ``nverts`` is only required if you specify the vertices
+(i.e. if ``isave_vertices==1``). Set to 0 if you don't need it.
+
+Since each cell can have a multitude of walls, for interal bookkeeping it is
+useful to know in advance the maximum number of walls per cell, which is given
+by ``cell_max_nr_walls`` (if it is chosen too small, RADMC-3D will try to
+internally correct it). Likewise for the maximum number of vertices per cell
+given by ``cell_max_nr_verts``.
+
+If (and only if) you provide the vertices of the grid (setting
+``isave_vertices=1``) you also need to specify the maximum number of
+vertices per wall ``wall_max_nr_verts`` (this you must specify correctly,
+as it determined how many vertex indices per wall are provided further down)
+and the maximum number of cells per vertex ``vert_max_nr_cells``, which can
+be an estimate (RADMC-3D will try to correct it). 
+
+At the surface of the grid there are either 'hull walls' or 'open cells'.  For
+Delaunay grids, and presumably for your own-designed grids, you will have 'hull
+walls' which have only 1 cell on one side (the first of the two cell indices
+specified) and the other side facing the vacuum. The hull walls should close the
+grid, separating the grid from the outside.  For Voronoi grids the cells on the
+edge of the domain are, instead, open: They go off to infinity. You have to
+specify how many hull walls or open cells you have (RADMC-3D has only been
+tested for either hull walls or open cells, not a combination): ``hull_nwalls``
+or ``ncells_open``.
+
+The way you specify the grid is flexible. By setting ``isave_volumes=1`` you
+give the cell volume for each cell (see below). Setting instead
+``isave_volumes=0`` asks RADMC-3D to compute the cell volumes internally.  So
+far RADMC-3D can only compute cell volumes if the cells are tetrahedral
+(i.e.~simplices), but maybe in the future this may change/improve.  By setting
+``isave_sn_vectors=1`` you give the support- and normal-vector of each
+wall. This makes the gridding very flexible, but it also costs a lot of disk
+space: 6 floats per wall. If you instead set ``isave_sn_vectors=0`` then you ask
+RADMC-3D to compute these internally from whatever other information is has
+(either from the vertices or by assuming Voronoi-type walls).  By setting
+``isave_cellcenters=1`` you give the exact location of each cell center
+point. For Voronoi grids this is a must, as the Voronoi grid is defined by its
+cell centers. For other grids (including Delaunay) this can be skipped (set
+``isave_cellcenters=0``) if the vertices are specified.  If you set
+``isave_vertices=1`` you specify the vertices. For Delaunay grids this is a
+must, as the Delaunay grid is defined by its vertices. For Voronoi grids you
+can omit these (by setting ``isave_vertices=0``) as RADMC-3D will then construct
+the cell walls automatically assuming them to lie exactly in between the two
+points. Finally, for the radiative transfer calculations as well as for
+handling precision errors, it is useful for RADMC-3D to know what the
+'size' is of a cell (even though with non-cubic cells a 'size' may not be
+uniquely defined). If not specified (``isave_size==0``) then RADMC-3D will
+estimate it as the cubic root of the volume. But if you set ``isave_size=1``
+then you can specify, for each cell, this 'size'.
+
+Depending on the settings of ``isave_volumes``, ``isave_sn_vectors``,
+``isave_cellcenters``, ``isave_vertices``, and ``isave_size``, the corresponding
+data are listed in the order shown above.
+
+Here is an example of a ``unstr_grid.inp`` file for a Delaunay grid:
+::
+
+   2                    <=== Format number 2
+   199462               <=== Nr of cells (for Delaunay grids usually >> nr of vertices)
+   399691               <=== Nr of walls (for Delaunay grids usually >> nr of vertices)
+   30000                <=== Nr of vertices
+   4                    <=== For Delaunay grid: always exactly 4 cell walls per cell
+   4                    <=== For Delaunay grid: always exactly 4 vertices per cell
+   3                    <=== For Delaunay grid: always exactly 3 vertices per wall
+   0                    <=== Not necessary to specify
+   0                    <=== For Delaunay grid: no open cells
+   1534                 <=== Nr of walls at the surface (the hull)
+   0                    <=== For Delaunay grid: RADMC-3D computes the volume
+   0                    <=== For Delaunay grid: RADMC-3D computes the s and n
+   0                    <=== For Delaunay grid: RADMC-3D computes the cell centers
+   1                    <=== For Delaunay grid: Must specify the vertices
+   0                    <=== Compute the size from the volume**0.33333
+   1                    <=== For Delaunay grid: Yes, the hull is convex
+   1 0                  <=== First wall, connecting to cell 1 to the vacuum (i.e. part of hull)
+   5 0
+   7 0
+   9 0
+   ...                  <=== Many, many lines...
+   154309 0
+   154310 0             <=== Wall connecting cell 154310 to the vacuum (last of the hull walls)
+   1 45                 <=== Wall connecting cells 1 and 45 (first of the internal walls)
+   1 160
+   1 2
+   ...                  <=== Many, many lines...
+   199460 199462
+   199461 199462        <=== Last cell wall, connecting cells 199461 and 199462
+   22156 15798 12402    <=== First cell wall: indices of the three vertices of this wall
+   19848 2591 5486
+   ...                  <=== Many, many lines...
+   26358 1240 11951
+   26358 19577 11951    <=== Last cell wall: indices of the three vertices of this wall
+   -9.158735473036884375e+13 -7.011778907885211719e+13 6.039256438409164844e+13   <=== First vertex
+   -6.263232133764155469e+13 1.286041325985346719e+14 6.671766425868976562e+12
+   ...                                                                            <=== Many, many lines...
+   -8.918647910718467188e+13 -7.056527384485303125e+13 -5.088009729690025000e+13
+   -6.440888241873650000e+13 -1.108250266699581299e+12 -2.545886642466098438e+13  <=== Last vertex
+
+And here is an example of a ``unstr_grid.inp`` file for a Voronoi grid:
+::
+
+   2                    <=== Format number 2
+   30000                <=== Nr of cells (= number of points)
+   230058               <=== Nr of walls
+   0                    <=== Can be kept 0
+   33                   <=== Maximum nr of walls per cell (can be many for Voronoi cells)
+   0                    <=== Can be kept 0
+   0                    <=== Can be kept 0 because we don't list the vertices
+   0                    <=== Can be kept 0 because we don't list the vertices
+   769                  <=== Nr of open cells
+   0                    <=== Nr of hull walls (for Voronoi: must be 0)
+   1                    <=== For Voronoi grid: Must specify cell volumes
+   0                    <=== For Voronoi grid: RADMC-3D computes the s and n
+   1                    <=== For Voronoi grid: Cell centers must be specified
+   0                    <=== For Voronoi grid: Vertices not explicitly necessary
+   0                    <=== Compute the size from the volume**0.33333
+   0                    <=== Since we have no hull walls, this is irrelevant
+   2.772699983914995096e+38   <=== Volume of the first cell
+   3.855434192315507956e+38
+   0.000000000000000000e+00   <=== Zero volume = open cell
+   4.187946751113876048e+38
+   ...                        <=== Many, many lines...
+   4.765148695599201280e+38
+   1.699867329158221159e+39   <=== Volume of the last cell
+   13738 5006                 <=== First cell wall connects cell 13738 with cell 5006
+   13738 29031
+   ...                        <=== Many, many lines...
+   28953 29538
+   29177 29815                <=== Last cell wall connects cell 29177 with 29815
+   3.224145067583187109e+13 1.185761258774503594e+14 6.399869810360167969e+13    <=== First cell center
+   1.024309911261237656e+14 9.824700277721357812e+13 -2.709320785406102344e+13
+   ...                                                                           <=== Many, many lines...
+   -4.278522643567171094e+13 -1.519077018470512695e+13 1.098029901859170156e+14
+   -8.087822681846140625e+13 -1.158794225153191562e+14 4.059165911623856250e+13  <=== Last cell center
+
+RADMC-3D does not need to explicitly know if a grid is Voronoi or Delaunay,
+because the input file, in particular which data are given (see the
+``isave_xxx`` flags), automatically makes it correct. In the actual internal
+workings of RADMC-3D it does not care about whether it is Voronoi or Delaunay:
+it only cares about cell volumes and cell walls.
 
 .. _sec-dustdens:
 

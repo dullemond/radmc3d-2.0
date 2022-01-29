@@ -29,25 +29,27 @@ are marked with [-]. Those that are currently being developed are marked with
 
 #. Coordinate systems:
    
-  #. [+] Cartesian coordinates (3-D)
-  #. [+] Spherical coordinates (1-D, 2-D and 3-D)
+    #. [+] Cartesian coordinates (3-D)
+    #. [+] Spherical coordinates (1-D, 2-D and 3-D)
 
 #. Gridding systems (regular and adaptive mesh refinement grids are
    available for cartesian *and* spherical coordinates):
 
-  #. [+] Regular
-  #. [+] Adaptive Mesh Refinement: oct-tree style
-  #. [+] Adaptive Mesh Refinement: layered ('patch') style
-  #. [-] Voronoi gridding *[To be implemented on request]*
+    #. [+] Regular
+    #. [+] Adaptive Mesh Refinement: oct-tree style
+    #. [+] Adaptive Mesh Refinement: layered ('patch') style
+    #. [+] Delaunay gridding
+    #. [+] Voronoi gridding
+    #. [+] Flexible unstructured gridding
 
 #. Radiation mechanisms:
 
     #. [+] Dust continuum, thermal emission
     #. [+] Dust continuum scattering:
 
-      #. [+] ...in isotropic approximation
-      #. [+] ...with full anisotropy
-      #. [+] ...with full Stokes and Polarization
+        #. [+] ...in isotropic approximation
+        #. [+] ...with full anisotropy
+        #. [+] ...with full Stokes and Polarization
 
     #. [-] Dust quantum heated grains *[To be implemented on request]*
     #. [t] Polarized dust emission by aligned grains *[first test version]*
@@ -88,10 +90,10 @@ are marked with [-]. Those that are currently being developed are marked with
 
 #. Front-end Python packages:
 
-   #. [+] Python simple tools for RADMC-3D
-   #. [+] Python RADMC-3D library {\small\tt radmc3dPy} (author: A. Juhasz)
+    #. [+] Python simple tools for RADMC-3D
+    #. [+] Python RADMC-3D library {\small\tt radmc3dPy} (author: A. Juhasz)
 
-#.
+#. Miscellaneous:
 
     #. [+] Stars can be treated as point-sources or as spheres
     #. [+] Option to calculate the mean intensity :math:`J_\nu(\vec x)` in the model
@@ -104,7 +106,7 @@ Version tracker
 The RADMC-3D software package in under continuous development. A very
 detailed development log-book is found in the git repository.
 A more user-friendly overview of the development history can be 
-found in this manual, in appendix \ref{chap-development-history}.
+found in this manual, in appendix :numref:`chap-development-history`.
 
 
 Copyright

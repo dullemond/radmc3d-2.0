@@ -315,6 +315,9 @@ INPUT ./polscat.pdf
 INPUT ./polscat.pdf
 INPUT polscat.pdf
 INPUT ./polscat.pdf
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/courier/pcrb8t.tfm
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/vf/adobe/courier/pcrb8t.vf
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/courier/pcrb8r.tfm
 INPUT stokes_and_angles_iaudef.pdf
 INPUT ./stokes_and_angles_iaudef.pdf
 INPUT ./stokes_and_angles_iaudef.pdf
@@ -441,6 +444,16 @@ INPUT ./nestedlayer_bare.pdf
 INPUT ./nestedlayer_bare.pdf
 INPUT nestedlayer_bare.pdf
 INPUT ./nestedlayer_bare.pdf
+INPUT delaunay_grid_2d.pdf
+INPUT ./delaunay_grid_2d.pdf
+INPUT ./delaunay_grid_2d.pdf
+INPUT delaunay_grid_2d.pdf
+INPUT ./delaunay_grid_2d.pdf
+INPUT voronoi_grid_2d.pdf
+INPUT ./voronoi_grid_2d.pdf
+INPUT ./voronoi_grid_2d.pdf
+INPUT voronoi_grid_2d.pdf
+INPUT ./voronoi_grid_2d.pdf
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/times/ptmri8c.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/helvetic/phvbo8t.tfm
 INPUT dataflow-basic-userdef.pdf

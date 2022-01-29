@@ -100,7 +100,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#on-the-successively-regular-kind-of-data-storage-and-its-slight-redundancy">On the ‘successively regular’ kind of data storage, and its slight redundancy</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#unstructured-grids">Unstructured grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unstructured-grids-delaunay-voronoi-or-more-general">Unstructured grids (Delaunay, Voronoi, or more general)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#d-plane-parallel-models">1-D Plane-parallel models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#making-a-spectrum-of-the-1-d-plane-parallel-atmosphere">Making a spectrum of the 1-D plane-parallel atmosphere</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#in-1-d-plane-parallel-no-star-but-incident-parallel-flux-beams">In 1-D plane-parallel: no star, but incident parallel flux beams</a></li>
@@ -191,7 +191,7 @@
 <span id="chap-gridding"></span><h1>More information about the gridding<a class="headerlink" href="#more-information-about-the-gridding" title="Permalink to this headline">¶</a></h1>
 <p>We already discussed the various types of grids in Section
 <a class="reference internal" href="basicstructure.html#sec-spatial-grid"><span class="std std-ref">The spatial grid</span></a>, and the grid input file structure is described in
-Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>. In this chapter let us take a closer look
+Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp or unstr_grid.inp</span></a>. In this chapter let us take a closer look
 at the gridding possibilities and things to take special care of.</p>
 <div class="section" id="regular-grids">
 <span id="sec-regular-grid"></span><h2>Regular grids<a class="headerlink" href="#regular-grids" title="Permalink to this headline">¶</a></h2>
@@ -299,7 +299,7 @@ separable. For models in which the inner grid edge is also the inner model
 edge (e.g. a simple model of a protoplanetary disk with a sharp inner
 cut-off) this kind of separable grid refinement in <span class="math notranslate nohighlight">\(R\)</span>-direction may be
 essential to avoid problems with optically thick inner cells (see e.g. Fig.
-<a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 30</span></a> for an example of what could go wrong if you do
+<a class="reference internal" href="tipsandtricks.html#fig-innerrim-lowres"><span class="std std-numref">Fig. 32</span></a> for an example of what could go wrong if you do
 not do this). Separable grid refinement in <span class="math notranslate nohighlight">\(\Theta\)</span>-direction is
 typically important for protoplanetary disk models, where the midplane and
 surface layers of the disk need to have sufficient resolution, but any
@@ -499,10 +499,111 @@ our ‘successively regular’ kind of data format is more of an advantage than 
 6.25% redundance is a disadvantage.</p>
 </div>
 </div>
-<div class="section" id="unstructured-grids">
-<span id="sec-unstruct-grids"></span><h2>Unstructured grids<a class="headerlink" href="#unstructured-grids" title="Permalink to this headline">¶</a></h2>
-<p>In a future version of RADMC-3D we will include unstructured gridding as a
-possibility. But at this moment such a gridding is not yet implemented.</p>
+<div class="section" id="unstructured-grids-delaunay-voronoi-or-more-general">
+<span id="sec-unstruct-grids"></span><h2>Unstructured grids (Delaunay, Voronoi, or more general)<a class="headerlink" href="#unstructured-grids-delaunay-voronoi-or-more-general" title="Permalink to this headline">¶</a></h2>
+<p>RADMC-3D can handle unstructures grids of a variety of types. This works (so
+far) only for 3-D cartesian coordinates. The two most well-known are Delaunay
+grids and Voronoi grids. But these are just special cases of a more general
+unstructured grid capability. RADMC-3D only needs to know, for each grid cell:</p>
+<ol class="arabic simple">
+<li><p>The volume of the cell</p></li>
+<li><p>The cell walls of the cell</p></li>
+</ol>
+<p>and, conversely, for each cell wall which two cells that the wall separates.  A
+cell wall is only defined by two vectors that define the 2D plane in 3D space: a
+support vector <span class="math notranslate nohighlight">\({\bf s}\)</span> and a normal vector <span class="math notranslate nohighlight">\({\bf n}\)</span>. By giving to
+RADMC-3D a file <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code> containing all this information, the user determines
+the shape of each cell. Each of these cells has an integer index, starting with
+1, and increasing by steps of 1 until the number of cells. The density and other
+variables in the usual input files such as <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> are then associated
+to these cells in that order (first value belongs to cell 1, second to cell 2 etc).</p>
+<p>This information is enough for RADMC-3D to compute where a ray passes from one
+cell to its neighbor, and how the passage through the cell affects the cell’s
+temperature and scattering source function.</p>
+<p>Some of this grid information is redundant, and depends on which information
+is contained in <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code>. Typically the user provides only the information
+about the grid he/she wants to provide, and RADMC-3D will try to complete the rest
+if it can (otherwise it will give an error).</p>
+<p>For example: For a Voronoi grid you only need to specify, for each cell wall,
+which two cells the wall separates. If RADMC-3D lacks further information, it
+will by default assume that the cell walls lie exactly in between the two cell
+center points and perpendicular to the line connecting them, thus naturally
+giving you a Voronoi grid. The support vectors and normal vectors of the walls are then
+computed internally in RADMC-3D. Unfortunately, RADMC-3D lacks the capability to
+calculate the cell volumes for Voronoi cells, so you will have to provide the
+cell volume.</p>
+<p>As another example: For a Delaunay grid you only need to specify the vertices
+(corner points of the tetraheders), which vertices span a wall, and which two
+cells the wall separates (or one cell and the vacuum). The support vectors and
+normal vectors of the walls are then computed internally in RADMC-3D.
+For these simple shaped cells (just simplices) RADMC-3D can calculate the volume
+itself.</p>
+<p>Computing this information for a Delaunay or Voronoi grid can be done using
+external software packages such as <code class="docutils literal notranslate"><span class="pre">qhull</span></code>. In fact, the <code class="docutils literal notranslate"><span class="pre">qhull</span></code> package
+is built-in into the <code class="docutils literal notranslate"><span class="pre">scipy.spatial</span></code> library of Python, and is thefore
+easily usable from within Python. To create the necessary <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code>
+files using these libraries you can use the following tools provided with
+the RADMC-3D package:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/radmc3d_delaunay_grid.py</span></code> : A tool to generate a
+Delaunay grid from a given set of vertex points. Note that the cells are
+then created by this tool, and they may not be the same (and almost certainly
+not in the same order) as the cells you may have assumed beforehand. So
+if you obtain a model from someone else that is on a Delaunay grid, and
+the physical values are in the grid cells, you may need to figure out how
+to associate the cells from that other model with the cells generated by
+this package. However, usually the physical values would, in the case of
+a Delaunay grid, be specified at the cell vertices. Then you would need
+to interpolate into the (new) cells, because RADMC-3D needs the physical
+values inside the cells, not at the vertices.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python/radmc3d_tools/radmc3d_voronoi_grid.py</span></code> : A tool to generate
+a Voronoi grid from a given set of cell center points. The physical
+variables are also specified on these points. The vertex points are
+not required as input. Only needed is information about each cell wall:
+which two cells are divided by the wall, and information about each cell:
+it’s volume. In voronoi grids there will be ‘open cells’ which go out
+to infinity. The physical variables in these cells are ignored: These
+cells are assumed to be empty.</p></li>
+</ol>
+<div class="figure align-default" id="id7">
+<span id="fig-delau"></span><a class="reference internal image-reference" href="_images/delaunay_grid_2d.png"><img alt="_images/delaunay_grid_2d.png" src="_images/delaunay_grid_2d.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 27 </span><span class="caption-text">Example of unstructured grid: a Delaunay grid. Figure is only symbolic, since
+the actual grid is 3D. Blue points are cell centers, orange points are
+vertices.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id8">
+<span id="fig-voronoi"></span><a class="reference internal image-reference" href="_images/voronoi_grid_2d.png"><img alt="_images/voronoi_grid_2d.png" src="_images/voronoi_grid_2d.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 28 </span><span class="caption-text">Example of unstructured grid: a Voronoi grid. Figure is only symbolic, since
+the actual grid is 3D. Blue points are cell centers, orange points are
+vertices.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p>Examples of these two types of grids are shown in
+<a class="reference internal" href="#fig-delau"><span class="std std-numref">Fig. 27</span></a> and <a class="reference internal" href="#fig-voronoi"><span class="std std-numref">Fig. 28</span></a>.</p>
+<p>However, you can also generate your own grid designs by specifying the
+support vectors and normal vectors and two cells belonging to each wall.
+However, this is not an entirely trivial task to do correctly, because
+the result has to obey the following conditions:</p>
+<ol class="arabic simple">
+<li><p>Each cell must be convex in shape.</p></li>
+<li><p>Beware not to forget any necessary wall. A missing wall will likely
+cause very unexpected behavior.</p></li>
+<li><p>There should be no “empty holes” between the cells: inside the grid
+cells should fill space perfectly. This is not a trivial condition
+to fulfill: ill defined grid walls can lead to photons finding themselves
+outside a grid cell, but within the grid. This leads to RADMC-3D
+to crash.</p></li>
+<li><p>If you specify the cell walls with vertices instead of support- and
+normal vectors, the vertices belonging to a cell must lie perfectly
+in same plane.</p></li>
+<li><p>If you have walls that face the vacuum, they are part of what is called
+the hull of the grid (Note: A Delaunay grid has a hull, but a Voronoi
+grid does not: it has instead open cells). It is best (though not
+strictly necessary) to assure that the hull is convex, since that
+makes the code faster.</p></li>
+</ol>
+<p>The way to make your own (non-Delaunay, non-Voronoi) grid is to generate
+a file <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code> in the appropriate way. The technical details
+how this file is formatted are given in Section <a class="reference internal" href="inputoutputfiles.html#sec-unstr-grid"><span class="std std-ref">Unstructured grid</span></a>.</p>
 </div>
 <div class="section" id="d-plane-parallel-models">
 <span id="sec-1d-plane-parallel"></span><h2>1-D Plane-parallel models<a class="headerlink" href="#d-plane-parallel-models" title="Permalink to this headline">¶</a></h2>
@@ -515,7 +616,7 @@ in-plane coordinates, while the <span class="math notranslate nohighlight">\(z\)
 thus have a 1-D grid in the <span class="math notranslate nohighlight">\(z\)</span>-coordinate, but no grid in <span class="math notranslate nohighlight">\(x\)</span>- or
 <span class="math notranslate nohighlight">\(y\)</span>-directions.</p>
 <p>You can make a 1-D plane-parallel model by setting some settings in the
-<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file. Please consult Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a> for the
+<code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> file. Please consult Section <a class="reference internal" href="inputoutputfiles.html#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp or unstr_grid.inp</span></a> for the
 format of this file. The changes/settings you have to do are (see example
 below): (1) set the coordinate type number to 10, (2) set the <span class="math notranslate nohighlight">\(x\)</span> and
 <span class="math notranslate nohighlight">\(y\)</span> dimensions to non-active and (3) setting the cell interfaces in

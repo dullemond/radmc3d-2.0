@@ -101,10 +101,11 @@
 <li class="toctree-l1"><a class="reference internal" href="tipsandtricks.html">Tips, tricks and problem hunting</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Main input and output files of RADMC-3D</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#input-radmc3d-inp">INPUT: radmc3d.inp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#input-required-amr-grid-inp">INPUT (required): amr_grid.inp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-required-amr-grid-inp-or-unstr-grid-inp">INPUT (required): amr_grid.inp or unstr_grid.inp</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#regular-grid">Regular grid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#oct-tree-style-amr-grid">Oct-tree-style AMR grid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#layer-style-amr-grid">Layer-style AMR grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unstructured-grid">Unstructured grid</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#input-required-for-dust-transfer-dust-density-inp">INPUT (required for dust transfer): dust_density.inp</a><ul>
@@ -513,21 +514,26 @@ See Section <a class="reference internal" href="toolsinside.html#sec-subbox"><sp
 </li>
 </ul>
 </div>
-<div class="section" id="input-required-amr-grid-inp">
-<span id="sec-grid-input"></span><h2>INPUT (required): amr_grid.inp<a class="headerlink" href="#input-required-amr-grid-inp" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="input-required-amr-grid-inp-or-unstr-grid-inp">
+<span id="sec-grid-input"></span><h2>INPUT (required): amr_grid.inp or unstr_grid.inp<a class="headerlink" href="#input-required-amr-grid-inp-or-unstr-grid-inp" title="Permalink to this headline">¶</a></h2>
 <p>This is the file that specifies what the spatial grid of the model looks
 like. See Chapter <a class="reference internal" href="gridding.html#chap-gridding"><span class="std std-ref">More information about the gridding</span></a>. This file is essential, because most
 other <code class="docutils literal notranslate"><span class="pre">.inp</span></code> and <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files are simple lists of numbers which do not
 contain any information about the grid. All information about the grid is
-contained in the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>, also for non-AMR regular grids. Note that
-in the future we will also allow for unstructured grids. The corresponding grid
-files will then be named differently.</p>
+contained in the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>, also for non-AMR regular grids, or alternatively
+in the <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code> file for unstructured grids.</p>
 <p>There are three possible AMR grid styles:</p>
 <ul class="simple">
 <li><p>Regular grid: No mesh refinement. This is grid style 0.</p></li>
 <li><p>Oct-tree-style AMR (‘Adaptive Mesh Refinement’, although for now it
 is not really ‘adaptive’). This is grid style 1.</p></li>
 <li><p>Layer-style AMR. This is grid style 10.</p></li>
+</ul>
+<p>Alternatively, there are a variety of possible unstructured grids:</p>
+<ul class="simple">
+<li><p>Delaunay</p></li>
+<li><p>Voronoi</p></li>
+<li><p>Self-designed</p></li>
 </ul>
 <div class="section" id="regular-grid">
 <span id="sec-amr-grid-regular"></span><h3>Regular grid<a class="headerlink" href="#regular-grid" title="Permalink to this headline">¶</a></h3>
@@ -771,6 +777,185 @@ layer is a datacube. For memory/hardisk-friendly storage you must use the
 oct-tree refinement instead. The layers are meant to make the AMR much more
 accessible, but are somewhat more memory consuming.</p>
 </div>
+<div class="section" id="unstructured-grid">
+<span id="sec-unstr-grid"></span><h3>Unstructured grid<a class="headerlink" href="#unstructured-grid" title="Permalink to this headline">¶</a></h3>
+<p>An unstructured grid (no matter whether Delaunay, Voronoi or general type) is
+specified in the file called <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>iformat                          &lt;=== Typically 2 at present
+ncells                           &lt;=== Nr of cells (both &quot;closed&quot; and &quot;open&quot; ones)
+nwalls                           &lt;=== Nr of walls
+nverts                           &lt;=== Nr of vertices
+cell_max_nr_walls                &lt;=== Max number of walls per cell
+cell_max_nr_verts                &lt;=== Max number of vertices per cell (0 means: not relevant)
+wall_max_nr_verts                &lt;=== Max number of vertices per wall (required if saving vertices)
+vert_max_nr_cells                &lt;=== Max number of cells per vertex (0 means: not relevant)
+ncells_open                      &lt;=== Nr of &quot;open&quot; cells
+hull_nwalls                      &lt;=== Nr of cell walls at the surface
+isave_volumes                    &lt;=== Include a list of cell volumes?
+isave_sn_vectors                 &lt;=== Include a list of s and n vectors?
+isave_cellcenters                &lt;=== Include a list of cell center positions?
+isave_vertices                   &lt;=== Include the list of vertices?
+isave_size                       &lt;=== Include the list of cell sizes?
+hull_convex                      &lt;=== Are the surface cell walls convex?
+Volume of cell 1                 \  [If isave_volumes==1]
+...                              |- Cell volumes
+Volume of cell ncells            /
+s and n of wall 1                \  [If isave_sn_vectors==1]
+...                              |- Support and normal vectors of walls: s_x s_y s_z n_x n_y n_z
+s and n of wall nwalls           /
+idx_left idx_right wall 1        \
+...                              |- Left and right cell indices of each cell wall
+idx_left idx_right wall nwalls   /
+cell center cell 1               \  [If isave_cellcenters==1]
+...                              |- Center point of cells: p_x p_y p_z
+cell center cell ncells          /
+idx_vertices wall 1              \  [If isave_vertices==1]
+...                              |- Indices of vertices spanning wall (wall_max_nr_verts for each
+idx_vertices wall nwalls         |  wall, if too many: pad with 0)
+vertex 1                         |
+...                              |- Vertices: v_x v_y v_z
+vertex nverts                    /
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ncells</span></code> always has to give the number of cells. The order of the cells is
+always the same as the order of the physical variables in files such as
+<code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> and the like.  The <code class="docutils literal notranslate"><span class="pre">nwalls</span></code> always has to give the number
+of cell walls separating the cells. Each cell wall can only separate two
+cells. Even if more cells lie on the same plane, each pair of adjacent cells
+must share one and only one wall. It is not a problem if more than one wall lie
+in the same plane. The <code class="docutils literal notranslate"><span class="pre">nverts</span></code> is only required if you specify the vertices
+(i.e. if <code class="docutils literal notranslate"><span class="pre">isave_vertices==1</span></code>). Set to 0 if you don’t need it.</p>
+<p>Since each cell can have a multitude of walls, for interal bookkeeping it is
+useful to know in advance the maximum number of walls per cell, which is given
+by <code class="docutils literal notranslate"><span class="pre">cell_max_nr_walls</span></code> (if it is chosen too small, RADMC-3D will try to
+internally correct it). Likewise for the maximum number of vertices per cell
+given by <code class="docutils literal notranslate"><span class="pre">cell_max_nr_verts</span></code>.</p>
+<p>If (and only if) you provide the vertices of the grid (setting
+<code class="docutils literal notranslate"><span class="pre">isave_vertices=1</span></code>) you also need to specify the maximum number of
+vertices per wall <code class="docutils literal notranslate"><span class="pre">wall_max_nr_verts</span></code> (this you must specify correctly,
+as it determined how many vertex indices per wall are provided further down)
+and the maximum number of cells per vertex <code class="docutils literal notranslate"><span class="pre">vert_max_nr_cells</span></code>, which can
+be an estimate (RADMC-3D will try to correct it).</p>
+<p>At the surface of the grid there are either ‘hull walls’ or ‘open cells’.  For
+Delaunay grids, and presumably for your own-designed grids, you will have ‘hull
+walls’ which have only 1 cell on one side (the first of the two cell indices
+specified) and the other side facing the vacuum. The hull walls should close the
+grid, separating the grid from the outside.  For Voronoi grids the cells on the
+edge of the domain are, instead, open: They go off to infinity. You have to
+specify how many hull walls or open cells you have (RADMC-3D has only been
+tested for either hull walls or open cells, not a combination): <code class="docutils literal notranslate"><span class="pre">hull_nwalls</span></code>
+or <code class="docutils literal notranslate"><span class="pre">ncells_open</span></code>.</p>
+<p>The way you specify the grid is flexible. By setting <code class="docutils literal notranslate"><span class="pre">isave_volumes=1</span></code> you
+give the cell volume for each cell (see below). Setting instead
+<code class="docutils literal notranslate"><span class="pre">isave_volumes=0</span></code> asks RADMC-3D to compute the cell volumes internally.  So
+far RADMC-3D can only compute cell volumes if the cells are tetrahedral
+(i.e.~simplices), but maybe in the future this may change/improve.  By setting
+<code class="docutils literal notranslate"><span class="pre">isave_sn_vectors=1</span></code> you give the support- and normal-vector of each
+wall. This makes the gridding very flexible, but it also costs a lot of disk
+space: 6 floats per wall. If you instead set <code class="docutils literal notranslate"><span class="pre">isave_sn_vectors=0</span></code> then you ask
+RADMC-3D to compute these internally from whatever other information is has
+(either from the vertices or by assuming Voronoi-type walls).  By setting
+<code class="docutils literal notranslate"><span class="pre">isave_cellcenters=1</span></code> you give the exact location of each cell center
+point. For Voronoi grids this is a must, as the Voronoi grid is defined by its
+cell centers. For other grids (including Delaunay) this can be skipped (set
+<code class="docutils literal notranslate"><span class="pre">isave_cellcenters=0</span></code>) if the vertices are specified.  If you set
+<code class="docutils literal notranslate"><span class="pre">isave_vertices=1</span></code> you specify the vertices. For Delaunay grids this is a
+must, as the Delaunay grid is defined by its vertices. For Voronoi grids you
+can omit these (by setting <code class="docutils literal notranslate"><span class="pre">isave_vertices=0</span></code>) as RADMC-3D will then construct
+the cell walls automatically assuming them to lie exactly in between the two
+points. Finally, for the radiative transfer calculations as well as for
+handling precision errors, it is useful for RADMC-3D to know what the
+‘size’ is of a cell (even though with non-cubic cells a ‘size’ may not be
+uniquely defined). If not specified (<code class="docutils literal notranslate"><span class="pre">isave_size==0</span></code>) then RADMC-3D will
+estimate it as the cubic root of the volume. But if you set <code class="docutils literal notranslate"><span class="pre">isave_size=1</span></code>
+then you can specify, for each cell, this ‘size’.</p>
+<p>Depending on the settings of <code class="docutils literal notranslate"><span class="pre">isave_volumes</span></code>, <code class="docutils literal notranslate"><span class="pre">isave_sn_vectors</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isave_cellcenters</span></code>, <code class="docutils literal notranslate"><span class="pre">isave_vertices</span></code>, and <code class="docutils literal notranslate"><span class="pre">isave_size</span></code>, the corresponding
+data are listed in the order shown above.</p>
+<p>Here is an example of a <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code> file for a Delaunay grid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>                    <span class="o">&lt;===</span> <span class="n">Format</span> <span class="n">number</span> <span class="mi">2</span>
+<span class="mi">199462</span>               <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">cells</span> <span class="p">(</span><span class="k">for</span> <span class="n">Delaunay</span> <span class="n">grids</span> <span class="n">usually</span> <span class="o">&gt;&gt;</span> <span class="n">nr</span> <span class="n">of</span> <span class="n">vertices</span><span class="p">)</span>
+<span class="mi">399691</span>               <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">walls</span> <span class="p">(</span><span class="k">for</span> <span class="n">Delaunay</span> <span class="n">grids</span> <span class="n">usually</span> <span class="o">&gt;&gt;</span> <span class="n">nr</span> <span class="n">of</span> <span class="n">vertices</span><span class="p">)</span>
+<span class="mi">30000</span>                <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">vertices</span>
+<span class="mi">4</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">always</span> <span class="n">exactly</span> <span class="mi">4</span> <span class="n">cell</span> <span class="n">walls</span> <span class="n">per</span> <span class="n">cell</span>
+<span class="mi">4</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">always</span> <span class="n">exactly</span> <span class="mi">4</span> <span class="n">vertices</span> <span class="n">per</span> <span class="n">cell</span>
+<span class="mi">3</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">always</span> <span class="n">exactly</span> <span class="mi">3</span> <span class="n">vertices</span> <span class="n">per</span> <span class="n">wall</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Not</span> <span class="n">necessary</span> <span class="n">to</span> <span class="n">specify</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">no</span> <span class="nb">open</span> <span class="n">cells</span>
+<span class="mi">1534</span>                 <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">walls</span> <span class="n">at</span> <span class="n">the</span> <span class="n">surface</span> <span class="p">(</span><span class="n">the</span> <span class="n">hull</span><span class="p">)</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">RADMC</span><span class="o">-</span><span class="mi">3</span><span class="n">D</span> <span class="n">computes</span> <span class="n">the</span> <span class="n">volume</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">RADMC</span><span class="o">-</span><span class="mi">3</span><span class="n">D</span> <span class="n">computes</span> <span class="n">the</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">n</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">RADMC</span><span class="o">-</span><span class="mi">3</span><span class="n">D</span> <span class="n">computes</span> <span class="n">the</span> <span class="n">cell</span> <span class="n">centers</span>
+<span class="mi">1</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">Must</span> <span class="n">specify</span> <span class="n">the</span> <span class="n">vertices</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">size</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">volume</span><span class="o">**</span><span class="mf">0.33333</span>
+<span class="mi">1</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Delaunay</span> <span class="n">grid</span><span class="p">:</span> <span class="n">Yes</span><span class="p">,</span> <span class="n">the</span> <span class="n">hull</span> <span class="ow">is</span> <span class="n">convex</span>
+<span class="mi">1</span> <span class="mi">0</span>                  <span class="o">&lt;===</span> <span class="n">First</span> <span class="n">wall</span><span class="p">,</span> <span class="n">connecting</span> <span class="n">to</span> <span class="n">cell</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">the</span> <span class="n">vacuum</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="n">part</span> <span class="n">of</span> <span class="n">hull</span><span class="p">)</span>
+<span class="mi">5</span> <span class="mi">0</span>
+<span class="mi">7</span> <span class="mi">0</span>
+<span class="mi">9</span> <span class="mi">0</span>
+<span class="o">...</span>                  <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="mi">154309</span> <span class="mi">0</span>
+<span class="mi">154310</span> <span class="mi">0</span>             <span class="o">&lt;===</span> <span class="n">Wall</span> <span class="n">connecting</span> <span class="n">cell</span> <span class="mi">154310</span> <span class="n">to</span> <span class="n">the</span> <span class="n">vacuum</span> <span class="p">(</span><span class="n">last</span> <span class="n">of</span> <span class="n">the</span> <span class="n">hull</span> <span class="n">walls</span><span class="p">)</span>
+<span class="mi">1</span> <span class="mi">45</span>                 <span class="o">&lt;===</span> <span class="n">Wall</span> <span class="n">connecting</span> <span class="n">cells</span> <span class="mi">1</span> <span class="ow">and</span> <span class="mi">45</span> <span class="p">(</span><span class="n">first</span> <span class="n">of</span> <span class="n">the</span> <span class="n">internal</span> <span class="n">walls</span><span class="p">)</span>
+<span class="mi">1</span> <span class="mi">160</span>
+<span class="mi">1</span> <span class="mi">2</span>
+<span class="o">...</span>                  <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="mi">199460</span> <span class="mi">199462</span>
+<span class="mi">199461</span> <span class="mi">199462</span>        <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">cell</span> <span class="n">wall</span><span class="p">,</span> <span class="n">connecting</span> <span class="n">cells</span> <span class="mi">199461</span> <span class="ow">and</span> <span class="mi">199462</span>
+<span class="mi">22156</span> <span class="mi">15798</span> <span class="mi">12402</span>    <span class="o">&lt;===</span> <span class="n">First</span> <span class="n">cell</span> <span class="n">wall</span><span class="p">:</span> <span class="n">indices</span> <span class="n">of</span> <span class="n">the</span> <span class="n">three</span> <span class="n">vertices</span> <span class="n">of</span> <span class="n">this</span> <span class="n">wall</span>
+<span class="mi">19848</span> <span class="mi">2591</span> <span class="mi">5486</span>
+<span class="o">...</span>                  <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="mi">26358</span> <span class="mi">1240</span> <span class="mi">11951</span>
+<span class="mi">26358</span> <span class="mi">19577</span> <span class="mi">11951</span>    <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">cell</span> <span class="n">wall</span><span class="p">:</span> <span class="n">indices</span> <span class="n">of</span> <span class="n">the</span> <span class="n">three</span> <span class="n">vertices</span> <span class="n">of</span> <span class="n">this</span> <span class="n">wall</span>
+<span class="o">-</span><span class="mf">9.158735473036884375e+13</span> <span class="o">-</span><span class="mf">7.011778907885211719e+13</span> <span class="mf">6.039256438409164844e+13</span>   <span class="o">&lt;===</span> <span class="n">First</span> <span class="n">vertex</span>
+<span class="o">-</span><span class="mf">6.263232133764155469e+13</span> <span class="mf">1.286041325985346719e+14</span> <span class="mf">6.671766425868976562e+12</span>
+<span class="o">...</span>                                                                            <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="o">-</span><span class="mf">8.918647910718467188e+13</span> <span class="o">-</span><span class="mf">7.056527384485303125e+13</span> <span class="o">-</span><span class="mf">5.088009729690025000e+13</span>
+<span class="o">-</span><span class="mf">6.440888241873650000e+13</span> <span class="o">-</span><span class="mf">1.108250266699581299e+12</span> <span class="o">-</span><span class="mf">2.545886642466098438e+13</span>  <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">vertex</span>
+</pre></div>
+</div>
+<p>And here is an example of a <code class="docutils literal notranslate"><span class="pre">unstr_grid.inp</span></code> file for a Voronoi grid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>                    <span class="o">&lt;===</span> <span class="n">Format</span> <span class="n">number</span> <span class="mi">2</span>
+<span class="mi">30000</span>                <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">cells</span> <span class="p">(</span><span class="o">=</span> <span class="n">number</span> <span class="n">of</span> <span class="n">points</span><span class="p">)</span>
+<span class="mi">230058</span>               <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">walls</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">kept</span> <span class="mi">0</span>
+<span class="mi">33</span>                   <span class="o">&lt;===</span> <span class="n">Maximum</span> <span class="n">nr</span> <span class="n">of</span> <span class="n">walls</span> <span class="n">per</span> <span class="n">cell</span> <span class="p">(</span><span class="n">can</span> <span class="n">be</span> <span class="n">many</span> <span class="k">for</span> <span class="n">Voronoi</span> <span class="n">cells</span><span class="p">)</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">kept</span> <span class="mi">0</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">kept</span> <span class="mi">0</span> <span class="n">because</span> <span class="n">we</span> <span class="n">don</span><span class="s1">&#39;t list the vertices</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">kept</span> <span class="mi">0</span> <span class="n">because</span> <span class="n">we</span> <span class="n">don</span><span class="s1">&#39;t list the vertices</span>
+<span class="mi">769</span>                  <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="nb">open</span> <span class="n">cells</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Nr</span> <span class="n">of</span> <span class="n">hull</span> <span class="n">walls</span> <span class="p">(</span><span class="k">for</span> <span class="n">Voronoi</span><span class="p">:</span> <span class="n">must</span> <span class="n">be</span> <span class="mi">0</span><span class="p">)</span>
+<span class="mi">1</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Voronoi</span> <span class="n">grid</span><span class="p">:</span> <span class="n">Must</span> <span class="n">specify</span> <span class="n">cell</span> <span class="n">volumes</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Voronoi</span> <span class="n">grid</span><span class="p">:</span> <span class="n">RADMC</span><span class="o">-</span><span class="mi">3</span><span class="n">D</span> <span class="n">computes</span> <span class="n">the</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">n</span>
+<span class="mi">1</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Voronoi</span> <span class="n">grid</span><span class="p">:</span> <span class="n">Cell</span> <span class="n">centers</span> <span class="n">must</span> <span class="n">be</span> <span class="n">specified</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">For</span> <span class="n">Voronoi</span> <span class="n">grid</span><span class="p">:</span> <span class="n">Vertices</span> <span class="ow">not</span> <span class="n">explicitly</span> <span class="n">necessary</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">size</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">volume</span><span class="o">**</span><span class="mf">0.33333</span>
+<span class="mi">0</span>                    <span class="o">&lt;===</span> <span class="n">Since</span> <span class="n">we</span> <span class="n">have</span> <span class="n">no</span> <span class="n">hull</span> <span class="n">walls</span><span class="p">,</span> <span class="n">this</span> <span class="ow">is</span> <span class="n">irrelevant</span>
+<span class="mf">2.772699983914995096e+38</span>   <span class="o">&lt;===</span> <span class="n">Volume</span> <span class="n">of</span> <span class="n">the</span> <span class="n">first</span> <span class="n">cell</span>
+<span class="mf">3.855434192315507956e+38</span>
+<span class="mf">0.000000000000000000e+00</span>   <span class="o">&lt;===</span> <span class="n">Zero</span> <span class="n">volume</span> <span class="o">=</span> <span class="nb">open</span> <span class="n">cell</span>
+<span class="mf">4.187946751113876048e+38</span>
+<span class="o">...</span>                        <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="mf">4.765148695599201280e+38</span>
+<span class="mf">1.699867329158221159e+39</span>   <span class="o">&lt;===</span> <span class="n">Volume</span> <span class="n">of</span> <span class="n">the</span> <span class="n">last</span> <span class="n">cell</span>
+<span class="mi">13738</span> <span class="mi">5006</span>                 <span class="o">&lt;===</span> <span class="n">First</span> <span class="n">cell</span> <span class="n">wall</span> <span class="n">connects</span> <span class="n">cell</span> <span class="mi">13738</span> <span class="k">with</span> <span class="n">cell</span> <span class="mi">5006</span>
+<span class="mi">13738</span> <span class="mi">29031</span>
+<span class="o">...</span>                        <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="mi">28953</span> <span class="mi">29538</span>
+<span class="mi">29177</span> <span class="mi">29815</span>                <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">cell</span> <span class="n">wall</span> <span class="n">connects</span> <span class="n">cell</span> <span class="mi">29177</span> <span class="k">with</span> <span class="mi">29815</span>
+<span class="mf">3.224145067583187109e+13</span> <span class="mf">1.185761258774503594e+14</span> <span class="mf">6.399869810360167969e+13</span>    <span class="o">&lt;===</span> <span class="n">First</span> <span class="n">cell</span> <span class="n">center</span>
+<span class="mf">1.024309911261237656e+14</span> <span class="mf">9.824700277721357812e+13</span> <span class="o">-</span><span class="mf">2.709320785406102344e+13</span>
+<span class="o">...</span>                                                                           <span class="o">&lt;===</span> <span class="n">Many</span><span class="p">,</span> <span class="n">many</span> <span class="n">lines</span><span class="o">...</span>
+<span class="o">-</span><span class="mf">4.278522643567171094e+13</span> <span class="o">-</span><span class="mf">1.519077018470512695e+13</span> <span class="mf">1.098029901859170156e+14</span>
+<span class="o">-</span><span class="mf">8.087822681846140625e+13</span> <span class="o">-</span><span class="mf">1.158794225153191562e+14</span> <span class="mf">4.059165911623856250e+13</span>  <span class="o">&lt;===</span> <span class="n">Last</span> <span class="n">cell</span> <span class="n">center</span>
+</pre></div>
+</div>
+<p>RADMC-3D does not need to explicitly know if a grid is Voronoi or Delaunay,
+because the input file, in particular which data are given (see the
+<code class="docutils literal notranslate"><span class="pre">isave_xxx</span></code> flags), automatically makes it correct. In the actual internal
+workings of RADMC-3D it does not care about whether it is Voronoi or Delaunay:
+it only cares about cell volumes and cell walls.</p>
+</div>
 </div>
 <div class="section" id="input-required-for-dust-transfer-dust-density-inp">
 <span id="sec-dustdens"></span><h2>INPUT (required for dust transfer): dust_density.inp<a class="headerlink" href="#input-required-for-dust-transfer-dust-density-inp" title="Permalink to this headline">¶</a></h2>
@@ -810,7 +995,7 @@ excluding the cells that are in fact the parents of 2x2x2 subcells; i.e.
 the sum of the volumes of all true cells (=leafs) adds up to the volume of
 the total grid). The order of these numbers is always the same ‘immediate
 recursive subtree entry’ as in the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code>
-(Section <a class="reference internal" href="#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>).</p>
+(Section <a class="reference internal" href="#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp or unstr_grid.inp</span></a>).</p>
 </li>
 <li><p><em>For layer-style AMR grids:</em></p>
 <p>The value of <code class="docutils literal notranslate"><span class="pre">nrcells</span></code> denotes the number of values that are specified. This
@@ -853,7 +1038,7 @@ Sections <a class="reference internal" href="#sec-amr-grid-regular"><span class=
 </div>
 <div class="figure align-default" id="id1">
 <span id="fig-regular-grid-numbered"></span><img alt="_images/base_amr.png" src="_images/base_amr.png" />
-<p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3 (as
+<p class="caption"><span class="caption-number">Fig. 33 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3 (as
 Fig. <a class="reference internal" href="gridding.html#fig-regular-grid"><span class="std std-numref">Fig. 21</span></a>), with the order of the cells shown as
 numbers in the cells.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
@@ -863,7 +1048,7 @@ numbers in the cells.</span><a class="headerlink" href="#id1" title="Permalink t
 <p>For the case when you have an oct-tree refined grid (see Sections
 <a class="reference internal" href="#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a> and <a class="reference internal" href="gridding.html#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>), the order of the
 numbers is the same as the order of the cells as specified in the
-<code class="docutils literal notranslate"><span class="pre">amr_grid.(u)inp</span></code> file (Section <a class="reference internal" href="#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp</span></a>).  Let us take the
+<code class="docutils literal notranslate"><span class="pre">amr_grid.(u)inp</span></code> file (Section <a class="reference internal" href="#sec-grid-input"><span class="std std-ref">INPUT (required): amr_grid.inp or unstr_grid.inp</span></a>).  Let us take the
 example of a simple 1x1x1 grid which is refined into 2x2x2 and for which the
 (1,2,1) cell is refined again in 2x2x2 (this is exactly the same example as
 shown in Section <a class="reference internal" href="#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a>, and for which the
@@ -895,7 +1080,7 @@ the cells.</span></a>.
 An unformatted version is also available, in the standard way (see above).</p>
 <div class="figure align-default" id="id2">
 <span id="fig-oct-tree-amr-numbered"></span><img alt="_images/oct_tree_amr.png" src="_images/oct_tree_amr.png" />
-<p class="caption"><span class="caption-number">Fig. 32 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement (as
+<p class="caption"><span class="caption-number">Fig. 34 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement (as
 Fig. <a class="reference internal" href="gridding.html#fig-oct-tree-amr"><span class="std std-ref">Example of a 2-D grid with oct-tree refinement. The base grid has nx=4
 and ny=3. Three levels of refinement are added to this base grid.</span></a>) with the order of the cells shown as numbers in
 the cells.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>

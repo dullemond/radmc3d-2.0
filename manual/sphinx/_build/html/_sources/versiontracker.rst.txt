@@ -417,3 +417,4 @@ This version overview is very rough, and has only been started as of version
     ``db_cumul(:)`` as thread private, but without having it declared
     as such. This led to interference between threads. This is now
     fixed.
+  * [as of 30.01.2022] Added unstructured grid support.
