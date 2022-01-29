@@ -980,6 +980,9 @@ subroutine read_grid_file()
         write(stdo,*) 'ERROR: In read_grid_file(): Reading unstr_grid.*inp failed.'
         stop
      endif
+     ! This notice can be removed at some point
+     write(stdo,*) 'Notice: Unstructured grids are a new feature of RADMC-3D as of January 2022.'
+     write(stdo,*) '        So please use with care, and report strange behavior to the author.'
   else
      write(stdo,*) 'ERROR: In read_grid_file(): Did not find grid file'
      stop
