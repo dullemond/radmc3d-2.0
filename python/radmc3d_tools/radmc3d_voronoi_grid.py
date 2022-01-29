@@ -34,6 +34,9 @@ class Voronoigrid(object):
         # Set flags
         #
         self.save_cellcenters = True    # Must be!
+        self.save_vertices    = False   # For now
+        self.save_volumes     = True    # As long as RADMC-3D cannot do this internally
+        self.save_sn_vectors  = False   # Not necessary
         self.save_size        = False   # For now
         self.qhull_options    = qhull_options
         #
@@ -395,9 +398,11 @@ class Voronoigrid(object):
         
     def write_radmc3d_unstr_grid(self,bin=False):
         self.compute_diagnostics()
-        iformat=1
+        iformat           = 2
         isave_cellcenters = int(self.save_cellcenters)
-        isave_vertices    = 0
+        isave_vertices    = int(self.save_vertices)
+        isave_volumes     = int(self.save_volumes)
+        isave_sn_vectors  = int(self.save_sn_vectors)
         isave_size        = int(self.save_size)
         if bin:
             ihdr   = np.array([iformat,                        # Format number
@@ -411,6 +416,8 @@ class Voronoigrid(object):
                                self.vert_max_nr_cells,         # Max number of cells per vertex (0 means: not relevant)
                                self.ncells_open,               # Nr of "open" cells
                                self.hull_nwalls,               # Nr of cell walls at the surface
+                               isave_volumes,                  # Include a list of cell volumes?
+                               isave_sn_vectors,               # Include a list of s and n vectors?
                                isave_cellcenters,              # Include a list of cell center positions?
                                isave_vertices,                 # Include the list of vertices?
                                isave_size,                     # Include the list of estimated linear cell sizes?
@@ -426,11 +433,10 @@ class Voronoigrid(object):
             striw         = str(self.hull_nwalls)+'Q'          # Create a format string for struct for the hull wall indices
             striwv        = str(self.nwalls*self.wall_max_nr_verts)+'Q' # Create a format string for struct for the wall vertex indices
             data_cellvols = self.cell_volumes.ravel()
-            data_walls    = np.hstack((self.wall_s,self.wall_n)).ravel()
+            #data_walls    = np.hstack((self.wall_s,self.wall_n)).ravel()
             indices       = (self.wall_icells+1).ravel()
             sdat          = struct.pack(strh,*ihdr) \
                             +struct.pack(strv,*data_cellvols) \
-                            +struct.pack(strw,*data_walls) \
                             +struct.pack(stri,*indices)        # Create a binary image of the data
             if(self.save_cellcenters):
                 data_points   = self.cell_points.ravel()
@@ -449,13 +455,15 @@ class Voronoigrid(object):
                 f.write('{}\n'.format(self.vert_max_nr_cells)) # Max number of cells per vertex (0 means: not relevant)
                 f.write('{}\n'.format(self.ncells_open))       # Nr of "open" cells
                 f.write('{}\n'.format(self.hull_nwalls))       # Nr of cell walls at the surface
+                f.write('{}\n'.format(isave_volumes))          # Include a list of cell volumes?
+                f.write('{}\n'.format(isave_sn_vectors))       # Include a list of s and n vectors?
                 f.write('{}\n'.format(isave_cellcenters))      # Include a list of cell center positions?
                 f.write('{}\n'.format(isave_vertices))         # Include the list of vertices?
                 f.write('{}\n'.format(isave_size))             # Include the list of cell sizes?
                 f.write('0\n')                                 # Are the surface cell walls convex?
                 np.savetxt(f,self.cell_volumes)                # The cell volumes (0="open" cell)
-                data=np.hstack((self.wall_s,self.wall_n))      # Glue the support and direction vectors
-                np.savetxt(f,data)                             # Write the wall support and direction vectors
+                #data=np.hstack((self.wall_s,self.wall_n))      # Glue the support and direction vectors
+                #np.savetxt(f,data)                             # Write the wall support and direction vectors
                 np.savetxt(f,self.wall_icells+1,fmt='%d')      # Indices of cells are on each side of the wall (starting with 1, fortran style!)
                 if(self.save_cellcenters):
                     data = self.cell_points
