@@ -2121,6 +2121,7 @@ if(amrray_selfcheck) then
       if(amr_tree_present) write(stdo,*) associated(amrray_cell),amrray_cell%id
       write(stdo,*) axi
       ierror = 1
+      return
       !stop 1031
    endif
 endif
@@ -2211,6 +2212,7 @@ if(amrray_selfcheck) then
    if((dsx.lt.0.d0).or.(dsy.lt.0.d0).or.(dsz.lt.0.d0)) then
       write(stdo,*) 'ERROR: Negative dsz, dsy or dsz'
       ierror = 3
+      return
       !stop 1040
    endif
 endif
