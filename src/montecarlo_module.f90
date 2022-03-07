@@ -6449,7 +6449,15 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
      !
      ! If error, return
      !
-     if(ierror.ne.0) return
+     if(ierror.ne.0) then
+        !
+        ! OpenMP Parallellization: Release lock on this cell
+        !
+        !$ if(ray_index .ge. 1 )then
+        !$    call omp_unset_lock(lock(ray_index));
+        !$ endif
+        return
+     endif
      !
      ! Path length
      ! 
@@ -6908,7 +6916,15 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
      !
      ! If error, return
      !
-     if(ierror.ne.0) return
+     if(ierror.ne.0) then
+        !
+        ! OpenMP Parallellization: Release lock on this cell
+        !
+        !$ if(ray_index .ge. 1 )then
+        !$    call omp_unset_lock(lock(ray_index));
+        !$ endif
+        return
+     endif
      !
      ! Path length
      ! 
