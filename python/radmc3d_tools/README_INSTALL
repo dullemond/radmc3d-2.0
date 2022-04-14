@@ -25,7 +25,7 @@ point your PYTHONPATH to $HOME/bin/python/ and you're done.  To do this in the
 bash shell add the following line to your .bashrc file (which is a file that
 should be located in your $HOME directory; if not, create it):
 
-  export PYTHONPATH='$HOME/bin/python/:$PYTHONPATH'
+  export PYTHONPATH=$HOME/bin/python/:$PYTHONPATH
 
 If you use (in the future) a different version of RADMC-3D, you do not need to
 add each version of RADMC-3D to the PYTHONPATH. The latest "make install"

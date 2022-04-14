@@ -1,5 +1,4 @@
 import numpy as np
-from natconst import *
 from numpy.random import default_rng
 import matplotlib.pyplot as plt
 from scipy.signal import fftconvolve
