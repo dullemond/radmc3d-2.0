@@ -13,9 +13,9 @@ optool on the command line like this:
 
 where 10. is the grain radius in microns and 5 is the chopping angle.  This will
 create the dustkapscatmat_pyrmg70.inp file, which is the RADMC-3D opacity
-file. This creates the opacity of a grain size made of pyrozene with 70% Mg (one
+file. This creates the opacity of a grain size made of pyroxene with 70% Mg (one
 of the standard optical constants data sets from the Jena database), of exactly
-10 micron, without a hollow core (-fmax 0), without porosity (-p 0), with
+10 micron, without averaging over particles with different size hollow cores to mimic irregular grains (-fmax 0), without porosity (-p 0), with
 excessive forward scattering chopped off within an angle of 5 degrees. See
 the manual of optool for more options.
 
