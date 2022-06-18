@@ -1170,13 +1170,14 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
         write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for binary input files.'
         stop 8710
      endif
-     nphibox = amr_grid_ny/n_plication
+     nphibox = amr_grid_nz/n_plication
      if(nphibox.lt.1) then
         write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: nphibox too small.'
         stop 8712
      endif
-     if(abs((1.d0*amr_grid_ny)/(1.d0*n_plication)-nphibox).gt.1e-8) then
+     if(abs((1.d0*amr_grid_nz)/(1.d0*n_plication)-nphibox).gt.1e-8) then
         write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: box does not fit integer-number times in 2*pi.'
+        write(stdo,*) nphibox, amr_grid_nz, n_plication
         stop 8713
      endif
   endif
@@ -1355,13 +1356,14 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
         write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for binary input files.'
         stop 8710
      endif
-     nphibox = amr_grid_ny/n_plication
+     nphibox = amr_grid_nz/n_plication
      if(nphibox.lt.1) then
         write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: nphibox too small.'
         stop 8712
      endif
-     if(abs((1.d0*amr_grid_ny)/(1.d0*n_plication)-nphibox).gt.1e-8) then
+     if(abs((1.d0*amr_grid_nz)/(1.d0*n_plication)-nphibox).gt.1e-8) then
         write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: box does not fit integer-number times in 2*pi.'
+        write(stdo,*) nphibox, amr_grid_nz, n_plication
         stop 8713
      endif
   endif
@@ -1553,6 +1555,7 @@ subroutine n_plicate_field_in_phi(ncopies,nc,nr,ntheta,nphi,nv1,nv2,scalar0,scal
      write(stdo,*) 'ERROR in making copies in phi-direction: nphi .ne. amr_grid_nz.'
      stop 3884
   endif
+  write(stdo,*) 'Now performing the n-plication: making n copies of the model in phi direction.'
   do icopy=2,ncopies
      do iphi=1,nphibox
         do itheta=1,ntheta

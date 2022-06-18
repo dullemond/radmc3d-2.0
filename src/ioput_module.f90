@@ -109,6 +109,7 @@ subroutine read_dust_density(action)
         nneff = nn/n_plication
         if(abs((1.d0*nn)/(1.d0*n_plication)-nneff).gt.1e-8) then
            write(stdo,*) 'ERROR in read_dust_density() when using n_plication: Number of cells not divisible by n_plication.'
+           write(stdo,*) nn,nneff,n_plication
            stop 8610
         endif
      else
@@ -167,7 +168,7 @@ subroutine read_dust_density(action)
              n_plication=n_plication)
      endif
   enddo
-  if(iiformat.ne.2) then
+  if(iiformat.eq.2) then
      !
      ! In the special mode: do the n_plication here (copying)
      !
@@ -356,7 +357,7 @@ subroutine read_dust_temperature(action)
              n_plication=n_plication)
      endif
   enddo
-  if(iiformat.ne.2) then
+  if(iiformat.eq.2) then
      !
      ! In the special mode: do the n_plication here (copying)
      !
