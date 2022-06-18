@@ -24,6 +24,7 @@ subroutine read_dust_density(action)
   double precision :: dummy
   integer(kind=8) :: iiformat,reclen,nn,kk
   integer :: index,ierr,irec,ispec,i,idum,style,precis,reclenn
+  integer :: n_plication,nneff
   !
   ! Action=0 means do nothing, action=1 means read if not yet read,
   ! action=2 means re-read.
@@ -93,13 +94,26 @@ subroutine read_dust_density(action)
      style = 3
      open(unit=1,file='dust_density.binp',status='old',access='stream')
      read(1) iiformat
-     if(iiformat.ne.1) then
+     if((iiformat.ne.1).and.(iiformat.ne.2)) then
         write(stdo,*) 'ERROR: Format number of dust_density.binp is invalid/unknown.'
         stop
      endif
      read(1) nn
      precis = nn
+     if(iiformat.eq.2) then
+        read(1) nn
+        n_plication = nn
+     endif
      read(1) nn,kk
+     if(iiformat.eq.2) then
+        nneff = nn/n_plication
+        if(abs((1.d0*nn)/(1.d0*n_plication)-nneff).gt.1e-8) then
+           write(stdo,*) 'ERROR in read_dust_density() when using n_plication: Number of cells not divisible by n_plication.'
+           stop 8610
+        endif
+     else
+        nneff = 0
+     endif
   endif
   !
   ! Do some checks
@@ -136,9 +150,29 @@ subroutine read_dust_density(action)
   ! Now read the dust density
   !
   do ispec=1,dust_nr_species
-     call read_scalarfield(1,style,precis,nrcellsinp,               &
-          dust_nr_species,1,ispec,1,1d-99,reclenn,scalar1=dustdens)
+     if(iiformat.ne.2) then
+        !
+        ! Normal reading of data
+        !
+        call read_scalarfield(1,style,precis,nrcellsinp,               &
+             dust_nr_species,1,ispec,1,1d-99,reclenn,scalar1=dustdens)
+     else
+        !
+        ! Special mode: read only 1/n_plication of the grid, and use
+        ! copy to fill the rest with copies. This can be useful for
+        ! if you want to insert a shearing box model into RADMC-3D.
+        !
+        call read_scalarfield(1,style,precis,nrcellsinp,               &
+             dust_nr_species,1,ispec,1,1d-99,reclenn,scalar1=dustdens, &
+             n_plication=n_plication)
+     endif
   enddo
+  if(iiformat.ne.2) then
+     !
+     ! In the special mode: do the n_plication here (copying)
+     !
+     call n_plicate_field_in_phi(n_plication,nrcellsinp,amr_grid_nx,amr_grid_ny,amr_grid_nz,dust_nr_species,1,scalar1=dustdens)
+  endif
   !
   ! Close the file
   !
@@ -171,6 +205,7 @@ subroutine read_dust_temperature(action)
   double precision :: dummy
   integer(kind=8) :: iiformat,reclen,nn,kk
   integer :: i,irec,ispec,index,ierr,idum,style,precis,reclenn
+  integer :: n_plication,nneff
   !
   ! Action=0 means do nothing, action=1 means read if not yet read,
   ! action=2 means re-read.
@@ -254,13 +289,26 @@ subroutine read_dust_temperature(action)
      style = 3
      open(unit=1,file='dust_temperature.bdat',status='old',access='stream')
      read(1) iiformat
-     if(iiformat.ne.1) then
+     if((iiformat.ne.1).and.(iiformat.ne.2)) then
         write(stdo,*) 'ERROR: Format number of dust_temperature.bdat is invalid/unknown.'
         stop
      endif
      read(1) nn
      precis = nn
+     if(iiformat.eq.2) then
+        read(1) nn
+        n_plication = nn
+     endif
      read(1) nn,kk
+     if(iiformat.eq.2) then
+        nneff = nn/n_plication
+        if(abs((1.d0*nn)/(1.d0*n_plication)-nneff).gt.1e-8) then
+           write(stdo,*) 'ERROR in read_dust_temperature() when using n_plication: Number of cells not divisible by n_plication.'
+           stop 8610
+        endif
+     else
+        nneff = 0
+     endif
   endif
   !
   ! Do some checks
@@ -291,9 +339,29 @@ subroutine read_dust_temperature(action)
   ! Now read the dust temperature
   !
   do ispec=1,dust_nr_species
-     call read_scalarfield(1,style,precis,nrcellsinp,                &
-          dust_nr_species,1,ispec,1,1d-99,reclenn,scalar1=dusttemp)
+     if(iiformat.ne.2) then
+        !
+        ! Normal reading of data
+        !
+        call read_scalarfield(1,style,precis,nrcellsinp,                &
+             dust_nr_species,1,ispec,1,1d-99,reclenn,scalar1=dusttemp)
+     else
+        !
+        ! Special mode: read only 1/n_plication of the grid, and use
+        ! copy to fill the rest with copies. This can be useful for
+        ! if you want to insert a shearing box model into RADMC-3D.
+        !
+        call read_scalarfield(1,style,precis,nrcellsinp,                &
+             dust_nr_species,1,ispec,1,1d-99,reclenn,scalar1=dusttemp,  &
+             n_plication=n_plication)
+     endif
   enddo
+  if(iiformat.ne.2) then
+     !
+     ! In the special mode: do the n_plication here (copying)
+     !
+     call n_plicate_field_in_phi(n_plication,nrcellsinp,amr_grid_nx,amr_grid_ny,amr_grid_nz,dust_nr_species,1,scalar1=dusttemp)
+  endif
   !
   ! Close the file
   !

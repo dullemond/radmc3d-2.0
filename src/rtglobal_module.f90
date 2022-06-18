@@ -1109,11 +1109,13 @@ end subroutine integer_to_string
 !                         CASE: SCALAR FIELD
 !-------------------------------------------------------------------------
 subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
-                            floor,reclen,scalar0,scalar1,scalar2)
+                            floor,reclen,scalar0,scalar1,scalar2, &
+                            n_plication)
   implicit none
   integer :: style,unit,irec,index,nv1,nv2,nc,iv1,iv2,i,ierr,precis,reclend
   integer(kind=8) :: iiformat,nn,kk
   integer, optional :: reclen
+  integer, optional :: n_plication
   double precision, optional :: floor
   double precision :: dummy,fl
   double precision, optional :: scalar0(1:nc)
@@ -1121,6 +1123,7 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
   double precision, optional :: scalar2(1:nv1,1:nv2,1:nc)
   double precision, allocatable :: data(:)
   real*4 :: sdummy
+  integer :: nphibox,indexmax
   !
   ! Check precision (only relevant for style.eq.3)
   !
@@ -1137,6 +1140,45 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
      fl=floor
   else
      fl=-1d99
+  endif
+  !
+  ! For the special mode with n_plication (reading only, say, 1/5th of the grid
+  ! and copying this to the other 4/5th of the grid; only for spherical coordinates,
+  ! only for the theta-coordinate, only for regular grid, and only for binary
+  ! file format) we do some checks. This special mode is useful for when you
+  ! want to insert a local shearing box model into RADMC-3D without having to
+  ! create needlessly large datafiles containing redundant data (the copies you
+  ! will likely have to make in phi-direction, because a local shearing box
+  ! usually does not span 2*pi in phi direction). Note that the local shearing
+  ! box must have a length in phi-direction that is 1/n_plication (with
+  ! n_plication being an integer >0) of the full circle 2*pi. 
+  !
+  if(present(n_plication)) then
+     if((amr_coordsystem.lt.100).or.(amr_coordsystem.ge.200)) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for spherical coordinates'
+        stop 8710
+     endif
+     if((amr_xdim.ne.1).or.(amr_ydim.ne.1).or.(amr_zdim.ne.1)) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for 3D'
+        stop 8710
+     endif
+     if(n_plication.lt.1) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: n_plication<1'
+        stop 8710
+     endif
+     if(style.ne.3) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for binary input files.'
+        stop 8710
+     endif
+     nphibox = amr_grid_ny/n_plication
+     if(nphibox.lt.1) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: nphibox too small.'
+        stop 8712
+     endif
+     if(abs((1.d0*amr_grid_ny)/(1.d0*n_plication)-nphibox).gt.1e-8) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: box does not fit integer-number times in 2*pi.'
+        stop 8713
+     endif
   endif
   !
   ! Now read the scalar field
@@ -1193,6 +1235,9 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
      !
      call amr_resetcount()
      call amr_nextcell(index)
+     if(present(n_plication)) then
+        indexmax = amr_nrleafs/n_plication
+     endif
      do while(index.ge.0) 
         if(precis.eq.4) then
            read(unit) sdummy 
@@ -1210,6 +1255,11 @@ subroutine read_scalarfield(unit,style,precis,nc,nv1,nv2,iv1,iv2, &
            endif
         endif
         call amr_nextcell(index)
+        if(present(n_plication)) then
+           if(index.gt.indexmax) then
+              index = -1
+           endif
+        endif
      enddo
   else
      write(stdo,*) 'INTERNAL ERROR: Input style ',style,' not known.'
@@ -1224,11 +1274,12 @@ end subroutine read_scalarfield
 !                         CASE: VECTOR FIELD
 !-------------------------------------------------------------------------
 subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
-                            reclen,vector0,vector1)
+                            reclen,vector0,vector1,n_plication)
   implicit none
   integer :: style,unit,irec,index,nc,i,ierr,precis,nv,nv0,nv1,iv1,reclend
   integer(kind=8) :: iiformat,nn,kk
   integer, optional :: reclen
+  integer, optional :: n_plication
   double precision, optional :: floor
   double precision :: dummy,fl
   double precision, optional :: vector0(1:nv0,1:nc)
@@ -1236,6 +1287,7 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
   double precision, allocatable :: thedata(:)
   real*4, allocatable :: thesdata(:)
   double precision, allocatable :: data(:,:)
+  integer :: nphibox,indexmax
   !
   ! Backward compatibility: reclen
   !
@@ -1275,7 +1327,46 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
      stop
   endif
   !
-  ! Now read the scalar field
+  ! For the special mode with n_plication (reading only, say, 1/5th of the grid
+  ! and copying this to the other 4/5th of the grid; only for spherical coordinates,
+  ! only for the theta-coordinate, only for regular grid, and only for binary
+  ! file format) we do some checks. This special mode is useful for when you
+  ! want to insert a local shearing box model into RADMC-3D without having to
+  ! create needlessly large datafiles containing redundant data (the copies you
+  ! will likely have to make in phi-direction, because a local shearing box
+  ! usually does not span 2*pi in phi direction). Note that the local shearing
+  ! box must have a length in phi-direction that is 1/n_plication (with
+  ! n_plication being an integer >0) of the full circle 2*pi. 
+  !
+  if(present(n_plication)) then
+     if((amr_coordsystem.lt.100).or.(amr_coordsystem.ge.200)) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for spherical coordinates'
+        stop 8710
+     endif
+     if((amr_xdim.ne.1).or.(amr_ydim.ne.1).or.(amr_zdim.ne.1)) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for 3D'
+        stop 8710
+     endif
+     if(n_plication.lt.1) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: n_plication<1'
+        stop 8710
+     endif
+     if(style.ne.3) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: Only for binary input files.'
+        stop 8710
+     endif
+     nphibox = amr_grid_ny/n_plication
+     if(nphibox.lt.1) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: nphibox too small.'
+        stop 8712
+     endif
+     if(abs((1.d0*amr_grid_ny)/(1.d0*n_plication)-nphibox).gt.1e-8) then
+        write(stdo,*) 'ERROR in read_scalarfield() when using n_plication: box does not fit integer-number times in 2*pi.'
+        stop 8713
+     endif
+  endif
+  !
+  ! Now read the vector field
   !
   if(style.eq.1) then
      !
@@ -1362,6 +1453,9 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
      !
      call amr_resetcount()
      call amr_nextcell(index)
+     if(present(n_plication)) then
+        indexmax = amr_nrleafs/n_plication
+     endif
      do while(index.ge.0) 
         if(precis.eq.4) then
            read(unit) thesdata(1:nv)
@@ -1377,6 +1471,11 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
            if(present(vector1)) vector1(1:nv,iv1,index) = thedata(1:nv)
         endif
         call amr_nextcell(index)
+        if(present(n_plication)) then
+           if(index.gt.indexmax) then
+              index = -1
+           endif
+        endif
      enddo
   else
      write(stdo,*) 'INTERNAL ERROR: Input style ',style,' not known.'
@@ -1387,6 +1486,87 @@ subroutine read_vectorfield(unit,style,precis,nv0,nv,nc,nv1,iv1,floor, &
   if(allocated(thesdata)) deallocate(thesdata)
 end subroutine read_vectorfield
 
+
+!-------------------------------------------------------------------------
+!                     MAKE COPIES OF DATA FIELDS
+!
+! This is a special feature useful for making global radiative transfer
+! models of local boxes. For instance if you want to embed a local
+! shearing box in spherical coordinates, and because the box only has
+! a phi-length of 2*pi/n you want to make n copies along phi, where n
+! is an integer. Of course, you can do so by creating RADMC-3D input
+! files that are n times larger than the actual box by doing the copies
+! within e.g. python, and writing out the full 2*pi data to file. But
+! that creates data files that are larger that strictly necessary, because
+! it is n times the same data. It can save a lot of storage space to
+! only have to read in the box once, and copy the data internally n
+! times. NOTE: Unfortunately it is not YET possible to include a kind
+! of mirror symmetry in phi-direction. Maybe this will be possible
+! in a future version. NOTE: This routine only works in spherical
+! coordinates and only in the phi-direction.
+!-------------------------------------------------------------------------
+subroutine n_plicate_field_in_phi(ncopies,nc,nr,ntheta,nphi,nv1,nv2,scalar0,scalar1,scalar2)
+  implicit none
+  integer :: ncopies,nc,nr,ntheta,nphi,nv1,nv2
+  integer :: ir,itheta,iphi,icopy,nphibox,cellindex0,cellindex1
+  double precision, optional :: scalar0(1:nc)
+  double precision, optional :: scalar1(1:nv1,1:nc)
+  double precision, optional :: scalar2(1:nv1,1:nv2,1:nc)
+  if((amr_coordsystem.lt.100).or.(amr_coordsystem.ge.200)) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: Only for spherical coordinates'
+     stop 3880
+  endif
+  if((amr_xdim.ne.1).or.(amr_ydim.ne.1).or.(amr_zdim.ne.1)) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: Only for 3D'
+     stop 3880
+  endif
+  if(amr_style.ne.0) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: Only for regular grids (no AMR, no layers)'
+     stop 3880
+  endif
+  if(ncopies.lt.1) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: ncopies<1'
+     stop 3880
+  endif
+  if(nc.ne.nr*ntheta*nphi) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: nc .ne. nr*ntheta*nphi'
+     stop 3881
+  endif
+  nphibox = nphi/ncopies
+  if(nphibox.lt.1) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: nphibox too small.'
+     stop 3882
+  endif
+  if(abs((1.d0*nphi)/(1.d0*ncopies)-nphibox).gt.1e-8) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: box does not fit integer-number times in 2*pi.'
+     stop 3883
+  endif
+  if(nr.ne.amr_grid_nx) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: nr .ne. amr_grid_nx.'
+     stop 3884
+  endif
+  if(ntheta.ne.amr_grid_ny) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: ntheta .ne. amr_grid_ny.'
+     stop 3884
+  endif
+  if(nphi.ne.amr_grid_nz) then
+     write(stdo,*) 'ERROR in making copies in phi-direction: nphi .ne. amr_grid_nz.'
+     stop 3884
+  endif
+  do icopy=2,ncopies
+     do iphi=1,nphibox
+        do itheta=1,ntheta
+           do ir=1,nr
+              cellindex0 = ir+(itheta-1)*amr_grid_nx+(iphi-1)*amr_grid_nx*amr_grid_ny
+              cellindex1 = ir+(itheta-1)*amr_grid_nx+(iphi-1+(icopy-1)*nphibox)*amr_grid_nx*amr_grid_ny
+              if(present(scalar0)) scalar0(cellindex1) = scalar0(cellindex0)
+              if(present(scalar1)) scalar1(:,cellindex1) = scalar1(:,cellindex0)
+              if(present(scalar2)) scalar2(:,:,cellindex1) = scalar2(:,:,cellindex0)
+           enddo
+        enddo
+     enddo
+  enddo
+end subroutine n_plicate_field_in_phi
 
 !-------------------------------------------------------------------------
 !                 HELPER SUBROUTINE FOR WRITING DATA
