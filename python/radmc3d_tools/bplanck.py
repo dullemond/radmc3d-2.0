@@ -1,3 +1,4 @@
+import numpy as np
 def bplanck(freq,temp):
     """
     This function computes the Planck function

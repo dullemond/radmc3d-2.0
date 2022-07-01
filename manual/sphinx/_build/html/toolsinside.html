@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Analysis tools inside of radmc3d &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Visualization with VTK tools (e.g. Paraview or VisIt)" href="vtkoutput.html" />
     <link rel="prev" title="Python analysis tool set" href="pythontools.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -116,81 +72,42 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Analysis tools inside of radmc3d</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/toolsinside.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="analysis-tools-inside-of-radmc3d">
-<span id="chap-radmc3d-internal-analysis-tools"></span><h1>Analysis tools inside of radmc3d<a class="headerlink" href="#analysis-tools-inside-of-radmc3d" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="analysis-tools-inside-of-radmc3d">
+<span id="chap-radmc3d-internal-analysis-tools"></span><h1>Analysis tools inside of radmc3d<a class="headerlink" href="#analysis-tools-inside-of-radmc3d" title="Permalink to this heading"></a></h1>
 <p>There are also some special purpose features in the Fortran-90 <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code that can be useful for analyzing complex AMR-gridded models.</p>
-<div class="section" id="making-a-regularly-spaced-datacube-subbox-of-amr-based-models">
-<span id="sec-subbox"></span><h2>Making a regularly-spaced datacube (‘subbox’) of AMR-based models<a class="headerlink" href="#making-a-regularly-spaced-datacube-subbox-of-amr-based-models" title="Permalink to this headline">¶</a></h2>
+<section id="making-a-regularly-spaced-datacube-subbox-of-amr-based-models">
+<span id="sec-subbox"></span><h2>Making a regularly-spaced datacube (‘subbox’) of AMR-based models<a class="headerlink" href="#making-a-regularly-spaced-datacube-subbox-of-amr-based-models" title="Permalink to this heading"></a></h2>
 <p>Because handling AMR-based models in Python or other data analysis packages can
 be rather cumbersome, we decided that it would be useful to create the
 possibility in <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to generate 1-D, 2-D or 3-D regularly spaced
 ‘cut-outs’ or ‘sub-boxes’ (whatever you want to call them) of any variable of
 the model.</p>
-<div class="section" id="creating-a-subbox">
-<h3>Creating a subbox<a class="headerlink" href="#creating-a-subbox" title="Permalink to this headline">¶</a></h3>
+<section id="creating-a-subbox">
+<h3>Creating a subbox<a class="headerlink" href="#creating-a-subbox" title="Permalink to this heading"></a></h3>
 <p>You can call <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> directly from the shell asking it to make
 the subbox. Here is an example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">radmc3d</span> <span class="n">subbox_dust_density</span> <span class="n">subbox_nxyz</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span> <span class="n">subbox_xyz01</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span> <span class="o">-</span><span class="mf">2.e15</span> <span class="mf">2.e15</span>
@@ -226,9 +143,9 @@ first two levels are included (remember that <span class="math notranslate nohig
 J1-0 line of CO). See Section <a class="reference internal" href="lineradtrans.html#sec-calcstore-levpop"><span class="std std-ref">Background information: Calculation and storage of level populations</span></a> for more information
 on how RADMC-3D automatically selects a subset of levels for storage in the
 global array (and thus also for writing out to file).</p>
-</div>
-<div class="section" id="format-of-the-subbox-output-files">
-<span id="sec-subbox-file-format"></span><h3>Format of the subbox output files<a class="headerlink" href="#format-of-the-subbox-output-files" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="format-of-the-subbox-output-files">
+<span id="sec-subbox-file-format"></span><h3>Format of the subbox output files<a class="headerlink" href="#format-of-the-subbox-output-files" title="Permalink to this heading"></a></h3>
 <p>All the files produced by the subbox method have the following format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">2</span> <span class="n">at</span> <span class="n">present</span>
 <span class="n">nx</span> <span class="n">ny</span> <span class="n">nz</span> <span class="n">nv</span>                              <span class="o">&lt;===</span> <span class="n">Box</span> <span class="n">of</span> <span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="o">*</span><span class="n">nz</span> <span class="n">cells</span><span class="p">,</span> <span class="n">each</span> <span class="k">with</span> <span class="n">nv</span> <span class="n">values</span>
@@ -269,9 +186,9 @@ levels 4 and 8 are in this file, then <code class="docutils literal notranslate"
 the identification numbers will be <code class="docutils literal notranslate"><span class="pre">48</span></code>. For all other quantities
 (dust density, dust temperature) this line of identification numbers is simply
 <code class="docutils literal notranslate"><span class="pre">123</span></code> etc.</p>
-</div>
-<div class="section" id="using-the-radmc3d-tools-to-read-the-subbox-data">
-<h3>Using the <code class="docutils literal notranslate"><span class="pre">radmc3d_tools</span></code> to read the subbox data<a class="headerlink" href="#using-the-radmc3d-tools-to-read-the-subbox-data" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="using-the-radmc3d-tools-to-read-the-subbox-data">
+<h3>Using the <code class="docutils literal notranslate"><span class="pre">radmc3d_tools</span></code> to read the subbox data<a class="headerlink" href="#using-the-radmc3d-tools-to-read-the-subbox-data" title="Permalink to this heading"></a></h3>
 <p>In Section <a class="reference internal" href="pythontools.html#sec-simpleread-tools"><span class="std std-ref">The simpleread.py library</span></a> a set of simple Python tools are
 discussed to read a variety of output files from RADMC-3D (as well as input
 files to RADMC-3D) for further analysis.</p>
@@ -283,7 +200,7 @@ Example: First run RADMC-3D:</p>
 </pre></div>
 </div>
 <p>Then go into Python and do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3d_tools.simpleread</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3d_tools.simpleread</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">dustdens</span> <span class="o">=</span> <span class="n">read_subbox</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dust_density&#39;</span><span class="p">)</span>
 <span class="n">dusttemp</span> <span class="o">=</span> <span class="n">read_subbox</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dust_temperature&#39;</span><span class="p">)</span>
 <span class="n">grid</span>     <span class="o">=</span> <span class="n">dustdens</span><span class="o">.</span><span class="n">grid</span>
@@ -296,10 +213,10 @@ Example: First run RADMC-3D:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="alternative-to-subbox-arbitrary-sampling-of-amr-based-models">
-<span id="sec-sampling"></span><h2>Alternative to subbox: arbitrary sampling of AMR-based models<a class="headerlink" href="#alternative-to-subbox-arbitrary-sampling-of-amr-based-models" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="alternative-to-subbox-arbitrary-sampling-of-amr-based-models">
+<span id="sec-sampling"></span><h2>Alternative to subbox: arbitrary sampling of AMR-based models<a class="headerlink" href="#alternative-to-subbox-arbitrary-sampling-of-amr-based-models" title="Permalink to this heading"></a></h2>
 <p>For some purposes it is useful to sample values of various quantities at
 arbitrary positions in the grid. The idea is very much like the subbox
 method of Section <a class="reference internal" href="#sec-subbox"><span class="std std-ref">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</span></a>, but instead of a regular subbox grid
@@ -377,63 +294,38 @@ statements like <code class="docutils literal notranslate"><span class="pre">if(
 <code class="docutils literal notranslate"><span class="pre">do_sample_myvariable=.true.</span></code> or reset <code class="docutils literal notranslate"><span class="pre">do_sample_myvariable=.false.</span></code> etc.</p></li>
 </ul>
 <p>That should do it.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="vtkoutput.html" class="btn btn-neutral float-right" title="Visualization with VTK tools (e.g. Paraview or VisIt)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="pythontools.html" class="btn btn-neutral float-left" title="Python analysis tool set" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pythontools.html" class="btn btn-neutral float-left" title="Python analysis tool set" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vtkoutput.html" class="btn btn-neutral float-right" title="Visualization with VTK tools (e.g. Paraview or VisIt)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

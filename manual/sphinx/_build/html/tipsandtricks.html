@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tips, tricks and problem hunting &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Main input and output files of RADMC-3D" href="inputoutputfiles.html" />
     <link rel="prev" title="Visualization with VTK tools (e.g. Paraview or VisIt)" href="vtkoutput.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -114,73 +70,34 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Tips, tricks and problem hunting</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/tipsandtricks.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="tips-tricks-and-problem-hunting">
-<span id="chap-problem-hunting"></span><h1>Tips, tricks and problem hunting<a class="headerlink" href="#tips-tricks-and-problem-hunting" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="tips-and-tricks">
-<h2>Tips and tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="tips-tricks-and-problem-hunting">
+<span id="chap-problem-hunting"></span><h1>Tips, tricks and problem hunting<a class="headerlink" href="#tips-tricks-and-problem-hunting" title="Permalink to this heading"></a></h1>
+<section id="tips-and-tricks">
+<h2>Tips and tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this heading"></a></h2>
 <p>RADMC-3D is a large software package, and the user will in all
 likelihood not understand all its internal workings. In this section we will
 discuss some issues that might be useful to know when you do modeling.</p>
@@ -218,9 +135,9 @@ those modes the level populations are pre-computed before the ray-tracing
 starts, which saves time. But that may require much memory.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="bug-hunting">
-<h2>Bug hunting<a class="headerlink" href="#bug-hunting" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bug-hunting">
+<h2>Bug hunting<a class="headerlink" href="#bug-hunting" title="Permalink to this heading"></a></h2>
 <p>Although we of course hope that <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> will not run into
 troubles or crash, it is nevertheless possible that it will. There are
 several ways by which one can hunt for bugs, and we list here a few
@@ -236,9 +153,9 @@ boundary check switch on your own compiler if it is not <code class="docutils li
 <li><p>Make sure that in the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> code the variable <code class="docutils literal notranslate"><span class="pre">debug_check_all</span></code> is
 set to 1. This will do some on-the-fly checks in the code.</p></li>
 </ul>
-</div>
-<div class="section" id="some-tips-for-avoiding-troubles-and-for-making-good-models">
-<h2>Some tips for avoiding troubles and for making good models<a class="headerlink" href="#some-tips-for-avoiding-troubles-and-for-making-good-models" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="some-tips-for-avoiding-troubles-and-for-making-good-models">
+<h2>Some tips for avoiding troubles and for making good models<a class="headerlink" href="#some-tips-for-avoiding-troubles-and-for-making-good-models" title="Permalink to this heading"></a></h2>
 <p>Here is a set of tips that we recommend you to follow, in order to avoid
 troubles with the code and to make sure that the models you make are OK.
 This list is far from complete! It will be updated as we continue to
@@ -280,9 +197,9 @@ of molecules, please be aware that you must include all levels that could
 be populated, not only the levels belonging to the line you are interested
 in.</p></li>
 </ol>
-</div>
-<div class="section" id="careful-things-that-might-go-wrong">
-<span id="sec-things-going-wrong"></span><h2>Careful: Things that might go wrong<a class="headerlink" href="#careful-things-that-might-go-wrong" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="careful-things-that-might-go-wrong">
+<span id="sec-things-going-wrong"></span><h2>Careful: Things that might go wrong<a class="headerlink" href="#careful-things-that-might-go-wrong" title="Permalink to this heading"></a></h2>
 <p>In principle RADMC-3D should be fine-tuned such that it produced reliable
 results in most circumstances. But radiative transfer modeling, like all
 kinds of modeling, is not an entirely trivial issue. Extreme circumstances
@@ -332,9 +249,10 @@ at the inner edge of a protoplanetary disk, if the inner cells are not
 assured to be optically thin through grid refinement (and possibly
 additionally a bit of smoothing of the density profile too) is given in
 Fig. <a class="reference internal" href="#fig-innerrim-lowres"><span class="std std-numref">Fig. 30</span></a>.</p>
-<div class="figure align-default" id="id1">
+<figure class="align-default" id="id1">
 <span id="fig-innerrim-lowres"></span><img alt="_images/innerrim.png" src="_images/innerrim.png" />
-<p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text">Example of what can go wrong with radiative transfer if the inner cells of
+<figcaption>
+<p><span class="caption-number">Fig. 30 </span><span class="caption-text">Example of what can go wrong with radiative transfer if the inner cells of
 a model are optically thick (i.e.if no grid refinement is used, see
 Section <a class="reference internal" href="gridding.html#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a>). Shown here are scattered light
 images at <span class="math notranslate nohighlight">\(\lambda=0.7\mu\)</span>Delta R/R=0.04`.  Left image: the
@@ -345,8 +263,9 @@ higher optical depth, making the inner cells optically thick with roughly
 emission near the midplane is strongly reduced.  The reason for that is
 that the scattering source function, due to photons scattering at the
 inner 10% of the inner cell, is diluted over the entire cell, making the
-scattered light brighness 10x lower than it should be.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
+scattered light brighness 10x lower than it should be.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 </li>
 <li><p><em>Model does not fit onto the grid (or onto the refined part of the grid)</em></p>
 <p>The grid must be large enough to contain the entire <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span>
@@ -370,9 +289,9 @@ real <span class="math notranslate nohighlight">\(\tau_\lambda=1\)</span> surfac
 outside of the refined part of the grid). This leads to wrong results.</p>
 </li>
 </ol>
-</div>
-<div class="section" id="common-technical-problems-and-how-to-fix-them">
-<h2>Common technical problems and how to fix them<a class="headerlink" href="#common-technical-problems-and-how-to-fix-them" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="common-technical-problems-and-how-to-fix-them">
+<h2>Common technical problems and how to fix them<a class="headerlink" href="#common-technical-problems-and-how-to-fix-them" title="Permalink to this heading"></a></h2>
 <p>When using a complex code such as RADMC-3D there are many ways you might
 encounter a problem. Here is a list of common issues and tips how to fix them.</p>
 <ol class="arabic">
@@ -515,63 +434,38 @@ the surface.</p></li>
 </ul>
 </li>
 </ol>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="inputoutputfiles.html" class="btn btn-neutral float-right" title="Main input and output files of RADMC-3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="vtkoutput.html" class="btn btn-neutral float-left" title="Visualization with VTK tools (e.g. Paraview or VisIt)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vtkoutput.html" class="btn btn-neutral float-left" title="Visualization with VTK tools (e.g. Paraview or VisIt)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="inputoutputfiles.html" class="btn btn-neutral float-right" title="Main input and output files of RADMC-3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>More information about the treatment of stars &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Modifying RADMC-3D: Internal setup and user-specified radiative processes" href="internalsetup.html" />
     <link rel="prev" title="More information about the gridding" href="gridding.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -121,71 +77,32 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>More information about the treatment of stars</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/stars.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="more-information-about-the-treatment-of-stars">
-<span id="chap-stars"></span><h1>More information about the treatment of stars<a class="headerlink" href="#more-information-about-the-treatment-of-stars" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="more-information-about-the-treatment-of-stars">
+<span id="chap-stars"></span><h1>More information about the treatment of stars<a class="headerlink" href="#more-information-about-the-treatment-of-stars" title="Permalink to this heading"></a></h1>
 <p>How stars are treated in RADMC-3D is perhaps something that needs some more
 background information. This is the structure:</p>
 <ol class="arabic">
@@ -231,8 +148,8 @@ Field’ can be treated by RADMC-3D as well. This is called the ‘external
 source’ in RADMC-3D. It is described in Section <a class="reference internal" href="#sec-external-source"><span class="std std-ref">The interstellar radiation field: external source of energy</span></a>.</p>
 </li>
 </ol>
-<div class="section" id="stars-treated-as-point-sources">
-<span id="sec-stars-as-points"></span><h2>Stars treated as point sources<a class="headerlink" href="#stars-treated-as-point-sources" title="Permalink to this headline">¶</a></h2>
+<section id="stars-treated-as-point-sources">
+<span id="sec-stars-as-points"></span><h2>Stars treated as point sources<a class="headerlink" href="#stars-treated-as-point-sources" title="Permalink to this heading"></a></h2>
 <p>By default the stars are treated as point-sources. Even if the radius is
 specified as non-zero in the <code class="docutils literal notranslate"><span class="pre">stars.inp</span></code> file, they are still
 treated as points. The reason for this is that it is much easier and faster
@@ -251,9 +168,9 @@ arounda Herbig Ae star, where the dust evaporation radius is at about 0.5
 AU, the star can be treated as a point-source without problems.</p>
 <p>So if you just use RADMC-3D as-is, or if you explicitly set <code class="docutils literal notranslate"><span class="pre">istar_sphere=0</span></code>
 in the file <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code>, then the stars are all treated as point sources.</p>
-</div>
-<div class="section" id="stars-treated-as-spheres">
-<span id="sec-stars-as-spheres"></span><h2>Stars treated as spheres<a class="headerlink" href="#stars-treated-as-spheres" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="stars-treated-as-spheres">
+<span id="sec-stars-as-spheres"></span><h2>Stars treated as spheres<a class="headerlink" href="#stars-treated-as-spheres" title="Permalink to this heading"></a></h2>
 <p>For problems in which the finite geometrical size of the star (or stars)
 is/are important, RADMC-3D has a mode by which the stars are treated as
 spheres. This can be necessary for instance if you model a disk around
@@ -278,9 +195,9 @@ aware of possible errors for now (as of version 0.17).</p>
 packages are emitted from the surface of the sphere of the star. It also
 means that any photon that re-enters the star during the Monte Carlo
 simulation is assumed to be lost.</p>
-</div>
-<div class="section" id="distributions-of-zillions-of-stars">
-<span id="sec-distrib-of-stars"></span><h2>Distributions of zillions of stars<a class="headerlink" href="#distributions-of-zillions-of-stars" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="distributions-of-zillions-of-stars">
+<span id="sec-distrib-of-stars"></span><h2>Distributions of zillions of stars<a class="headerlink" href="#distributions-of-zillions-of-stars" title="Permalink to this heading"></a></h2>
 <p>For models of galaxies it is important to be able to have distributed
 stellar sources instead of individual stars. The way to implement this
 in a model for RADMC-3D is to</p>
@@ -316,16 +233,16 @@ Monte Carlo way.</p>
 <p>Note that the smooth stellar source distributions assume that the zillions
 of stars that they represent are so small that they do not absorb any
 appreciable amount of radiation. They are therefore pure sources, not sinks.</p>
-</div>
-<div class="section" id="the-interstellar-radiation-field-external-source-of-energy">
-<span id="sec-external-source"></span><h2>The interstellar radiation field: external source of energy<a class="headerlink" href="#the-interstellar-radiation-field-external-source-of-energy" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-interstellar-radiation-field-external-source-of-energy">
+<span id="sec-external-source"></span><h2>The interstellar radiation field: external source of energy<a class="headerlink" href="#the-interstellar-radiation-field-external-source-of-energy" title="Permalink to this heading"></a></h2>
 <p>You can include an <em>isotropic</em> interstellar radiation field in
 RADMC-3D. This will take effect both in the making of spectra and images, as
 well as in the Monte Carlo module.</p>
 <p>The way to activate this is to make a file <code class="docutils literal notranslate"><span class="pre">external_source.inp</span></code>
 and fill it with the information needed (see Section <a class="reference internal" href="inputoutputfiles.html#sec-ext-src-inp"><span class="std std-ref">INPUT (optional): external_source.inp</span></a>).</p>
-<div class="section" id="role-of-the-external-radiation-field-in-monte-carlo-simulations">
-<h3>Role of the external radiation field in Monte Carlo simulations<a class="headerlink" href="#role-of-the-external-radiation-field-in-monte-carlo-simulations" title="Permalink to this headline">¶</a></h3>
+<section id="role-of-the-external-radiation-field-in-monte-carlo-simulations">
+<h3>Role of the external radiation field in Monte Carlo simulations<a class="headerlink" href="#role-of-the-external-radiation-field-in-monte-carlo-simulations" title="Permalink to this heading"></a></h3>
 <p>For the Monte Carlo simulations this means that photons may be launched from
 outside inward. The way that this is done is that RADMC-3D will make a
 sphere around the entire grid, just large enough to fit in the entire grid
@@ -361,9 +278,9 @@ see Section <a class="reference internal" href="dustradtrans.html#sec-dust-therm
 at least some of them enter the starless cores. If you choose <code class="docutils literal notranslate"><span class="pre">phot</span></code> too small
 in this case, then the temperature in these cores would remain undetermined
 (i.e. they will be zero in the results).</p>
-</div>
-<div class="section" id="role-of-the-external-radiation-field-in-images-and-spectra">
-<h3>Role of the external radiation field in images and spectra<a class="headerlink" href="#role-of-the-external-radiation-field-in-images-and-spectra" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="role-of-the-external-radiation-field-in-images-and-spectra">
+<h3>Role of the external radiation field in images and spectra<a class="headerlink" href="#role-of-the-external-radiation-field-in-images-and-spectra" title="Permalink to this heading"></a></h3>
 <p>The interstellar radiation field also affects the images and spectra that
 you make. Every ray will start at minus-infinity with the intensity given by
 the external radiation field, instead of 0 as it would be if no external
@@ -375,10 +292,10 @@ radiation is inside the beam, and will thus contribute to the spectrum.
 In fact, the larger you make the beam the more you will pick up of the
 background. This could thus lead to the spectrum of your source to be
 swamped by the background if you do not specify a beam in the spectrum.</p>
-</div>
-</div>
-<div class="section" id="internal-heat-source">
-<span id="sec-internal-source"></span><h2>Internal heat source<a class="headerlink" href="#internal-heat-source" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="internal-heat-source">
+<span id="sec-internal-source"></span><h2>Internal heat source<a class="headerlink" href="#internal-heat-source" title="Permalink to this heading"></a></h2>
 <p>Sometimes the gas and dust inside the object of interest gets heated up by
 some internal process such as friction, magnetic reconnection, chemical
 reactions, etc. A nice example is the ‘viscous heating’ inside an
@@ -416,8 +333,8 @@ the dust temperature on that assumption: it computes how much energy the
 cell gains (by the heat source or by absorbing photons) and then it requires
 that the temperature of the dust is such that precisely the same amount of
 radiative energy is emitted.</p>
-<div class="section" id="slow-performance-of-radmc-3d-with-heat-source">
-<h3>Slow performance of RADMC-3D with heat source<a class="headerlink" href="#slow-performance-of-radmc-3d-with-heat-source" title="Permalink to this headline">¶</a></h3>
+<section id="slow-performance-of-radmc-3d-with-heat-source">
+<h3>Slow performance of RADMC-3D with heat source<a class="headerlink" href="#slow-performance-of-radmc-3d-with-heat-source" title="Permalink to this heading"></a></h3>
 <p>For very optically thick models, such as the inner regions of actively
 accreting dusty protoplanetary disks, the use of this heat source can lead
 to extremely slow performance. The reason is that all photons originating
@@ -443,64 +360,39 @@ the outcoming spectrum or image it will presumably not be affected that
 much, because at the end of the day the effective temperature of the disk
 surface must anyway be such that it radiates away the internal heat,
 independent of how deep inside the disk this heat is released.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="internalsetup.html" class="btn btn-neutral float-right" title="Modifying RADMC-3D: Internal setup and user-specified radiative processes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gridding.html" class="btn btn-neutral float-left" title="More information about the gridding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gridding.html" class="btn btn-neutral float-left" title="More information about the gridding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="internalsetup.html" class="btn btn-neutral float-right" title="Modifying RADMC-3D: Internal setup and user-specified radiative processes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

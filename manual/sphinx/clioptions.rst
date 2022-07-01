@@ -236,6 +236,10 @@ forget to list new options here):
 
 * ``noapert``\ : [for images/spectra] Do *not* use an image-plane aperture.
 
+* ``diag_subpix``\ : [for images/spectra] write ``subpixeling_diagnostics.out``
+  file, which contains the locations of all the pixels used, including the
+  subpixels (see Section :ref:`sec-recursive-subpixeling`).
+
 * ``nphot_therm``\ : [for MC] The nr of photons for the thermal
   Monte Carlo simulation. But it is better to use the ``radmc3d.inp`` for this
   (see Section :ref:`sec-radmc-inp`), because then you can see afterward with

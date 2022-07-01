@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Command-line options &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Which options are mutually incompatible?" href="optionscompat.html" />
     <link rel="prev" title="Binary I/O files" href="binaryio.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -112,75 +68,36 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Command-line options</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/clioptions.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="command-line-options">
-<span id="chap-command-line-options"></span><h1>Command-line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="command-line-options">
+<span id="chap-command-line-options"></span><h1>Command-line options<a class="headerlink" href="#command-line-options" title="Permalink to this heading"></a></h1>
 <p>This chapter deals with all the possible command-line options one can
 give when calling the <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code.</p>
-<div class="section" id="main-commands">
-<h2>Main commands<a class="headerlink" href="#main-commands" title="Permalink to this headline">¶</a></h2>
+<section id="main-commands">
+<h2>Main commands<a class="headerlink" href="#main-commands" title="Permalink to this heading"></a></h2>
 <p>In addition to the radmc3d.inp file, which contains many ‘steering’ parameters,
 one can (and even must) give RADMC-3D also command-line options. The most
 important (and compulsory) options are the ‘command’ what RADMC-3D should do.
@@ -222,9 +139,9 @@ quantities will follow in later versions. See Section <a class="reference intern
 <li><p><code class="docutils literal notranslate"><span class="pre">linelist</span></code>: Write a list of all the lines included in
 this model.</p></li>
 </ul>
-</div>
-<div class="section" id="additional-arguments-general">
-<h2>Additional arguments: general<a class="headerlink" href="#additional-arguments-general" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="additional-arguments-general">
+<h2>Additional arguments: general<a class="headerlink" href="#additional-arguments-general" title="Permalink to this heading"></a></h2>
 <p>Here is a list of command line options, on top of the above listed main
 commands (Note: We’ll try to be complete, but as the code develops we may
 forget to list new options here):</p>
@@ -367,6 +284,9 @@ you may sometimes want to reset to normal imaging mode.</p></li>
 images/spectra] Use the image-plane aperture information from the file
 <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">noapert</span></code>: [for images/spectra] Do <em>not</em> use an image-plane aperture.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">diag_subpix</span></code>: [for images/spectra] write <code class="docutils literal notranslate"><span class="pre">subpixeling_diagnostics.out</span></code>
+file, which contains the locations of all the pixels used, including the
+subpixels (see Section <a class="reference internal" href="imagesspectra.html#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nphot_therm</span></code>: [for MC] The nr of photons for the thermal
 Monte Carlo simulation. But it is better to use the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> for this
 (see Section <a class="reference internal" href="inputoutputfiles.html#sec-radmc-inp"><span class="std std-ref">INPUT: radmc3d.inp</span></a>), because then you can see afterward with
@@ -388,9 +308,9 @@ times something like <code class="docutils literal notranslate"><span class="pre
 be annoying. By adding <code class="docutils literal notranslate"><span class="pre">countwrite</span> <span class="pre">100000</span></code> to the command
 line, you will only see a message every 100000 photon packages.</p></li>
 </ul>
-</div>
-<div class="section" id="switching-on-off-of-radiation-processes">
-<h2>Switching on/off of radiation processes<a class="headerlink" href="#switching-on-off-of-radiation-processes" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="switching-on-off-of-radiation-processes">
+<h2>Switching on/off of radiation processes<a class="headerlink" href="#switching-on-off-of-radiation-processes" title="Permalink to this heading"></a></h2>
 <p>You can switch certain radiative processes on or off with the following
 command-line options (though often the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file also allows this):</p>
 <ul class="simple">
@@ -414,63 +334,38 @@ you limit the scattering in the images/spectra to single-scattering.
 With <code class="docutils literal notranslate"><span class="pre">maxnrscat</span> <span class="pre">2</span></code> to double scattering, etc. Can be useful to
 figure out the relative importance of single vs multiple scattering.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="optionscompat.html" class="btn btn-neutral float-right" title="Which options are mutually incompatible?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="binaryio.html" class="btn btn-neutral float-left" title="Binary I/O files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="binaryio.html" class="btn btn-neutral float-left" title="Binary I/O files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="optionscompat.html" class="btn btn-neutral float-right" title="Which options are mutually incompatible?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

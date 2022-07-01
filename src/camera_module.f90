@@ -3150,6 +3150,7 @@ subroutine camera_make_rect_image(img,tausurf)
   ! are put.
   !
   if(camera_diagnostics_subpix) then
+     write(stdo,*) 'Writing out subpixeling diagnostics to subpixeling_diagnostics.out'
      open(unit=10,file='subpixeling_diagnostics.out')
   endif
   !

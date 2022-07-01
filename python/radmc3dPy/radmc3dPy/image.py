@@ -1720,7 +1720,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
 
 
 def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None, pointau=None,
-              fluxcons=True, nostar=False, noscat=False,
+              fluxcons=True, nostar=False, noscat=False, tracetau=False,
               widthkms=None, linenlam=None, vkms=None, iline=None,
               lambdarange=None, nlam=None, stokes=False, binary=False, setthreads=None):
     """Calculates a rectangular image with RADMC-3D
@@ -1778,6 +1778,10 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
     noscat      : bool, optional
                   If True, scattered emission will be neglected in the source function, however,
                    extinction will contain scattering if kappa_scat is not zero.
+
+    tracetau    : bool, optional
+                  If True, then instead of the intensity I_nu, the optical depth along the
+                  ray tau_nu is computed, and read in as if it is an image.
 
     stokes      : bool, optional
                   If True, images in all four stokes parameters (IQUV) will be calculated, if
@@ -1894,6 +1898,9 @@ def makeImage(npix=None, incl=None, wav=None, sizeau=None, phi=None, posang=None
 
     if noscat:
         com = com + ' noscat'
+
+    if tracetau:
+        com = com + ' tracetau'
 
     if setthreads is not None:
         com = com + ' setthreads {}'.format(setthreads)

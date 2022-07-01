@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Main input and output files of RADMC-3D &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Binary I/O files" href="binaryio.html" />
     <link rel="prev" title="Tips, tricks and problem hunting" href="tipsandtricks.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -144,71 +100,32 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Main input and output files of RADMC-3D</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/inputoutputfiles.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="main-input-and-output-files-of-radmc-3d">
-<span id="chap-input-files"></span><h1>Main input and output files of RADMC-3D<a class="headerlink" href="#main-input-and-output-files-of-radmc-3d" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="main-input-and-output-files-of-radmc-3d">
+<span id="chap-input-files"></span><h1>Main input and output files of RADMC-3D<a class="headerlink" href="#main-input-and-output-files-of-radmc-3d" title="Permalink to this heading"></a></h1>
 <p>RADMC-3D is written in fortran-90. It is written in such a way that the user
 prepares input files (ending in <code class="docutils literal notranslate"><span class="pre">.inp</span></code>) for the program and then calls
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> with some command-line options. The program then reads the input
@@ -250,8 +167,8 @@ style: ascii) files, or binary files (i.e. C-style unformatted). This is
 specified by the file extension. See Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for more
 details.</p></li>
 </ul>
-<div class="section" id="input-radmc3d-inp">
-<span id="sec-radmc-inp"></span><h2>INPUT: radmc3d.inp<a class="headerlink" href="#input-radmc3d-inp" title="Permalink to this headline">¶</a></h2>
+<section id="input-radmc3d-inp">
+<span id="sec-radmc-inp"></span><h2>INPUT: radmc3d.inp<a class="headerlink" href="#input-radmc3d-inp" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file is a namelist file with the main settings for
 RADMC-3D. The namelist is not a standard Fortran namelist style, but a simple
 <em>name = value</em> list. If a name is not specified, the default values are taken.
@@ -419,7 +336,7 @@ images or spectra too much.</p>
 <a class="reference internal" href="imagesspectra.html#sec-recursive-subpixeling"><span class="std std-ref">The solution: recursive sub-pixeling</span></a>), for spherical coordinates,
 preventing that too coarse subpixeling would reduce the accuracy.</p>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">camera_min_dr</span></code> (default 0.003) <em>[Fine-tuning only]</em></p>
+<li><p><code class="docutils literal notranslate"><span class="pre">camera_min_drr</span></code> (default 0.003) <em>[Fine-tuning only]</em></p>
 <p>Fine-tuning parameter for recursive subpixeling, for spherical coordinates,
 assuring that not too fine subpixeling would slow down the rendering of
 images or spectra too much.</p>
@@ -512,9 +429,9 @@ are present, only the first species will be used.</p>
 See Section <a class="reference internal" href="toolsinside.html#sec-subbox"><span class="std std-ref">Making a regularly-spaced datacube (‘subbox’) of AMR-based models</span></a> for details.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="input-required-amr-grid-inp">
-<span id="sec-grid-input"></span><h2>INPUT (required): amr_grid.inp<a class="headerlink" href="#input-required-amr-grid-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-required-amr-grid-inp">
+<span id="sec-grid-input"></span><h2>INPUT (required): amr_grid.inp<a class="headerlink" href="#input-required-amr-grid-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that specifies what the spatial grid of the model looks
 like. See Chapter <a class="reference internal" href="gridding.html#chap-gridding"><span class="std std-ref">More information about the gridding</span></a>. This file is essential, because most
 other <code class="docutils literal notranslate"><span class="pre">.inp</span></code> and <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files are simple lists of numbers which do not
@@ -529,8 +446,8 @@ files will then be named differently.</p>
 is not really ‘adaptive’). This is grid style 1.</p></li>
 <li><p>Layer-style AMR. This is grid style 10.</p></li>
 </ul>
-<div class="section" id="regular-grid">
-<span id="sec-amr-grid-regular"></span><h3>Regular grid<a class="headerlink" href="#regular-grid" title="Permalink to this headline">¶</a></h3>
+<section id="regular-grid">
+<span id="sec-amr-grid-regular"></span><h3>Regular grid<a class="headerlink" href="#regular-grid" title="Permalink to this heading"></a></h3>
 <p>For a regular grid, without grid refinement, the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
 <span class="mi">0</span>                                        <span class="o">&lt;===</span> <span class="n">Grid</span> <span class="n">style</span> <span class="p">(</span><span class="n">regular</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
@@ -587,9 +504,9 @@ z-direction.</p></li>
 <span class="o">-</span><span class="mf">1.</span>  <span class="mf">0.</span> <span class="mf">1.</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="oct-tree-style-amr-grid">
-<span id="sec-amr-grid-oct-tree"></span><h3>Oct-tree-style AMR grid<a class="headerlink" href="#oct-tree-style-amr-grid" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="oct-tree-style-amr-grid">
+<span id="sec-amr-grid-oct-tree"></span><h3>Oct-tree-style AMR grid<a class="headerlink" href="#oct-tree-style-amr-grid" title="Permalink to this heading"></a></h3>
 <p>For a grid with oct-tree style grid refinement (see Section
 <a class="reference internal" href="gridding.html#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>), the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
@@ -667,9 +584,9 @@ which the (1,2,1) cell is refined again in 2x2x2:</p>
 <span class="mi">0</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="layer-style-amr-grid">
-<span id="sec-amr-grid-layered"></span><h3>Layer-style AMR grid<a class="headerlink" href="#layer-style-amr-grid" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="layer-style-amr-grid">
+<span id="sec-amr-grid-layered"></span><h3>Layer-style AMR grid<a class="headerlink" href="#layer-style-amr-grid" title="Permalink to this heading"></a></h3>
 <p>For a grid with layer-style grid refinement (see Section
 <a class="reference internal" href="gridding.html#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a>), the <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                                  <span class="o">&lt;===</span> <span class="n">Typically</span> <span class="mi">1</span> <span class="n">at</span> <span class="n">present</span>
@@ -770,10 +687,10 @@ files larger than strictly necessary, but it is much easier to handle as each
 layer is a datacube. For memory/hardisk-friendly storage you must use the
 oct-tree refinement instead. The layers are meant to make the AMR much more
 accessible, but are somewhat more memory consuming.</p>
-</div>
-</div>
-<div class="section" id="input-required-for-dust-transfer-dust-density-inp">
-<span id="sec-dustdens"></span><h2>INPUT (required for dust transfer): dust_density.inp<a class="headerlink" href="#input-required-for-dust-transfer-dust-density-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="input-required-for-dust-transfer-dust-density-inp">
+<span id="sec-dustdens"></span><h2>INPUT (required for dust transfer): dust_density.inp<a class="headerlink" href="#input-required-for-dust-transfer-dust-density-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that contains the dust densities. It is merely a list of
 numbers. Their association to grid cells is via the file <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> (see
 Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for the binary version of this file, which is more
@@ -828,8 +745,8 @@ always takes place on <em>regular</em> grids and subgrids (=layers). This is muc
 easier to handle than the complexities of the oct-tree AMR.</p>
 </li>
 </ul>
-<div class="section" id="example-dust-density-inp-for-a-regular-grid">
-<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a regular grid<a class="headerlink" href="#example-dust-density-inp-for-a-regular-grid" title="Permalink to this headline">¶</a></h3>
+<section id="example-dust-density-inp-for-a-regular-grid">
+<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a regular grid<a class="headerlink" href="#example-dust-density-inp-for-a-regular-grid" title="Permalink to this heading"></a></h3>
 <p>Now let us look at an example of a <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> file,
 starting with one for the simplified case of a regular 3-D grid (see
 Sections <a class="reference internal" href="#sec-amr-grid-regular"><span class="std std-ref">Regular grid</span></a> and <a class="reference internal" href="gridding.html#sec-regular-grid"><span class="std std-ref">Regular grids</span></a>):</p>
@@ -851,15 +768,17 @@ Sections <a class="reference internal" href="#sec-amr-grid-regular"><span class=
 <span class="n">density</span><span class="p">[</span><span class="n">nz</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">nz</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id1">
+<figure class="align-default" id="id1">
 <span id="fig-regular-grid-numbered"></span><img alt="_images/base_amr.png" src="_images/base_amr.png" />
-<p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3 (as
+<figcaption>
+<p><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of a regular 2-D grid with <code class="docutils literal notranslate"><span class="pre">nx</span></code>=4 and <code class="docutils literal notranslate"><span class="pre">ny</span></code>=3 (as
 Fig. <a class="reference internal" href="gridding.html#fig-regular-grid"><span class="std std-numref">Fig. 21</span></a>), with the order of the cells shown as
-numbers in the cells.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
-</div>
-<div class="section" id="example-dust-density-inp-for-an-oct-tree-refined-grid">
-<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for an oct-tree refined grid<a class="headerlink" href="#example-dust-density-inp-for-an-oct-tree-refined-grid" title="Permalink to this headline">¶</a></h3>
+numbers in the cells.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="example-dust-density-inp-for-an-oct-tree-refined-grid">
+<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for an oct-tree refined grid<a class="headerlink" href="#example-dust-density-inp-for-an-oct-tree-refined-grid" title="Permalink to this heading"></a></h3>
 <p>For the case when you have an oct-tree refined grid (see Sections
 <a class="reference internal" href="#sec-amr-grid-oct-tree"><span class="std std-ref">Oct-tree-style AMR grid</span></a> and <a class="reference internal" href="gridding.html#sec-oct-tree-amr"><span class="std std-ref">Oct-tree Adaptive Mesh Refinement</span></a>), the order of the
 numbers is the same as the order of the cells as specified in the
@@ -893,16 +812,18 @@ one dust species. Then the <code class="docutils literal notranslate"><span clas
 Fig. fig-oct-tree-amr) with the order of the cells shown as numbers in
 the cells.</span></a>.
 An unformatted version is also available, in the standard way (see above).</p>
-<div class="figure align-default" id="id2">
+<figure class="align-default" id="id2">
 <span id="fig-oct-tree-amr-numbered"></span><img alt="_images/oct_tree_amr.png" src="_images/oct_tree_amr.png" />
-<p class="caption"><span class="caption-number">Fig. 32 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement (as
+<figcaption>
+<p><span class="caption-number">Fig. 32 </span><span class="caption-text">Example of a 2-D grid with oct-tree refinement (as
 Fig. <a class="reference internal" href="gridding.html#fig-oct-tree-amr"><span class="std std-ref">Example of a 2-D grid with oct-tree refinement. The base grid has nx=4
 and ny=3. Three levels of refinement are added to this base grid.</span></a>) with the order of the cells shown as numbers in
-the cells.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</div>
-</div>
-<div class="section" id="example-dust-density-inp-for-a-layer-style-refined-grid">
-<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a layer-style refined grid<a class="headerlink" href="#example-dust-density-inp-for-a-layer-style-refined-grid" title="Permalink to this headline">¶</a></h3>
+the cells.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="example-dust-density-inp-for-a-layer-style-refined-grid">
+<h3>Example: <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> for a layer-style refined grid<a class="headerlink" href="#example-dust-density-inp-for-a-layer-style-refined-grid" title="Permalink to this heading"></a></h3>
 <p>For the case when you have an layer-style refined grid (see Sections
 <a class="reference internal" href="#sec-amr-grid-layered"><span class="std std-ref">Layer-style AMR grid</span></a> and <a class="reference internal" href="gridding.html#sec-layered-amr"><span class="std std-ref">Layered Adaptive Mesh Refinement</span></a>) you specify the
 density in a series of regular boxes (=layers). The first box is the base
@@ -978,10 +899,10 @@ present in the file, but they can have any value you like (typically 0).</p>
 <p>Note that if you have multiple species of dust then we will still have
 48 as the value of <code class="docutils literal notranslate"><span class="pre">nrcells</span></code>. The number of values to be read,
 if you have 2 dust species, is then simply 2*<code class="docutils literal notranslate"><span class="pre">nrcells</span></code> = 2*48 = 96.</p>
-</div>
-</div>
-<div class="section" id="input-output-dust-temperature-dat">
-<h2>INPUT/OUTPUT: dust_temperature.dat<a class="headerlink" href="#input-output-dust-temperature-dat" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="input-output-dust-temperature-dat">
+<h2>INPUT/OUTPUT: dust_temperature.dat<a class="headerlink" href="#input-output-dust-temperature-dat" title="Permalink to this heading"></a></h2>
 <p>The dust temperature file is an intermediate result of RADMC-3D and follows from
 the thermal Monte Carlo simulation. The name of this file is
 <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> (see Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for the binary
@@ -994,9 +915,9 @@ temperature.</p>
 <p>The structure of this file is identical to that of <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> (Section
 <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>), but with density replaced by temperature. We refer to
 section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a> for the details.</p>
-</div>
-<div class="section" id="input-mostly-required-stars-inp">
-<span id="sec-stars"></span><h2>INPUT (mostly required): stars.inp<a class="headerlink" href="#input-mostly-required-stars-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-mostly-required-stars-inp">
+<span id="sec-stars"></span><h2>INPUT (mostly required): stars.inp<a class="headerlink" href="#input-mostly-required-stars-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that specifies the number of stars, their positions,
 radii, and spectra. Stars are sources of netto energy. For the dust
 continuum Monte Carlo simulation these are a source of photon packages.
@@ -1073,9 +994,9 @@ micron (100 wavelength points) and with a blackbody spectrum with a
 temperature equal to the effective temperature of the sun.</p>
 <p>Note: The position of a star can be both inside and outside of the
 computational domain.</p>
-</div>
-<div class="section" id="input-optional-stellarsrc-templates-inp">
-<span id="sec-stellarsrc-templates"></span><h2>INPUT (optional): stellarsrc_templates.inp<a class="headerlink" href="#input-optional-stellarsrc-templates-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-optional-stellarsrc-templates-inp">
+<span id="sec-stellarsrc-templates"></span><h2>INPUT (optional): stellarsrc_templates.inp<a class="headerlink" href="#input-optional-stellarsrc-templates-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that specifies the template spectra for the smooth stellar
 source distributions. See Section <a class="reference internal" href="stars.html#sec-distrib-of-stars"><span class="std std-ref">Distributions of zillions of stars</span></a>.
 The file exists only in formatted (ascii) style. Its structure is:</p>
@@ -1143,9 +1064,9 @@ compute the stellar template. Example:</p>
 <p>will tell RADMC-3D that there is just one stellar template, assumed to have
 a blackbody spectrum with solar effective temperature. Each star of this
 template has one solar radius, one solar mass.</p>
-</div>
-<div class="section" id="input-optional-stellarsrc-density-inp">
-<span id="sec-stellarsrc-density"></span><h2>INPUT (optional): stellarsrc_density.inp<a class="headerlink" href="#input-optional-stellarsrc-density-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-optional-stellarsrc-density-inp">
+<span id="sec-stellarsrc-density"></span><h2>INPUT (optional): stellarsrc_density.inp<a class="headerlink" href="#input-optional-stellarsrc-density-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that contains the smooth stellar source densities. If you
 have the file <code class="docutils literal notranslate"><span class="pre">stellarsrc_templates.inp</span></code> specified (see Section
 <a class="reference internal" href="#sec-stellarsrc-templates"><span class="std std-ref">INPUT (optional): stellarsrc_templates.inp</span></a>) then you <em>must</em> also specify <code class="docutils literal notranslate"><span class="pre">stellarsrc_density.inp</span></code> (or its binary form, see Chapter
@@ -1153,9 +1074,9 @@ have the file <code class="docutils literal notranslate"><span class="pre">stell
 <code class="docutils literal notranslate"><span class="pre">dust_density.inp</span></code> (Section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>), but instead
 different dust species, we have different templates.  For the rest we refer
 to Section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a> for the format.  Just replace <code class="docutils literal notranslate"><span class="pre">ispec</span></code> (the dust species) with <code class="docutils literal notranslate"><span class="pre">itempl</span></code> (the template).</p>
-</div>
-<div class="section" id="input-optional-external-source-inp">
-<span id="sec-ext-src-inp"></span><h2>INPUT (optional): external_source.inp<a class="headerlink" href="#input-optional-external-source-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-optional-external-source-inp">
+<span id="sec-ext-src-inp"></span><h2>INPUT (optional): external_source.inp<a class="headerlink" href="#input-optional-external-source-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that specifies the spectrum and intensity of the
 external radiation field, i.e. the ‘interstellar radiation field’
 (see Section <a class="reference internal" href="stars.html#sec-external-source"><span class="std std-ref">The interstellar radiation field: external source of energy</span></a>). Its structure is:</p>
@@ -1187,9 +1108,9 @@ Section <a class="reference internal" href="#sec-wavelengths"><span class="std s
 <li><p><code class="docutils literal notranslate"><span class="pre">Intensity[i]</span></code>: The intensity of the radiation field at
 wavelength <span class="math notranslate nohighlight">\(i\)</span> in units of erg / <span class="math notranslate nohighlight">\(\mathrm{cm}^2\)</span> / sec / Hz / steradian.</p></li>
 </ul>
-</div>
-<div class="section" id="input-optional-heatsource-inp">
-<span id="sec-heatsource"></span><h2>INPUT (optional): heatsource.inp<a class="headerlink" href="#input-optional-heatsource-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-optional-heatsource-inp">
+<span id="sec-heatsource"></span><h2>INPUT (optional): heatsource.inp<a class="headerlink" href="#input-optional-heatsource-inp" title="Permalink to this heading"></a></h2>
 <p>This file, if present (it is an optional file!), gives the internal heat
 source of the gas-dust mixture in every cell. For formatted style
 (<code class="docutils literal notranslate"><span class="pre">heatsource.inp</span></code>) the structure of this file is as follows.:</p>
@@ -1206,9 +1127,9 @@ data in binary form (<code class="docutils literal notranslate"><span class="pre
 <p>The physical unit of <code class="docutils literal notranslate"><span class="pre">heatsource</span></code> is
 <span class="math notranslate nohighlight">\(\mathrm{erg}\,\mathrm{cm}^{-3}\,\mathrm{s}^{-1}\)</span>. The total luminosity of
 the heat source would then be the sum over all cells of <code class="docutils literal notranslate"><span class="pre">heatsource</span></code> times the cell volume.</p>
-</div>
-<div class="section" id="input-required-wavelength-micron-inp">
-<span id="sec-wavelengths"></span><h2>INPUT (required): wavelength_micron.inp<a class="headerlink" href="#input-required-wavelength-micron-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-required-wavelength-micron-inp">
+<span id="sec-wavelengths"></span><h2>INPUT (required): wavelength_micron.inp<a class="headerlink" href="#input-required-wavelength-micron-inp" title="Permalink to this heading"></a></h2>
 <p>This is the file that sets the discrete wavelength points for the continuum
 radiative transfer calculations. Note that this is not the same as the
 wavelength grid used for e.g. line radiative transfer.  See Section
@@ -1238,9 +1159,9 @@ practice means that this should go all the way from 0.1 <span class="math notran
 Carlo run and dust temperatures may then be severely miscalculated. Note
 that the 0.1 <span class="math notranslate nohighlight">\(\mu\)</span>m is OK for stellar temperatures below 10000 K. For higher
 temperatures a shorter wavelength lower limit must be used.</p>
-</div>
-<div class="section" id="input-optional-camera-wavelength-micron-inp">
-<span id="sec-camera-wavelengths"></span><h2>INPUT (optional): camera_wavelength_micron.inp<a class="headerlink" href="#input-optional-camera-wavelength-micron-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-optional-camera-wavelength-micron-inp">
+<span id="sec-camera-wavelengths"></span><h2>INPUT (optional): camera_wavelength_micron.inp<a class="headerlink" href="#input-optional-camera-wavelength-micron-inp" title="Permalink to this heading"></a></h2>
 <p>The wavelength points in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file are the
 global continuum wavelength points. On this grid the continuum transfer is
 done. However, there may be various reasons why the user may want to
@@ -1266,17 +1187,17 @@ identical to that of <code class="docutils literal notranslate"><span class="pre
 RADMC-3D choose wavelength points, many of which may be even simpler
 and more preferable than the method described here. See Section
 <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>.</p>
-</div>
-<div class="section" id="input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp">
-<span id="sec-opacities"></span><h2>INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp<a class="headerlink" href="#input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp">
+<span id="sec-opacities"></span><h2>INPUT (required for dust transfer): dustopac.inp and dustkappa_*.inp or dustkapscatmat_*.inp or dust_optnk_*.inp<a class="headerlink" href="#input-required-for-dust-transfer-dustopac-inp-and-dustkappa-inp-or-dustkapscatmat-inp-or-dust-optnk-inp" title="Permalink to this heading"></a></h2>
 <p>These files specify the dust opacities to be used. More than one can be
 specified, meaning that there will be more than one co-existing dust
 species. Each of these species will have its own dust density specified
 (see Section <a class="reference internal" href="#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>). The opacity of each species is specified
 in a separate file for each species. The <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> file tells which
 file to read for each of these species.</p>
-<div class="section" id="the-dustopac-inp-file">
-<span id="sec-dustopac-inp-file"></span><h3>The dustopac.inp file<a class="headerlink" href="#the-dustopac-inp-file" title="Permalink to this headline">¶</a></h3>
+<section id="the-dustopac-inp-file">
+<span id="sec-dustopac-inp-file"></span><h3>The dustopac.inp file<a class="headerlink" href="#the-dustopac-inp-file" title="Permalink to this heading"></a></h3>
 <p>The file <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> has the following structure, where an example
 of 2 separate dust species is used:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iformat</span>                          <span class="o">&lt;===</span> <span class="n">Put</span> <span class="n">this</span> <span class="n">to</span> <span class="mi">2</span>
@@ -1316,9 +1237,9 @@ name of the opacity file (see above). For instance, if the name is
 <code class="docutils literal notranslate"><span class="pre">enstatite</span></code>, and <code class="docutils literal notranslate"><span class="pre">inputstyle==1</span></code>, then the file to be
 read is <code class="docutils literal notranslate"><span class="pre">dustkappa_enstatite.inp</span></code>.</p></li>
 </ul>
-</div>
-<div class="section" id="the-dustkappa-inp-files">
-<span id="sec-dustkappa-files"></span><h3>The dustkappa_*.inp files<a class="headerlink" href="#the-dustkappa-inp-files" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-dustkappa-inp-files">
+<span id="sec-dustkappa-files"></span><h3>The dustkappa_*.inp files<a class="headerlink" href="#the-dustkappa-inp-files" title="Permalink to this heading"></a></h3>
 <p>If you wish to use dust opacities that include the mass-weighted absorption
 opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{abs}}\)</span>, the (optionally) mass-weighted scattering
 opacity <span class="math notranslate nohighlight">\(\kappa_{\mathrm{scat}}\)</span>, and (optionally) the anisotropy factor <span class="math notranslate nohighlight">\(g\)</span>
@@ -1378,9 +1299,9 @@ the upper or lower edges of the wavelength domain of the <code class="docutils l
 short wavelength this will simply be constant extrapolation while at long
 wavelength a powerlaw extrapolation is done. Have a look at the <code class="docutils literal notranslate"><span class="pre">dustkappa_*.inp_used</span></code> file to see how RADMC-3D has done this
 in your particular case.</p>
-</div>
-<div class="section" id="the-dustkapscatmat-inp-files">
-<span id="sec-dustkapscatmat-files"></span><h3>The dustkapscatmat_*.inp files<a class="headerlink" href="#the-dustkapscatmat-inp-files" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-dustkapscatmat-inp-files">
+<span id="sec-dustkapscatmat-files"></span><h3>The dustkapscatmat_*.inp files<a class="headerlink" href="#the-dustkapscatmat-inp-files" title="Permalink to this heading"></a></h3>
 <p>If you wish to treat scattering in a more realistic way than just the
 Henyey-Greenstein non-polarized way, then you must provide RADMC-3D with
 more information than is present in the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code>
@@ -1515,10 +1436,10 @@ additional file to <code class="docutils literal notranslate"><span class="pre">
 </div>
 <p><em>NOTE:</em> This file is not compulsory. If it is not given, then
 <code class="docutils literal notranslate"><span class="pre">RADMC-3D</span></code> will make its own internal scattering angle grid.</p>
-</div>
-</div>
-<div class="section" id="output-spectrum-out">
-<span id="sec-output-spectrum-out"></span><h2>OUTPUT: spectrum.out<a class="headerlink" href="#output-spectrum-out" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="output-spectrum-out">
+<span id="sec-output-spectrum-out"></span><h2>OUTPUT: spectrum.out<a class="headerlink" href="#output-spectrum-out" title="Permalink to this heading"></a></h2>
 <p>Any spectrum that is made with RADMC-3D will be either called
 <code class="docutils literal notranslate"><span class="pre">spectrum.out</span></code> or <code class="docutils literal notranslate"><span class="pre">spectrum_&lt;somename&gt;.out</span></code> and will have
 the following structure:</p>
@@ -1553,9 +1474,9 @@ of normalization).</p></li>
 </ul>
 <p><em>NOTE: Maybe in the future a new iformat version will be possible
 where more telescope information is given in the spectrum file.</em></p>
-</div>
-<div class="section" id="output-image-out-or-image-out">
-<span id="sec-image-out"></span><h2>OUTPUT: image.out or image_****.out<a class="headerlink" href="#output-image-out-or-image-out" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="output-image-out-or-image-out">
+<span id="sec-image-out"></span><h2>OUTPUT: image.out or image_****.out<a class="headerlink" href="#output-image-out-or-image-out" title="Permalink to this heading"></a></h2>
 <p>Any images that are produced by RADMC-3D will be written in a file called
 <code class="docutils literal notranslate"><span class="pre">image.out</span></code>. The file has the following structure (for the case
 without Stokes parameters):</p>
@@ -1663,14 +1584,14 @@ following form:</p>
 <p>That is: instead of 1 number per line we now have 4 numbers per line, which
 are the four Stokes parameters. Note that <code class="docutils literal notranslate"><span class="pre">iformat</span></code>=3 to indicate
 that we have now all four Stokes parameters in the image.</p>
-</div>
-<div class="section" id="input-minor-input-files">
-<span id="sec-minor-input-files"></span><h2>INPUT: (minor input files)<a class="headerlink" href="#input-minor-input-files" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="input-minor-input-files">
+<span id="sec-minor-input-files"></span><h2>INPUT: (minor input files)<a class="headerlink" href="#input-minor-input-files" title="Permalink to this heading"></a></h2>
 <p>There is a number of lesser important input files, or input files that are
 only read under certain circumstances (for instance when certain command
 line options are given). Here they are described.</p>
-<div class="section" id="the-color-inus-inp-file-required-with-comm-line-option-loadcolor">
-<span id="sec-color-inus"></span><h3>The <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> file (required with comm-line option ‘loadcolor’)<a class="headerlink" href="#the-color-inus-inp-file-required-with-comm-line-option-loadcolor" title="Permalink to this headline">¶</a></h3>
+<section id="the-color-inus-inp-file-required-with-comm-line-option-loadcolor">
+<span id="sec-color-inus"></span><h3>The <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> file (required with comm-line option ‘loadcolor’)<a class="headerlink" href="#the-color-inus-inp-file-required-with-comm-line-option-loadcolor" title="Permalink to this heading"></a></h3>
 <p>The file <code class="docutils literal notranslate"><span class="pre">color_inus.inp</span></code> will only be read by RADMC-3D if on the command line
 the option <code class="docutils literal notranslate"><span class="pre">loadcolor</span></code> or <code class="docutils literal notranslate"><span class="pre">color</span></code> is specified, and if the main action is
 <code class="docutils literal notranslate"><span class="pre">image</span></code>.</p>
@@ -1688,9 +1609,9 @@ the option <code class="docutils literal notranslate"><span class="pre">loadcolo
 <li><p><code class="docutils literal notranslate"><span class="pre">ilam[i]</span></code>: The wavelength index for image i (the wavelength
 index refers to the list of wavelengths in the <code class="docutils literal notranslate"><span class="pre">wavelength_micron.inp</span></code> file.</p></li>
 </ul>
-</div>
-<div class="section" id="input-aperture-info-inp">
-<span id="sec-aperture-info-file"></span><h3>INPUT: <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code><a class="headerlink" href="#input-aperture-info-inp" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-aperture-info-inp">
+<span id="sec-aperture-info-file"></span><h3>INPUT: <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code><a class="headerlink" href="#input-aperture-info-inp" title="Permalink to this heading"></a></h3>
 <p>If you wish to make spectra with wavelength-dependent collecting area, i.e.
 aperture (see Section <a class="reference internal" href="imagesspectra.html#sec-aperture"><span class="std std-ref">Can one specify more realistic ‘beams’?</span></a>), then you must prepare the file
 <code class="docutils literal notranslate"><span class="pre">aperture_info.inp</span></code>. Here is its structure:</p>
@@ -1715,10 +1636,10 @@ encompass all wavelengths you may wish to include in spectra.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rcol_as[i]</span></code>: The radius of the circular image mask used for
 the aperture model, in units of arcsec.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="for-developers-some-details-on-the-internal-workings">
-<h2>For developers: some details on the internal workings<a class="headerlink" href="#for-developers-some-details-on-the-internal-workings" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="for-developers-some-details-on-the-internal-workings">
+<h2>For developers: some details on the internal workings<a class="headerlink" href="#for-developers-some-details-on-the-internal-workings" title="Permalink to this heading"></a></h2>
 <p>There are several input files that can be quite large. Reading these files
 into RADMC-3D memory can take time, so it is important not to read files
 that are not required for the execution of the particular command at
@@ -1749,63 +1670,38 @@ data is nowhere needed, they will not be read.</p>
 <p>All these <code class="docutils literal notranslate"><span class="pre">read_***</span></code> routines with argument <code class="docutils literal notranslate"><span class="pre">action</span></code> can also
 be called with <code class="docutils literal notranslate"><span class="pre">action=2</span></code>. This will force the routine to (re-)read
 these data. But this is rarely needed.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="binaryio.html" class="btn btn-neutral float-right" title="Binary I/O files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="tipsandtricks.html" class="btn btn-neutral float-left" title="Tips, tricks and problem hunting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tipsandtricks.html" class="btn btn-neutral float-left" title="Tips, tricks and problem hunting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="binaryio.html" class="btn btn-neutral float-right" title="Binary I/O files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
