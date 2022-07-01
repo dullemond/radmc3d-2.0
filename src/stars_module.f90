@@ -38,7 +38,6 @@ doubleprecision,allocatable :: illum_fluxtot(:)
 doubleprecision,allocatable :: illum_fluxtot_cum(:)
 
 !$OMP THREADPRIVATE(stellarsrc_cum)
-!$OMP THREADPRIVATE(star_fraclum)
 
 contains
 
@@ -184,14 +183,12 @@ subroutine read_stars()
            write(stdo,*) 'ERROR: Could not allocate space for stellar cell index'
            stop
         endif
-        !$OMP PARALLEL
         allocate(star_fraclum(1:nstars),STAT=ierr)
         if(ierr.ne.0) then
            write(stdo,*) 'ERROR: Could not allocate space for fraclum array'
            stop
         endif
         star_fraclum(:) = 1.d0
-        !$OMP END PARALLEL
         !
         ! Read the stellar information
         !
@@ -1310,8 +1307,8 @@ subroutine stars_cleanup
   if(allocated(illum_flux_unprojected_cum)) deallocate(illum_flux_unprojected_cum)
   if(allocated(illum_fluxtot)) deallocate(illum_fluxtot)
   if(allocated(illum_fluxtot_cum)) deallocate(illum_fluxtot_cum)
-  !$OMP PARALLEL
   if(allocated(star_fraclum)) deallocate(star_fraclum)
+  !$OMP PARALLEL
   if(allocated(stellarsrc_cum)) deallocate(stellarsrc_cum)
   !$OMP END PARALLEL
   incl_stellarsrc           = 0
