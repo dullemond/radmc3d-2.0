@@ -667,6 +667,14 @@ becomes, too).
 are treated as spheres, i.e. non-point-like (see Section
 :ref:`sec-image-stars` and Chapter :ref:`chap-stars`).
 
+*NOTE:* If you want to know, for a given image, how RADMC-3D subpixeled the
+image, you can either set ``camera_diagnostics_subpix=1`` in the ``radmc3d.inp``
+file or add ``diag_subpix`` to the command line. This forces RADMC-3D to
+write out a file called ``subpixeling_diagnostics.out`` which contains
+four columns, for respectivly: ``px,py,pdx,pdy``\ , i.e. the pixel position
+and its size. This allows the user to
+find out if the recursive subpixeling went well or if certain areas were
+over/under-resolved. This is really only meant as a diagnostic.
 
 
 A danger with recursive sub-pixeling
