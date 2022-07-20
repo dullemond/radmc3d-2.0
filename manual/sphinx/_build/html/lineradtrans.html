@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Line radiative transfer &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Making images and spectra" href="imagesspectra.html" />
     <link rel="prev" title="Dust continuum radiative transfer" href="dustradtrans.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -144,71 +100,32 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Line radiative transfer</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/lineradtrans.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="line-radiative-transfer">
-<span id="chap-line-transfer"></span><h1>Line radiative transfer<a class="headerlink" href="#line-radiative-transfer" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="line-radiative-transfer">
+<span id="chap-line-transfer"></span><h1>Line radiative transfer<a class="headerlink" href="#line-radiative-transfer" title="Permalink to this heading"></a></h1>
 <p>RADMC-3D is capable of modeling radiative transfer in molecular and/or
 atomic lines. Due to the complexity of line radiative transfer, and the huge
 computational and memory requirements of full-scale non-LTE line transfer,
@@ -219,8 +136,8 @@ demanding. The default mode (and certainly recommended initially) is LTE
 ray-tracing in the slow but memory efficient way: the <em>simple LTE mode</em>
 (see Section <a class="reference internal" href="#sec-line-trans-modes"><span class="std std-ref">Line transfer modes and how to activate the line transfer</span></a>). Since this is the default mode,
 you do not need to specify anything to have this selected.</p>
-<div class="section" id="quick-start-for-adding-line-transfer-to-images-and-spectra">
-<h2>Quick start for adding line transfer to images and spectra<a class="headerlink" href="#quick-start-for-adding-line-transfer-to-images-and-spectra" title="Permalink to this headline">¶</a></h2>
+<section id="quick-start-for-adding-line-transfer-to-images-and-spectra">
+<h2>Quick start for adding line transfer to images and spectra<a class="headerlink" href="#quick-start-for-adding-line-transfer-to-images-and-spectra" title="Permalink to this heading"></a></h2>
 <p>Do properly model line transfer requires dedication and experimentation.
 This is <em>not</em> a simple task. See Section <a class="reference internal" href="#sec-lines-pitfalls"><span class="std std-ref">What can go wrong with line transfer?</span></a> for an
 analysis of several pitfalls one may encounter. However, nothing is better
@@ -244,9 +161,9 @@ that molecule in units of <span class="math notranslate nohighlight">\(\mathrm{c
 need to specify this file if you add the keyword <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust</span> <span class="pre">=</span> <span class="pre">1</span></code>
 into the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.</p></li>
 </ul>
-</div>
-<div class="section" id="some-definitions-for-line-transfer">
-<span id="sec-line-trans-definitions"></span><h2>Some definitions for line transfer<a class="headerlink" href="#some-definitions-for-line-transfer" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="some-definitions-for-line-transfer">
+<span id="sec-line-trans-definitions"></span><h2>Some definitions for line transfer<a class="headerlink" href="#some-definitions-for-line-transfer" title="Permalink to this heading"></a></h2>
 <p>The formal transfer equation is:</p>
 <div class="math notranslate nohighlight">
 \[\frac{dI_\nu(\omega)}{ds} = j_\nu(\omega) - \alpha_\nu(\omega)I_\nu(\omega)\]</div>
@@ -299,14 +216,14 @@ becomes angle-dependent (at a given lab-frame frequency):</p>
 <p>But RADMC-3D naturally includes overlapping lines, at least in the
 ray-tracing (for spectra and images). For non-LTE modes the line
 overlapping is not yet (as of December 2011) included.</p>
-</div>
-<div class="section" id="line-transfer-modes-and-how-to-activate-the-line-transfer">
-<span id="sec-line-trans-modes"></span><h2>Line transfer modes and how to activate the line transfer<a class="headerlink" href="#line-transfer-modes-and-how-to-activate-the-line-transfer" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="line-transfer-modes-and-how-to-activate-the-line-transfer">
+<span id="sec-line-trans-modes"></span><h2>Line transfer modes and how to activate the line transfer<a class="headerlink" href="#line-transfer-modes-and-how-to-activate-the-line-transfer" title="Permalink to this heading"></a></h2>
 <p>Line transfer can be done in various different ways. This is controlled by the
 global variable <code class="docutils literal notranslate"><span class="pre">lines_mode</span></code> (see below) and by the nature of the
 molecular/atomic data (see discussion in Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a>).</p>
-<div class="section" id="two-different-atomic-molecular-data-file-types">
-<h3>Two different atomic/molecular data file types<a class="headerlink" href="#two-different-atomic-molecular-data-file-types" title="Permalink to this headline">¶</a></h3>
+<section id="two-different-atomic-molecular-data-file-types">
+<h3>Two different atomic/molecular data file types<a class="headerlink" href="#two-different-atomic-molecular-data-file-types" title="Permalink to this heading"></a></h3>
 <p>Let us start with the latter: RADMC-3D does not have any atomic or molecular
 data hard-coded inside. It reads these data from data files that you provide.
 There are two fundamentally different ways to feed atomic/molecular data into
@@ -319,9 +236,9 @@ in LTE as well as in non-LTE.</p></li>
 atom). Atoms or molecules for which this data is provided can only be
 treated in LTE.</p></li>
 </ul>
-</div>
-<div class="section" id="the-different-line-modes-the-lines-mode-parameter">
-<span id="sec-lines-mode"></span><h3>The different line modes (the <code class="docutils literal notranslate"><span class="pre">lines_mode</span> <span class="pre">parameter</span></code>)<a class="headerlink" href="#the-different-line-modes-the-lines-mode-parameter" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-different-line-modes-the-lines-mode-parameter">
+<span id="sec-lines-mode"></span><h3>The different line modes (the <code class="docutils literal notranslate"><span class="pre">lines_mode</span> <span class="pre">parameter</span></code>)<a class="headerlink" href="#the-different-line-modes-the-lines-mode-parameter" title="Permalink to this heading"></a></h3>
 <p>For the atoms or molecules for which the full data are specified (the
 <code class="docutils literal notranslate"><span class="pre">molecule_XXX.inp</span></code> files) RADMC-3D has various different line
 transfer modes, including different treatments of LTE or non-LTE. Which of
@@ -379,12 +296,12 @@ the level populations before the rendering, but instead compute them
 on-the-fly. This makes the code slower, but requires less memory.  You can do
 this by choosing e.g. <code class="docutils literal notranslate"><span class="pre">lines_mode=-3</span></code> instead of <code class="docutils literal notranslate"><span class="pre">lines_mode=3</span></code> (for
 LVG+EscProb).</p>
-</div>
-</div>
-<div class="section" id="the-various-input-files-for-line-transfer">
-<h2>The various input files for line transfer<a class="headerlink" href="#the-various-input-files-for-line-transfer" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="input-the-line-transfer-entries-in-the-radmc3d-inp-file">
-<span id="sec-line-radmc-inp"></span><h3>INPUT: The line transfer entries in the radmc3d.inp file<a class="headerlink" href="#input-the-line-transfer-entries-in-the-radmc3d-inp-file" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="the-various-input-files-for-line-transfer">
+<h2>The various input files for line transfer<a class="headerlink" href="#the-various-input-files-for-line-transfer" title="Permalink to this heading"></a></h2>
+<section id="input-the-line-transfer-entries-in-the-radmc3d-inp-file">
+<span id="sec-line-radmc-inp"></span><h3>INPUT: The line transfer entries in the radmc3d.inp file<a class="headerlink" href="#input-the-line-transfer-entries-in-the-radmc3d-inp-file" title="Permalink to this heading"></a></h3>
 <p>Like all other modules of <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code>, also the line module
 can be steered through keywords in the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file.
 Here is a list:</p>
@@ -402,9 +319,9 @@ temperature to the dust temperature. If multiple dust species are present,
 only the first species will be used.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="input-the-line-inp-file">
-<span id="sec-line-dot-inp"></span><h3>INPUT: The line.inp file<a class="headerlink" href="#input-the-line-inp-file" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-the-line-inp-file">
+<span id="sec-line-dot-inp"></span><h3>INPUT: The line.inp file<a class="headerlink" href="#input-the-line-inp-file" title="Permalink to this heading"></a></h3>
 <p>Like with the dust (which has this <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> master file,
 also the line module has a master file: <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code>. It specifies
 which molecules/atoms are to be modeled and in which file the
@@ -533,9 +450,9 @@ are linelist style. For instance:</p>
 <p>Here the CO lines can be treated in a non-LTE manner (depending on what you put
 for <code class="docutils literal notranslate"><span class="pre">lines_mode</span></code>, see Section <a class="reference internal" href="#sec-line-trans-modes"><span class="std std-ref">Line transfer modes and how to activate the line transfer</span></a>), and the
 H<sub>2</sub>O is treated in LTE.</p>
-</div>
-<div class="section" id="input-molecular-atomic-data-the-molecule-xxx-inp-file-s">
-<span id="sec-leiden-format"></span><span id="sec-molecule-xxx-inp"></span><h3>INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)<a class="headerlink" href="#input-molecular-atomic-data-the-molecule-xxx-inp-file-s" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-molecular-atomic-data-the-molecule-xxx-inp-file-s">
+<span id="sec-leiden-format"></span><span id="sec-molecule-xxx-inp"></span><h3>INPUT: Molecular/atomic data: The molecule_XXX.inp file(s)<a class="headerlink" href="#input-molecular-atomic-data-the-molecule-xxx-inp-file-s" title="Permalink to this heading"></a></h3>
 <p>As mentioned in Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a> the atomic or molecular
 fundamental data such as the level diagram and the radiative decay rates
 (Einstein A coefficients) are read from a file (or more than one files) named
@@ -693,9 +610,9 @@ the strength of the lines you are interested in.</p></li>
 files that contain their spatial distribution is a bit complicated. See
 Section <a class="reference internal" href="#sec-collpartner"><span class="std std-ref">INPUT: The number density of collision partners (for non-LTE transfer)</span></a>.</p></li>
 </ul>
-</div>
-<div class="section" id="input-molecular-atomic-data-the-linelist-xxx-inp-file-s">
-<span id="sec-linelist-xxx-inp"></span><h3>INPUT: Molecular/atomic data: The linelist_XXX.inp file(s)<a class="headerlink" href="#input-molecular-atomic-data-the-linelist-xxx-inp-file-s" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-molecular-atomic-data-the-linelist-xxx-inp-file-s">
+<span id="sec-linelist-xxx-inp"></span><h3>INPUT: Molecular/atomic data: The linelist_XXX.inp file(s)<a class="headerlink" href="#input-molecular-atomic-data-the-linelist-xxx-inp-file-s" title="Permalink to this heading"></a></h3>
 <p>In many cases molecular data are merely given as lists of lines (e.g. the
 HITRAN database, the Kurucz database, the Jorgensen et al. databases
 etc.). These line lists contain information about the line wavelength
@@ -778,9 +695,9 @@ the lower and upper levels belonging to this line.</p>
 <p>Note that you can tell RADMC-3D to read <code class="docutils literal notranslate"><span class="pre">linelist_h2o.inp</span></code> (instead of search
 for <code class="docutils literal notranslate"><span class="pre">molecule_h2o.inp</span></code>) by specifying <code class="docutils literal notranslate"><span class="pre">linelist</span></code> instead of <code class="docutils literal notranslate"><span class="pre">leiden</span></code> in
 the <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> file (see Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a>).</p>
-</div>
-<div class="section" id="input-the-number-density-of-each-molecular-species">
-<span id="sec-mol-numdensity"></span><h3>INPUT: The number density of each molecular species<a class="headerlink" href="#input-the-number-density-of-each-molecular-species" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-the-number-density-of-each-molecular-species">
+<span id="sec-mol-numdensity"></span><h3>INPUT: The number density of each molecular species<a class="headerlink" href="#input-the-number-density-of-each-molecular-species" title="Permalink to this heading"></a></h3>
 <p>For the line radiative transfer we need to know how many molecules of each
 species are there per cubic centimeter. For molecular/atom species <code class="docutils literal notranslate"><span class="pre">XXX</span></code> this
 is given in the file <code class="docutils literal notranslate"><span class="pre">numberdens_XXX.inp</span></code> (see Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>
@@ -802,9 +719,9 @@ described in detail.</p>
 </div>
 <p>The number densities are to be specified in units of molecule per cubic
 centimeter.</p>
-</div>
-<div class="section" id="input-the-gas-temperature">
-<span id="sec-gas-temperature"></span><h3>INPUT: The gas temperature<a class="headerlink" href="#input-the-gas-temperature" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-the-gas-temperature">
+<span id="sec-gas-temperature"></span><h3>INPUT: The gas temperature<a class="headerlink" href="#input-the-gas-temperature" title="Permalink to this heading"></a></h3>
 <p>For line transfer we need to know the gas temperature. You specify this in the
 file <code class="docutils literal notranslate"><span class="pre">gas_temperature.inp</span></code> (see Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a> for the binary
 version of these files, which are more compact, and which you can use instead of
@@ -817,9 +734,9 @@ is described in detail.</p>
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to copy the dust temperature (if it know it) into the gas
 temperature. See the keyword <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust</span></code> described in Section
 <a class="reference internal" href="#sec-line-radmc-inp"><span class="std std-ref">INPUT: The line transfer entries in the radmc3d.inp file</span></a>.</p>
-</div>
-<div class="section" id="input-the-velocity-field">
-<span id="sec-velo-field"></span><h3>INPUT: The velocity field<a class="headerlink" href="#input-the-velocity-field" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-the-velocity-field">
+<span id="sec-velo-field"></span><h3>INPUT: The velocity field<a class="headerlink" href="#input-the-velocity-field" title="Permalink to this heading"></a></h3>
 <p>Since gas motions are usually the main source of Doppler shift or broadening in
 astrophysical settings, it is obligatory to specify the gas velocity.  This can
 be done with the file <code class="docutils literal notranslate"><span class="pre">gas_velocity.inp</span></code> (see Chapter <a class="reference internal" href="binaryio.html#chap-binary-io"><span class="std std-ref">Binary I/O files</span></a>
@@ -838,9 +755,9 @@ positive <span class="math notranslate nohighlight">\(v_\phi\)</span> means velo
 <span class="math notranslate nohighlight">\(x,y\)</span>-plane.</p>
 <p>For the precise way to address the various cells in the different AMR modes,
 we refer to Section <a class="reference internal" href="inputoutputfiles.html#sec-dustdens"><span class="std std-ref">INPUT (required for dust transfer): dust_density.inp</span></a>, where this is described in detail.</p>
-</div>
-<div class="section" id="input-the-local-microturbulent-broadening-optional">
-<span id="sec-turb-broadening"></span><h3>INPUT: The local microturbulent broadening (optional)<a class="headerlink" href="#input-the-local-microturbulent-broadening-optional" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-the-local-microturbulent-broadening-optional">
+<span id="sec-turb-broadening"></span><h3>INPUT: The local microturbulent broadening (optional)<a class="headerlink" href="#input-the-local-microturbulent-broadening-optional" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> code automatically includes thermal broadening of the line. But
 sometimes it is also useful to specify a local (spatially unresolved) turbulent
 width. This is not obligatory (if it is not specified, only the thermal
@@ -859,9 +776,9 @@ molecular weight, <span class="math notranslate nohighlight">\(k\)</span> the Bo
 the microturbulent line width in units of cm/s. The
 <span class="math notranslate nohighlight">\(a_{\mathrm{linewidth}}\)</span> is then the total (thermal plus microturbulent)
 line width.</p>
-</div>
-<div class="section" id="input-for-lte-line-transfer-the-partition-function-optional">
-<span id="sec-partition-function"></span><h3>INPUT for LTE line transfer: The partition function (optional)<a class="headerlink" href="#input-for-lte-line-transfer-the-partition-function-optional" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-for-lte-line-transfer-the-partition-function-optional">
+<span id="sec-partition-function"></span><h3>INPUT for LTE line transfer: The partition function (optional)<a class="headerlink" href="#input-for-lte-line-transfer-the-partition-function-optional" title="Permalink to this heading"></a></h3>
 <p>If you use the LTE mode (either <code class="docutils literal notranslate"><span class="pre">lines_mode=-1</span></code> or <code class="docutils literal notranslate"><span class="pre">lines_mode=1</span></code>), then the partition function is required to calculate, for
 a given temperature the populations of the various levels. Since this
 involves a summation over <em>all</em> levels of all kinds that can possibly be
@@ -894,9 +811,9 @@ is non-zero (example: Hydrogen <span class="math notranslate nohighlight">\(E_1=
 datafiles that contain only a subset of levels (which is in principle no problem
 for LTE calculations) then it is essential that the ground state is included in
 this list, and that it is the first level (<code class="docutils literal notranslate"><span class="pre">ilevel=1</span></code>).</p>
-</div>
-<div class="section" id="input-the-number-density-of-collision-partners-for-non-lte-transfer">
-<span id="sec-collpartner"></span><h3>INPUT: The number density of collision partners (for non-LTE transfer)<a class="headerlink" href="#input-the-number-density-of-collision-partners-for-non-lte-transfer" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="input-the-number-density-of-collision-partners-for-non-lte-transfer">
+<span id="sec-collpartner"></span><h3>INPUT: The number density of collision partners (for non-LTE transfer)<a class="headerlink" href="#input-the-number-density-of-collision-partners-for-non-lte-transfer" title="Permalink to this heading"></a></h3>
 <p>For non-LTE line transfer (see e.g. Sections <a class="reference internal" href="#sec-lvg"><span class="std std-ref">Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method</span></a>,
 <a class="reference internal" href="#sec-optthinpop"><span class="std std-ref">Non-LTE Transfer: The optically thin line assumption method</span></a>) the molecules can be collisionally excited. The collision
 rates for each pair of molecule + collision partner are given in the molecular
@@ -923,10 +840,10 @@ often not machine-readable.  Example, in <code class="docutils literal notransla
 (which is directly from the LAMDA database).  This is hard to decipher for
 RADMC-3D. Therefore you have to tell this explicitly in the file <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code>,
 and we refer to Section <a class="reference internal" href="#sec-line-dot-inp"><span class="std std-ref">INPUT: The line.inp file</span></a> for how to do this.</p>
-</div>
-</div>
-<div class="section" id="making-images-and-spectra-with-line-transfer">
-<h2>Making images and spectra with line transfer<a class="headerlink" href="#making-images-and-spectra-with-line-transfer" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="making-images-and-spectra-with-line-transfer">
+<h2>Making images and spectra with line transfer<a class="headerlink" href="#making-images-and-spectra-with-line-transfer" title="Permalink to this heading"></a></h2>
 <p>Making images and spectra with/of lines works in the same way as for the
 continuum. RADMC-3D will check if the file <code class="docutils literal notranslate"><span class="pre">lines.inp</span></code> is present in your
 directory, and if so, it will automatically switch on the line transfer. If you
@@ -994,8 +911,8 @@ maps.</p>
 <a class="reference internal" href="imagesspectra.html#sec-set-camera-frequencies"><span class="std std-ref">Specifying custom-made sets of wavelength points for the camera</span></a>. Note that keywords such as <code class="docutils literal notranslate"><span class="pre">incl</span></code>, <code class="docutils literal notranslate"><span class="pre">phi</span></code>,
 and any other keywords specifying the camera position, zooming factor etc, can
 all be used in addition to the above keywords.</p>
-<div class="section" id="speed-versus-realism-of-rendering-of-line-images-spectra">
-<span id="sec-line-render-speed-realism"></span><h3>Speed versus realism of rendering of line images/spectra<a class="headerlink" href="#speed-versus-realism-of-rendering-of-line-images-spectra" title="Permalink to this headline">¶</a></h3>
+<section id="speed-versus-realism-of-rendering-of-line-images-spectra">
+<span id="sec-line-render-speed-realism"></span><h3>Speed versus realism of rendering of line images/spectra<a class="headerlink" href="#speed-versus-realism-of-rendering-of-line-images-spectra" title="Permalink to this heading"></a></h3>
 <p>As usual with numerical modeling: including realism to the modeling goes at
 the cost of rendering speed. A ‘fully realistic’ rendering of a model
 spectrum or image of a gas line involves (assuming the level populations
@@ -1026,9 +943,9 @@ purposes virtually perfectly correct</em>. Just beware that when you render
 short-wavelength lines (optical) or you use large grains, i.e. when the
 scattering albedo at the wavelength of the line is not negligible, this may
 result in a mis-estimation of the continuum around the line.</p>
-</div>
-<div class="section" id="line-emission-scattered-off-dust-grains">
-<span id="sec-line-scat-off-dust"></span><h3>Line emission scattered off dust grains<a class="headerlink" href="#line-emission-scattered-off-dust-grains" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="line-emission-scattered-off-dust-grains">
+<span id="sec-line-scat-off-dust"></span><h3>Line emission scattered off dust grains<a class="headerlink" href="#line-emission-scattered-off-dust-grains" title="Permalink to this heading"></a></h3>
 <p><em>NOTE: The contents of this subsection may not be 100% implemented yet.</em></p>
 <p>Also any line emission from obscured regions that get scattered into the
 line of sight by the dust (if dust scattering is included) will be
@@ -1040,10 +957,10 @@ projected velocity of the dust will be added. Only the Doppler shift of the
 line-emitting region is accounted for. This is rarely a problem, because
 typically the dust that may scatter line emission is located far away from
 the source of line emission and moves at substantially lower speed.</p>
-</div>
-</div>
-<div class="section" id="non-lte-transfer-the-large-velocity-gradient-lvg-escape-probability-escprob-method">
-<span id="sec-lvg"></span><h2>Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method<a class="headerlink" href="#non-lte-transfer-the-large-velocity-gradient-lvg-escape-probability-escprob-method" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="non-lte-transfer-the-large-velocity-gradient-lvg-escape-probability-escprob-method">
+<span id="sec-lvg"></span><h2>Non-LTE Transfer: The Large Velocity Gradient (LVG) + Escape Probability (EscProb) method<a class="headerlink" href="#non-lte-transfer-the-large-velocity-gradient-lvg-escape-probability-escprob-method" title="Permalink to this heading"></a></h2>
 <p>The assumption that the energy levels of a molecule or atom are always
 populated according to a thermal distribution (the so-called ‘local
 thermodynamic equilibrium’, or LTE, assumption) is valid under certain
@@ -1196,9 +1113,9 @@ populations is avoided.</p>
 with the dust continuum radiation field.</em></p>
 <p><em>NOTE: Currently this method does not yet include radiative pumping
 by stellar radiation. Will be included soon.</em></p>
-</div>
-<div class="section" id="non-lte-transfer-the-optically-thin-line-assumption-method">
-<span id="sec-optthinpop"></span><h2>Non-LTE Transfer: The optically thin line assumption method<a class="headerlink" href="#non-lte-transfer-the-optically-thin-line-assumption-method" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="non-lte-transfer-the-optically-thin-line-assumption-method">
+<span id="sec-optthinpop"></span><h2>Non-LTE Transfer: The optically thin line assumption method<a class="headerlink" href="#non-lte-transfer-the-optically-thin-line-assumption-method" title="Permalink to this heading"></a></h2>
 <p>An even simpler non-LTE method is applicable in <em>very</em> dilute
 media, in which the lines are all optically thin. This means that
 a photon that is emitted by the gas will never be reabsorbed.
@@ -1223,9 +1140,9 @@ by stellar radiation.</em></p>
 the populations of the levels are computed under the {bf assumption}
 that the lines are optically thin. If you subsequently make a spectrum
 or image of your model, all absorption effects are again included.*</p>
-</div>
-<div class="section" id="non-lte-transfer-full-non-local-modes-future">
-<span id="sec-nonlte-nonlocal"></span><h2>Non-LTE Transfer: Full non-local modes (FUTURE)<a class="headerlink" href="#non-lte-transfer-full-non-local-modes-future" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="non-lte-transfer-full-non-local-modes-future">
+<span id="sec-nonlte-nonlocal"></span><h2>Non-LTE Transfer: Full non-local modes (FUTURE)<a class="headerlink" href="#non-lte-transfer-full-non-local-modes-future" title="Permalink to this heading"></a></h2>
 <p>In the near future RADMC-3D will hopefully also feature full non-LTE transfer,
 in which the level populations are coupled to the full non-local radiation
 field. Methods such as <em>lambda iteration</em> and <em>accelerated lambda iteration</em>
@@ -1243,9 +1160,9 @@ ray-tracing, and the populations do not have to be written to file (only if
 you want to inspect them: Section <a class="reference internal" href="#sec-nonlte-write-levelpop"><span class="std std-ref">Non-LTE Transfer: Inspecting the level populations</span></a>).</p>
 <p>For now, however, RADMC-3D still does not have the non-local non-LTE
 modes.</p>
-</div>
-<div class="section" id="non-lte-transfer-inspecting-the-level-populations">
-<span id="sec-nonlte-write-levelpop"></span><h2>Non-LTE Transfer: Inspecting the level populations<a class="headerlink" href="#non-lte-transfer-inspecting-the-level-populations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="non-lte-transfer-inspecting-the-level-populations">
+<span id="sec-nonlte-write-levelpop"></span><h2>Non-LTE Transfer: Inspecting the level populations<a class="headerlink" href="#non-lte-transfer-inspecting-the-level-populations" title="Permalink to this heading"></a></h2>
 <p>When doing line radiative transfer it is often useful to inspect the level
 populations. For instance, you may want to inspect how far from LTE your
 populations are, or just check if the results are reasonable.  There are two
@@ -1306,9 +1223,9 @@ changes if you use ‘layers’.</p>
 have, however, here the extra complication that at each cell we have more
 than one number. Essentially this simply means that the length of the data
 per cell is larger, so that fewer cells fit into a single record.</p>
-</div>
-<div class="section" id="non-lte-transfer-reading-the-level-populations-from-file">
-<span id="sec-nonlte-read-levelpop"></span><h2>Non-LTE Transfer: Reading the level populations from file<a class="headerlink" href="#non-lte-transfer-reading-the-level-populations-from-file" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="non-lte-transfer-reading-the-level-populations-from-file">
+<span id="sec-nonlte-read-levelpop"></span><h2>Non-LTE Transfer: Reading the level populations from file<a class="headerlink" href="#non-lte-transfer-reading-the-level-populations-from-file" title="Permalink to this heading"></a></h2>
 <p>Sometimes you may want to make images and/or spectra of lines based on level
 populations that you calculated using another program (or calculated using
 RADMC-3D at some earlier time). You can ask RADMC-3D to read these
@@ -1328,9 +1245,9 @@ file).</p>
 <p>Because of the rather lage size of these files for 3-D models, it might be
 worthwhile to make sure to reduce the number of levels of the
 <code class="docutils literal notranslate"><span class="pre">molecule_xx.inp</span></code> files to only those you actually need.</p>
-</div>
-<div class="section" id="what-can-go-wrong-with-line-transfer">
-<span id="sec-lines-pitfalls"></span><h2>What can go wrong with line transfer?<a class="headerlink" href="#what-can-go-wrong-with-line-transfer" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="what-can-go-wrong-with-line-transfer">
+<span id="sec-lines-pitfalls"></span><h2>What can go wrong with line transfer?<a class="headerlink" href="#what-can-go-wrong-with-line-transfer" title="Permalink to this heading"></a></h2>
 <p>Even the simple task of performing a ray-tracing line transfer calculation
 with given level populations (i.e. the so-called <em>formal transfer
 equation</em>) is a non-trivial task in complex 3-D AMR models with possibly
@@ -1390,9 +1307,9 @@ systematic method is the ‘doppler catching’ method described in Section
 method of Section <a class="reference internal" href="imagesspectra.html#sec-wavelength-bands"><span class="std std-ref">Heads-up: In reality wavelength are actually wavelength bands</span></a> to make it even more
 perfect).</p></li>
 </ol>
-</div>
-<div class="section" id="preventing-doppler-jumps-the-doppler-catching-method">
-<span id="sec-doppler-catching"></span><h2>Preventing doppler jumps: The ‘doppler catching method’<a class="headerlink" href="#preventing-doppler-jumps-the-doppler-catching-method" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="preventing-doppler-jumps-the-doppler-catching-method">
+<span id="sec-doppler-catching"></span><h2>Preventing doppler jumps: The ‘doppler catching method’<a class="headerlink" href="#preventing-doppler-jumps-the-doppler-catching-method" title="Permalink to this heading"></a></h2>
 <p>If the local co-moving line width of a line (due to thermal/fundamental
 broadning and/or local subgrid ‘microturbulence’) is much smaller than the
 typical velocity fields in the model, then a dangerous situation can
@@ -1407,20 +1324,24 @@ representation of this problem. In reality the doppler shift between these
 two cells would be smooth, and thus the line would smoothly pass over the
 wavelength-of-sight, and thus make a contribution. Therefore the numerical
 integration may thus go wrong.</p>
-<div class="figure align-default" id="id1">
+<figure class="align-default" id="id1">
 <span id="fig-doppler-jump"></span><a class="reference internal image-reference" href="_images/line_doppjump.png"><img alt="_images/line_doppjump.png" src="_images/line_doppjump.png" style="width: 75%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Pictographic representation of the doppler jumping problem with
-ray-tracing through a model with strong cell-to-cell velocity differences.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id2">
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Pictographic representation of the doppler jumping problem with
+ray-tracing through a model with strong cell-to-cell velocity differences.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
 <span id="fig-doppler-catch"></span><a class="reference internal image-reference" href="_images/line_doppcatch.png"><img alt="_images/line_doppcatch.png" src="_images/line_doppcatch.png" style="width: 75%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Right: Pictographic representation of the doppler catching method to
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Right: Pictographic representation of the doppler catching method to
 prevent this problem: First of all, second order integration is done
 instead of first order. Secondly, the method automatically detects a
 possibly dangerous doppler jump and makes sub-steps to neatly integrate
 over the line that shifts in- and out of the wavelength channel of
-interest.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</div>
+interest.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 <p>The problem is described in more detail in Section <a class="reference internal" href="imagesspectra.html#sec-wavelength-bands"><span class="std std-ref">Heads-up: In reality wavelength are actually wavelength bands</span></a>,
 and one possible solution is proposed there.  But that solution does not always
 solve the problem.</p>
@@ -1545,9 +1466,9 @@ code. <em>As of version 0.41 of this code a method is in place to prevent
 this</em>. It is switched on by default, but it can be switched off manually
 for testing purposes. See Section <a class="reference internal" href="imagesspectra.html#sec-secord-spher"><span class="std std-ref">Second order integration in spherical coordinates: a subtle issue</span></a> for details.</p></li>
 </ul>
-</div>
-<div class="section" id="background-information-calculation-and-storage-of-level-populations">
-<span id="sec-calcstore-levpop"></span><h2>Background information: Calculation and storage of level populations<a class="headerlink" href="#background-information-calculation-and-storage-of-level-populations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="background-information-calculation-and-storage-of-level-populations">
+<span id="sec-calcstore-levpop"></span><h2>Background information: Calculation and storage of level populations<a class="headerlink" href="#background-information-calculation-and-storage-of-level-populations" title="Permalink to this heading"></a></h2>
 <p>If RADMC-3D makes an image or a spectrum with molecular (or atomic) lines
 included, then the level populations of the molecules/atoms have to be
 computed. In the standard method of ray-tracing of images or spectra, these
@@ -1596,7 +1517,7 @@ command line. Example:</p>
 <p>This then creates (in addition to the spectrum) a file called (for our
 example of the CO molecule) <code class="docutils literal notranslate"><span class="pre">levelpop_co.dat</span></code>. Here is how you can read
 this data in Python:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3d_tools</span> <span class="k">import</span> <span class="n">simpleread</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3d_tools</span> <span class="kn">import</span> <span class="n">simpleread</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">simpleread</span><span class="o">.</span><span class="n">read_levelpop</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1607,9 +1528,9 @@ afford to do so with the size of your computer’s memory), you can make RADMC-3
 do so by adding <code class="docutils literal notranslate"><span class="pre">noautosubset</span></code> as a keyword to the command line, or by adding
 <code class="docutils literal notranslate"><span class="pre">lines_autosubset</span> <span class="pre">=</span> <span class="pre">0</span></code> to the <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> file. However, for other than
 code testing purposes, it seems unlikely you will wish to do this.</p>
-</div>
-<div class="section" id="in-case-it-is-necessary-on-the-fly-calculation-of-populations">
-<span id="sec-onthefly"></span><h2>In case it is necessary: On-the-fly calculation of populations<a class="headerlink" href="#in-case-it-is-necessary-on-the-fly-calculation-of-populations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="in-case-it-is-necessary-on-the-fly-calculation-of-populations">
+<span id="sec-onthefly"></span><h2>In case it is necessary: On-the-fly calculation of populations<a class="headerlink" href="#in-case-it-is-necessary-on-the-fly-calculation-of-populations" title="Permalink to this heading"></a></h2>
 <p>There might be rare circumstances in which you do not want to have to store
 the level populations in a global array. For example: you are making a spectrum
 of the CO bandhead, in which case you have many tens of lines in a single
@@ -1630,9 +1551,9 @@ second-order integration (Section <a class="reference internal" href="imagesspec
 catching (Section <a class="reference internal" href="#sec-doppler-catching"><span class="std std-ref">Preventing doppler jumps: The ‘doppler catching method’</span></a>) together with non-trivial
 population solving methods like LVG. So please use the on-the-fly method only
 when you are forced to do so (for memory reasons).</p>
-</div>
-<div class="section" id="for-experts-selecting-a-subset-of-lines-and-levels-manually">
-<span id="sec-line-selection"></span><h2>For experts: Selecting a subset of lines and levels ‘manually’<a class="headerlink" href="#for-experts-selecting-a-subset-of-lines-and-levels-manually" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="for-experts-selecting-a-subset-of-lines-and-levels-manually">
+<span id="sec-line-selection"></span><h2>For experts: Selecting a subset of lines and levels ‘manually’<a class="headerlink" href="#for-experts-selecting-a-subset-of-lines-and-levels-manually" title="Permalink to this heading"></a></h2>
 <p>As explained in Section <a class="reference internal" href="#sec-calcstore-levpop"><span class="std std-ref">Background information: Calculation and storage of level populations</span></a>, RADMC-3D automatically
 makes a selection of levels for which it will allocate memory for the global
 level population storage.</p>
@@ -1670,63 +1591,38 @@ line with:</p>
 <p>The ‘1’ says that a list of levels follows, the ‘2’ says that two levels will be
 selected and the next line with ‘3’ and ‘4’ say that levels 3 and 4 should be
 selected.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="imagesspectra.html" class="btn btn-neutral float-right" title="Making images and spectra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="dustradtrans.html" class="btn btn-neutral float-left" title="Dust continuum radiative transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dustradtrans.html" class="btn btn-neutral float-left" title="Dust continuum radiative transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="imagesspectra.html" class="btn btn-neutral float-right" title="Making images and spectra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

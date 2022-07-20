@@ -895,6 +895,40 @@ multiple-scattering contribution is compared to single scattering. But of
 course, it is always safer to simply increase ``nphot_scat`` and patiently wait
 until the Monte Carlo run is finished.
 
+.. _sec-select-scattering:
+
+Tip: Analyzing the effect of multiple scattering using ``selectscat``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are interested in analyzing the role that multiple scattering plays in your
+image (as opposed to single scattering), you can ask RADMC-3D to compute the
+scattering source function only for, for instance, the second scattering::
+
+  radmc3d image lambda 1.0 selectscat 2 2
+
+Note that this should not be used for production runs, because the image that
+is produced is unphysical (it omits the first and third, fourth etc scatterings).
+But it can be useful to get a feeling for how important multiple scattering
+is, or to investigate if certain features in your image are due to multiple
+scattering or not. You can also select only the first scattering::
+  
+  radmc3d image lambda 1.0 selectscat 1 1
+
+or all scatterings except the first::
+
+  radmc3d image lambda 1.0 selectscat 2 100000
+
+Note that if you make an image with ``selectscat``, the thermal emission from
+the dust is still included (as is the case without ``selectscat``). So if
+you want to see *only* the scattered light in the image, you need to manually
+set the dust temperature to zero everywhere (in the file ``dust_temperature.dat``,
+see Chapter :ref:`chap-input-files`).
+
+Also note that you can use ``selectscat`` also for the monochromatic
+Monte Carlo for computing the mean intensity field
+(see Section :ref:`sec-dust-monochromatic-monte-carlo`).
+
+
 .. _sec-simple-single-scattering:
 
 Simplified single-scattering mode (spherical coordinates)

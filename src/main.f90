@@ -2352,6 +2352,13 @@ subroutine read_radmcinp_file()
      call parse_input_double ('camera_min_drr@               ',mindrr)
      call parse_input_integer('camera_interpol_jnu@          ',interpoljnu)
      call parse_input_double ('camera_maxdphi@               ',camera_maxdphi)
+     idum=0
+     call parse_input_integer('camera_diagnostics_subpix@    ',idum)
+     if(idum.eq.0) then
+        camera_diagnostics_subpix = .false.
+     else
+        camera_diagnostics_subpix = .true.
+     endif
      call parse_input_integer('sources_interpol_jnu@         ',interpoljnu)
 !     call parse_input_double ('lines_maxdoppler@             ',lines_maxdoppler)
      call parse_input_integer('lines_mode@                   ',lines_mode)

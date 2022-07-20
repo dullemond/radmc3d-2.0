@@ -250,7 +250,7 @@ is a non-exhaustive list of the variables that can be set.
   :ref:`sec-recursive-subpixeling`), for spherical coordinates, 
   preventing that too coarse subpixeling would reduce the accuracy. 
 
-* ``camera_min_dr`` (default 0.003) *[Fine-tuning only]*
+* ``camera_min_drr`` (default 0.003) *[Fine-tuning only]*
   
   Fine-tuning parameter for recursive subpixeling, for spherical coordinates, 
   assuring that not too fine subpixeling would slow down the rendering of

@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Modifying RADMC-3D: Internal setup and user-specified radiative processes &mdash; radmc3d 2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Python analysis tool set" href="pythontools.html" />
     <link rel="prev" title="More information about the treatment of stars" href="stars.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> radmc3d
-          
-
-          
+            <a href="index.html" class="icon icon-home"> radmc3d
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstarting with RADMC-3D</a></li>
@@ -115,71 +71,32 @@
 <li class="toctree-l1"><a class="reference internal" href="versiontracker.html">Version tracker: Development history</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">radmc3d</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Modifying RADMC-3D: Internal setup and user-specified radiative processes</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/internalsetup.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="modifying-radmc-3d-internal-setup-and-user-specified-radiative-processes">
-<span id="chap-internal-setup"></span><h1>Modifying RADMC-3D: Internal setup and user-specified radiative processes<a class="headerlink" href="#modifying-radmc-3d-internal-setup-and-user-specified-radiative-processes" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="modifying-radmc-3d-internal-setup-and-user-specified-radiative-processes">
+<span id="chap-internal-setup"></span><h1>Modifying RADMC-3D: Internal setup and user-specified radiative processes<a class="headerlink" href="#modifying-radmc-3d-internal-setup-and-user-specified-radiative-processes" title="Permalink to this heading"></a></h1>
 <p>It has been mentioned several times before that as an alternative to the
 standard <cite>compile once-and-for-all’ philosophy, one can also use RADMC-3D by
 modifying the code directly so that ``radmc3d`</cite> will have new
@@ -192,8 +109,8 @@ that the editings to the fortran files are done in the local way described
 in Section <a class="reference internal" href="installation.html#sec-special-purpose-compile"><span class="std std-ref">Making special-purpose modified versions of RADMC-3D (optional)</span></a> so that the original source
 files in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory stay unaffected, and only local
 copies are edited.</p>
-<div class="section" id="setting-up-a-model-inside-of-radmc-3d">
-<h2>Setting up a model <em>inside</em> of RADMC-3D<a class="headerlink" href="#setting-up-a-model-inside-of-radmc-3d" title="Permalink to this headline">¶</a></h2>
+<section id="setting-up-a-model-inside-of-radmc-3d">
+<h2>Setting up a model <em>inside</em> of RADMC-3D<a class="headerlink" href="#setting-up-a-model-inside-of-radmc-3d" title="Permalink to this heading"></a></h2>
 <p>The most common reason for editing the code itself is for setting up the
 model <em>internally</em> rather than reading in all data via input files. For
 a list of advantages and disadvantages of setting models up internally as
@@ -220,10 +137,12 @@ call from within the standard subroutines.</p></li>
 <li><p>Introduce your own <code class="docutils literal notranslate"><span class="pre">radmc3d.inp</span></code> namelist variables (see Section
 <a class="reference internal" href="#sec-predef-userdef"><span class="std std-ref">The pre-defined subroutines of the userdef_module.f90</span></a>).</p></li>
 </ul>
-<div class="figure align-default" id="id1">
-<span id="fig-dataflow-basic-userdef"></span><img alt="_images/dataflow-basic-userdef.svg" src="_images/dataflow-basic-userdef.svg" /><p class="caption"><span class="caption-number">Fig. 27 </span><span class="caption-text">Pictographic representation of the dataflow for the case when you define your
-model <em>internally</em> using the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
+<figure class="align-default" id="id1">
+<span id="fig-dataflow-basic-userdef"></span><img alt="_images/dataflow-basic-userdef.svg" src="_images/dataflow-basic-userdef.svg" /><figcaption>
+<p><span class="caption-number">Fig. 27 </span><span class="caption-text">Pictographic representation of the dataflow for the case when you define your
+model <em>internally</em> using the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 <p>Often you still want some of the input data to be still read in in the usual
 way, using input files. For instance, you may want to still read the
 <code class="docutils literal notranslate"><span class="pre">dustopac.inp</span></code> and the opacities using the <code class="docutils literal notranslate"><span class="pre">dustkappa_xxx.inp</span></code> files. This
@@ -234,9 +153,9 @@ learn how to do this is to start from the example directories in which a model
 is set up with the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> method.</p>
 <p>In Fig. <a class="reference internal" href="#fig-dataflow-basic-userdef"><span class="std std-numref">Fig. 27</span></a> the dataflow for the user-defined
 model setup is graphically depicted.</p>
-</div>
-<div class="section" id="the-pre-defined-subroutines-of-the-userdef-module-f90">
-<span id="sec-predef-userdef"></span><h2>The pre-defined subroutines of the userdef_module.f90<a class="headerlink" href="#the-pre-defined-subroutines-of-the-userdef-module-f90" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-pre-defined-subroutines-of-the-userdef-module-f90">
+<span id="sec-predef-userdef"></span><h2>The pre-defined subroutines of the userdef_module.f90<a class="headerlink" href="#the-pre-defined-subroutines-of-the-userdef-module-f90" title="Permalink to this heading"></a></h2>
 <p>The idea of the <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> is that it contains a number of standard
 pre-defined subroutines that are called from the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> code (and <em>only</em>
 from there). Just browse through the <code class="docutils literal notranslate"><span class="pre">main.f90</span></code> file and search for the
@@ -370,9 +289,9 @@ following types of data are still supposed to be read from file:</p>
 </div></blockquote>
 <p>Please have a look in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory for models
 which are set up in this internal way.</p>
-</div>
-<div class="section" id="some-caveats-and-advantages-of-internal-model-setup">
-<span id="sec-internalsetup-proscons"></span><h2>Some caveats and advantages of internal model setup<a class="headerlink" href="#some-caveats-and-advantages-of-internal-model-setup" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="some-caveats-and-advantages-of-internal-model-setup">
+<span id="sec-internalsetup-proscons"></span><h2>Some caveats and advantages of internal model setup<a class="headerlink" href="#some-caveats-and-advantages-of-internal-model-setup" title="Permalink to this heading"></a></h2>
 <p>Setting up the models internally has several advantages as well as
 disadvantages compared to the standard way of feeding the models into
 <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> via files. The advantages are, among others:</p>
@@ -417,9 +336,9 @@ if it has its grid from inside (i.e. it has not read the grid from the file
 code, as you will need to directly insert code lines in the
 <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> file.</p></li>
 </ul>
-</div>
-<div class="section" id="using-the-userdef-module-to-compute-integrals-of-j-nu">
-<span id="sec-compute-radiation-integrals"></span><h2>Using the userdef module to compute integrals of <span class="math notranslate nohighlight">\(J_\nu\)</span><a class="headerlink" href="#using-the-userdef-module-to-compute-integrals-of-j-nu" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="using-the-userdef-module-to-compute-integrals-of-j-nu">
+<span id="sec-compute-radiation-integrals"></span><h2>Using the userdef module to compute integrals of <span class="math notranslate nohighlight">\(J_\nu\)</span><a class="headerlink" href="#using-the-userdef-module-to-compute-integrals-of-j-nu" title="Permalink to this heading"></a></h2>
 <p>With the monochromatic Monte Carlo computation (see Section
 <a class="reference internal" href="dustradtrans.html#sec-dust-monochromatic-monte-carlo"><span class="std std-ref">Special-purpose feature: Computing the local radiation field</span></a>) we can calculate the mean intensity
 <span class="math notranslate nohighlight">\(J_\nu\)</span> at every location in the model at a user-defined set of
@@ -445,9 +364,9 @@ done. This saves a huge amount of memory.</p>
 <p>Since this is somewhat hard to explain in this PDF document, we refer to
 the example model <code class="docutils literal notranslate"><span class="pre">run_example_jnu_integral/</span></code>.</p>
 <p><em>STILL IN PROGRESS.</em></p>
-</div>
-<div class="section" id="some-tips-and-tricks-for-programming-user-defined-subroutines">
-<h2>Some tips and tricks for programming user-defined subroutines<a class="headerlink" href="#some-tips-and-tricks-for-programming-user-defined-subroutines" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="some-tips-and-tricks-for-programming-user-defined-subroutines">
+<h2>Some tips and tricks for programming user-defined subroutines<a class="headerlink" href="#some-tips-and-tricks-for-programming-user-defined-subroutines" title="Permalink to this heading"></a></h2>
 <p>Apart from the standard subroutines that <em>must</em> be present in the
 <code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> file (see Section <a class="reference internal" href="#sec-predef-userdef"><span class="std std-ref">The pre-defined subroutines of the userdef_module.f90</span></a>), you are
 free to add any subroutines or functions that you want, which you can call from
@@ -486,9 +405,9 @@ the AMR-tree structure of this cell. The pointer <code class="docutils literal n
 <span class="n">zi_r</span> <span class="o">=</span> <span class="n">amr_finegrid_xi</span><span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">ixyzf</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">b</span><span class="o">%</span><span class="n">level</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="creating-your-own-emission-and-absorption-processes">
-<h2>Creating your own emission and absorption processes<a class="headerlink" href="#creating-your-own-emission-and-absorption-processes" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="creating-your-own-emission-and-absorption-processes">
+<h2>Creating your own emission and absorption processes<a class="headerlink" href="#creating-your-own-emission-and-absorption-processes" title="Permalink to this heading"></a></h2>
 <p>RADMC-3D Allows you to add your own physics to the ray-tracing images and
 spectra. At every point during the ray-tracing process, when it computes the
 emissivity and extinction coefficients <span class="math notranslate nohighlight">\(j_\nu\)</span> and <span class="math notranslate nohighlight">\(\alpha_\nu\)</span> it
@@ -513,63 +432,38 @@ that is not usually read into RADMC-3D, you can add read commands in the
 </div>
 <p>See the example directory <code class="docutils literal notranslate"><span class="pre">examples/run_simple_userdefsrc</span></code> for
 more ideas.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="pythontools.html" class="btn btn-neutral float-right" title="Python analysis tool set" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="stars.html" class="btn btn-neutral float-left" title="More information about the treatment of stars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="stars.html" class="btn btn-neutral float-left" title="More information about the treatment of stars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pythontools.html" class="btn btn-neutral float-right" title="Python analysis tool set" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Cornelis Dullemond
-
-    </p>
+    <p>&#169; Copyright 2020, Cornelis Dullemond.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
