@@ -356,7 +356,7 @@ then you only need to specify 1 million of them. The most compact form of
   <int8:2>
   <int8:4>
   <int8:5>
-  <int8:1000000>
+  <int8:5000000>
   <int8:1>
   <dbl8:density[1,ispec=1]>
   ..
