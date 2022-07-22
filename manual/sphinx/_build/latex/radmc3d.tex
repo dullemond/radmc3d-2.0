@@ -60,7 +60,7 @@
 
 
 \title{radmc3d}
-\date{Jul 01, 2022}
+\date{Jul 22, 2022}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -13999,6 +13999,90 @@ will get:
 \sphinxAtStartPar
 Note that only the mean intensity data (the main data) are single precision
 floats.
+
+
+\section{Special binary input/output mode for embedding shearing box model into RADMC\sphinxhyphen{}3D}
+\label{\detokenize{binaryio:special-binary-input-output-mode-for-embedding-shearing-box-model-into-radmc-3d}}\label{\detokenize{binaryio:sec-shearing-box}}
+\sphinxAtStartPar
+Many hydrodynamics and magnetohydrodynamics models of accretion disks are
+performed in the so\sphinxhyphen{}called shearing box approach. In this approach a small part
+of the disk is modelled with periodic boundary conditions and a background
+shearing motion. The advantage of this approach for the time\sphinxhyphen{}dependent modeling
+of the dynamics of disks is that it allows much higher resolution and does not
+suffer from boundary effects (other than the box size). Therefore it is still
+widely in use.
+
+\sphinxAtStartPar
+To see what such a model would look like when observed with e.g.  ALMA, the box
+would have to be “ported” to a 3D RADMC\sphinxhyphen{}3D grid. Since the local shearing box
+usually does not cover all 360 degrees in azimuth, it is generally necessary to
+make several copies of the box in \(\phi\)\sphinxhyphen{}direction. This requires a bit of
+fine\sphinxhyphen{}tuning, as the box must fit an integer number of times between
+\(\phi=0\) and \(\phi=2\pi\). This duplication (or better
+\(n\)\sphinxhyphen{}plicaton with \(n\) being the number of times you copy in
+\(\phi\)\sphinxhyphen{}direction) produces input files that are \(n\) times as large
+as the amount of information they contain. This is an unnecessary waste of
+harddisk space. It should be possible for RADMC\sphinxhyphen{}3D to read in the box data once,
+and internally copy it \(n\) times.
+
+\sphinxAtStartPar
+This is precisely the special input/output mode for embedding shearing box model
+into RADMC\sphinxhyphen{}3D. It is not truly necessary, but it saves lots of disk space.
+
+\sphinxAtStartPar
+\sphinxstyleemphasis{Note:} For now this works only for \sphinxcode{\sphinxupquote{dust\_density.binp}} and
+\sphinxcode{\sphinxupquote{dust\_temperature.bdat}}. And it only works in binary file format (\sphinxcode{\sphinxupquote{.binp}} or
+\sphinxcode{\sphinxupquote{.bdat}}). And, finally, it works only for spherical coordinates and for
+regular, not\sphinxhyphen{}AMR, grids.
+
+\sphinxAtStartPar
+The trick is to set the \sphinxcode{\sphinxupquote{iformat}} number at the beginning of the file (which
+is normally set to 1) to the value 2. Then you put as data only the data of one
+of the \(n\) copies. RADMC\sphinxhyphen{}3D will then automatically internally make
+\(n\) copies of the data.  Then you add an additional integer right after
+the precision integer, which gives the value of \(n\). The binary file
+format looks like the following
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{n}{iformat}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{n}{precis}\PYG{o}{=}\PYG{l+m+mi}{8}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{n}{ncopies}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{n}{nrcells}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{n}{nrspec}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{dbl8}\PYG{p}{:}\PYG{n}{density}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{ispec}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{\PYGZgt{}}
+\PYG{o}{.}\PYG{o}{.}
+\PYG{o}{\PYGZlt{}}\PYG{n}{dbl8}\PYG{p}{:}\PYG{n}{density}\PYG{p}{[}\PYG{n}{nrcells}\PYG{o}{/}\PYG{n}{ncopies}\PYG{p}{,}\PYG{n}{ispec}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{dbl8}\PYG{p}{:}\PYG{n}{density}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{ispec}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{\PYGZgt{}}
+\PYG{o}{.}\PYG{o}{.}
+\PYG{o}{.}\PYG{o}{.}
+\PYG{o}{.}\PYG{o}{.}
+\PYG{o}{\PYGZlt{}}\PYG{n}{dbl8}\PYG{p}{:}\PYG{n}{density}\PYG{p}{[}\PYG{n}{nrcells}\PYG{o}{/}\PYG{n}{ncopies}\PYG{p}{,}\PYG{n}{ispec}\PYG{o}{=}\PYG{n}{nrspec}\PYG{p}{]}\PYG{o}{\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+You can save even more disk space by going to single precision (setting \sphinxcode{\sphinxupquote{precis=4}}).
+
+\sphinxAtStartPar
+The other files all remain the same (also the grid file \sphinxcode{\sphinxupquote{amr\_grid.inp}} stays
+the same and still includes all grid cells, not just those of the box).
+
+\sphinxAtStartPar
+Example: For a box of about 16 pressure scale heights in size in
+\(\phi\)\sphinxhyphen{}direction at 100 au around a solar type star, you typically need to
+make \(n=5\) copies of the box. If you have, say, in total 5 million cells,
+then you only need to specify 1 million of them. The most compact form of
+\sphinxcode{\sphinxupquote{dust\_density.binp}} (single precision) would then look
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{l+m+mi}{2}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{l+m+mi}{4}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{l+m+mi}{5}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{l+m+mi}{5000000}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{int8}\PYG{p}{:}\PYG{l+m+mi}{1}\PYG{o}{\PYGZgt{}}
+\PYG{o}{\PYGZlt{}}\PYG{n}{dbl8}\PYG{p}{:}\PYG{n}{density}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{ispec}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{\PYGZgt{}}
+\PYG{o}{.}\PYG{o}{.}
+\PYG{o}{\PYGZlt{}}\PYG{n}{dbl8}\PYG{p}{:}\PYG{n}{density}\PYG{p}{[}\PYG{l+m+mi}{1000000}\PYG{p}{,}\PYG{n}{ispec}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{\PYGZgt{}}
+\end{sphinxVerbatim}
 
 \sphinxstepscope
 

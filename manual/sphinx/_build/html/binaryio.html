@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -59,6 +60,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-switch-to-binary-or-back-to-ascii">How to switch to binary (or back to ascii)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#binary-i-o-file-format-of-radmc-3d">Binary I/O file format of RADMC-3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-binary-input-output-mode-for-embedding-shearing-box-model-into-radmc-3d">Special binary input/output mode for embedding shearing box model into RADMC-3D</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="clioptions.html">Command-line options</a></li>
@@ -382,6 +384,72 @@ will get:</p>
 </div>
 <p>Note that only the mean intensity data (the main data) are single precision
 floats.</p>
+</section>
+<section id="special-binary-input-output-mode-for-embedding-shearing-box-model-into-radmc-3d">
+<span id="sec-shearing-box"></span><h2>Special binary input/output mode for embedding shearing box model into RADMC-3D<a class="headerlink" href="#special-binary-input-output-mode-for-embedding-shearing-box-model-into-radmc-3d" title="Permalink to this heading"></a></h2>
+<p>Many hydrodynamics and magnetohydrodynamics models of accretion disks are
+performed in the so-called shearing box approach. In this approach a small part
+of the disk is modelled with periodic boundary conditions and a background
+shearing motion. The advantage of this approach for the time-dependent modeling
+of the dynamics of disks is that it allows much higher resolution and does not
+suffer from boundary effects (other than the box size). Therefore it is still
+widely in use.</p>
+<p>To see what such a model would look like when observed with e.g.  ALMA, the box
+would have to be “ported” to a 3D RADMC-3D grid. Since the local shearing box
+usually does not cover all 360 degrees in azimuth, it is generally necessary to
+make several copies of the box in <span class="math notranslate nohighlight">\(\phi\)</span>-direction. This requires a bit of
+fine-tuning, as the box must fit an integer number of times between
+<span class="math notranslate nohighlight">\(\phi=0\)</span> and <span class="math notranslate nohighlight">\(\phi=2\pi\)</span>. This duplication (or better
+<span class="math notranslate nohighlight">\(n\)</span>-plicaton with <span class="math notranslate nohighlight">\(n\)</span> being the number of times you copy in
+<span class="math notranslate nohighlight">\(\phi\)</span>-direction) produces input files that are <span class="math notranslate nohighlight">\(n\)</span> times as large
+as the amount of information they contain. This is an unnecessary waste of
+harddisk space. It should be possible for RADMC-3D to read in the box data once,
+and internally copy it <span class="math notranslate nohighlight">\(n\)</span> times.</p>
+<p>This is precisely the special input/output mode for embedding shearing box model
+into RADMC-3D. It is not truly necessary, but it saves lots of disk space.</p>
+<p><em>Note:</em> For now this works only for <code class="docutils literal notranslate"><span class="pre">dust_density.binp</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dust_temperature.bdat</span></code>. And it only works in binary file format (<code class="docutils literal notranslate"><span class="pre">.binp</span></code> or
+<code class="docutils literal notranslate"><span class="pre">.bdat</span></code>). And, finally, it works only for spherical coordinates and for
+regular, not-AMR, grids.</p>
+<p>The trick is to set the <code class="docutils literal notranslate"><span class="pre">iformat</span></code> number at the beginning of the file (which
+is normally set to 1) to the value 2. Then you put as data only the data of one
+of the <span class="math notranslate nohighlight">\(n\)</span> copies. RADMC-3D will then automatically internally make
+<span class="math notranslate nohighlight">\(n\)</span> copies of the data.  Then you add an additional integer right after
+the precision integer, which gives the value of <span class="math notranslate nohighlight">\(n\)</span>. The binary file
+format looks like the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">iformat</span><span class="o">=</span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">precis</span><span class="o">=</span><span class="mi">8</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">ncopies</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrcells</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="n">nrspec</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="o">/</span><span class="n">ncopies</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="n">nrcells</span><span class="o">/</span><span class="n">ncopies</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="n">nrspec</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>You can save even more disk space by going to single precision (setting <code class="docutils literal notranslate"><span class="pre">precis=4</span></code>).</p>
+<p>The other files all remain the same (also the grid file <code class="docutils literal notranslate"><span class="pre">amr_grid.inp</span></code> stays
+the same and still includes all grid cells, not just those of the box).</p>
+<p>Example: For a box of about 16 pressure scale heights in size in
+<span class="math notranslate nohighlight">\(\phi\)</span>-direction at 100 au around a solar type star, you typically need to
+make <span class="math notranslate nohighlight">\(n=5\)</span> copies of the box. If you have, say, in total 5 million cells,
+then you only need to specify 1 million of them. The most compact form of
+<code class="docutils literal notranslate"><span class="pre">dust_density.binp</span></code> (single precision) would then look</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="mi">4</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="mi">5</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="mi">5000000</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">int8</span><span class="p">:</span><span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">..</span>
+<span class="o">&lt;</span><span class="n">dbl8</span><span class="p">:</span><span class="n">density</span><span class="p">[</span><span class="mi">1000000</span><span class="p">,</span><span class="n">ispec</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 </section>
 </section>
 
