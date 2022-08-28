@@ -16,6 +16,7 @@ radmc3dPy/radsources.py
 radmc3dPy/reggrid.py
 radmc3dPy/setup.py
 radmc3dPy/staratm.py
+radmc3dPy/subbox.py
 radmc3dPy.egg-info/PKG-INFO
 radmc3dPy.egg-info/SOURCES.txt
 radmc3dPy.egg-info/dependency_links.txt
