@@ -1516,7 +1516,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
         implot = plt.imshow(data, extent=ext, cmap=cmap, interpolation=interpolation, **kwargs)
         plt.xlabel(xlab)
         plt.ylabel(ylab)
-        plt.title(r'$\lambda$=' + ("%.5f" % image.wav[ifreq]) + r'$\mu$m')
+        plt.title(r'$\lambda$=' + ("%.5g" % image.wav[ifreq]) + r'$\mu$m')
         cbar = plt.colorbar(implot)
         cbar.set_label(cb_label)
         plt.show()
