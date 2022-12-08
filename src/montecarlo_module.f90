@@ -246,6 +246,8 @@ integer :: selectscat_iscat
 integer :: selectscat_iscat_first = 1
 integer :: selectscat_iscat_last  = 1000000000
 !
+logical :: debug_set_thermemistot_to_zero=.false.
+!
 !----TO-ADD----
 !
 ! Array for skipping very optically thick cells
@@ -2070,6 +2072,19 @@ subroutine montecarlo_compute_freqdep_luminosities(params,freq)
   ! Store the total thermal emissivity
   !
   mc_thermemistot = mc_cumulthermemis(nrcells+1)
+  !
+  ! A DEBUGGING FEATURE (ONLY FOR TESTING!!)
+  !
+  if(debug_set_thermemistot_to_zero) then
+     write(stdo,*) '*********************************************************'
+     write(stdo,*) '*********************************************************'
+     write(stdo,*) ' DEBUGGING MODE: SETTING THERMAL EMISSION FOR SCATTERING'
+     write(stdo,*) ' TO ZERO. THIS IS ARTIFICIAL, SO DO NOT USE THIS IN '
+     write(stdo,*) ' PRODUCTION RUNS'
+     write(stdo,*) '*********************************************************'
+     write(stdo,*) '*********************************************************'
+     mc_thermemistot = 0.d0
+  endif
   !
   ! Now normalize to unity
   !

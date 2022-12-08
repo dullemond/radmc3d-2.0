@@ -225,6 +225,7 @@ program radmc3d
   !                                      ! motion off. This is perhaps slower
   !                                      ! but safer.
   rt_mcparams%optim_dtau       = 2.d0
+  debug_set_thermemistot_to_zero=.false. ! This is only for testing purposes. Should be .false. for normal models.
   !
   ! Parameters for the Modified Random Walk:
   !
@@ -3854,6 +3855,13 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         amr_always_use_tree = .true.
         do_write_vtk_grid   = .true.
         do_write_vtk_velocity = .true.
+        gotit = .true.
+     elseif(buffer(1:30).eq.'debug_set_thermemistot_to_zero') then
+        !
+        ! DEBUG MODE: Setting the thermal dust emission as
+        ! source for scattering Monte Carlo to zero.
+        !
+        debug_set_thermemistot_to_zero = .true.
         gotit = .true.
      else
         !
