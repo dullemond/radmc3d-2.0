@@ -70,14 +70,6 @@ class Voronoigrid(object):
         #
         self.find_open_cells()
         #
-        # If bbox is given, then reject all cells that have Voronoi vertices
-        # that are outside of the box. 
-        #
-        self.bbox = bbox
-        if bbox is not None:
-            print('Implementing bounding box by rejecting cells that are not entirely in the bbox...')
-            self.bbox_reject_cells()
-        #
         # Now create the cell walls
         #
         print('Creating the cell walls...')
@@ -117,6 +109,14 @@ class Voronoigrid(object):
         if compvolume:
             print('Computing the cell volumes...')
             self.compute_cell_volumes()
+        #
+        # If bbox is given, then reject all cells that have Voronoi vertices
+        # that are outside of the box.
+        #
+        self.bbox = bbox
+        if compvolume and bbox is not None:
+            print('Implementing bounding box by rejecting cells that are not entirely in the bbox...')
+            self.bbox_reject_cells()
         #
         # Compute some diagnostics
         #
@@ -282,11 +282,13 @@ class Voronoigrid(object):
         #self.cell_iopen    = np.where((self.cell_volumes<=0.0))[0]
         self.ncells_open   = len(self.cell_iopen)
         if hasattr(self,'cell_volumes'):
-            self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
-            assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
+            if self.bbox is None:
+                self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
+                assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
             self.volume_total   = self.cell_volumes.sum()
         else:
-            self.ncells_closed = self.ncells - self.ncells_open
+            if self.bbox is None:
+                self.ncells_closed = self.ncells - self.ncells_open
         l=np.array([len(self.cell_iwalls[i]) for i in range(self.npnts)])
         self.cell_max_nr_walls = l.max()
         self.cell_max_nr_verts = 0
