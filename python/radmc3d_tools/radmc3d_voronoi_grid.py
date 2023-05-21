@@ -5,7 +5,7 @@ import struct
 from tqdm import tqdm    # For a nice progress bar
 
 class Voronoigrid(object):
-    def __init__(self,points,bbox=None,qhull_options=None):
+    def __init__(self,points,bbox=None,qhull_options=None,compvolume=True):
         """
         Create a Voronoi grid for RADMC-3D from a set of 3D points.
 
@@ -21,6 +21,9 @@ class Voronoigrid(object):
                              cells that have >=1 point outside the box are treated as
                              "open regions", see below.
           qhull_options      For passing to the Voronoi generator of SciPy
+          compvolume         If False, then skip the computation of the cell volumes.
+                             Can be useful if you import these values externally.
+                             Default is True.
 
         Note on "open regions": These are "cells" that are not closed, and thus 
         have an infinite volume. These regions are still useful for guiding the
@@ -111,8 +114,9 @@ class Voronoigrid(object):
         # infinity (with an infinite volume). These "open" regions are
         # marked by a volume = 0.0
         #
-        print('Computing the cell volumes...')
-        self.compute_cell_volumes()
+        if compvolume:
+            print('Computing the cell volumes...')
+            self.compute_cell_volumes()
         #
         # Compute some diagnostics
         #
@@ -227,7 +231,8 @@ class Voronoigrid(object):
         add_wall_n      = []
         add_wall_icells = []
         add_wall_iverts = []
-        for icell in self.cell_iopen:
+        #for icell in self.cell_iopen:
+        for icell in range(self.npnts):
             neighbors_voronoi  = list(self.find_neighboring_cells(icell))
             lneighvor = len(neighbors_voronoi)
             neighbors_delaunay = list(indices[indptr[icell]:indptr[icell+1]])
@@ -276,9 +281,12 @@ class Voronoigrid(object):
         self.ncells        = self.npnts
         #self.cell_iopen    = np.where((self.cell_volumes<=0.0))[0]
         self.ncells_open   = len(self.cell_iopen)
-        self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
-        assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
-        self.volume_total   = self.cell_volumes.sum()
+        if hasattr(self,'cell_volumes'):
+            self.ncells_closed = len(np.where((self.cell_volumes>0.0))[0])
+            assert self.ncells_open+self.ncells_closed==self.ncells, 'Internal error.'
+            self.volume_total   = self.cell_volumes.sum()
+        else:
+            self.ncells_closed = self.ncells - self.ncells_open
         l=np.array([len(self.cell_iwalls[i]) for i in range(self.npnts)])
         self.cell_max_nr_walls = l.max()
         self.cell_max_nr_verts = 0
