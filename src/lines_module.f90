@@ -37,6 +37,7 @@
 !=======================================================================
 module lines_module
 use amr_module
+use ugrid_module
 use rtglobal_module
 use ioput_module
 use mathroutines_module
@@ -2765,7 +2766,9 @@ subroutine lines_compute_velgradient(index,velgradient,maxdiff)
   implicit none
   double precision :: velgradient,velgradsum,factor(1:3)
   double precision :: pos0(1:3),pos1,vel0(1:3),vel1,adj_ds
+  double precision :: n(1:3),dv(1:3),dx(1:3),ddv
   integer :: index,numvels,level
+  integer :: iwall,iiwall,icellnext
   type(amr_branch), pointer :: cell,neighbor
   integer :: ixx,iyy,izz,indexn,ixn,iyn,izn
   logical, optional :: maxdiff
@@ -2816,10 +2819,6 @@ subroutine lines_compute_velgradient(index,velgradient,maxdiff)
         pos0(2) = amr_finegrid_xc(iyy,2,0)
         pos0(3) = amr_finegrid_xc(izz,3,0)
      endif
-  else
-     write(stdo,*) 'ERROR: Computing velocity gradient is not yet implemented '
-     write(stdo,*) '       in unstructured grids. But it should happen soon...'
-     stop 8445
   endif
   !
   ! Get factors for coordinate systems
@@ -2844,6 +2843,7 @@ subroutine lines_compute_velgradient(index,velgradient,maxdiff)
   ! for each one found, compute a contribution to the 
   ! overall average velocity gradient.
   !
+  if(igrid_type.lt.100) then
   if(amr_tree_present) then
      !
      ! The AMR tree is available, so we use that, and we
@@ -3146,6 +3146,40 @@ subroutine lines_compute_velgradient(index,velgradient,maxdiff)
            numvels    = numvels + 1
         endif
      endif
+  endif
+  else
+     !
+     ! Unstructured grid: Loop over all cell walls. For each cell
+     ! wall check if an adjacent cell is there. If so, then compute
+     ! the projected velocity gradient toward that cell center.
+     !
+     do iwall=1,ugrid_cell_nwalls(index)
+        iiwall  = ugrid_cell_iwalls(index,iwall)
+        if(iiwall.gt.0) then
+           if(ugrid_wall_icells(iiwall,1).eq.index) then
+              icellnext = ugrid_wall_icells(iiwall,2)
+           else
+              icellnext = ugrid_wall_icells(iiwall,1)
+              if(ugrid_wall_icells(iiwall,2).ne.index) then
+                 write(*,*) 'Error: Cell wall inconsistency'
+                 stop 5472
+              endif
+           endif
+           if(icellnext.gt.0) then
+              n(1:3)  = ugrid_cell_sgnwalls(index,iwall)*ugrid_wall_n(iiwall,1:3)
+              dx(1:3) = ugrid_cellcenters(icellnext,1:3)-ugrid_cellcenters(index,1:3)
+              adj_ds  = sqrt(dx(1)**2+dx(2)**2+dx(3)**2)
+              dv(1:3) = gasvelocity(1:3,icellnext)-gasvelocity(1:3,index)
+              ddv     = dv(1)*n(1) + dv(2)*n(2) + dv(3)*n(3)
+              if(average) then
+                 velgradsum = velgradsum + abs(ddv/adj_ds)
+              else
+                 velgradsum = max(velgradsum,abs(ddv))
+              endif
+              numvels = numvels + 1
+           endif
+        endif
+     enddo
   endif
   !
   ! Check
