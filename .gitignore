@@ -52,3 +52,4 @@ temp/
 examples_quarantaine/
 *.pptx
 manual/sphinx/_build/doctrees/
+*.sty
