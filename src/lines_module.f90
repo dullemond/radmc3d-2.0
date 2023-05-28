@@ -4286,7 +4286,7 @@ subroutine write_levelpop()
   !
   do ispec=1,lines_nr_species
      if(lines_species_fullmolec(ispec)) then
-        if(igrid_type.lt.100) then
+        !if(igrid_type.lt.100) then
            !
            ! Regular (AMR) grid
            ! 
@@ -4408,10 +4408,10 @@ subroutine write_levelpop()
            ! Close file
            !
            close(1)
-        else
-           write(stdo,*) 'ERROR: For the moment no other grid type supported as AMR for writing out level populations'
-           stop
-        endif
+        !else
+        !   write(stdo,*) 'ERROR: For the moment no other grid type supported as AMR for writing out level populations'
+        !   stop
+        !endif
      endif
   enddo ! Loop over species
   !
