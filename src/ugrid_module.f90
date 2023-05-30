@@ -949,12 +949,12 @@ contains
     if(maxncells.ne.ugrid_vert_max_nr_cells) then
        write(*,*) 'NOTE: Counted ',maxncells,' max nr of cells per vertex. '
        write(*,*) 'File said: ',ugrid_vert_max_nr_cells,'. Taking ',maxncells
-       ugrid_cell_max_nr_walls = maxncells
+       ugrid_vert_max_nr_cells = maxncells
     endif
     !
     ! Now associate the cells to the vertices
     !
-    allocate(ugrid_vert_icells(ugrid_nverts,ugrid_cell_max_nr_walls))
+    allocate(ugrid_vert_icells(ugrid_nverts,ugrid_vert_max_nr_cells))
     ugrid_vert_ncells(:) = 0
     do icell=1,ugrid_ncells
        do ivert=1,ugrid_cell_nverts(icell)
