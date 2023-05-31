@@ -2522,7 +2522,7 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
   integer :: iarg,numarg
   double precision :: dum,zoom_x0,zoom_x1,zoom_y0,zoom_y1,px,py
   integer :: idum
-  logical :: gotit,flagzoom,truepix,truezoom,quit,fromstdi
+  logical :: gotit,flagzoom,truepix,truezoom,quit,fromstdi,hertz
   !
   gotit    = .false.
   quit     = .false.
@@ -3515,10 +3515,17 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
            write(stdo,*) '      Expecting 1 real after nuhz/lambdamic.'
            stop
         endif
+        if(buffer(1:4).eq.'nuhz') then
+           hertz=.true.
+        else
+           hertz=.false.
+        endif
         call ggetarg(iarg,buffer,fromstdi)
         iarg = iarg+1
         read(buffer,*) camera_lambdamic
-        if(buffer(1:4).eq.'nuhz') then
+        ! BUGFIX 31.05.2023: The commandline nuhz could not work properly because buffer was overwritten.
+        !                    Apparently nobody ever used nuhz, because nobody ever complained ;-).
+        if(hertz) then
            camera_lambdamic = 1d4*cc/camera_lambdamic
         endif
      elseif((buffer(1:10).eq.'globalfreq').or.(buffer(1:9).eq.'globallam').or.&
