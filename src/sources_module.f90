@@ -2345,6 +2345,10 @@ subroutine sources_ugrid_compute_snualphanu_at_vertices(inu,inclstokes)
      stop
   endif
   !
+  ! Prepare the interpolation on tetraeders
+  !
+  call ugrid_setup_barycentric_matrices()
+  !
   ! Allocate temporary arrays
   !
   allocate(src(1:sources_nrfreq,1:4))

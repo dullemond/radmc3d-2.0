@@ -1061,7 +1061,7 @@ contains
     implicit none
     integer :: icell,icorner,ivert
     double precision :: v(1:3),lam(1:4),matrix(1:3,1:3),dum(1:3),tol
-    if(icell.le.1) stop 3443
+    if(icell.lt.1) stop 3443
     if(.not.allocated(ugrid_bary_matinv)) then
        write(*,*) 'Error: For barycentric interpolation, need ugrid_bary_matinv array.'
        stop 8723
