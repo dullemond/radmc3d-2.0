@@ -1464,7 +1464,9 @@ To switch on doppler catching, you simply add the command-line option
   radmc3d spectrum iline 1 widthkms 10 doppcatch
 
 (again: you do not need to add ``secondorder``, because it is automatic when
-``doppcatch`` is used).
+``doppcatch`` is used). Or for an image::
+
+  radmc3d image iline 1 vkms 1.3 doppcatch
 
 The Doppler catching method will assure that the line is integrated over with
 small enough steps that it cannot accidently get jumped over. How fine these
@@ -1569,6 +1571,49 @@ Here are some additional issues to keep in mind:
   this*. It is switched on by default, but it can be switched off manually
   for testing purposes. See Section :ref:`sec-secord-spher` for details.
 
+.. _sec-doppler-catching:
+
+Preventing doppler jumps (alternative method): Artificial line widening
+=======================================================================
+
+For preventing doppler jumps it is always preferable to use the above described
+doppler catching method. However, sometimes this method may not be available
+(e.g., for Voronoi grids, although one could in that case switch to Delaunay
+grids, for which it is available). In that case there is an alternative, albeit
+less elegant, way to avoid dopper jumps: artificial line widening.
+
+The idea is based on the fact that the danger of doppler jumps only occurs when
+the velocity difference between neighboring cells is larger than the local line
+width (thermal + microturbulent). By artificially adding more "microturbulence"
+such that the local line width is no longer narrower than the cell-to-cell
+velocity differences, one can artificially "solve" the problem of doppler
+jumps.
+
+One way of doing this is "by hand": Simply provide RADMC-3D with a microturbulence
+file (see Section :ref:`sec-turb-broadening`) that contains the required amount
+of microturbulence. The problem is that this requires you, the user, to compute
+the velocity differences between all neighboring cells, which is a non-trivial
+task.
+
+So instead, you can ask RADMC-3D to compute this for you. You should give
+RADMC-3D a number called ``linewideningfactor`` (either in ``radmc3d.inp``
+or on the command line) which is the "safety factor" by which RADMC-3D
+will assure enough microturbulence to avoid doppler jumps. RADMC-3D will
+never reduce any already specified microturbulence, but if it finds that
+the combined microturbulence and thermal broadning is less than required
+for compensating the maximum cell-to-neighbor velocity difference
+by a factor ``linewideningfactor``, it will increase the microturbulence
+accordingly. The larger you choose ``linewideningfactor``, the safer
+you are, but the drawback is that the lines will become much broader
+than they really are physically. The smaller you choose ``linewideningfactor``,
+the less you unphysically broaden the line, but the higher the risk remains
+for doppler jump effects. A value between 0.2 and 1.0 is reasonable,
+but some experimentation is recommended.
+
+Staying with the example from the previous section, we would
+write the following on the command line::
+
+  radmc3d image iline 1 vkms 1.3 linewideningfactor 0.3
 
 .. _sec-calcstore-levpop:
 
