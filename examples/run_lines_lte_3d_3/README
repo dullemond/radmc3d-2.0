@@ -14,10 +14,21 @@ Now, in Python, you can:
 
   %run problem_plotexample.py
 
-which shows two images: one created without doppler catching, one with.
+which shows three images: one created without doppler catching, one with,
+and one with (instead) artificial line widening.
+
 In the one without doppler catching, you do not see any line emission
 whatsoever. Only the (very weak) dust continuum emission and the star
 are seen. But with doppler catching, the line emission is very bright,
-and saturated to the Planck function.
+and saturated to the Planck function. With the artificial line widening
+you see that the emitting zone is much wider than in the doppler-catching
+case. This is of course not real, and is an unfortunate side-effect of
+the artificial line widening. Therefore, doppler catching should be
+used instead, if possible. But if not possible, then artificial widening
+could be a reasonable alternative.
 
-11.01.11 / 04.04.11 / 27.08.2020
+Note: If you use artificial widening factor 1.0, then the line becomes
+really super wide. Here, a factor of 0.3 is used, which appears to give
+a more reasonable result.
+
+11.01.11 / 04.04.11 / 27.08.2020 / 31.05.2023
