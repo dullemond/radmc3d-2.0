@@ -139,6 +139,7 @@ program radmc3d
   lines_show_pictograms      = 0
   lines_maser_warning        = .false.
   lines_slowlvg_as_alternative = .false.
+  lines_artificial_widening_factor = 0.d0
   !
   ! Thermal boundary conditions (only for 
   ! cartesian coordinates)
@@ -656,16 +657,40 @@ program radmc3d
   !
   if(rt_incl_lines.and.allocated(gasvelocity).and. &
        allocated(lines_microturb).and.allocated(gastemp)) then
-     lines_maxrelshift = 0.d0
-     call lines_compute_maxrellineshift()
-     if(lines_maxrelshift.gt.0.7d0) then
-        write(stdo,*) 'WARNING: cell-to-cell line doppler shifts are large compared to the local line width.'
-        write(stdo,*) '   In this model the largest dv_doppler/dv_linewidth = ',lines_maxrelshift
-        if(camera_catch_doppler_line) then
-           write(stdo,*) '   But since you are using doppler catching mode, you are reasonably safe...'
-        else
-           write(stdo,*) '   To get reasonable line images/spectra please use the doppler catching mode.'
+     if(lines_artificial_widening_factor.le.0) then
+        !
+        ! By default we do not artificially widen the local line width. Then we want to
+        ! check if we are in danger of doppler jumps.
+        !
+        lines_maxrelshift = 0.d0
+        call lines_compute_maxrellineshift()
+        if(lines_maxrelshift.gt.0.7d0) then
+           write(stdo,*) 'WARNING: cell-to-cell line doppler shifts are large compared to the local line width.'
+           write(stdo,*) '   In this model the largest dv_doppler/dv_linewidth = ',lines_maxrelshift
+           if(camera_catch_doppler_line) then
+              write(stdo,*) '   But since you are using doppler catching mode, you are reasonably safe...'
+           else
+              write(stdo,*) '   To get reasonable line images/spectra please use the doppler catching mode.'
+           endif
         endif
+     else
+        !
+        ! But if lines_artificial_widening_factor is >0.0 (typically around 1.0), we
+        ! artificially widen the local microturbulent line width to assure that
+        ! doppler jumps are avoided. How well they are avoided depends on the
+        ! value of lines_artificial_widening_factor. A good value is 1.0, which
+        ! means that the local line width is assured not to drop below the largest
+        ! velocity difference between neighboring cells. A value >1.0 would give
+        ! more safety, but smears out the line emission more (due to excessive
+        ! line width). A value <1.0 will not avoid doppler jumps entirely. 
+        !
+        if(camera_catch_doppler_line) then
+           write(stdo,*) 'NOTICE: You have activated BOTH doppler catching AND artificial line widening.'
+           write(stdo,*) '        While not forbidden, it is not useful, since both are meant to fight'
+           write(stdo,*) '        doppler jumps.'
+        endif
+        write(stdo,*) '  --> To avoid doppler jumps, the lines are artificially widened'
+        call lines_artificially_widen()
      endif
   endif
   !
@@ -2363,6 +2388,7 @@ subroutine read_radmcinp_file()
      call parse_input_double ('camera_maxdphi@               ',camera_maxdphi)
      call parse_input_integer('sources_interpol_jnu@         ',interpoljnu)
 !     call parse_input_double ('lines_maxdoppler@             ',lines_maxdoppler)
+     call parse_input_double ('linewideningfactor@           ',lines_artificial_widening_factor)
      call parse_input_integer('lines_mode@                   ',lines_mode)
      call parse_input_integer('lines_autosubset@             ',iautosubset)
      call parse_input_double ('lines_widthmargin@            ',lines_widthmargin)
@@ -3610,6 +3636,15 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         !
         camera_catch_doppler_line = .true.
         camera_secondorder = .true.
+     elseif(buffer(1:18).eq.'linewideningfactor') then
+        !
+        ! Activate artificial line widening to avoid doppler jumps.
+        ! Set this to 1.0 for standard line widening. Larger than 1.0 is
+        ! stronger line widening. 
+        !
+        call ggetarg(iarg,buffer,fromstdi)
+        iarg = iarg+1
+        read(buffer,*) lines_artificial_widening_factor
      elseif(buffer(1:8).eq.'inclstar') then
         !
         ! Make sure that the stars are included in the images and SEDs,

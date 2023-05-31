@@ -280,6 +280,17 @@ double precision :: lines_nonlte_convcrit = 1d-2
 !
 logical :: lines_autosubset=.true.
 !
+! As an alternative to "doppler catching" you can avoid
+! doppler jumps by artificially broadning the local line
+! width. This is done if this parameter is set to >0.
+! Set it, for instance, to 1.0, meaning that it will make
+! sure that the local line width is at least 1.0x the
+! maximum local velocity difference. Setting it >1.0 is
+! safer but less accurate, <1.0 is more accurate but
+! could yield stronger dopper jumps.
+!
+double precision :: lines_artificial_widening_factor = 0.d0
+!
 contains
 
 
@@ -5445,6 +5456,62 @@ subroutine lines_compute_maxrellineshift()
      !
   enddo
 end subroutine lines_compute_maxrellineshift
+
+
+!--------------------------------------------------------------------------------
+!       ARTIFICIALLY BROADEN THE LINE TO AVOID DOPPLER JUMPS
+!
+! (New 2023.05.31) The elegant way to deal with doppler jumps is the "doppler
+! catching" method. However, sometimes this is either not practical or not
+! possible. An alternative way to avoid doppler jumps is to artificially broaden
+! the local line width such that doppler jumps cannot occur.  This is done when
+! setting lines_artificial_widening_factor to >0.  Set it, for instance, to 1.0,
+! meaning that it will make sure that the local line width is at least 1.0x the
+! maximum local velocity difference. Setting it >1.0 is safer but less accurate,
+! <1.0 is more accurate but could yield stronger dopper jumps.
+!--------------------------------------------------------------------------------
+subroutine lines_artificially_widen()
+  implicit none
+  doubleprecision :: width2_therm,dummy,dv
+  integer :: index,icell
+  !
+  ! Check
+  !
+  if(lines_artificial_widening_factor.le.0.d0) stop 8301
+  !
+  ! Reset 
+  !
+  lines_maxrelshift = 0.d0
+  !
+  ! Visit all cells
+  !
+  do icell=1,nrcells
+     index = cellindex(icell)
+     !
+     ! Compute the local thermal line width in cm/s for the most massive molecule
+     ! in the current model
+     !
+     width2_therm = 2*kk*gastemp(index)/lines_umass_max
+     !
+     ! Compute the maximum velocity difference between this
+     ! cell and adjacent cells
+     !
+     call lines_compute_velgradient(index,dv,maxdiff=.true.)
+     !
+     ! Check if we need to artificially widen the line (i.e., that the
+     ! local thermal + microturbulent line width is not large enough
+     ! to avoid doppler jumps)
+     !
+     dummy    = (dv*lines_artificial_widening_factor)**2 - width2_therm
+     if(dummy.gt.lines_microturb(index)**2) then
+        !
+        ! Yes we do. We adjust the microturbulent line width accordingly.
+        !
+        lines_microturb(index) = sqrt(dummy)
+     endif
+     !
+  enddo
+end subroutine lines_artificially_widen
 
 
 
