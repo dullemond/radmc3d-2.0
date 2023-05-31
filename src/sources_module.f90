@@ -2313,7 +2313,7 @@ end subroutine sources_find_srcalp_interpol
 !--------------------------------------------------------------------------
 subroutine sources_ugrid_compute_snualphanu_at_vertices(inu,inclstokes)
   implicit none
-  integer :: inu,icell,ivt,ix,iy,iz,cnt,icnt
+  integer :: inu,icell,ivt,ix,iy,iz,cnt,icnt,icl
   integer :: ixx,iyy,izz
   double precision :: nu,snu(1:4),anu,dpl,trb,tmp
   double precision :: r,theta,phi
