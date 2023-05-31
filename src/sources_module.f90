@@ -1249,6 +1249,13 @@ subroutine sources_compute_snualphanu_at_vertices(inu,inclstokes)
   type(amr_branch), pointer :: b
   logical :: inclstokes
   !
+  ! Check if grid is rectangular
+  !
+  if(igrid_type.ge.200) then
+     write(stdo,*) 'ERROR: sources_compute_snualphanu_at_vertices() is not for unstructured grids.'
+     stop 7602
+  endif
+  !
   ! Check if frequency index is in range
   !
   if(inu.gt.sources_nrfreq) then
@@ -1373,7 +1380,7 @@ subroutine sources_compute_snualphanu_at_vertices(inu,inclstokes)
 !        ! 
 !        sources_cell_temp(ray_index) = gastemp(ray_index)
 !
-!       Get the nup and ndown        
+!       Get the nup and ndown
 !
         call lines_get_active_nup_ndown(sources_vertex_lines_nractivetot, &
              nup,ndown)
@@ -2286,6 +2293,221 @@ subroutine sources_find_srcalp_interpol(x,y,z,snu,anu,inclstokes)
      endif
   end select
 end subroutine sources_find_srcalp_interpol
+
+!--------------------------------------------------------------------------
+!            COMPUTE SOURCE FUNCTION AND ALPHA AT VERTICES
+!                    VERSION UNSTRUCTURED GRID
+!
+! This subroutine is used for the second-order integration of the transfer
+! equation. For this we need to know the sources at the corner points.
+!
+! NOTE: If sources_interpol_jnu is set, then snu = jnu rather than the
+!       source function jnu/anu. 
+!
+! NOTE: Before calling this subroutine, please set the ray_cart_dirx,y,z
+!       to the correct values: the direction in which the rays toward the
+!       observer point. If you use local observer mode, then you must
+!       let the sources_module know by setting sources_localobserver=.true.
+!       and setting sources_observer_position(:) to the position of the
+!       observer.
+!--------------------------------------------------------------------------
+subroutine sources_ugrid_compute_snualphanu_at_vertices(inu,inclstokes)
+  implicit none
+  integer :: inu,icell,ivt,ix,iy,iz,cnt,icnt
+  integer :: ixx,iyy,izz
+  double precision :: nu,snu(1:4),anu,dpl,trb,tmp
+  double precision :: r,theta,phi
+  double precision :: dirx,diry,dirz,xbk,ybk,zbk
+  double precision, allocatable :: src(:,:),alp(:)
+  double precision, allocatable :: nup(:),ndown(:)
+  type(amr_branch), pointer :: b
+  logical :: inclstokes
+  !
+  ! Check if grid is unstructured
+  !
+  if(igrid_type.lt.200) then
+     write(stdo,*) 'ERROR: sources_ugrid_compute_snualphanu_at_vertices() is only for unstructured grids.'
+     stop 7603
+  endif
+  !
+  ! Check if the vertices are stored
+  !
+  if((ugrid_nverts.le.0).or.(.not.allocated(ugrid_vertices))) then
+     write(stdo,*) 'ERROR: In unstructured grid, the vertices are not stored. Cannot interpolate sources onto vertices.'
+     stop 4933
+  endif
+  !
+  ! Check if frequency index is in range
+  !
+  if(inu.gt.sources_nrfreq) then
+     write(stdo,*) 'ERROR when computing snu and alphanu at vertices:'
+     write(stdo,*) '      inu out of range.'
+     stop
+  endif
+  !
+  ! Allocate temporary arrays
+  !
+  allocate(src(1:sources_nrfreq,1:4))
+  allocate(alp(1:sources_nrfreq))
+  if(sources_catch_doppler_line) then
+     allocate(nup(1:sources_vertex_lines_nractivetot))
+     allocate(ndown(1:sources_vertex_lines_nractivetot))
+  endif
+  !
+  ! Get frequency
+  !
+  nu = sources_frequencies(inu)
+  !
+  ! Fill the cell center values of j_nu and alpha_nu
+  !
+  do icell=1,nrcells
+     !
+     ! Get the current cell index
+     !
+     ray_index  = cellindex(icell)
+     !
+     ! Find the position of the cell
+     !
+     ray_cart_x = ugrid_cellcenters(icell,1)
+     ray_cart_y = ugrid_cellcenters(icell,2)
+     ray_cart_z = ugrid_cellcenters(icell,3)
+     !
+     ! Copy also to prev
+     !
+     ray_prev_x = ray_cart_x
+     ray_prev_y = ray_cart_y
+     ray_prev_z = ray_cart_z
+     !
+     ! If local observer, set the direction vector. For an observer
+     ! at infinity this direction will be the same for all cells, and
+     ! will thus be set beforehand, at the start of this routine.
+     !
+     if(sources_localobserver) then
+        write(stdo,*) 'Local observer for now not possible in second order integration'
+        stop
+     endif
+     !
+     ! Compute the j_nu and alpha_nu, as well as (if requested)
+     ! the line level populations and other line-related stuff.
+     ! Note that if 'sources_catch_doppler_line' is switched on,
+     ! we only calculate what is needed to compute the line 
+     ! j_nu and alpha_nu; we do not add these to the src and alp
+     ! yet. If this option is not set, then we DO add them to
+     ! the src and alp.
+     !
+     call sources_get_src_alp(inu,inu,sources_nrfreq,src,alp,inclstokes)
+     !
+     ! Fill the anu and jnu
+     !
+     sources_cell_anu(ray_index) = alp(inu)
+     if(inclstokes) then
+        if(sources_interpol_jnu) then
+           sources_cell_snu(ray_index,1:4) = src(inu,1:4)*alp(inu)
+        else
+           sources_cell_snu(ray_index,1:4) = src(inu,1:4)
+        endif
+     else
+        if(sources_interpol_jnu) then
+           sources_cell_snu(ray_index,1) = src(inu,1)*alp(inu)
+        else
+           sources_cell_snu(ray_index,1) = src(inu,1)
+        endif
+     endif
+     !
+     ! If sources_catch_doppler_line option is set, then fill the line stuff
+     !
+     if(sources_catch_doppler_line) then
+        !
+        ! The line-of-sight Doppler shift at this point
+        !
+        sources_cell_doppler(ray_index) = lines_ray_doppler(1)
+!        !
+!        ! The local microturbulence at this point
+!        !
+!        sources_cell_turb(ray_index) = lines_ray_turb(1)
+!        !
+!        ! The local temperature at this point
+!        ! NOTE: THIS IS NOT REALLY NECESSARY. DOUBLE STORAGE...
+!        ! 
+!        sources_cell_temp(ray_index) = gastemp(ray_index)
+!
+!       Get the nup and ndown
+!
+        call lines_get_active_nup_ndown(sources_vertex_lines_nractivetot, &
+             nup,ndown)
+        do icnt=1,sources_vertex_lines_nractivetot
+           sources_cell_line_nup(icnt,ray_index)   = nup(icnt)
+           sources_cell_line_ndown(icnt,ray_index) = ndown(icnt)
+        enddo
+     endif
+  enddo
+  !
+  ! Now average these onto the vertices
+  !
+  do ivt=1,ugrid_nverts
+     snu(1:4)=0.d0
+     anu=0.d0
+     cnt=0
+     if(sources_catch_doppler_line) then
+        dpl        = 0.d0
+        trb        = 0.d0
+        tmp        = 0.d0
+        nup(:)     = 0.d0
+        ndown(:)   = 0.d0
+     endif
+     do icl=1,ugrid_vert_ncells(ivt)
+        ray_index = ugrid_vert_icells(ivt,icl)
+        if(ray_index.gt.0) then
+           if(inclstokes) then
+              snu(1:4) = snu(1:4) + sources_cell_snu(ray_index,1:4)
+           else
+              snu(1) = snu(1) + sources_cell_snu(ray_index,1)
+           endif
+           anu = anu + sources_cell_anu(ray_index)
+           if(sources_catch_doppler_line) then
+              dpl = dpl + sources_cell_doppler(ray_index)
+              if(allocated(lines_microturb)) trb = trb + lines_microturb(ray_index)
+              tmp = tmp + gastemp(ray_index)
+              do icnt=1,sources_vertex_lines_nractivetot
+                 nup(icnt)   = nup(icnt)   + sources_cell_line_nup(icnt,ray_index)
+                 ndown(icnt) = ndown(icnt) + sources_cell_line_ndown(icnt,ray_index)
+              enddo
+           endif
+           cnt = cnt + 1
+        endif
+     enddo
+     if(cnt.ge.1) then
+        snu(1:4) = snu(1:4) / cnt
+        anu = anu / cnt
+        if(sources_catch_doppler_line) then
+           dpl     = dpl / cnt
+           trb     = trb / cnt
+           tmp     = tmp / cnt
+           nup   = nup / cnt
+           ndown = ndown / cnt
+        endif
+     endif
+     if(inclstokes) then
+        sources_vertex_snu(ivt,1:4) = snu(1:4)
+     else
+        sources_vertex_snu(ivt,1) = snu(1)
+     endif
+     sources_vertex_anu(ivt) = anu
+     if(sources_catch_doppler_line) then
+        sources_vertex_doppler(ivt) = dpl
+        sources_vertex_turb(ivt)    = trb
+        sources_vertex_temp(ivt)    = tmp
+        do icnt=1,sources_vertex_lines_nractivetot
+           sources_vertex_line_nup(icnt,ivt)   = nup(icnt)
+           sources_vertex_line_ndown(icnt,ivt) = ndown(icnt)
+        enddo
+     endif
+  enddo
+  !
+  deallocate(src,alp)
+  if(allocated(nup)) deallocate(nup,ndown)
+  !
+end subroutine sources_ugrid_compute_snualphanu_at_vertices
 
 !-------------------------------------------------------------------------
 !             DO LINEAR INTERPOLATION OF ALPHA AND SOURCE

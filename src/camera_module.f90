@@ -4174,7 +4174,17 @@ subroutine camera_make_rect_image(img,tausurf)
            !
            ! Then call the subroutine
            !
-           call sources_compute_snualphanu_at_vertices(inu0,camera_stokesvector)
+           if(igrid_type.lt.100) then
+              !
+              ! Regular or AMR type grid
+              !
+              call sources_compute_snualphanu_at_vertices(inu0,camera_stokesvector)
+           else
+              !
+              ! Unstructured grid
+              !
+              call sources_ugrid_compute_snualphanu_at_vertices(inu0,camera_stokesvector)
+           endif
         endif
         !
         ! Now make the image for this wavelength only
@@ -7213,7 +7223,17 @@ subroutine camera_make_circ_image()
            !
            ! Then call the subroutine
            !
-           call sources_compute_snualphanu_at_vertices(inu0,camera_stokesvector)
+           if(igrid_type.lt.100) then
+              !
+              ! Regular or AMR type grid
+              !
+              call sources_compute_snualphanu_at_vertices(inu0,camera_stokesvector)
+           else
+              !
+              ! Unstructured grid
+              !
+              call sources_ugrid_compute_snualphanu_at_vertices(inu0,camera_stokesvector)
+           endif
         endif
         !
         ! Now make the image for this wavelength only
