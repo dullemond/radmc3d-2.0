@@ -529,6 +529,37 @@ subroutine read_lines_all(action)
      end select
   endif
   !
+  ! Check (and possibly correct) for doppler jump risks
+  !
+  if(allocated(gasvelocity).and.allocated(gastemp)) then
+     if(lines_artificial_widening_factor.le.0) then
+        !
+        ! By default we do not artificially widen the local line width. Then we want to
+        ! check if we are in danger of doppler jumps.
+        !
+        lines_maxrelshift = 0.d0
+        call lines_compute_maxrellineshift()
+        if(lines_maxrelshift.gt.0.7d0) then
+           write(stdo,*) 'WARNING: cell-to-cell line doppler shifts are large compared to the local line width.'
+           write(stdo,*) '   In this model the largest dv_doppler/dv_linewidth = ',lines_maxrelshift
+           write(stdo,*) '   If you use the doppler catching mode, you are fine. If not, you may risk doppler jump effects.'
+        endif
+     else
+        !
+        ! But if lines_artificial_widening_factor is >0.0 (typically around 1.0), we
+        ! artificially widen the local microturbulent line width to assure that
+        ! doppler jumps are avoided. How well they are avoided depends on the
+        ! value of lines_artificial_widening_factor. A good value is 1.0, which
+        ! means that the local line width is assured not to drop below the largest
+        ! velocity difference between neighboring cells. A value >1.0 would give
+        ! more safety, but smears out the line emission more (due to excessive
+        ! line width). A value <1.0 will not avoid doppler jumps entirely.
+        !
+        write(stdo,*) '  --> To avoid doppler jumps, the lines are artificially widened'
+        call lines_artificially_widen()
+     endif
+  endif
+  !
 end subroutine read_lines_all
 
 
@@ -5426,6 +5457,15 @@ subroutine lines_compute_maxrellineshift()
   implicit none
   doubleprecision :: width_local,relshift,dv
   integer :: index,icell
+  logical :: incl_microturb
+  !
+  ! Check
+  !
+  if(allocated(lines_microturb)) then
+     incl_microturb = .true.
+  else
+     incl_microturb = .false.
+  endif
   !
   ! Reset 
   !
@@ -5439,7 +5479,11 @@ subroutine lines_compute_maxrellineshift()
      ! Compute the local line width in cm/s for the most massive molecule
      ! in the current model
      !
-     width_local = sqrt(2*kk*gastemp(index)/lines_umass_max+lines_microturb(index)**2)
+     if(incl_microturb) then
+        width_local = sqrt(2*kk*gastemp(index)/lines_umass_max+lines_microturb(index)**2)
+     else
+        width_local = sqrt(2*kk*gastemp(index)/lines_umass_max)
+     endif
      !
      ! Compute the maximum velocity difference between this
      ! cell and adjacent cells (maximum of the 2x3 directions)
@@ -5473,15 +5517,22 @@ end subroutine lines_compute_maxrellineshift
 subroutine lines_artificially_widen()
   implicit none
   doubleprecision :: width2_therm,dummy,dv
-  integer :: index,icell
+  integer :: index,icell,ierr
   !
   ! Check
   !
   if(lines_artificial_widening_factor.le.0.d0) stop 8301
   !
-  ! Reset 
+  ! Make sure lines_microturb is allocated
   !
-  lines_maxrelshift = 0.d0
+  if(.not.(allocated(lines_microturb))) then
+     allocate(lines_microturb(1:nrcells),STAT=ierr)
+     if(ierr.ne.0) then
+        write(stdo,*) 'ERROR: Could not allocate the lines_microturb() array'
+        stop
+     endif
+     lines_microturb(:) = 0.d0
+  endif
   !
   ! Visit all cells
   !

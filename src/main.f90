@@ -652,49 +652,6 @@ program radmc3d
      endif
   endif
   !
-  ! If lines are included in the model, we now check for the maximum
-  ! cell-to-cell line shift compared to the local line width. 
-  !
-  if(rt_incl_lines.and.allocated(gasvelocity).and. &
-       allocated(lines_microturb).and.allocated(gastemp)) then
-     if(lines_artificial_widening_factor.le.0) then
-        !
-        ! By default we do not artificially widen the local line width. Then we want to
-        ! check if we are in danger of doppler jumps.
-        !
-        lines_maxrelshift = 0.d0
-        call lines_compute_maxrellineshift()
-        if(lines_maxrelshift.gt.0.7d0) then
-           write(stdo,*) 'WARNING: cell-to-cell line doppler shifts are large compared to the local line width.'
-           write(stdo,*) '   In this model the largest dv_doppler/dv_linewidth = ',lines_maxrelshift
-           if(camera_catch_doppler_line) then
-              write(stdo,*) '   But since you are using doppler catching mode, you are reasonably safe...'
-           else
-              write(stdo,*) '   To get reasonable line images/spectra please use the doppler catching mode.'
-           endif
-        endif
-     else
-        !
-        ! But if lines_artificial_widening_factor is >0.0 (typically around 1.0), we
-        ! artificially widen the local microturbulent line width to assure that
-        ! doppler jumps are avoided. How well they are avoided depends on the
-        ! value of lines_artificial_widening_factor. A good value is 1.0, which
-        ! means that the local line width is assured not to drop below the largest
-        ! velocity difference between neighboring cells. A value >1.0 would give
-        ! more safety, but smears out the line emission more (due to excessive
-        ! line width). A value <1.0 will not avoid doppler jumps entirely. 
-        !
-        if(camera_catch_doppler_line) then
-           write(stdo,*) 'NOTICE: You have activated BOTH doppler catching AND artificial line widening.'
-           write(stdo,*) '        While not forbidden, it is not useful, since both are meant to fight'
-           write(stdo,*) '        doppler jumps.'
-        endif
-        write(stdo,*) '  --> To avoid doppler jumps, the lines are artificially widened'
-        call lines_artificially_widen()
-     endif
-  endif
-  !
-  !
   ! ====================================================================
   !                     NOW START THE LOOP OVER ACTIONS
   ! ====================================================================
