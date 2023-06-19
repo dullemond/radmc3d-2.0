@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-from radmc3d_basic_tools import bplanck
+from radmc3d_tools import bplanck
 #
 # Some natural constants
 #
