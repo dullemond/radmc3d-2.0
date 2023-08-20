@@ -113,11 +113,11 @@ logical :: amrray_spheres_flag
 !$OMP THREADPRIVATE(amrray_icross)
 !$OMP THREADPRIVATE(amrray_cell,amrray_nextcell)
 !$OMP THREADPRIVATE(amrray_ix_curr,amrray_iy_curr,amrray_iz_curr,amrray_ix_next,amrray_iy_next,amrray_iz_next)
-! BUGFIX 2023.08.20: Removed the threadprivate for the amrray_sint1 etc variables.
-!                    Thank you, Alicia Trabold and Mario Flock, for reporting a small, but
-!                    clear temperature difference for the run_spher2d_1 model between the serial
-!                    run and the OpenMP multi-thread run, which led to the discovery of this bug.
-!$OMP THREADPRIVATE(thetagrid_cross_equator)
+! BUGFIX 2023.08.20a: Removed the threadprivate for the amrray_sint1 etc variables.
+!                     Thank you, Alicia Trabold and Mario Flock, for reporting a small, but
+!                     clear temperature difference for the run_spher2d_1 model between the serial
+!                     run and the OpenMP multi-thread run, which led to the discovery of this bug.
+! BUGFIX 2023.08.20b: Removed the threadprivate for thetagrid_cross_equator.
 !$OMP THREADPRIVATE(amrray_ispherehit)
 
 !doubleprecision :: pi,pihalf,twopi
