@@ -1234,6 +1234,29 @@ Example usage:
 
 
 
+.. _sec-tracetau:
+
+Maps of optical depth :math:`\tau`
+==================================
+
+Another way to get a better understanding of the optical depth of your model
+is to make an "image of optical depths". It is just like making an image, but
+instead of each pixel containing the intensity :math:`I_\nu` of the image,
+each pixel now contains the full optical depth :math:`\tau_\nu` along the ray.
+In this way you get an optical depth map.
+
+The idea is to simply make an image, as you would normally do, but now add
+the command-line  keyword ``tracetau``. Example: ::
+
+  radmc3d image lambda 10 incl 45 phi 30 tracetau
+
+The image output file ``image.out`` will now contain, for each pixel, the
+optical depth.
+
+You can also use the command-line  keyword ``tracecolumn``, in which case
+your image will not contain the optical depth, but the total column density.
+Note: For now it only includes the column density of the dust.
+
 
 
 .. _sec-local-observer:

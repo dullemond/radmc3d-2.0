@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Making images and spectra &mdash; radmc3d 2.0 documentation</title>
@@ -83,6 +83,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#circular-images">Circular images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualizing-the-tau-1-surface">Visualizing the <span class="math notranslate nohighlight">\(\tau=1\)</span> surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maps-of-optical-depth-tau">Maps of optical depth <span class="math notranslate nohighlight">\(\tau\)</span></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#for-public-outreach-work-local-observers-inside-the-model">For public outreach work: local observers inside the model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multiple-vantage-points-the-movie-mode">Multiple vantage points: the ‘Movie’ mode</a></li>
 </ul>
@@ -143,7 +144,8 @@ An image can now be made with a simple call to
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span>
 </pre></div>
 </div>
-<p>This makes an image of the model at wavelength <span class="math notranslate nohighlight">\(\lambda=10\mu\)</span>. We refer to Section
+<p>This makes an image of the model at wavelength <span class="math notranslate nohighlight">\(\lambda=10\mu`m and writes
+this to the file ``image.out`\)</span>. We refer to Section
 <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a> for details of this file and how to interpret the
 content. See Chapter <a class="reference internal" href="pythontools.html#chap-python-analysis-tools"><span class="std std-ref">Python analysis tool set</span></a> for an extensive Python tools
 that make it easy to read and handle these files. The vantage point is
@@ -303,7 +305,8 @@ example on just one of these methods. Type, for instance,</p>
 </pre></div>
 </div>
 <p>This will create 10 images at once, all with the same viewing perspective, but
-at 10 wavelengths regularly distributed between 5 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m.  All images are written into a single file, <code class="docutils literal notranslate"><span class="pre">image.out</span></code> (See
+at 10 wavelengths regularly distributed between 5 <span class="math notranslate nohighlight">\(\mu`m and 20
+:math:\)</span>mu`m.  All images are written into a single file, <code class="docutils literal notranslate"><span class="pre">image.out</span></code> (See
 Section <a class="reference internal" href="inputoutputfiles.html#sec-image-out"><span class="std std-ref">OUTPUT: image.out or image_****.out</span></a> for its format).</p>
 <p>In Python you simply type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radmc3dPy</span> <span class="kn">import</span> <span class="n">image</span>
@@ -498,7 +501,8 @@ do this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span>
 </pre></div>
 </div>
-<p>This will make a spectrum between 5 and 20 <span class="math notranslate nohighlight">\(\mu\)</span>mu`m. You
+<p>This will make a spectrum between 5 and 20 <span class="math notranslate nohighlight">\(\mu`m. It will use by default
+100 wavelength points logarithmically spaced between 5 and 20 :math:\)</span>mu`m. You
 can change the number of wavelength points as well:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">spectrum</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">lambdarange</span> <span class="mf">5.</span> <span class="mf">20.</span> <span class="n">nlam</span> <span class="mi">1000</span>
 </pre></div>
@@ -568,7 +572,11 @@ width of the order of <span class="math notranslate nohighlight">\(\lambda\)</sp
 set of filters. Usually one can download these profiles as digital tables.
 It can, under some circumstances, be important to include a treatment of
 these profiles in the model predictions. As an example take the N band. This
-is a band that includes the 10 <span class="math notranslate nohighlight">\(\mu\)</span>lambda_i` for <span class="math notranslate nohighlight">\(1\le i\le n\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of
+is a band that includes the 10 <span class="math notranslate nohighlight">\(\mu`m silicate feature, which is a strong
+function of wavelength *within* the N band. If you have a wide filter in
+the N band, then one cannot simply calculate the model spectrum in one single
+wavelength. Instead one has to calculate it for a properly finely sampled
+set of wavelengths :math:\)</span>lambda_i` for <span class="math notranslate nohighlight">\(1\le i\le n\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of
 wavelength samples, and then compute the filter-averaged flux with:</p>
 <div class="math notranslate nohighlight">
 \[F_{band} = \int_0^{\infty}\Phi_i(\lambda)F(\lambda)d\lambda
@@ -1159,6 +1167,24 @@ the case of observer-at-infinity).</p>
 </pre></div>
 </div>
 </section>
+<section id="maps-of-optical-depth-tau">
+<span id="sec-tracetau"></span><h2>Maps of optical depth <span class="math notranslate nohighlight">\(\tau\)</span><a class="headerlink" href="#maps-of-optical-depth-tau" title="Permalink to this heading"></a></h2>
+<p>Another way to get a better understanding of the optical depth of your model
+is to make an “image of optical depths”. It is just like making an image, but
+instead of each pixel containing the intensity <span class="math notranslate nohighlight">\(I_\nu\)</span> of the image,
+each pixel now contains the full optical depth <span class="math notranslate nohighlight">\(\tau_\nu\)</span> along the ray.
+In this way you get an optical depth map.</p>
+<p>The idea is to simply make an image, as you would normally do, but now add
+the command-line  keyword <code class="docutils literal notranslate"><span class="pre">tracetau</span></code>. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radmc3d</span> <span class="n">image</span> <span class="k">lambda</span> <span class="mi">10</span> <span class="n">incl</span> <span class="mi">45</span> <span class="n">phi</span> <span class="mi">30</span> <span class="n">tracetau</span>
+</pre></div>
+</div>
+<p>The image output file <code class="docutils literal notranslate"><span class="pre">image.out</span></code> will now contain, for each pixel, the
+optical depth.</p>
+<p>You can also use the command-line  keyword <code class="docutils literal notranslate"><span class="pre">tracecolumn</span></code>, in which case
+your image will not contain the optical depth, but the total column density.
+Note: For now it only includes the column density of the dust.</p>
+</section>
 <section id="for-public-outreach-work-local-observers-inside-the-model">
 <span id="sec-local-observer"></span><h2>For public outreach work: local observers inside the model<a class="headerlink" href="#for-public-outreach-work-local-observers-inside-the-model" title="Permalink to this heading"></a></h2>
 <p>While it may not be very useful for scientific purposes (though there may be
@@ -1319,7 +1345,7 @@ These are the x, y and z position of the local observer (in units of cm).</p></l
 command-line options still remain valid.</p>
 <p>Example, let us make a movie of 360 frames of a model seen at infinity while
 rotating the object 360 degrees, and as seen at a wavelength of
-<span class="math notranslate nohighlight">\(\lambda=10\mu\)</span> file:</p>
+<span class="math notranslate nohighlight">\(\lambda=10\mu`m with 200x200 pixels. We construct the ``movie.inp`\)</span> file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
 <span class="mi">360</span>
 <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">1e15</span> <span class="mf">1e15</span> <span class="mf">0.</span> <span class="mf">60.</span>  <span class="mf">1.</span>
@@ -1339,7 +1365,9 @@ rotating the object 360 degrees, and as seen at a wavelength of
 </div>
 <p>This will create image files <code class="docutils literal notranslate"><span class="pre">image_0001.out</span></code>, <code class="docutils literal notranslate"><span class="pre">image_0002.out</span></code>, all the way
 to <code class="docutils literal notranslate"><span class="pre">image_0360.out</span></code>.  The images will have a full width and height of
-<span class="math notranslate nohighlight">\(2\times 10^{15}\)</span>phi`-angle.</p>
+<span class="math notranslate nohighlight">\(2\times 10^{15}`cm (about 130 AU), will always point to the center of the
+image, will be taken at an inclination of 60 degrees and with varying
+:math:\)</span>phi`-angle.</p>
 <p>Another example: let us move through the object (local observer mode),
 approaching the center very closely, but not precisely:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mi">1</span>

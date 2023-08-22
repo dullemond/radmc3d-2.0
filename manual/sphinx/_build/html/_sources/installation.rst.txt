@@ -62,7 +62,7 @@ any directory. What it does is:
   use a bash shell, then you can add the following line to your
   ``$HOME/.bashrc``::
     
-    export PATH=/myhomedirectory/bin/python:$PATH
+    export PATH=/myhomedirectory/bin:$PATH
     
 * It creates a file ``radmc3d`` in this ``$HOME/bin/``
   directory with the correct executable permissions. This file is merely a
