@@ -385,7 +385,7 @@ class radmc3dImage(object):
 
             else:
                 for inu in range(self.nfreq):
-                    data[inu, 0, :, :] = self.image[:, :, inu] * conv
+                    data[0, inu, :, :] = self.image[:, :, inu] * conv
         else:
             data = np.zeros([self.nfreq, self.nx, self.ny], dtype=float)
             if self.stokes:
@@ -544,7 +544,7 @@ class radmc3dImage(object):
                  Distance of the source in pc
 
         au     : bool
-                 If True displays the image with AU as the spatial axis unit
+                 If True displays the image with au as the spatial axis unit
 
         arcsec : bool
                  If True displays the image with arcsec as the spatial axis unit (dpc should also be set!)
@@ -581,8 +581,8 @@ class radmc3dImage(object):
         if au:
             x = self.x / nc.au
             y = self.y / nc.au
-            xlab = 'X [AU]'
-            ylab = 'Y [AU]'
+            xlab = 'X [au]'
+            ylab = 'Y [au]'
         elif arcsec:
             x = self.x / nc.au / dpc
             y = self.y / nc.au / dpc
@@ -1157,7 +1157,7 @@ def plotPolDir(image=None, arcsec=False, au=False, dpc=None, ifreq=0, cmask_rad=
                     If True image axis will have the unit arcsec (NOTE: dpc keyword should also be set!)
 
     au            : bool
-                    If True image axis will have the unit AU
+                    If True image axis will have the unit au
 
     dpc           : float
                     Distance to the source in parsec (This keywords should be set if arcsec=True, or bunit!='norm')
@@ -1200,8 +1200,8 @@ def plotPolDir(image=None, arcsec=False, au=False, dpc=None, ifreq=0, cmask_rad=
     if au:
         x = image.x / nc.au
         y = image.y / nc.au
-        xlab = 'X [AU]'
-        ylab = 'Y [AU]'
+        xlab = 'X [au]'
+        ylab = 'Y [au]'
     elif arcsec:
         x = image.x / nc.au / dpc
         y = image.y / nc.au / dpc
@@ -1259,7 +1259,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
                     If True image axis will have the unit arcsec (NOTE: dpc keyword should also be set!)
 
     au            : bool
-                    If True image axis will have the unit AU
+                    If True image axis will have the unit au
 
     log           : bool
                     If True image scale will be logarithmic, otherwise linear
@@ -1494,8 +1494,8 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
         if au:
             x = image.x / nc.au
             y = image.y / nc.au
-            xlab = 'X [AU]'
-            ylab = 'Y [AU]'
+            xlab = 'X [au]'
+            ylab = 'Y [au]'
         elif arcsec:
             x = image.x / nc.au / dpc
             y = image.y / nc.au / dpc
@@ -1516,7 +1516,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
         implot = plt.imshow(data, extent=ext, cmap=cmap, interpolation=interpolation, **kwargs)
         plt.xlabel(xlab)
         plt.ylabel(ylab)
-        plt.title(r'$\lambda$=' + ("%.5f" % image.wav[ifreq]) + r'$\mu$m')
+        plt.title(r'$\lambda$=' + ("%.5g" % image.wav[ifreq]) + r'$\mu$m')
         cbar = plt.colorbar(implot)
         cbar.set_label(cb_label)
         plt.show()
@@ -1678,7 +1678,7 @@ def plotImage(image=None, arcsec=False, au=False, log=False, dpc=None, maxlog=No
 
         if au:
             y = image.rc / 1.496e13
-            ylab = 'R [AU]'
+            ylab = 'R [au]'
         elif arcsec:
             y = image.rc / 1.496e13 / dpc
             ylab = 'R [arcsec]'
@@ -1934,7 +1934,7 @@ def cmask(im=None, rad=0.0, au=False, arcsec=False, dpc=None):
             The raadius of the mask
 
     au     : bool
-            If true the radius is taken to have a unit of AU
+            If true the radius is taken to have a unit of au
 
     arcsec : bool
             If true the radius is taken to have a unit of arcsec (dpc

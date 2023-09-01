@@ -22,7 +22,7 @@ A branch of particular interest is `camera_openmp`, which is the OpenMP parallel
 Also a branch of particular interest is `unstruct`, in which unstructured grids are implemented (Delaunay, Voronoi or home-made). If you try this out, please let me know if it works correctly and well, and does not break earlier features of RADMC-3D (backward compatibility). There are likely to be still numerous bugs, so be careful. Once I am confident of this new feature, I will merge it into the master branch.
 
 ## News
-Bugfix [11.11.2021] in OpenMP parallellization of thermal Monte Carlo affecting models with multiple dust species and `iranfreqmode=1` in the `radmc3d.inp` file when using `setthreads X` with X>1. Please upgrade to version of 11.11.2021 of the master branch.
+Bugfix [20.08.2023] in OpenMP parallellization of Monte Carlo on a spherical 2D or 3D grid when using `setthreads X` with X>1. Please upgrade to version of date 20.08.2023 or later of the master branch.
 
 ## Website
 For more information, please consult the website http://www.ita.uni-heidelberg.de/~dullemond/software/radmc-3d

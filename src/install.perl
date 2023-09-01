@@ -9,7 +9,7 @@ $home = $ENV{"HOME"};
 $bin  = $home . "/bin" ;
 if(!(-e $bin)) {
     print "You must have a bin/ directory in your home directory\n" ;
-    print "-----Shall I make $bin for you?\n" ;
+    print "-----Shall I make $bin for you (y/n)?\n" ;
     $input = <STDIN> ;
     print $input ;
     if($input=~/^[yY]/) {
@@ -49,7 +49,7 @@ $python    = $home . "/bin/python" ;
 $radmc3d   = $python . "/radmc3d_tools" ;
 if(!(-e $python)) {
     print "It is convenient for you to have a bin/python/ directory in your home directory\n" ;
-    print "-----Shall I make $python for you?\n" ;
+    print "-----Shall I make $python for you (y/n)?\n" ;
     $input = <STDIN> ;
     print $input ;
     if($input=~/^[yY]/) {
@@ -60,7 +60,7 @@ if(!(-e $python)) {
 if(-e $python) {
     if(!(-e $radmc3d)) {
         print "It is convenient for you to have a bin/python/radmc3d_tools directory in your home directory\n" ;
-        print "-----Shall I make $radmc3d for you?\n" ;
+        print "-----Shall I make $radmc3d for you (y/n)?\n" ;
         $input = <STDIN> ;
         print $input ;
         if($input=~/^[yY]/) {

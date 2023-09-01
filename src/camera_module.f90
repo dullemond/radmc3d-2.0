@@ -5839,11 +5839,7 @@ subroutine set_camera_frequencies(nfr,freq1,freq2)
         gotit = .true.
         !
      endif
-     if(camera_lambdamic.gt.0.d0) then
-        if(gotit) then
-           write(stdo,*) 'ERROR: You try to use two methods for setting the camera wavelengths.'
-           stop
-        endif
+     if((camera_lambdamic.gt.0.d0).and.(.not.gotit)) then
         !
         ! Use exactly this wavelength, given on the command line
         !

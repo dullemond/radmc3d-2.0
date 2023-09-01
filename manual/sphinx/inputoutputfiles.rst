@@ -347,7 +347,7 @@ is a non-exhaustive list of the variables that can be set.
 * ``tgas_eq_tdust`` (default: 0)
   
   By setting ``tgas_eq_tdust=1`` you tell ``radmc3d`` to
-  simply read the ``dust_temperature.inp`` file and then equate
+  simply read the ``dust_temperature.dat`` file and then equate
   the gas temperature to the dust temperature. If multiple dust species
   are present, only the first species will be used.
 
