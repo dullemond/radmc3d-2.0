@@ -20,4 +20,9 @@ run models you must be careful for:
      may be necessary, because refinement in radial grid may become too
      fine.
 
+You can use plot_structure.py to plot the density model and the temperature
+structure. These are in spherical coordinates, which is usally enough. But
+if you want to use cylindrical coordinates, the results have to be mapped.
+This is done in plot_structure_cylindrical.py.
+
 For a more basic RADMC-3D setup, see run_simple_1/
