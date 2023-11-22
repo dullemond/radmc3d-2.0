@@ -249,7 +249,7 @@ Here is a list:
   temperature. You can do this obviously by hand: read the output dust
   temperature and create the equivalent gas temperature input file from it. But
   that is cumbersome.  By setting ``tgas_eq_tdust=1`` you tell ``radmc3d`` to
-  simply read the ``dust_temperature.inp`` file and then equate the gas
+  simply read the ``dust_temperature.dat`` file and then equate the gas
   temperature to the dust temperature. If multiple dust species are present,
   only the first species will be used.
 
