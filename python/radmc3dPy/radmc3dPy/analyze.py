@@ -44,7 +44,7 @@ from . reggrid import *
 from . molecule import *
 
 
-def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, ispec=None, vturb=False, grid=None,
+def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, ispec=None, vturb=False, mint=False, grid=None,
              old=False, binary=None):
     """Reads the physical variables of the model (e.g. density, velocity, temperature).
 
@@ -72,6 +72,9 @@ def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, isp
     vturb : bool
             If True the microturbulent velocity field will be read
 
+    mint  : bool
+            If True mean intensity will be read (all frequencies in Hz)
+
     grid  : radmc3dGrid
             An instance of radmc3dGrid containing the spatial and frequency grid of the model. If the grid
             is passed to the function it will not be read again from file. This can be useful for octree
@@ -91,13 +94,14 @@ def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, isp
         res = radmc3dData()
 
     # By default: read everything
-    if not(ddens or dtemp or gvel or gtemp or vturb or gdens):
+    if not(ddens or dtemp or gvel or gtemp or vturb or gdens or mint):
         ddens=True
         dtemp=True
         gvel=True
         gtemp=True
         vturb=True
         gdens=True
+        mint=True
         
     if ddens:
         res.readDustDens(old=old)
@@ -109,6 +113,8 @@ def readData(ddens=False, dtemp=False, gdens=False, gtemp=False, gvel=False, isp
         res.readGasTemp()
     if vturb:
         res.readVTurb()
+    if mint:
+        res.readMeanInt()
     if gdens:
         if ispec is not None:
             res.readGasDens(ispec=ispec)
