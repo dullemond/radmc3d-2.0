@@ -125,6 +125,12 @@ class radmc3dData(object):
     vturb     : ndarray
                 Mictroturbulence in cm/s
 
+    meanint   : ndarray
+                Mean intensity in erg/s/cm^2/Hz/ster
+
+    freq      : ndarray
+                (Mean intensity) corresponding frequencies in Hz
+
     taux      : ndarray
                 Optical depth along the x (cartesian) / r (cylindrical) / r (spherical) dimension
 
@@ -158,6 +164,8 @@ class radmc3dData(object):
         self.gasvel = np.zeros(0, dtype=np.float64)
         self.gastemp = np.zeros(0, dtype=np.float64)
         self.vturb = np.zeros(0, dtype=np.float64)
+        self.meanint = np.zeros(0, dtype=np.float64)
+        self.freq = np.zeros(0, dtype=np.float64)
         self.taux = np.zeros(0, dtype=np.float64)
         self.tauy = np.zeros(0, dtype=np.float64)
         self.tauz = np.zeros(0, dtype=np.float64)
@@ -284,7 +292,7 @@ class radmc3dData(object):
                 Name of the file containing a scalar variable
 
         ndim   : int
-                Number of dimension of the data field (3 for gas variables, 4 for dust)
+                Number of dimension of the data field (3 for gas variables, 4 for dust, 5 for mean intensity)
         Returns
         -------
 
@@ -293,13 +301,14 @@ class radmc3dData(object):
         octree = self.octree
         binary = self._isBinary(fname)
         data = None
+        freq = None
         with open(fname, 'r') as rfile:
             if binary:
                 # Read the header
                 # hdr[0] = format number
                 # hdr[1] = data precision (4=single, 8=double)
                 # hdr[2] = nr of cells
-                # hdr[3] = nr of dust species
+                # hdr[3] = nr of dust species or mean intensity frequencies
                 if ndim == 3:
                     hdr = np.fromfile(rfile, count=3, dtype=np.int64)
                 else:
@@ -380,6 +389,8 @@ class radmc3dData(object):
                     hdr = np.fromfile(rfile, count=2, sep=" ", dtype=np.int64)
                 else:
                     hdr = np.fromfile(rfile, count=3, sep=" ", dtype=np.int64)
+                    if ndim == 5:
+                        freq = np.fromfile(rfile, count=hdr[2], sep=" ", dtype=np.float64)
 
                 if octree:
                     if hdr[1] != self.grid.nLeaf:
@@ -441,7 +452,7 @@ class radmc3dData(object):
                     data = np.swapaxes(data, 0, 3)
                     data = np.swapaxes(data, 1, 2)
 
-        return data
+        return data if freq is None else (data, freq)
 
     def getTauOneDust(self, idust=0, axis='', kappa=0.):
         """Calculates the optical depth of a single dust species along any given combination of the axes.
@@ -924,6 +935,27 @@ class radmc3dData(object):
             self.gastemp = self._scalarfieldReader(fname=fname, ndim=3)
             if octree:
                 self.gastemp = np.squeeze(self.gastemp)
+
+    def readMeanInt(self, fname=None):
+        """Reads the mean intensity field.
+
+        Parameters
+        ----------
+
+        fname   : str, optional
+                  Name of the file that contains the mean intensity. If omitted 'mean_intensity.out' is used.
+        """
+        assert self.grid is not None, "radmc3dData object MUST have a .grid subobject."
+
+        octree = self.octree
+
+        if fname is None:
+            fname = self._findDataFile('mean_intensity')
+        if os.path.isfile(fname):
+            print('Reading '+fname)
+            self.meanint, self.freq = self._scalarfieldReader(fname=fname, ndim=5)
+            if octree:
+                self.meanint = np.squeeze(self.meanint)
 
     def writeDustDens(self, fname='', binary=True, old=False):
         """Writes the dust density.
