@@ -142,7 +142,7 @@ class radmc3dOctree(object):
         #
         # Leaf index array - mapping between a full array and an array containing only leaves
         #
-        self.leafID = np.zeros(0, dtype=np.int)
+        self.leafID = np.zeros(0, dtype=int)
         #
         # Boolean array for the cell type (True - leaf, False - branch)
         #
@@ -150,11 +150,11 @@ class radmc3dOctree(object):
         #
         # Level array (base grid is level 0)
         #
-        self.level = np.zeros(0, dtype=np.int)
+        self.level = np.zeros(0, dtype=int)
         #
         # Array containing the index of the parent cell (currently unused, only needed if we go up in the tree)
         #
-        self.parentID = np.zeros(0, dtype=np.int)
+        self.parentID = np.zeros(0, dtype=int)
         #
         # List of children indices
         #
@@ -202,8 +202,8 @@ class radmc3dOctree(object):
 
         self.nwav = 0
         self.nfreq = 0
-        self.wav = np.zeros(0, dtype=np.int)
-        self.freq = np.zeros(0, dtype=np.int)
+        self.wav = np.zeros(0, dtype=int)
+        self.freq = np.zeros(0, dtype=int)
 
         self.counter = -1
 
@@ -389,7 +389,7 @@ class radmc3dOctree(object):
         #
         print('Reading ' + fname)
         data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-        self.nfreq = np.int(data[0])
+        self.nfreq = int(data[0])
         self.nwav = self.nfreq
         self.wav = data[1:]
         self.freq = nc.cc / self.wav * 1e4
@@ -470,7 +470,7 @@ class radmc3dOctree(object):
         self.isLeaf[cellID] = True
         self.level[cellID] = level
         self.parentID[cellID] = parentID
-        self.childID.append(np.zeros(self.nChild, dtype=np.int))
+        self.childID.append(np.zeros(self.nChild, dtype=int))
 
         return
 
@@ -501,9 +501,9 @@ class radmc3dOctree(object):
         dy = np.zeros(ncell * self.nChild, dtype=np.float64)
         dz = np.zeros(ncell * self.nChild, dtype=np.float64)
         isLeaf = np.zeros(ncell * self.nChild, dtype=bool)
-        level = np.zeros(ncell * self.nChild, dtype=np.int)
-        parentID = np.zeros(ncell * self.nChild, dtype=np.int)
-        ind = np.arange(ncell, dtype=np.int) * self.nChild
+        level = np.zeros(ncell * self.nChild, dtype=int)
+        parentID = np.zeros(ncell * self.nChild, dtype=int)
+        ind = np.arange(ncell, dtype=int) * self.nChild
         nx = self.x.shape[0]
 
         xc_offset = None
@@ -578,11 +578,11 @@ class radmc3dOctree(object):
                 dz[ind + i] = np.zeros(ncell, dtype=np.float64) + self.dz[rsIDs][0]
 
             isLeaf[ind + i] = np.ones(ncell, dtype=bool)
-            level[ind + i] = np.zeros(ncell, dtype=np.int) + self.level[rsIDs][0] + 1
+            level[ind + i] = np.zeros(ncell, dtype=int) + self.level[rsIDs][0] + 1
             parentID[ind + i] = rsIDs
 
         childID = []
-        cid = np.arange(self.nChild, dtype=np.int)
+        cid = np.arange(self.nChild, dtype=int)
         for i in range(ncell * self.nChild):
             childID.append(cid)
 
@@ -611,7 +611,7 @@ class radmc3dOctree(object):
         # Update the array length variables
         #
         self.nCell = self.x.shape[0]
-        self.cID = np.arange(self.nCell, dtype=np.int)
+        self.cID = np.arange(self.nCell, dtype=int)
 
         return
 
@@ -711,7 +711,7 @@ class radmc3dOctree(object):
                     self.isLeaf = np.append(self.isLeaf, True)
                     self.level = np.append(self.level, 0)
                     self.parentID = np.append(self.parentID, -1)
-                    self.childID.append(np.zeros(self.nChild, dtype=np.int))
+                    self.childID.append(np.zeros(self.nChild, dtype=int))
 
                     self.nLeaf += 1
                     ind += 1
@@ -821,7 +821,7 @@ class radmc3dOctree(object):
         Performs a self-check of the tree allocation and report it to the screen
         """
 
-        self.counter = np.zeros([3], dtype=np.int)
+        self.counter = np.zeros([3], dtype=int)
         nRoot = self.nxRoot * self.nyRoot * self.nzRoot
         for i in range(nRoot):
             self._selfCheckCounterRec(cellID=i)
@@ -864,7 +864,7 @@ class radmc3dOctree(object):
         """
 
         print('Generating leaf indices')
-        self.leafID = np.zeros(self.nCell, dtype=np.int) - 1
+        self.leafID = np.zeros(self.nCell, dtype=int) - 1
         self.cellIDCur = -1
         nRoot = self.nxRoot * self.nyRoot * self.nzRoot
         for i in range(nRoot):
@@ -1095,8 +1095,8 @@ class radmc3dOctree(object):
             self.dz = np.zeros(nCell, dtype=np.float64)
 
             self.isLeaf = np.ones(nCell, dtype=bool)
-            self.level = np.zeros(nCell, dtype=np.int)
-            self.parentID = np.zeros(nCell, dtype=np.int)
+            self.level = np.zeros(nCell, dtype=int)
+            self.parentID = np.zeros(nCell, dtype=int)
             self.childID = []
 
             #
@@ -1223,7 +1223,7 @@ class radmc3dOctree(object):
                                  + 'claimed.')
 
             self.isLeaf[cellID] = False
-            self.childID[cellID] = np.zeros(self.nChild, dtype=np.int)
+            self.childID[cellID] = np.zeros(self.nChild, dtype=int)
             for i in range(self.nChild):
                 self.childID[cellID][i] = self.cellIDCur
                 dx = self.dx[cellID] * (2.0 - self.act_dim[0])

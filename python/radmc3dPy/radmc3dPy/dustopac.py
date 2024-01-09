@@ -321,7 +321,7 @@ class radmc3dDustOpac(object):
 
                     # Now read the rest of the file
                     data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
-                    hdr  = np.array(data[:2], dtype=np.int)
+                    hdr  = np.array(data[:2], dtype=int)
                     nlam = hdr[0]
                     nang = hdr[1]
                     data = data[2:]
@@ -391,7 +391,7 @@ class radmc3dDustOpac(object):
 
                         # Now read the rest of the file
                         data = np.fromfile(rfile, count=-1, sep=" ", dtype=np.float64)
-                        hdr  = np.array(data[:1], dtype=np.int)
+                        hdr  = np.array(data[:1], dtype=int)
                         nlam = hdr[0]
                         data = data[1:]
 
@@ -441,7 +441,7 @@ class radmc3dDustOpac(object):
                     self.idust.append(idust[i])
 
                     data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-                    hdr = np.array(data[:2], dtype=np.int)
+                    hdr = np.array(data[:2], dtype=int)
                     data = data[2:]
                     if hdr[0] != nfreq:
                         msg = fname + ' contains a different number of frequencies than frequency.inp'
