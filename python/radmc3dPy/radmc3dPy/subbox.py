@@ -72,7 +72,7 @@ class subBox(object):
             assert iformat==2, "Subbox file format inconsistent"
             print('Reading '+fname)
             data = np.fromfile(f, count=-1, sep=" ", dtype=np.float64)
-        hdr  = np.array(data[:4], dtype=np.int)
+        hdr  = np.array(data[:4], dtype=int)
         self.nx = hdr[0]
         self.ny = hdr[1]
         self.nz = hdr[2]
@@ -97,7 +97,7 @@ class subBox(object):
         self.theta = hdr[1]
         self.phi2  = hdr[2]
         data = data[3:]
-        hdr  = np.array(data[:self.nv], dtype=np.int)
+        hdr  = np.array(data[:self.nv], dtype=int)
         data = data[self.nv:]
         if(self.datatype=='lines_levelpop'):
             self.level_subset = hdr
