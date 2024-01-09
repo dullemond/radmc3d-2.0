@@ -709,7 +709,7 @@ class radmc3dGrid(object):
             #
             print('Reading ' + fname)
             data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-            self.nfreq = np.int(data[0])
+            self.nfreq = int(data[0])
             self.nwav = self.nfreq
             self.wav = data[1:]
             self.freq = nc.cc / self.wav * 1e4
@@ -722,7 +722,7 @@ class radmc3dGrid(object):
 
             print('Reading '+fname)
             data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-            self.nfreq = np.int(data[0])
+            self.nfreq = int(data[0])
             self.nwav = self.nwav
             self.freq = data[1:]
             self.wav = nc.cc / self.freq * 1e4
@@ -753,7 +753,7 @@ class radmc3dGrid(object):
 
             print('Reading '+fname)
             data = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
-            hdr = np.array(data[:10], dtype=np.int)
+            hdr = np.array(data[:10], dtype=int)
             data = data[10:]
 
             # Check the file format
@@ -807,7 +807,7 @@ class radmc3dGrid(object):
             # Read the radial grid
             #
             data = np.fromfile('radius.inp', count=-1, sep=" ", dtype=np.float64)
-            self.nx = np.int(data[0])
+            self.nx = int(data[0])
             self.nxi = self.nx + 1
             self.x = data[1:]
             self.xi = np.zeros(self.nxi, dtype=float)
@@ -820,7 +820,7 @@ class radmc3dGrid(object):
             #
 
             data = np.fromfile('theta.inp', count=-1, sep=" ", dtype=np.float64)
-            self.ny = np.int(data[0]) * 2
+            self.ny = int(data[0]) * 2
             self.nyi = self.ny + 1
             self.y = np.zeros(self.ny, dtype=float)
             self.y[:self.ny//2] = data[2:]
