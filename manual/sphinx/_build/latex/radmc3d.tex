@@ -60,7 +60,7 @@
 
 
 \title{radmc3d}
-\date{Nov 23, 2023}
+\date{Mar 06, 2024}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -5231,6 +5231,15 @@ The radiative transfer equation for non overlapping lines is then
 But RADMC\sphinxhyphen{}3D naturally includes overlapping lines, at least in the
 ray\sphinxhyphen{}tracing (for spectra and images). For non\sphinxhyphen{}LTE modes the line
 overlapping is not yet (as of December 2011) included.
+
+\sphinxAtStartPar
+RADMC\sphinxhyphen{}3D also allows for a more general line profile: The Voigt
+profile, which is a combination of the Gaussian and the Lorentz
+profiles. It is implemented in RADMC\sphinxhyphen{}3D, but this is not yet well
+documented, nor very well tested yet. Please check the
+\sphinxcode{\sphinxupquote{userdef\_compute\_lorentz\_delta()}} function in the
+\sphinxcode{\sphinxupquote{userdef\_module.f90}} module and the \sphinxcode{\sphinxupquote{voigt\_humlicek()}}
+function in the \sphinxcode{\sphinxupquote{lines\_module.f90}} module.
 
 
 \section{Line transfer modes and how to activate the line transfer}

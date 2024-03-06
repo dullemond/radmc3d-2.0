@@ -216,6 +216,13 @@ becomes angle-dependent (at a given lab-frame frequency):</p>
 <p>But RADMC-3D naturally includes overlapping lines, at least in the
 ray-tracing (for spectra and images). For non-LTE modes the line
 overlapping is not yet (as of December 2011) included.</p>
+<p>RADMC-3D also allows for a more general line profile: The Voigt
+profile, which is a combination of the Gaussian and the Lorentz
+profiles. It is implemented in RADMC-3D, but this is not yet well
+documented, nor very well tested yet. Please check the
+<code class="docutils literal notranslate"><span class="pre">userdef_compute_lorentz_delta()</span></code> function in the
+<code class="docutils literal notranslate"><span class="pre">userdef_module.f90</span></code> module and the <code class="docutils literal notranslate"><span class="pre">voigt_humlicek()</span></code>
+function in the <code class="docutils literal notranslate"><span class="pre">lines_module.f90</span></code> module.</p>
 </section>
 <section id="line-transfer-modes-and-how-to-activate-the-line-transfer">
 <span id="sec-line-trans-modes"></span><h2>Line transfer modes and how to activate the line transfer<a class="headerlink" href="#line-transfer-modes-and-how-to-activate-the-line-transfer" title="Permalink to this heading"></a></h2>
