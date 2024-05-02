@@ -123,10 +123,19 @@ For models of galaxies it is important to be able to have distributed
 stellar sources instead of individual stars. The way to implement this
 in a model for RADMC-3D is to 
 
-#. Prepare one or more *template stellar spectra*, for instance, one for each
+#. Prepare one or more *template stellar spectra* :math:`S^{*}_{i,\nu}`, for instance, one for each
    stellar type you wish to include. These must be specified in the file
    ``stellarsrc_templates.inp`` (see Section
-   :ref:`sec-stellarsrc-templates`). Of course the more templates you have, the
+   :ref:`sec-stellarsrc-templates`). The format for each template stellar
+   spectrum is:
+
+   .. math::
+   
+      S^{*}_\nu = \frac{L^{*}_\nu}{4\pi M_{*}}
+
+   where :math:`L^{*}_\nu` is the luminosity spectrum of the star in
+   units of :math:`\mathrm{erg}\; \mathrm{s}^{-1} \mathrm{Hz}^{-1}` and :math:`M_{*}` is
+   the mass of the star. Of course the more templates you have, the
    more memory consuming it becomes, which is of particular concern for models
    on large grids. You can of course also take a sum of various stellar types as
    a template. For instance, if we wish to include a 'typical' bulge stellar
@@ -136,10 +145,20 @@ in a model for RADMC-3D is to
   
 #. For each template you must specify the *spatial distribution*,
    i.e. how many stars of each template star are there per unit volume in
-   each cell. The stellar density is, in fact, given as gram-of-star/cm\ :math:`^3`
-   (i.e. not as number density of stars). The stellar spatial densities
+   each cell. The stellar density :math:`\rho_{*}` is, in fact, given as gram-of-star/cm\ :math:`^3`
+   (i.e. not as number density of stars :math:`N_{*}`). In other words: :math:`\rho_{*}=N_{*}M_{*}`.
+   The stellar spatial densities
    are specified in the file ``stellarsrc_density.inp`` (see
    Section :ref:`sec-stellarsrc-density`).
+
+The emissivity of each stellar population is then:
+
+.. math::
+   
+   j^{*}_\nu = \rho_{*} S^{*}_\nu
+
+where :math:`j^{*}_\nu` is in units of :math:`\mathrm{erg}\; \mathrm{s}^{-1} \mathrm{cm}^{-3} \mathrm{Hz}^{-1} \mathrm{steradian}^{-1}`, i.e., it is
+the usual emissivity function for the radiative transfer equation :math:`dI_\nu/ds = j_\nu - \rho\kappa_\nu I_\nu`.
 
 Note that if you have a file ``stellarsrc_templates.inp`` in your
 model directly, then the stellar sources are automatically switched on.
@@ -157,6 +176,7 @@ Monte Carlo way.
 Note that the smooth stellar source distributions assume that the zillions
 of stars that they represent are so small that they do not absorb any
 appreciable amount of radiation. They are therefore pure sources, not sinks.
+
 
 
 

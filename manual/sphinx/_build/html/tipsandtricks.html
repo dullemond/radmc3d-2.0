@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tips, tricks and problem hunting &mdash; radmc3d 2.0 documentation</title>
@@ -255,7 +255,10 @@ Fig. <a class="reference internal" href="#fig-innerrim-lowres"><span class="std 
 <p><span class="caption-number">Fig. 30 </span><span class="caption-text">Example of what can go wrong with radiative transfer if the inner cells of
 a model are optically thick (i.e.if no grid refinement is used, see
 Section <a class="reference internal" href="gridding.html#sec-separable-refinement"><span class="std std-ref">Separable grid refinement in spherical coordinates (important!)</span></a>). Shown here are scattered light
-images at <span class="math notranslate nohighlight">\(\lambda=0.7\mu\)</span>Delta R/R=0.04`.  Left image: the
+images at <span class="math notranslate nohighlight">\(\lambda=0.7\mu`m wavelength of the inner rim of a
+protoplanetary disk, but with the star removed with an ideal
+choronograph. The color scale is linear. The radial grid is taken to be
+logarithmically spaced with :math:\)</span>Delta R/R=0.04`.  Left image: the
 inner cells are marginally optically thin <span class="math notranslate nohighlight">\(\Delta\tau\simeq 1\)</span>,
 creating a bright inner ring, as is expected. Right image: ten times
 higher optical depth, making the inner cells optically thick with roughly
@@ -416,7 +419,10 @@ will go wrong. First of all the inner edge of the disk will almost
 certainly behave strangely (see Fig. <a class="reference internal" href="#fig-innerrim-lowres"><span class="std std-ref">Example of what can go wrong with radiative transfer if the inner cells of
 a model are optically thick (i.e.if no grid refinement is used, see
 Section sec-separable-refinement). Shown here are scattered light
-images at \lambda=0.7\muDelta R/R=0.04`.  Left image: the
+images at \lambda=0.7\mu`m wavelength of the inner rim of a
+protoplanetary disk, but with the star removed with an ideal
+choronograph. The color scale is linear. The radial grid is taken to be
+logarithmically spaced with :math:Delta R/R=0.04`.  Left image: the
 inner cells are marginally optically thin \Delta\tau\simeq 1,
 creating a bright inner ring, as is expected. Right image: ten times
 higher optical depth, making the inner cells optically thick with roughly

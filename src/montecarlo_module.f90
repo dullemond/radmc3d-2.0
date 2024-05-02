@@ -2211,9 +2211,6 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
   integer :: iseeddum,isd,itemplate
   logical :: mc_emergency_break
   !$ integer :: i
-  !$ integer OMP_get_num_threads
-  !$ integer OMP_get_thread_num
-  !$ integer OMP_get_num_procs
   !$ conflict_counter = 0
   !
   ! Some consistency checks
@@ -2805,9 +2802,6 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
   logical :: mc_emergency_break
   doubleprecision:: seconds
   !$ integer :: ierr,i
-  !$ integer OMP_get_num_threads
-  !$ integer OMP_get_thread_num
-  !$ integer OMP_get_num_procs
   !$ conflict_counter = 0
   !
   ! Some consistency checks

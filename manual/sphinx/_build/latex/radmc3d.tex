@@ -60,7 +60,7 @@
 
 
 \title{radmc3d}
-\date{Jul 01, 2022}
+\date{Nov 23, 2023}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -916,7 +916,7 @@ use a bash shell, then you can add the following line to your
 \sphinxcode{\sphinxupquote{\$HOME/.bashrc}}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-export PATH=/myhomedirectory/bin/python:\PYGZdl{}PATH
+export PATH=/myhomedirectory/bin:\PYGZdl{}PATH
 \end{sphinxVerbatim}
 
 \item {} 
@@ -2456,7 +2456,7 @@ For creating an image you can type
 \end{sphinxVerbatim}
 
 \sphinxAtStartPar
-which creates an image at wavelength \(\lambda\)mu\textasciigrave{}m. More information
+which creates an image at wavelength \(\lambda`=10:math:\)mu\textasciigrave{}m. More information
 about making images is given in Chapter {\hyperref[\detokenize{imagesspectra:chap-images-spectra}]{\sphinxcrossref{\DUrole{std,std-ref}{Making images and spectra}}}}.
 
 \sphinxAtStartPar
@@ -5382,7 +5382,7 @@ first the dust temperature and then set the gas temperature equal to the dust
 temperature. You can do this obviously by hand: read the output dust
 temperature and create the equivalent gas temperature input file from it. But
 that is cumbersome.  By setting \sphinxcode{\sphinxupquote{tgas\_eq\_tdust=1}} you tell \sphinxcode{\sphinxupquote{radmc3d}} to
-simply read the \sphinxcode{\sphinxupquote{dust\_temperature.inp}} file and then equate the gas
+simply read the \sphinxcode{\sphinxupquote{dust\_temperature.dat}} file and then equate the gas
 temperature to the dust temperature. If multiple dust species are present,
 only the first species will be used.
 
@@ -6872,7 +6872,7 @@ doppler jumps. This is because in addition to the physical gradient of gas
 velocity, the projected gas velocity along a ray changes also along the
 ray due to the geometry (the use of spherical coordinates). Example: a
 spherically symmetric radially outflowing wind with constant outward
-velocity \(v_r=\) is constant, the 3\sphinxhyphen{}D \sphinxstyleemphasis{vector}
+velocity \(v_r=`const. Although :math:`v_r\) is constant, the 3\sphinxhyphen{}D \sphinxstyleemphasis{vector}
 \(\vec v\) is not constant, since it always points outward. A ray through
 this wind will thus have a varying \(\vec n\cdot \vec v\) along the ray.  In
 the cell where the ray reaches its closest approach to the origin of the
@@ -7094,7 +7094,8 @@ An image can now be made with a simple call to
 \end{sphinxVerbatim}
 
 \sphinxAtStartPar
-This makes an image of the model at wavelength \(\lambda=10\mu\). We refer to Section
+This makes an image of the model at wavelength \(\lambda=10\mu`m and writes
+this to the file ``image.out`\). We refer to Section
 {\hyperref[\detokenize{inputoutputfiles:sec-image-out}]{\sphinxcrossref{\DUrole{std,std-ref}{OUTPUT: image.out or image\_****.out}}}} for details of this file and how to interpret the
 content. See Chapter {\hyperref[\detokenize{pythontools:chap-python-analysis-tools}]{\sphinxcrossref{\DUrole{std,std-ref}{Python analysis tool set}}}} for an extensive Python tools
 that make it easy to read and handle these files. The vantage point is
@@ -7314,7 +7315,8 @@ example on just one of these methods. Type, for instance,
 
 \sphinxAtStartPar
 This will create 10 images at once, all with the same viewing perspective, but
-at 10 wavelengths regularly distributed between 5 \(\mu\)mu\textasciigrave{}m.  All images are written into a single file, \sphinxcode{\sphinxupquote{image.out}} (See
+at 10 wavelengths regularly distributed between 5 \(\mu`m and 20
+:math:\)mu\textasciigrave{}m.  All images are written into a single file, \sphinxcode{\sphinxupquote{image.out}} (See
 Section {\hyperref[\detokenize{inputoutputfiles:sec-image-out}]{\sphinxcrossref{\DUrole{std,std-ref}{OUTPUT: image.out or image\_****.out}}}} for its format).
 
 \sphinxAtStartPar
@@ -7598,7 +7600,8 @@ do this:
 \end{sphinxVerbatim}
 
 \sphinxAtStartPar
-This will make a spectrum between 5 and 20 \(\mu\)mu\textasciigrave{}m. You
+This will make a spectrum between 5 and 20 \(\mu`m. It will use by default
+100 wavelength points logarithmically spaced between 5 and 20 :math:\)mu\textasciigrave{}m. You
 can change the number of wavelength points as well:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -7691,7 +7694,11 @@ width of the order of \(\lambda\) itself. Many instruments have their own
 set of filters. Usually one can download these profiles as digital tables.
 It can, under some circumstances, be important to include a treatment of
 these profiles in the model predictions. As an example take the N band. This
-is a band that includes the 10 \(\mu\)lambda\_i\textasciigrave{} for \(1\le i\le n\), where \(n\) is the number of
+is a band that includes the 10 \(\mu`m silicate feature, which is a strong
+function of wavelength *within* the N band. If you have a wide filter in
+the N band, then one cannot simply calculate the model spectrum in one single
+wavelength. Instead one has to calculate it for a properly finely sampled
+set of wavelengths :math:\)lambda\_i\textasciigrave{} for \(1\le i\le n\), where \(n\) is the number of
 wavelength samples, and then compute the filter\sphinxhyphen{}averaged flux with:
 \begin{equation*}
 \begin{split}F_{band} = \int_0^{\infty}\Phi_i(\lambda)F(\lambda)d\lambda
@@ -8451,6 +8458,33 @@ Example usage:
 \end{sphinxVerbatim}
 
 
+\section{Maps of optical depth \protect\(\tau\protect\)}
+\label{\detokenize{imagesspectra:maps-of-optical-depth-tau}}\label{\detokenize{imagesspectra:sec-tracetau}}
+\sphinxAtStartPar
+Another way to get a better understanding of the optical depth of your model
+is to make an “image of optical depths”. It is just like making an image, but
+instead of each pixel containing the intensity \(I_\nu\) of the image,
+each pixel now contains the full optical depth \(\tau_\nu\) along the ray.
+In this way you get an optical depth map.
+
+\sphinxAtStartPar
+The idea is to simply make an image, as you would normally do, but now add
+the command\sphinxhyphen{}line  keyword \sphinxcode{\sphinxupquote{tracetau}}. Example:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{radmc3d} \PYG{n}{image} \PYG{k}{lambda} \PYG{l+m+mi}{10} \PYG{n}{incl} \PYG{l+m+mi}{45} \PYG{n}{phi} \PYG{l+m+mi}{30} \PYG{n}{tracetau}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The image output file \sphinxcode{\sphinxupquote{image.out}} will now contain, for each pixel, the
+optical depth.
+
+\sphinxAtStartPar
+You can also use the command\sphinxhyphen{}line  keyword \sphinxcode{\sphinxupquote{tracecolumn}}, in which case
+your image will not contain the optical depth, but the total column density.
+Note: For now it only includes the column density of the dust.
+
+
 \section{For public outreach work: local observers inside the model}
 \label{\detokenize{imagesspectra:for-public-outreach-work-local-observers-inside-the-model}}\label{\detokenize{imagesspectra:sec-local-observer}}
 \sphinxAtStartPar
@@ -8690,7 +8724,7 @@ command\sphinxhyphen{}line options still remain valid.
 \sphinxAtStartPar
 Example, let us make a movie of 360 frames of a model seen at infinity while
 rotating the object 360 degrees, and as seen at a wavelength of
-\(\lambda=10\mu\) file:
+\(\lambda=10\mu`m with 200x200 pixels. We construct the ``movie.inp`\) file:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{l+m+mi}{1}
@@ -8716,7 +8750,9 @@ We now call RADMC\sphinxhyphen{}3D in the following way:
 \sphinxAtStartPar
 This will create image files \sphinxcode{\sphinxupquote{image\_0001.out}}, \sphinxcode{\sphinxupquote{image\_0002.out}}, all the way
 to \sphinxcode{\sphinxupquote{image\_0360.out}}.  The images will have a full width and height of
-\(2\times 10^{15}\)phi\textasciigrave{}\sphinxhyphen{}angle.
+\(2\times 10^{15}`cm (about 130 AU), will always point to the center of the
+image, will be taken at an inclination of 60 degrees and with varying
+:math:\)phi\textasciigrave{}\sphinxhyphen{}angle.
 
 \sphinxAtStartPar
 Another example: let us move through the object (local observer mode),
@@ -9542,10 +9578,18 @@ in a model for RADMC\sphinxhyphen{}3D is to
 \sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
 \item {} 
 \sphinxAtStartPar
-Prepare one or more \sphinxstyleemphasis{template stellar spectra}, for instance, one for each
+Prepare one or more \sphinxstyleemphasis{template stellar spectra} \(S^{*}_{i,\nu}\), for instance, one for each
 stellar type you wish to include. These must be specified in the file
 \sphinxcode{\sphinxupquote{stellarsrc\_templates.inp}} (see Section
-{\hyperref[\detokenize{inputoutputfiles:sec-stellarsrc-templates}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (optional): stellarsrc\_templates.inp}}}}). Of course the more templates you have, the
+{\hyperref[\detokenize{inputoutputfiles:sec-stellarsrc-templates}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (optional): stellarsrc\_templates.inp}}}}). The format for each template stellar
+spectrum is:
+\begin{equation*}
+\begin{split}S^{*}_\nu = \frac{L^{*}_\nu}{4\pi M_{*}}\end{split}
+\end{equation*}
+\sphinxAtStartPar
+where \(L^{*}_\nu\) is the luminosity spectrum of the star in
+units of \(\mathrm{erg}\; \mathrm{s}^{-1} \mathrm{Hz}^{-1}\) and \(M_{*}\) is
+the mass of the star. Of course the more templates you have, the
 more memory consuming it becomes, which is of particular concern for models
 on large grids. You can of course also take a sum of various stellar types as
 a template. For instance, if we wish to include a ‘typical’ bulge stellar
@@ -9557,12 +9601,22 @@ the template and thus save memory.
 \sphinxAtStartPar
 For each template you must specify the \sphinxstyleemphasis{spatial distribution},
 i.e. how many stars of each template star are there per unit volume in
-each cell. The stellar density is, in fact, given as gram\sphinxhyphen{}of\sphinxhyphen{}star/cm\(^3\)
-(i.e. not as number density of stars). The stellar spatial densities
+each cell. The stellar density \(\rho_{*}\) is, in fact, given as gram\sphinxhyphen{}of\sphinxhyphen{}star/cm\(^3\)
+(i.e. not as number density of stars \(N_{*}\)). In other words: \(\rho_{*}=N_{*}M_{*}\).
+The stellar spatial densities
 are specified in the file \sphinxcode{\sphinxupquote{stellarsrc\_density.inp}} (see
 Section {\hyperref[\detokenize{inputoutputfiles:sec-stellarsrc-density}]{\sphinxcrossref{\DUrole{std,std-ref}{INPUT (optional): stellarsrc\_density.inp}}}}).
 
 \end{enumerate}
+
+\sphinxAtStartPar
+The emissivity of each stellar population is then:
+\begin{equation*}
+\begin{split}j^{*}_\nu = \rho_{*} S^{*}_\nu\end{split}
+\end{equation*}
+\sphinxAtStartPar
+where \(j^{*}_\nu\) is in units of \(\mathrm{erg}\; \mathrm{s}^{-1} \mathrm{cm}^{-3} \mathrm{Hz}^{-1} \mathrm{steradian}^{-1}\), i.e., it is
+the usual emissivity function for the radiative transfer equation \(dI_\nu/ds = j_\nu - \rho\kappa_\nu I_\nu\).
 
 \sphinxAtStartPar
 Note that if you have a file \sphinxcode{\sphinxupquote{stellarsrc\_templates.inp}} in your
@@ -11133,7 +11187,10 @@ Fig. \hyperref[\detokenize{tipsandtricks:fig-innerrim-lowres}]{Fig.\@ \ref{\deto
 \caption{Example of what can go wrong with radiative transfer if the inner cells of
 a model are optically thick (i.e.if no grid refinement is used, see
 Section {\hyperref[\detokenize{gridding:sec-separable-refinement}]{\sphinxcrossref{\DUrole{std,std-ref}{Separable grid refinement in spherical coordinates (important!)}}}}). Shown here are scattered light
-images at \(\lambda=0.7\mu\)Delta R/R=0.04\textasciigrave{}.  Left image: the
+images at \(\lambda=0.7\mu`m wavelength of the inner rim of a
+protoplanetary disk, but with the star removed with an ideal
+choronograph. The color scale is linear. The radial grid is taken to be
+logarithmically spaced with :math:\)Delta R/R=0.04\textasciigrave{}.  Left image: the
 inner cells are marginally optically thin \(\Delta\tau\simeq 1\),
 creating a bright inner ring, as is expected. Right image: ten times
 higher optical depth, making the inner cells optically thick with roughly
@@ -11365,7 +11422,10 @@ will go wrong. First of all the inner edge of the disk will almost
 certainly behave strangely (see Fig. {\hyperref[\detokenize{tipsandtricks:fig-innerrim-lowres}]{\sphinxcrossref{\DUrole{std,std-ref}{Example of what can go wrong with radiative transfer if the inner cells of
 a model are optically thick (i.e.if no grid refinement is used, see
 Section sec\sphinxhyphen{}separable\sphinxhyphen{}refinement). Shown here are scattered light
-images at \textbackslash{}lambda=0.7\textbackslash{}muDelta R/R=0.04\textasciigrave{}.  Left image: the
+images at \textbackslash{}lambda=0.7\textbackslash{}mu\textasciigrave{}m wavelength of the inner rim of a
+protoplanetary disk, but with the star removed with an ideal
+choronograph. The color scale is linear. The radial grid is taken to be
+logarithmically spaced with :math:Delta R/R=0.04\textasciigrave{}.  Left image: the
 inner cells are marginally optically thin \textbackslash{}Delta\textbackslash{}tau\textbackslash{}simeq 1,
 creating a bright inner ring, as is expected. Right image: ten times
 higher optical depth, making the inner cells optically thick with roughly
@@ -11866,7 +11926,7 @@ If 1, then print a pictogram of the levels of the molecules/atoms.
 
 \sphinxAtStartPar
 By setting \sphinxcode{\sphinxupquote{tgas\_eq\_tdust=1}} you tell \sphinxcode{\sphinxupquote{radmc3d}} to
-simply read the \sphinxcode{\sphinxupquote{dust\_temperature.inp}} file and then equate
+simply read the \sphinxcode{\sphinxupquote{dust\_temperature.dat}} file and then equate
 the gas temperature to the dust temperature. If multiple dust species
 are present, only the first species will be used.
 

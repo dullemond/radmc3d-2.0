@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Line radiative transfer &mdash; radmc3d 2.0 documentation</title>
@@ -314,7 +314,7 @@ first the dust temperature and then set the gas temperature equal to the dust
 temperature. You can do this obviously by hand: read the output dust
 temperature and create the equivalent gas temperature input file from it. But
 that is cumbersome.  By setting <code class="docutils literal notranslate"><span class="pre">tgas_eq_tdust=1</span></code> you tell <code class="docutils literal notranslate"><span class="pre">radmc3d</span></code> to
-simply read the <code class="docutils literal notranslate"><span class="pre">dust_temperature.inp</span></code> file and then equate the gas
+simply read the <code class="docutils literal notranslate"><span class="pre">dust_temperature.dat</span></code> file and then equate the gas
 temperature to the dust temperature. If multiple dust species are present,
 only the first species will be used.</p>
 </li>
@@ -1456,7 +1456,7 @@ doppler jumps. This is because in addition to the physical gradient of gas
 velocity, the projected gas velocity along a ray changes also along the
 ray due to the geometry (the use of spherical coordinates). Example: a
 spherically symmetric radially outflowing wind with constant outward
-velocity <span class="math notranslate nohighlight">\(v_r=\)</span> is constant, the 3-D <em>vector</em>
+velocity <span class="math notranslate nohighlight">\(v_r=`const. Although :math:`v_r\)</span> is constant, the 3-D <em>vector</em>
 <span class="math notranslate nohighlight">\(\vec v\)</span> is not constant, since it always points outward. A ray through
 this wind will thus have a varying <span class="math notranslate nohighlight">\(\vec n\cdot \vec v\)</span> along the ray.  In
 the cell where the ray reaches its closest approach to the origin of the
