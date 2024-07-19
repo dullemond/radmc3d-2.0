@@ -32,4 +32,3 @@ radmc3dPy/models/simple_1.py
 radmc3dPy/models/spher1d_1.py
 radmc3dPy/models/spher2d_1.py
 radmc3dPy/models/template.py
-radmc3dPy/models/test_scattering_1.py

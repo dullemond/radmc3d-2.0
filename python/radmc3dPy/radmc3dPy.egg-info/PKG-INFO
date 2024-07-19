@@ -4,12 +4,7 @@ Version: 2.0
 Summary: Python module for RADMC3D
 Author: Attila Juhasz
 Author-email: at.juhasz01@gmail.com
-License: UNKNOWN
-Platform: UNKNOWN
 Requires: numpy
 Requires: scipy
 Requires: matplotlib
 Requires: astropy
-
-UNKNOWN
-
