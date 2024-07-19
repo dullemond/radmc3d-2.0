@@ -1166,7 +1166,7 @@ def interpolateOctree(data=None, x=None, y=None, z=None, var=None, nproc=1):
         if 'gvel' in var:
             idata['gvel'] = np.zeros([nx, ny, nz, 3], dtype=np.float64)
 
-        idata['cellID'] = np.zeros(npoint, dtype=np.int)
+        idata['cellID'] = np.zeros(npoint, dtype=np.int_)
 
         for ind in range(npoint):
 
@@ -1885,7 +1885,7 @@ def plotSlice2D(data=None, var='ddens', plane='xy', crd3=0.0, icrd3=None, ispec=
     if showgrid:
         if octree:
             ind = 0
-            plottedInd = np.zeros(idata['cellID'].shape[0], dtype=np.int) - 1
+            plottedInd = np.zeros(idata['cellID'].shape[0], dtype=np.int_) - 1
 
             if plane.strip().lower() == 'xy':
                 for i in idata['cellID']:

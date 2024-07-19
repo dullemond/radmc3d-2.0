@@ -62,7 +62,7 @@ def readGrid(sgrid=True, wgrid=True, sgrid_fname=None, wgrid_fname=None, old=Fal
         if not old:
             if sgrid_fname is None:
                 sgrid_fname = 'amr_grid.inp'
-            hdr = np.fromfile(sgrid_fname, count=7, sep="\n", dtype=np.int)
+            hdr = np.fromfile(sgrid_fname, count=7, sep="\n", dtype=np.int_)
             if hdr[1] == 0:
                 grid = radmc3dGrid()
             elif hdr[1] == 1:
