@@ -84,7 +84,7 @@ def read_grid():
     data  = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Read the header
-    hdr   = np.array(data[:10], dtype=np.int)
+    hdr   = np.array(data[:10], dtype=np.int_)
     data  = data[10:]
 
     # Check the file format
@@ -150,7 +150,7 @@ def read_dustdens(indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
     
     # Read the header
-    hdr       = np.array(data[:3], dtype=np.int)
+    hdr       = np.array(data[:3], dtype=np.int_)
     data      = data[3:]
 
     # Check the file format
@@ -209,7 +209,7 @@ def read_dusttemp(indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
     
     # Read the header
-    hdr       = np.array(data[:3], dtype=np.int)
+    hdr       = np.array(data[:3], dtype=np.int_)
     data      = data[3:]
 
     # Check the file format
@@ -472,7 +472,7 @@ def read_gastemp(indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Read the header
-    hdr       = np.array(data[:2], dtype=np.int)
+    hdr       = np.array(data[:2], dtype=np.int_)
     data      = data[2:]
 
     # Check the file format
@@ -527,7 +527,7 @@ def read_gasvelocity(indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Read the header
-    hdr       = np.array(data[:2], dtype=np.int)
+    hdr       = np.array(data[:2], dtype=np.int_)
     data      = data[2:]
 
     # Check the file format
@@ -584,7 +584,7 @@ def read_molnumdens(molecule,indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Read the header
-    hdr       = np.array(data[:2], dtype=np.int)
+    hdr       = np.array(data[:2], dtype=np.int_)
     data      = data[2:]
 
     # Check the file format
@@ -640,7 +640,7 @@ def read_mollevelpop(molecule,indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Read the header
-    hdr       = np.array(data[:3], dtype=np.int)
+    hdr       = np.array(data[:3], dtype=np.int_)
     data      = data[3:]
 
     # Check the file format
@@ -658,7 +658,7 @@ def read_mollevelpop(molecule,indexorder='fortran'):
     mollevelpop.nlevels = hdr[2]
 
     # Identities of the levels (for associating them to the levels in the molecule_xxxx.inp file)
-    hdr       = np.array(data[:mollevelpop.nlevels], dtype=np.int)
+    hdr       = np.array(data[:mollevelpop.nlevels], dtype=np.int_)
     data      = data[mollevelpop.nlevels:]
     mollevelpop.levels = hdr
 
@@ -716,7 +716,7 @@ def read_mean_intensity(indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Read the header
-    hdr       = np.array(data[:3], dtype=np.int)
+    hdr       = np.array(data[:3], dtype=np.int_)
     data      = data[3:]
 
     # Get the frequencies
@@ -788,7 +788,7 @@ def read_subbox(name='dust_temperature',indexorder='fortran'):
     data      = np.fromfile(fname, count=-1, sep=" ", dtype=np.float64)
 
     # Extract the header and create the main data box
-    hdr       = np.array(data[:15], dtype=np.int)
+    hdr       = np.array(data[:15], dtype=np.int_)
     data      = data[15:]
 
     # Get the grid data
