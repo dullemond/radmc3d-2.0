@@ -9,6 +9,8 @@ from makedustopacfortran import create_dustkapscatmat_file
 import os
 from radmc3dPy.analyze import readOpac
 from scipy.optimize import bisect
+# bugfix for radmc3dPy since np.int was removed in numpy.
+np.int = np.int32
 #
 # A simple grid refinement function
 #

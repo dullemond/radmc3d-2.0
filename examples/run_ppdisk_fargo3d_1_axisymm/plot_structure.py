@@ -45,15 +45,13 @@ y      = (np.pi/2-a.grid.y)[::-1]
 xi     = np.log10(a.grid.xi/au)
 yi     = (np.pi/2-a.grid.yi)[::-1]
 z      = a.dusttemp[:,::-1,0,0].T
-im     = NonUniformImage(ax,interpolation='nearest',cmap=cmap)
-im.set_data(x,y,z)
-ax.images.append(im)
+norm = colors.Normalize(vmin=z.min(),vmax=z.max())
+pcm = ax.pcolormesh(x, y, z, cmap=cmap, norm=norm)
 ax.set_xlim((xi[0],(xi[-1]-xi[0])/zoomr+xi[0]))
 ax.set_ylim((yi[0],yi[-1]))
 plt.xlabel(r'$^{10}\log(r)\; [\mathrm{AU}]$')
 plt.ylabel(r'$\pi/2-\theta$')
-norm=colors.Normalize(vmin=z.min(),vmax=z.max())
-cbar=fig.colorbar(cm.ScalarMappable(norm=norm,cmap=cmap), ax=ax)
+cbar=fig.colorbar(pcm)
 cbar.set_label(r'$T\;[\mathrm{K}]$')
 plt.title('Dust temperature structure')
 
@@ -132,15 +130,13 @@ zmax   = z.max()
 zmin   = zmax*1e-10
 z[z<zmin]=np.nan
 z      = np.log10(z)
-im     = NonUniformImage(ax,interpolation='nearest',cmap=cmap)
-im.set_data(x,y,z)
-ax.images.append(im)
+norm=colors.Normalize(vmin=np.log10(zmin),vmax=np.log10(zmax))
+pcm = ax.pcolormesh(x,y,z, cmap=cmap, norm=norm)
 ax.set_xlim((xi[0],(xi[-1]-xi[0])/zoomr+xi[0]))
 ax.set_ylim((yi[0],yi[-1]))
 plt.xlabel(r'$^{10}\log(r)\; [\mathrm{AU}]$')
 plt.ylabel(r'$\pi/2-\theta$')
-norm=colors.Normalize(vmin=np.log10(zmin),vmax=np.log10(zmax))
-cbar=fig.colorbar(cm.ScalarMappable(norm=norm,cmap=cmap), ax=ax)
+cbar=fig.colorbar(pcm)
 cbar.set_label(r'$^{10}\log(\rho)\;[\mathrm{g/cm}^3]$')
 plt.title('Dust density structure')
 
