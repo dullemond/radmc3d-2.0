@@ -53,7 +53,7 @@ yi     = (np.pi/2-a.grid.yi)[::-1]
 z      = a.dusttemp[:,::-1,0,0].T
 im     = NonUniformImage(ax,interpolation='nearest',cmap=cmap)
 im.set_data(x,y,z)
-ax.images.append(im)
+ax.add_artist(im)
 ax.set_xlim((xi[0],(xi[-1]-xi[0])/zoomr+xi[0]))
 ax.set_ylim((yi[0],yi[-1]))
 plt.xlabel(r'$^{10}\log(r)\; [\mathrm{AU}]$')
