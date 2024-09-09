@@ -271,7 +271,7 @@ program bhmakeopac
   ! Scattering matrix elements are calculated for 2*NANG-1 angles
   ! including 0, 90, and 180 degrees.
   !
-  IF(NANG180.GT.2*MXNANG-1)STOP'***Error: NANG > MXNANG'
+  IF(NANG180.GT.2*MXNANG-1) STOP '***Error: NANG > MXNANG'
   NANG=(NANG180+1)/2
   DANG=0.5d0*PI/(NANG-1.d0)
   NAN=NANG180
