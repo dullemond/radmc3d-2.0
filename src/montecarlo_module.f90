@@ -10201,7 +10201,7 @@ subroutine find_smallest_size_spher_lite(x0,x1,size,idim)
      dist(2)=x0(1)*(x1(2)-x0(2))
      if(dist(2).lt.size) size=dist(2)
      if(idim.ge.3) then
-        dist(3)=x0(1)*sin(x0(2))*(x1(3)-x0(3))
+        dist(3)=x0(1)*sin(0.5d0*(x0(2)+x1(2)))*(x1(3)-x0(3))
         if(dist(3).lt.size) size=dist(3)
      endif
   endif
