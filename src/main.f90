@@ -1958,15 +1958,24 @@ program radmc3d
         vtkfilename = 'model.vtk'
         vtktitle    = 'RADMC-3D Model'
         write(stdo,*) 'Opening and writing grid to VTK file ',trim(vtkfilename)
-        call amr_open_vtk_file(1,vtkfilename,vtktitle,.true., igrid_coord)
+        if (rto_style .eq. 3) then
+          call amr_open_vtk_file_b(1,vtkfilename,vtktitle,.true., igrid_coord)
+        else
+          call amr_open_vtk_file(1,vtkfilename,vtktitle,.true., igrid_coord)
+        endif
         if(do_write_vtk_dust_density) then
            if(allocated(dustdens)) then
               write(stdo,*) 'Writing dust density to VTK file'
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the scalar field name)
               vtkFieldName = 'dust_density'
-              call amr_write_vtk_file_scalar_alt(1,dust_nr_species,amr_nrleafs,&
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_scalar_alt_b(1,dust_nr_species,amr_nrleafs,&
                    vtk_dust_ispec,dustdens,.true.,vtkFieldName)
+              else
+                call amr_write_vtk_file_scalar_alt(1,dust_nr_species,amr_nrleafs,&
+                   vtk_dust_ispec,dustdens,.true.,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since dust density is not allocated,',& 
                    'no VTK data for dust density was written...'
@@ -1978,8 +1987,13 @@ program radmc3d
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the scalar field name)
               vtkFieldName = 'dust_temperature'
-              call amr_write_vtk_file_scalar_alt(1,dust_nr_species,amr_nrleafs,&
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_scalar_alt_b(1,dust_nr_species,amr_nrleafs,&
                    vtk_dust_ispec,dusttemp,.false.,vtkFieldName)
+              else
+                call amr_write_vtk_file_scalar_alt(1,dust_nr_species,amr_nrleafs,&
+                   vtk_dust_ispec,dusttemp,.false.,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since dust temperature is not allocated,',&
                    ' no VTK data for dust temperature was written...'
@@ -1991,7 +2005,11 @@ program radmc3d
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the scalar field name)
               vtkFieldName = 'gas_density'
-              call amr_write_vtk_file_scalar(1,amr_nrleafs,gasdens,.true.,vtkFieldName)
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_scalar_b(1,amr_nrleafs,gasdens,.true.,vtkFieldName)
+              else
+                call amr_write_vtk_file_scalar(1,amr_nrleafs,gasdens,.true.,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since gas density is not allocated, ',&
                    'no VTK data for gas density was written...'
@@ -2003,7 +2021,11 @@ program radmc3d
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the scalar field name)
               vtkFieldName = 'gas_temperature'
-              call amr_write_vtk_file_scalar(1,amr_nrleafs,gastemp,.false.,vtkFieldName)
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_scalar_b(1,amr_nrleafs,gastemp,.false.,vtkFieldName)
+              else
+                call amr_write_vtk_file_scalar(1,amr_nrleafs,gastemp,.false.,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since gas temperature is not allocated, ',&
                    'no VTK data for gas temperature was written...'
@@ -2015,8 +2037,13 @@ program radmc3d
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the scalar field name)
               vtkFieldName = 'molecule_density'
-              call amr_write_vtk_file_scalar_alt(1,lines_nr_species,amr_nrleafs, &
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_scalar_alt_b(1,lines_nr_species,amr_nrleafs, &
                    vtk_lines_ispec,gas_chemspec_numberdens,.true.,vtkFieldName)
+              else
+                call amr_write_vtk_file_scalar_alt(1,lines_nr_species,amr_nrleafs, &
+                   vtk_lines_ispec,gas_chemspec_numberdens,.true.,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since gas_chemspec_numberdens is not allocated, ',&
                    'no VTK data for molecule/atom density was written...'
@@ -2028,9 +2055,15 @@ program radmc3d
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the scalar field name)
               vtkFieldName = 'level_population'
-              call amr_write_vtk_file_scalar_alt2(1,lines_nrlevels_subset_max, &
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_scalar_alt2_b(1,lines_nrlevels_subset_max, &
                    lines_nr_species,amr_nrleafs,vtk_lines_ispec,vtk_lines_ilevel, &
                    lines_levelpop,.true.,vtkFieldName)
+              else
+                call amr_write_vtk_file_scalar_alt2(1,lines_nrlevels_subset_max, &
+                   lines_nr_species,amr_nrleafs,vtk_lines_ispec,vtk_lines_ilevel, &
+                   lines_levelpop,.true.,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since level population array is not allocated, ',&
                    'no VTK data for level populations was written...'
@@ -2042,7 +2075,11 @@ program radmc3d
               ! Attila Juhasz - pass the vtkFieldName to the VTK writer (it will
               ! appear in the vector field name) 
               vtkFieldName = 'gas_velocity'
-              call amr_write_vtk_file_vector(1,amr_nrleafs,gasvelocity,igrid_coord,vtkFieldName)
+              if (rto_style .eq. 3) then
+                call amr_write_vtk_file_vector_b(1,amr_nrleafs,gasvelocity,igrid_coord,vtkFieldName)
+              else
+                call amr_write_vtk_file_vector(1,amr_nrleafs,gasvelocity,igrid_coord,vtkFieldName)
+              endif
            else
               write(stdo,*) 'WARNING: Since gas velocity is not allocated, ',&
                    'no VTK data for gas velocity was written...'

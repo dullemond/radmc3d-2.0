@@ -74,6 +74,7 @@
 !==========================================================================
 module amr_module
 use constants_module
+use ISO_FORTRAN_ENV
 implicit none
 public
 integer nvar
@@ -282,6 +283,7 @@ integer, allocatable :: amr_cell_corners(:,:,:,:)
 ! vtk_cell_type(:) VTK cell type of each leaf
 ! vtk_nr_cells(14) Nr of cells (leafs) of each VTK cell type in the whole mesh
 character*5, allocatable :: vtk_cell_type(:)
+integer(int32), allocatable :: ivtk_cell_type(:)
 integer :: vtk_nr_cells(14)
 contains
 !
@@ -5817,6 +5819,230 @@ subroutine amr_open_vtk_file(unit,filename,title,data, igrid_coord)
   endif
 end subroutine amr_open_vtk_file
 
+subroutine amr_open_vtk_file_b(unit,filename,title,data, igrid_coord)
+  implicit none
+  character*160 :: filename,title
+  character*256 :: longstring
+  character*80 :: nvtx_string,ncell_string,string,slen,slen2,form
+  integer :: ivtx,icell,idum,index,unit,igrid_coord,nr_wedge_cells, ierr
+  integer(int32) :: ic(1:8)
+  double precision :: x,y,z, cart_x, cart_y, cart_z
+  logical :: data
+  !
+  ! Check
+  !
+  if(.not.amr_tree_present) then
+     write(stdo,*) 'ERROR: Need to use the AMR-tree to be able to'
+     write(stdo,*) '       create an AMR VTK output file.'
+     write(stdo,*) '       Add command line option usetree to radmc3d call.'
+     stop
+  endif
+  if(.not.allocated(amr_thebranches)) then
+     call amr_compute_list_all()
+  endif
+  if(.not.allocated(amr_vertex_cells)) then
+     write(stdo,*) 'Setting up the vertices (cell corners) for second order transfer...'
+     call amr_set_up_vertices()
+  endif
+  !
+  ! Convert integers to strings
+  !
+  call amr_integer_to_string(amr_nr_vertices,nvtx_string)
+  call amr_integer_to_string(amr_nrleafs,ncell_string)
+  !
+  ! Allocate the cell type ID array
+  !
+  allocate(ivtk_cell_type(amr_nrleafs), STAT=ierr)
+  if(ierr.ne.0) then
+     write(stdo,*) 'ERROR in AMR Module: Could not allocate ivtk_cell_type()'
+     stop 2711
+  endif
+  vtk_nr_cells(:) = 0
+  !
+  ! Open file and write header
+  !
+  open(unit=unit,file=filename,status='replace',access='stream',convert='big_endian')
+  !
+  ! Write the VTK header
+  !
+  write(unit) '# vtk DataFile Version 1.0', NEW_LINE('a')
+  call amr_integer_to_string(len_trim(title),slen)
+  write(unit) trim(title), NEW_LINE('a')
+  write(unit) 'BINARY', NEW_LINE('a')
+  !
+  ! Write the grid header
+  !
+  write(unit) 'DATASET UNSTRUCTURED_GRID', NEW_LINE('a'), NEW_LINE('a')
+  call amr_integer_to_string(len_trim(nvtx_string),slen)
+  write(unit) 'POINTS ',trim(nvtx_string),' float', NEW_LINE('a')
+  ! ------------------------------------------------------------------------------
+  ! Spherical coordinate system
+  !
+  ! Binary version of amr_open_vtk_file
+  !
+  ! ------------------------------------------------------------------------------
+
+  if((igrid_coord.ge.100).and.(igrid_coord.lt.200)) then
+     do ivtx=1,amr_nr_vertices
+        call amr_check_vertex(ivtx,x,y,z)
+  !
+  ! Transform the spherical coordinates to cartesian system
+  !      
+        cart_x = x * sin(y) * cos(z)
+        cart_y = x * sin(y) * sin(z)
+        cart_z = x * cos(y) 
+        if (y.eq.pi) then
+            cart_x = 0.0
+            cart_y = 0.0
+        endif
+        write(unit) real(cart_x, real32),real(cart_y,real32),real(cart_z,real32)
+     enddo
+     
+     !
+     ! Now go through all cells and check which one is a hexahedron and which
+     ! is a wedge
+     !
+
+     vtk_nr_cells(:) = 0
+
+     do icell=1,amr_nrleafs
+        index = amr_theleaf_index(icell)
+        ivtk_cell_type(icell) = 12 ! Hexahedron - 12
+        call amr_check_vertex(amr_cell_corners(1,1,1,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(2,1,1,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(1,2,1,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(2,2,1,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(1,1,2,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(2,1,2,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(1,2,2,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+        call amr_check_vertex(amr_cell_corners(2,2,2,index),x,y,z)
+        if ((y.eq.0.).or.(y.eq.pi))  ivtk_cell_type(icell) = 13! VTK_Wedge - 13 
+
+        if (ivtk_cell_type(icell).eq.13) then
+            vtk_nr_cells(13) = vtk_nr_cells(13) + 1
+        else
+            vtk_nr_cells(12) = vtk_nr_cells(12) + 1
+        endif
+     enddo
+
+     ! 
+     ! For the moment exclude the wedge cells around the poles and write only
+     ! the hexahedron cells
+     ! 
+     call amr_integer_to_string((vtk_nr_cells(12))*9+vtk_nr_cells(13)*7,string)
+     call amr_integer_to_string(len_trim(ncell_string),slen)
+     call amr_integer_to_string(len_trim(string),slen2)
+
+     call amr_integer_to_string(vtk_nr_cells(12)+vtk_nr_cells(13),ncell_string)
+     write(unit) NEW_LINE('a'), NEW_LINE('a'), 'CELLS ', trim(ncell_string), ' ', trim(string), NEW_LINE('a')
+
+     !
+     ! Write out the vertex indices belonging to a given hexahedron/wedge
+     !
+     do icell=1,amr_nrleafs
+        index = amr_theleaf_index(icell)
+        !
+        ! If we have a hexahedron cell then go ahead
+        !
+        if (ivtk_cell_type(icell).eq.12) then
+            !
+            ! The 3-4 and 7-8 corner index pairs are the switched around 
+            !  in a hexahedron cell compared to a voxel
+            ! 
+            ic(1) = int(amr_cell_corners(1,1,1,index)-1, int32)
+            ic(2) = int(amr_cell_corners(1,2,1,index)-1, int32)
+            ic(3) = int(amr_cell_corners(1,2,2,index)-1, int32)
+            ic(4) = int(amr_cell_corners(1,1,2,index)-1, int32)
+            ic(5) = int(amr_cell_corners(2,1,1,index)-1, int32)
+            ic(6) = int(amr_cell_corners(2,2,1,index)-1, int32)
+            ic(7) = int(amr_cell_corners(2,2,2,index)-1, int32)
+            ic(8) = int(amr_cell_corners(2,1,2,index)-1, int32)
+            write(unit) int(8, int32),ic(1),ic(2),ic(3),ic(4),ic(5),ic(6),ic(7),ic(8)
+        !
+        ! If we have a wedge cell
+        !
+        else
+                
+            call amr_check_vertex(amr_cell_corners(1,1,1,index),x,y,z)  
+            ! 
+            ! If we are on the northen hemisphere
+            !
+            if (y.eq.0.0) then
+                ic(1) = amr_cell_corners(1,1,1,index)-1
+                ic(2) = amr_cell_corners(1,2,2,index)-1
+                ic(3) = amr_cell_corners(1,2,1,index)-1
+                ic(4) = amr_cell_corners(2,1,1,index)-1
+                ic(5) = amr_cell_corners(2,2,2,index)-1
+                ic(6) = amr_cell_corners(2,2,1,index)-1
+            !
+            ! If we are on the southern hemisphere
+            !
+            else
+                ic(1) = amr_cell_corners(2,2,1,index)-1
+                ic(2) = amr_cell_corners(2,1,2,index)-1
+                ic(3) = amr_cell_corners(2,1,1,index)-1
+                ic(4) = amr_cell_corners(1,2,1,index)-1
+                ic(5) = amr_cell_corners(1,1,2,index)-1
+                ic(6) = amr_cell_corners(1,1,1,index)-1
+            endif
+
+            write(unit) int(6, int32),ic(1),ic(2),ic(3),ic(4),ic(5),ic(6)
+        endif
+     enddo
+
+     !write(unit) ' ', NEW_LINE('a')
+     call amr_integer_to_string(len_trim(ncell_string),slen)
+     write(unit) NEW_LINE('a'), NEW_LINE('a'), 'CELL_TYPES ',trim(ncell_string), NEW_LINE('a')
+     do icell=1, amr_nrleafs
+        write(unit) int(ivtk_cell_type(icell), int32)   ! 12 = Hexahedron, 13 - VTK_wedge
+     enddo
+  ! ------------------------------------------------------------------------------
+  ! Cartesian coordinate system
+  ! ------------------------------------------------------------------------------
+  elseif (igrid_coord.lt.100) then
+     !
+     ! First write out the vertices 
+     !
+     do ivtx=1,amr_nr_vertices
+        call amr_check_vertex(ivtx,x,y,z)
+        write(unit) real(x, real32),real(y, real32),real(z, real32)
+     enddo
+     !
+     ! Now write out the vertex indices belonging to a given voxel
+     !
+     call amr_integer_to_string(amr_nrleafs*9,string)
+     call amr_integer_to_string(len_trim(ncell_string),slen)
+     write(unit) NEW_LINE('a'), NEW_LINE('a'), 'CELLS ',trim(ncell_string),trim(string), NEW_LINE('a')
+     do icell=1,amr_nrleafs
+         index = amr_theleaf_index(icell)
+         ic(1) = amr_cell_corners(1,1,1,index)-1
+         ic(2) = amr_cell_corners(2,1,1,index)-1
+         ic(3) = amr_cell_corners(1,2,1,index)-1
+         ic(4) = amr_cell_corners(2,2,1,index)-1
+         ic(5) = amr_cell_corners(1,1,2,index)-1
+         ic(6) = amr_cell_corners(2,1,2,index)-1
+         ic(7) = amr_cell_corners(1,2,2,index)-1
+         ic(8) = amr_cell_corners(2,2,2,index)-1
+        write(unit) int(8, int32),ic(1),ic(2),ic(3),ic(4),ic(5),ic(6),ic(7),ic(8)
+    enddo
+    write(unit) NEW_LINE('a'), NEW_LINE('a'), 'CELL_TYPES ',trim(ncell_string), NEW_LINE('a')
+    do icell=1,amr_nrleafs
+        write(unit) int(11, int32)   ! 11 = Voxel
+    enddo
+  endif
+  if(data) then
+     call amr_integer_to_string(amr_nrleafs,ncell_string)
+     string = 'CELL_DATA '//trim(ncell_string)
+    write(unit) NEW_LINE('a'), NEW_LINE('a'), trim(string), NEW_LINE('a')
+  endif
+end subroutine amr_open_vtk_file_b
 
 !--------------------------------------------------------------------------
 !               WRITE A SCALAR FIELD TO THE VTK FILE
@@ -5857,6 +6083,33 @@ subroutine amr_write_vtk_file_scalar(unit,ncl,scalar,log,scalarName)
   enddo
 end subroutine amr_write_vtk_file_scalar
 
+subroutine amr_write_vtk_file_scalar_b(unit,ncl,scalar,log,scalarName)
+  implicit none
+  character*80 :: string,ncell_string,slen,form,scalarName
+  integer :: icell,idum,index,unit,ncl
+  double precision :: scalar(1:ncl),dummy
+  logical :: log
+  !
+  ! Convert integers to strings
+  !
+  ! ----------------------------------------------------------------------
+  ! Binary version of amr_write_vtk_file_scalar
+  ! ----------------------------------------------------------------------
+  string = 'SCALARS '//scalarName(1:len_trim(scalarName))//' float'
+  write(unit) trim(string), NEW_LINE('a')
+  string = 'LOOKUP_TABLE default'
+  write(unit) trim(string), NEW_LINE('a')
+  do icell=1,amr_nrleafs
+     index = amr_theleaf_index(icell)
+     dummy = scalar(index)
+     if(log) then
+        if(dummy.lt.1d-90) dummy=1d-90
+        dummy = log10(dummy)
+     endif
+     if(abs(dummy).lt.1d-30) dummy=1d-30
+     write(unit) real(dummy, real32)
+  enddo
+end subroutine amr_write_vtk_file_scalar_b
 
 !--------------------------------------------------------------------------
 !               WRITE A SCALAR FIELD TO THE VTK FILE
@@ -5897,6 +6150,35 @@ subroutine amr_write_vtk_file_scalar_alt(unit,nn,ncl,ii,scalar,log,scalarName)
   enddo
 end subroutine amr_write_vtk_file_scalar_alt
 
+subroutine amr_write_vtk_file_scalar_alt_b(unit,nn,ncl,ii,scalar,log,scalarName)
+  implicit none
+  character*80 :: string,ncell_string,slen,form,scalarName
+  integer :: icell,idum,index,unit,ncl,nn,ii
+  double precision :: scalar(1:nn,1:ncl),dummy
+  logical :: log
+  !
+  ! Convert integers to strings
+  !
+  ! ----------------------------------------------------------------------
+  ! Binary version of amr_write_vtk_file_scalar_alt
+  !string = 'SCALARS scalars float'
+  ! ----------------------------------------------------------------------
+  call amr_integer_to_string(ii,slen)
+  string = 'SCALARS '//scalarName(1:len_trim(scalarName))//'_'//slen(1:len_trim(slen))//' float'
+  write(unit) trim(string), NEW_LINE('a')
+  string = 'LOOKUP_TABLE default'
+  write(unit) trim(string), NEW_LINE('a')
+  do icell=1,amr_nrleafs
+     index = amr_theleaf_index(icell)
+     dummy = scalar(ii,index)
+     if(log) then
+        if(dummy.lt.1d-90) dummy=1d-90
+        dummy = log10(dummy)
+     endif
+     if(abs(dummy).lt.1d-30) dummy=1d-30
+     write(unit) real(dummy, real32)
+  enddo
+end subroutine amr_write_vtk_file_scalar_alt_b
 
 !--------------------------------------------------------------------------
 !               WRITE A SCALAR FIELD TO THE VTK FILE
@@ -5939,6 +6221,36 @@ subroutine amr_write_vtk_file_scalar_alt2(unit,nn,mm,ncl,ii,jj,scalar,log,scalar
   enddo
 end subroutine amr_write_vtk_file_scalar_alt2
 
+subroutine amr_write_vtk_file_scalar_alt2_b(unit,nn,mm,ncl,ii,jj,scalar,log,scalarName)
+  implicit none
+  character*80 :: string,ncell_string,slen,form,scalarName,slen2
+  integer :: icell,idum,index,unit,ncl,nn,mm,ii,jj
+  double precision :: scalar(1:nn,1:mm,1:ncl),dummy
+  logical :: log
+  !
+  ! Convert integers to strings
+  !
+  ! ----------------------------------------------------------------------
+  ! Binary version of amr_write_vtk_file_scalar_alt2
+  ! ----------------------------------------------------------------------
+  call amr_integer_to_string(ii,slen)
+  call amr_integer_to_string(jj,slen2)
+  string = 'SCALARS '//scalarName(1:len_trim(scalarName))//'_'//slen(1:len_trim(slen))//'_'//slen2(1:len_trim(slen2))//' float'
+
+  write(unit) trim(string), NEW_LINE('a')
+  string = 'LOOKUP_TABLE default'
+  write(unit) trim(string), NEW_LINE('a')
+  do icell=1,amr_nrleafs
+     index = amr_theleaf_index(icell)
+     dummy = scalar(ii,jj,index)
+     if(log) then
+        if(dummy.lt.1d-90) dummy=1d-90
+        dummy = log10(dummy)
+     endif
+     if(abs(dummy).lt.1d-30) dummy=1d-30
+     write(unit) real(dummy, real32)
+  enddo
+end subroutine amr_write_vtk_file_scalar_alt2_b
 
 !--------------------------------------------------------------------------
 !               WRITE A VECTOR FIELD TO THE VTK FILE
@@ -6015,6 +6327,64 @@ subroutine amr_write_vtk_file_vector(unit,ncl,vector,igrid_coord,vectorName)
   endif
 end subroutine amr_write_vtk_file_vector
 
+subroutine amr_write_vtk_file_vector_b(unit,ncl,vector,igrid_coord,vectorName)
+  implicit none
+  character*80 :: string,ncell_string,slen,form,vectorName
+  integer :: icell,idum,index,unit,ncl,igrid_coord
+  double precision :: vector(3,1:ncl),dummy(1:3)
+  double precision :: x1, y1, z1, x2, y2, z2, r, phi, theta 
+
+
+  !
+  ! Convert integers to strings
+  !
+  ! ----------------------------------------------------------------------
+  ! Binary version of amr_write_vtk_file_vector
+  ! ----------------------------------------------------------------------
+  string = 'VECTORS '//vectorName(1:len_trim(vectorName))//' float'
+  write(unit) trim(string), NEW_LINE('a')
+ 
+  if((igrid_coord.ge.100).and.(igrid_coord.lt.200)) then   
+      do icell=1, amr_nrleafs
+        
+        !
+        ! Calculate cell center coordinates 
+        ! This should be done in a more elegant way since the cell centers are
+        ! already stored, this is just a quick and dirty solution
+        !
+        index = amr_theleaf_index(icell)
+        call amr_check_vertex(amr_cell_corners(1,1,1,index),x1,y1,z1)
+        call amr_check_vertex(amr_cell_corners(2,1,1,index),x2,y2,z2)
+        r  = 0.5*(x1+x2)
+        call amr_check_vertex(amr_cell_corners(1,1,1,index),x1,y1,z1)   
+        call amr_check_vertex(amr_cell_corners(1,2,1,index),x2,y2,z2)   
+        theta = 0.5*(y1+y2)
+        call amr_check_vertex(amr_cell_corners(1,1,1,index),x1,y1,z1)   
+        call amr_check_vertex(amr_cell_corners(1,1,2,index),x2,y2,z2)   
+        if ((z2.eq.0.0).and.(amr_cyclic_xyz(3))) z2 = twopi
+        phi = 0.5*(z1+z2)
+    
+        dummy(1) = vector(1,index)*sin(theta)*cos(phi) - vector(3,index)*sin(phi) + vector(2,index)*cos(theta)*cos(phi)    
+        dummy(2) = vector(1,index)*sin(theta)*sin(phi) + vector(3,index)*cos(phi) + vector(2,index)*cos(theta)*sin(phi)
+        dummy(3) = vector(1,index)*cos(theta) - vector(2,index)*sin(theta) 
+       
+        if(abs(dummy(1)).lt.1d-30) dummy(1)=1d-30
+        if(abs(dummy(2)).lt.1d-30) dummy(2)=1d-30
+        if(abs(dummy(3)).lt.1d-30) dummy(3)=1d-30
+        write(unit) real(dummy(1), real32),real(dummy(2), real32),real(dummy(3), real32)
+
+      enddo
+  else
+      do icell=1,amr_nrleafs
+         index = amr_theleaf_index(icell)
+         dummy(:) = vector(:,index)
+         if(abs(dummy(1)).lt.1d-30) dummy(1)=1d-30
+         if(abs(dummy(2)).lt.1d-30) dummy(2)=1d-30
+         if(abs(dummy(3)).lt.1d-30) dummy(3)=1d-30
+         write(unit) real(dummy(1), real32),real(dummy(2), real32),real(dummy(3), real32)
+      enddo
+  endif
+end subroutine amr_write_vtk_file_vector_b
 
 !==========================================================================
 !             ROUTINES FOR REGULAR GRID MANAGEMENT WITHOUT AMR TREE
