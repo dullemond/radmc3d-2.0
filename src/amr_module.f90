@@ -74,7 +74,7 @@
 !==========================================================================
 module amr_module
 use constants_module
-use ISO_FORTRAN_ENV
+use, intrinsic ::  ISO_FORTRAN_ENV, only: real32, int32
 implicit none
 public
 integer nvar
