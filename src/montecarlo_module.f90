@@ -125,7 +125,8 @@ double precision, allocatable :: mc_align_opcumul(:,:,:)
 ! (Must ensure huge range here)
 !
 double precision,allocatable :: mc_ilastphot(:),mc_iphotcount(:)
-double precision :: mc_iphotcurr
+!!!!!double precision :: mc_iphotcurr
+integer(kind=8) :: mc_iphotcurr
 !!!!!integer(kind=8),allocatable :: mc_ilastphot(:),mc_iphotcount(:)
 !!!!!integer(kind=8) :: mc_iphotcurr
 ! 
@@ -245,6 +246,13 @@ logical :: mc_photon_destroyed
 integer :: selectscat_iscat
 integer :: selectscat_iscat_first = 1
 integer :: selectscat_iscat_last  = 1000000000
+!
+! For analysis or debugging: Storing photon path (partially)
+!
+logical :: mc_path_activated = .false.
+integer :: mc_path_nphot = 0
+integer :: mc_path_nr_events = 2
+double precision, allocatable :: mc_path_xv(:,:,:)
 !
 !----TO-ADD----
 !
@@ -1206,6 +1214,8 @@ subroutine montecarlo_partial_cleanup()
   if(allocated(mc_align_orth)) deallocate(mc_align_orth)
   if(allocated(mc_align_para)) deallocate(mc_align_para)
   if(allocated(mc_align_opcumul)) deallocate(mc_align_opcumul)
+  if(allocated(mc_path_xv)) deallocate(mc_path_xv)
+  mc_path_nphot = 0
   !
   !$OMP PARALLEL
   if(allocated(mc_enerpart)) deallocate(mc_enerpart)
@@ -2487,7 +2497,10 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
   ! For debugging only!
   !
   if(params%debug_write_path.eq.1) then
-     open(unit=5,file='path.dat',status='unknown')
+     mc_path_activated = .true.
+     if(allocated(mc_path_xv)) deallocate(mc_path_xv)
+     allocate(mc_path_xv(1:6,2,nphot))
+     mc_path_nphot = nphot
   endif
   !
   ! Count set to 1
@@ -2682,12 +2695,6 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
    
    if(mc_emergency_break) then
       return
-   endif
-   !
-   ! Close path file
-   !
-   if(params%debug_write_path.eq.1) then
-      close(5)
    endif
    !
    ! If statistics writing active, close
@@ -2947,7 +2954,10 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
   ! For debugging only!
   !
   if(params%debug_write_path.eq.1) then
-     open(unit=5,file='path.dat',status='unknown')
+     mc_path_activated = .true.
+     if(allocated(mc_path_xv)) deallocate(mc_path_xv)
+     allocate(mc_path_xv(1:6,2,nphot))
+     mc_path_nphot = nphot
   endif
   !
   ! Count set to 1
@@ -3292,12 +3302,6 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
 !    enddo 
 ! endif
 !----TO-ADD----
-  !
-  ! Close path file
-  !
-  if(params%debug_write_path.eq.1) then
-     close(5)
-  endif
   !
   ! If statistics writing active, close
   !
@@ -3730,12 +3734,6 @@ subroutine do_lambda_starlight_single_scattering(params,ierror,scatsrc,meanint)
      enddo
   enddo
   !
-  ! Close path file
-  !
-  if(params%debug_write_path.eq.1) then
-     close(5)
-  endif
-  !
   ! If statistics writing active, close
   !
   if(params%debug_write_stats.ne.0) then
@@ -4158,12 +4156,6 @@ subroutine do_lambda_starlight_single_scattering_simple(params,ierror,scatsrc,me
         enddo
      enddo
   enddo
-  !
-  ! Close path file
-  !
-  if(params%debug_write_path.eq.1) then
-     close(5)
-  endif
   !
   ! If statistics writing active, close
   !
@@ -4958,6 +4950,18 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      stop
   endif
   !
+  ! For debugging/analysis: follow photon path
+  !
+  if(mc_path_activated) then
+     if(mc_iphotcurr.le.0) stop 3201
+     mc_path_xv(1,1,mc_iphotcurr) = ray_cart_x
+     mc_path_xv(2,1,mc_iphotcurr) = ray_cart_y
+     mc_path_xv(3,1,mc_iphotcurr) = ray_cart_z
+     mc_path_xv(4,1,mc_iphotcurr) = ray_cart_dirx
+     mc_path_xv(5,1,mc_iphotcurr) = ray_cart_diry
+     mc_path_xv(6,1,mc_iphotcurr) = ray_cart_dirz
+  endif
+  !
   ! In case we use polarization, init the photpkg structure 
   !
   if(scattering_mode.ge.5) then
@@ -5143,6 +5147,18 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      ! For debugging: Increase event counter
      !
      ieventcounttot = ieventcounttot + 1
+     !
+     ! For debugging/analysis: follow photon path
+     !
+     if(mc_path_activated) then
+        if(mc_iphotcurr.le.0) stop 3201
+        mc_path_xv(1,2,mc_iphotcurr) = ray_cart_x
+        mc_path_xv(2,2,mc_iphotcurr) = ray_cart_y
+        mc_path_xv(3,2,mc_iphotcurr) = ray_cart_z
+        mc_path_xv(4,2,mc_iphotcurr) = ray_cart_dirx
+        mc_path_xv(5,2,mc_iphotcurr) = ray_cart_diry
+        mc_path_xv(6,2,mc_iphotcurr) = ray_cart_dirz
+     endif
      !
      ! If requested, see if we can do a Modified Random Walk (MRW) from
      ! this point onward until we exit the cell again. This is 
@@ -5738,6 +5754,9 @@ subroutine walk_full_path_scat(params,inu,ierror)
            ray_index = star_cellindex(istar)
            !
         endif
+        !
+        ! 
+        !
      else
         !
         ! It is an illumination beam (only for 1-D plane-parallel)
@@ -6101,6 +6120,18 @@ subroutine walk_full_path_scat(params,inu,ierror)
      endif
   endif
   !
+  ! For debugging/analysis: follow photon path
+  !
+  if(mc_path_activated) then
+     if(mc_iphotcurr.le.0) stop 3201
+     mc_path_xv(1,1,mc_iphotcurr) = ray_cart_x
+     mc_path_xv(2,1,mc_iphotcurr) = ray_cart_y
+     mc_path_xv(3,1,mc_iphotcurr) = ray_cart_z
+     mc_path_xv(4,1,mc_iphotcurr) = ray_cart_dirx
+     mc_path_xv(5,1,mc_iphotcurr) = ray_cart_diry
+     mc_path_xv(6,1,mc_iphotcurr) = ray_cart_dirz
+  endif
+  !
   ! Now associate pointer to cell.
   ! This is grid type dependent.
   !
@@ -6273,6 +6304,18 @@ subroutine walk_full_path_scat(params,inu,ierror)
      ! For selectscat: Increase counter
      !
      selectscat_iscat = selectscat_iscat + 1
+     !
+     ! For debugging/analysis: follow photon path
+     !
+     if(mc_path_activated) then
+        if(mc_iphotcurr.le.0) stop 3201
+        mc_path_xv(1,2,mc_iphotcurr) = ray_cart_x
+        mc_path_xv(2,2,mc_iphotcurr) = ray_cart_y
+        mc_path_xv(3,2,mc_iphotcurr) = ray_cart_z
+        mc_path_xv(4,2,mc_iphotcurr) = ray_cart_dirx
+        mc_path_xv(5,2,mc_iphotcurr) = ray_cart_diry
+        mc_path_xv(6,2,mc_iphotcurr) = ray_cart_dirz
+     endif
      !
      ! Next event
      !
@@ -9357,6 +9400,26 @@ subroutine hunt_temp(rho,energy,jlo)
   goto 3
 end subroutine hunt_temp
 !  (C) Copr. 1986-92 Numerical Recipes Software =v1.9"217..
+
+
+!------------------------------------------------------------------
+!                 WRITE THE PHOTON PATH INFORMATION
+!------------------------------------------------------------------
+subroutine mc_write_photon_paths()
+  implicit none
+  integer :: iphot
+  if(.not.mc_path_activated) then
+     write(stdo,*) 'Error: Cannot write photon paths if they have not been calculated.'
+     stop
+  endif
+  open(unit=5,file='photon_paths.out',status='unknown')
+  write(5,*) 1               ! Format number
+  write(5,*) mc_path_nphot  ! Nr of photon packages
+  do iphot=1,mc_path_nphot
+     write(5,*) mc_path_xv(1:6,1,iphot),mc_path_xv(1:6,2,iphot)
+  enddo
+  close(5)
+end subroutine mc_write_photon_paths
 
 
 !=========================================================================

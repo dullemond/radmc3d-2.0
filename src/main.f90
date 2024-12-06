@@ -3657,6 +3657,12 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         ! irrespective of what the radmc3d.inp says
         !
         camera_incl_stars=0
+     elseif(buffer(1:16).eq.'write_photonpath') then
+        !
+        ! For debugging and analysis: Write out the photon path information
+        !
+        rt_mcparams%debug_write_path = 1
+        write(stdo,*) 'WARNING: Writing out photon path info. Can become a big file.'
      elseif(buffer(1:16).eq.'lambdasinglescat') then
         !
         ! Use do_lambda_starlight_single_scattering() routine instead of do_monte_carlo_scattering(),
