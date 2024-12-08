@@ -251,8 +251,10 @@ integer :: selectscat_iscat_last  = 1000000000
 !
 logical :: mc_path_activated = .false.
 integer :: mc_path_nphot = 0
-integer :: mc_path_nr_events = 2
+integer :: mc_path_max_nr_events = 2
+integer, allocatable :: mc_path_nevents(:)
 double precision, allocatable :: mc_path_xv(:,:,:)
+integer :: mc_path_event_count
 !
 !----TO-ADD----
 !
@@ -292,6 +294,7 @@ double precision, allocatable :: mc_path_xv(:,:,:)
 !$OMP THREADPRIVATE(mcscat_phasefunc)
 !$OMP THREADPRIVATE(db_cumul)
 !$OMP THREADPRIVATE(selectscat_iscat)
+!$OMP THREADPRIVATE(mc_path_event_count)
 
 contains
 
@@ -1214,6 +1217,7 @@ subroutine montecarlo_partial_cleanup()
   if(allocated(mc_align_orth)) deallocate(mc_align_orth)
   if(allocated(mc_align_para)) deallocate(mc_align_para)
   if(allocated(mc_align_opcumul)) deallocate(mc_align_opcumul)
+  if(allocated(mc_path_nevents)) deallocate(mc_path_nevents)
   if(allocated(mc_path_xv)) deallocate(mc_path_xv)
   mc_path_nphot = 0
   !
@@ -2498,8 +2502,11 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
   !
   if(params%debug_write_path.eq.1) then
      mc_path_activated = .true.
+     if(mc_path_max_nr_events.lt.1) stop 1209
      if(allocated(mc_path_xv)) deallocate(mc_path_xv)
-     allocate(mc_path_xv(1:6,2,nphot))
+     allocate(mc_path_xv(1:6,mc_path_max_nr_events,nphot))
+     if(allocated(mc_path_nevents)) deallocate(mc_path_nevents)
+     allocate(mc_path_nevents(nphot))
      mc_path_nphot = nphot
   endif
   !
@@ -2674,6 +2681,12 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
             !      if(params%debug_write_eventcounts.ne.0) then
             !         write(stdo,*) 'Nr of events = ',ieventcount
             !      endif
+         endif
+         !
+         ! Store nr of events
+         !
+         if(params%debug_write_path.eq.1) then
+            mc_path_nevents(iphot) = mc_path_event_count
          endif
       endif
    enddo
@@ -2955,8 +2968,11 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
   !
   if(params%debug_write_path.eq.1) then
      mc_path_activated = .true.
+     if(mc_path_max_nr_events.lt.1) stop 1209
      if(allocated(mc_path_xv)) deallocate(mc_path_xv)
-     allocate(mc_path_xv(1:6,2,nphot))
+     allocate(mc_path_xv(1:6,mc_path_max_nr_events,nphot))
+     if(allocated(mc_path_nevents)) deallocate(mc_path_nevents)
+     allocate(mc_path_nevents(nphot))
      mc_path_nphot = nphot
   endif
   !
@@ -3255,6 +3271,12 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
         !      if(params%debug_write_eventcounts.ne.0) then
         !         write(stdo,*) 'Nr of events = ',ieventcount
         !      endif
+        !
+        ! Store nr of events
+        !
+        if(params%debug_write_path.eq.1) then
+           mc_path_nevents(iphot) = mc_path_event_count
+        endif
      end if
   enddo
   !$OMP END DO 
@@ -4189,7 +4211,7 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
   double precision :: pos(1:3),nrevents,cellx0(1:3),cellx1(1:3)
   integer :: idir_cross,ilr_cross
   integer :: ispec,iqactive,istar,icell,itemplate
-  integer :: ibnd,bc_idir,bc_ilr,ix,iy,iz,illum
+  integer :: ibnd,bc_idir,bc_ilr,ix,iy,iz,illum,iev
   integer :: index_prev,count_samecell,iddr,idim,icoord
   logical :: ok,arrived,therm,usesphere,nospheres,incell
   type(amr_branch), pointer :: acell
@@ -4954,12 +4976,14 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
   !
   if(mc_path_activated) then
      if(mc_iphotcurr.le.0) stop 3201
-     mc_path_xv(1,1,mc_iphotcurr) = ray_cart_x
-     mc_path_xv(2,1,mc_iphotcurr) = ray_cart_y
-     mc_path_xv(3,1,mc_iphotcurr) = ray_cart_z
-     mc_path_xv(4,1,mc_iphotcurr) = ray_cart_dirx
-     mc_path_xv(5,1,mc_iphotcurr) = ray_cart_diry
-     mc_path_xv(6,1,mc_iphotcurr) = ray_cart_dirz
+     mc_path_event_count = 1
+     mc_path_xv(1,mc_path_event_count,mc_iphotcurr) = ray_cart_x
+     mc_path_xv(2,mc_path_event_count,mc_iphotcurr) = ray_cart_y
+     mc_path_xv(3,mc_path_event_count,mc_iphotcurr) = ray_cart_z
+     mc_path_xv(4,mc_path_event_count,mc_iphotcurr) = ray_cart_dirx
+     mc_path_xv(5,mc_path_event_count,mc_iphotcurr) = ray_cart_diry
+     mc_path_xv(6,mc_path_event_count,mc_iphotcurr) = ray_cart_dirz
+     mc_path_event_count = mc_path_event_count + 1
   endif
   !
   ! In case we use polarization, init the photpkg structure 
@@ -5152,12 +5176,17 @@ subroutine walk_full_path_bjorkmanwood(params,ierror)
      !
      if(mc_path_activated) then
         if(mc_iphotcurr.le.0) stop 3201
-        mc_path_xv(1,2,mc_iphotcurr) = ray_cart_x
-        mc_path_xv(2,2,mc_iphotcurr) = ray_cart_y
-        mc_path_xv(3,2,mc_iphotcurr) = ray_cart_z
-        mc_path_xv(4,2,mc_iphotcurr) = ray_cart_dirx
-        mc_path_xv(5,2,mc_iphotcurr) = ray_cart_diry
-        mc_path_xv(6,2,mc_iphotcurr) = ray_cart_dirz
+        iev = mc_path_event_count
+        if(iev.gt.mc_path_max_nr_events) then
+           iev = mc_path_max_nr_events        ! Last one is always the last one
+        endif
+        mc_path_xv(1,iev,mc_iphotcurr) = ray_cart_x
+        mc_path_xv(2,iev,mc_iphotcurr) = ray_cart_y
+        mc_path_xv(3,iev,mc_iphotcurr) = ray_cart_z
+        mc_path_xv(4,iev,mc_iphotcurr) = ray_cart_dirx
+        mc_path_xv(5,iev,mc_iphotcurr) = ray_cart_diry
+        mc_path_xv(6,iev,mc_iphotcurr) = ray_cart_dirz
+        mc_path_event_count = mc_path_event_count + 1
      endif
      !
      ! If requested, see if we can do a Modified Random Walk (MRW) from
@@ -5524,7 +5553,7 @@ subroutine walk_full_path_scat(params,inu,ierror)
   double precision :: pdirx,pdiry,pdirz,dirnewx,dirnewy,dirnewz
   double precision :: dir_perp,dir_planex,dir_planey,dummy
   integer :: ispec,iqactive,istar,icell,itemplate,iscatevent
-  integer :: ibnd,bc_idir,bc_ilr,ix,iy,iz,illum,ierr
+  integer :: ibnd,bc_idir,bc_ilr,ix,iy,iz,illum,ierr,iev
   logical :: ok,arrived,usesphere,todo_photpkg
   type(amr_branch), pointer :: acell
   !
@@ -6177,6 +6206,20 @@ subroutine walk_full_path_scat(params,inu,ierror)
      call polarization_make_s_vector(photpkg%n,photpkg%s)
   endif
   !
+  ! For debugging/analysis: follow photon path
+  !
+  if(mc_path_activated) then
+     if(mc_iphotcurr.le.0) stop 3201
+     mc_path_event_count = 1
+     mc_path_xv(1,mc_path_event_count,mc_iphotcurr) = ray_cart_x
+     mc_path_xv(2,mc_path_event_count,mc_iphotcurr) = ray_cart_y
+     mc_path_xv(3,mc_path_event_count,mc_iphotcurr) = ray_cart_z
+     mc_path_xv(4,mc_path_event_count,mc_iphotcurr) = ray_cart_dirx
+     mc_path_xv(5,mc_path_event_count,mc_iphotcurr) = ray_cart_diry
+     mc_path_xv(6,mc_path_event_count,mc_iphotcurr) = ray_cart_dirz
+     mc_path_event_count = mc_path_event_count + 1
+  endif
+  !
   ! Now start the random walk
   !
   ok = .true.
@@ -6301,21 +6344,26 @@ subroutine walk_full_path_scat(params,inu,ierror)
      !$omp atomic
      ieventcounttot = ieventcounttot + 1
      !
-     ! For selectscat: Increase counter
-     !
-     selectscat_iscat = selectscat_iscat + 1
-     !
      ! For debugging/analysis: follow photon path
      !
      if(mc_path_activated) then
         if(mc_iphotcurr.le.0) stop 3201
-        mc_path_xv(1,2,mc_iphotcurr) = ray_cart_x
-        mc_path_xv(2,2,mc_iphotcurr) = ray_cart_y
-        mc_path_xv(3,2,mc_iphotcurr) = ray_cart_z
-        mc_path_xv(4,2,mc_iphotcurr) = ray_cart_dirx
-        mc_path_xv(5,2,mc_iphotcurr) = ray_cart_diry
-        mc_path_xv(6,2,mc_iphotcurr) = ray_cart_dirz
+        iev = mc_path_event_count
+        if(iev.gt.mc_path_max_nr_events) then
+           iev = mc_path_max_nr_events        ! Last one is always the last one
+        endif
+        mc_path_xv(1,iev,mc_iphotcurr) = ray_cart_x
+        mc_path_xv(2,iev,mc_iphotcurr) = ray_cart_y
+        mc_path_xv(3,iev,mc_iphotcurr) = ray_cart_z
+        mc_path_xv(4,iev,mc_iphotcurr) = ray_cart_dirx
+        mc_path_xv(5,iev,mc_iphotcurr) = ray_cart_diry
+        mc_path_xv(6,iev,mc_iphotcurr) = ray_cart_dirz
+        mc_path_event_count = mc_path_event_count + 1
      endif
+     !
+     ! For selectscat: Increase counter
+     !
+     selectscat_iscat = selectscat_iscat + 1
      !
      ! Next event
      !
@@ -9407,7 +9455,7 @@ end subroutine hunt_temp
 !------------------------------------------------------------------
 subroutine mc_write_photon_paths()
   implicit none
-  integer :: iphot
+  integer :: iphot,iev
   if(.not.mc_path_activated) then
      write(stdo,*) 'Error: Cannot write photon paths if they have not been calculated.'
      stop
@@ -9416,7 +9464,10 @@ subroutine mc_write_photon_paths()
   write(5,*) 1               ! Format number
   write(5,*) mc_path_nphot  ! Nr of photon packages
   do iphot=1,mc_path_nphot
-     write(5,*) mc_path_xv(1:6,1,iphot),mc_path_xv(1:6,2,iphot)
+     write(5,*) mc_path_nevents(iphot)
+     do iev=1,mc_path_max_nr_events
+        write(5,*) mc_path_xv(1:6,iev,iphot)
+     enddo
   enddo
   close(5)
 end subroutine mc_write_photon_paths
