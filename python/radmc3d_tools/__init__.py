@@ -6,8 +6,9 @@
 from . import simpleread
 from . import simpleplot
 from . import sph_to_sphergrid
+from . import read_paths
 
 __version__ = "2.00.0"
 __author__ = "Cornelis Dullemond"
 __copyright__ = "Copyright (C) 2020 Cornelis Dullemond"
-__all__ = ["simpleread", "simpleplot", "bplanck"]
+__all__ = ["simpleread", "simpleplot", "bplanck","read_paths"]
