@@ -2686,7 +2686,7 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
          ! Store nr of events
          !
          if(params%debug_write_path.eq.1) then
-            mc_path_nevents(iphot) = mc_path_event_count
+            mc_path_nevents(iphot) = mc_path_event_count - 1
          endif
       endif
    enddo
@@ -2789,6 +2789,13 @@ subroutine do_monte_carlo_bjorkmanwood(params,ierror,resetseed)
    ! Free the emission database
    !
    call free_emiss_dbase()
+   !
+   ! If path writing active, then write
+   !
+   if(mc_path_activated) then
+      write(stdo,*) 'Writing the photon paths to file for analysis or debugging.'
+      call mc_write_photon_paths()
+   endif
    !
    ! Done...
    !
@@ -3275,7 +3282,7 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
         ! Store nr of events
         !
         if(params%debug_write_path.eq.1) then
-           mc_path_nevents(iphot) = mc_path_event_count
+           mc_path_nevents(iphot) = mc_path_event_count - 1
         endif
      end if
   enddo
@@ -3329,6 +3336,13 @@ subroutine do_monte_carlo_scattering(params,ierror,resetseed,scatsrc,meanint)
   !
   if(params%debug_write_stats.ne.0) then
      close(4)
+  endif
+  !
+  ! If path writing active, then write
+  !
+  if(mc_path_activated) then
+     write(stdo,*) 'Writing the photon paths to file for analysis or debugging.'
+     call mc_write_photon_paths()
   endif
   !
   ! Write to the radmc_save.info that we're done
@@ -9455,7 +9469,7 @@ end subroutine hunt_temp
 !------------------------------------------------------------------
 subroutine mc_write_photon_paths()
   implicit none
-  integer :: iphot,iev
+  integer :: iphot,iev,iiev
   if(.not.mc_path_activated) then
      write(stdo,*) 'Error: Cannot write photon paths if they have not been calculated.'
      stop
@@ -9464,9 +9478,18 @@ subroutine mc_write_photon_paths()
   write(5,*) 1               ! Format number
   write(5,*) mc_path_nphot  ! Nr of photon packages
   do iphot=1,mc_path_nphot
-     write(5,*) mc_path_nevents(iphot)
+     !write(5,*) mc_path_nevents(iphot)
      do iev=1,mc_path_max_nr_events
-        write(5,*) mc_path_xv(1:6,iev,iphot)
+        if(iev.le.mc_path_nevents(iphot)) then
+           if(iev.eq.mc_path_max_nr_events) then
+              iiev = mc_path_nevents(iphot)
+           else
+              iiev = iev
+           endif
+        else
+           iiev = 0
+        endif
+        write(5,'(I6,1X,I6,6(1X,E13.6))') iphot,iev,mc_path_xv(1:6,iev,iphot)
      enddo
   enddo
   close(5)

@@ -3663,6 +3663,20 @@ subroutine interpet_command_line_options(gotit,fromstdi,quit)
         !
         rt_mcparams%debug_write_path = 1
         write(stdo,*) 'WARNING: Writing out photon path info. Can become a big file.'
+     elseif(buffer(1:21).eq.'max_photonpath_length') then
+        !
+        ! Maximum length of the photon paths (see write_photonpath)
+        !
+        if(iarg.gt.numarg) then
+           write(stdo,*) 'ERROR while reading command line options: cannot read '
+           write(stdo,*) '      max_photonpath_length.'
+           write(stdo,*) '      Expecting 1 integer.'
+           stop
+        endif
+        call ggetarg(iarg,buffer,fromstdi)
+        iarg = iarg+1
+        read(buffer,*) idum
+        mc_path_max_nr_events = idum
      elseif(buffer(1:16).eq.'lambdasinglescat') then
         !
         ! Use do_lambda_starlight_single_scattering() routine instead of do_monte_carlo_scattering(),
