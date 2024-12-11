@@ -1773,6 +1773,11 @@ first-order integration.
 More about photon packages in the Monte Carlo simulations
 =========================================================
 
+.. _sec-weighted-photon-packages-mc:
+
+Weighted photon packages
+------------------------
+
 In the 'standard' Monte Carlo approach, the input energy (e.g. starlight or, for
 the scattering Monte Carlo, the thermal emission of dust) is divided into
 :math:`N` equal energy packages of photons, which then travel through the model
@@ -1801,6 +1806,36 @@ compensate for their favorable focusing toward the grid.
 *NOTE:* You can switch the mode off by setting ``mc_weighted_photons=0`` in the
 ``radmc3d.inp`` file.
 
+.. _sec-analyzing-paths-mc:
+
+Analyzing photon paths
+----------------------
+
+It can sometimes be useful to figure out where the Monte Carlo photon packages
+go to. One way RADMC-3D allows you to "have a look inside" of the Monte Carlo
+process is with the command line option ``write_photonpath``. For instance, if
+you want to know where all the photon scattering events for an image take
+place, try e.g.::
+
+  radmc3d image lambda 1.65 incl 60 write_photonpath max_photonpath_length 8
+
+This will create a file called ``photon_paths.out`` which contains, for each
+photon package, the original location, the location of the first 6 scattering
+events and the location of the last scattering event. To read the file, you
+can use the ``read_paths()`` function in the ``read_paths.py`` file in the
+``python/radmc3d_tools/`` directory. This will return a Pandas table with
+the locations of the scattering events and directions the photon has after
+the scattering event.
+
+You can do the same for thermal Monte Carlo, also by adding
+``write_photonpath`` and optionally ``max_photonpath_length 8`` on the
+command line.
+
+*NOTE:* This can lead to huge files ``photon_paths.out`` if you keep the
+number of photon packages high. So you might want to set ``nphot`` or
+``nphot_scat`` to relatively low values to avoid producing too large
+files. And you might want to remove these files after you are done with
+your analysis.
 
 .. _sec-polarized-thermal-emission:
 

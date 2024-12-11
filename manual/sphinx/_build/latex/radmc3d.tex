@@ -60,7 +60,7 @@
 
 
 \title{radmc3d}
-\date{Mar 06, 2024}
+\date{Dec 11, 2024}
 \release{2.0}
 \author{Cornelis Dullemond}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -4171,6 +4171,9 @@ first\sphinxhyphen{}order integration.
 
 \section{More about photon packages in the Monte Carlo simulations}
 \label{\detokenize{dustradtrans:more-about-photon-packages-in-the-monte-carlo-simulations}}\label{\detokenize{dustradtrans:sec-photon-packages-mc}}
+
+\subsection{Weighted photon packages}
+\label{\detokenize{dustradtrans:weighted-photon-packages}}\label{\detokenize{dustradtrans:sec-weighted-photon-packages-mc}}
 \sphinxAtStartPar
 In the ‘standard’ Monte Carlo approach, the input energy (e.g. starlight or, for
 the scattering Monte Carlo, the thermal emission of dust) is divided into
@@ -4202,6 +4205,41 @@ compensate for their favorable focusing toward the grid.
 \sphinxAtStartPar
 \sphinxstyleemphasis{NOTE:} You can switch the mode off by setting \sphinxcode{\sphinxupquote{mc\_weighted\_photons=0}} in the
 \sphinxcode{\sphinxupquote{radmc3d.inp}} file.
+
+
+\subsection{Analyzing photon paths}
+\label{\detokenize{dustradtrans:analyzing-photon-paths}}\label{\detokenize{dustradtrans:sec-analyzing-paths-mc}}
+\sphinxAtStartPar
+It can sometimes be useful to figure out where the Monte Carlo photon packages
+go to. One way RADMC\sphinxhyphen{}3D allows you to “have a look inside” of the Monte Carlo
+process is with the command line option \sphinxcode{\sphinxupquote{write\_photonpath}}. For instance, if
+you want to know where all the photon scattering events for an image take
+place, try e.g.:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{radmc3d} \PYG{n}{image} \PYG{k}{lambda} \PYG{l+m+mf}{1.65} \PYG{n}{incl} \PYG{l+m+mi}{60} \PYG{n}{write\PYGZus{}photonpath} \PYG{n}{max\PYGZus{}photonpath\PYGZus{}length} \PYG{l+m+mi}{8}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will create a file called \sphinxcode{\sphinxupquote{photon\_paths.out}} which contains, for each
+photon package, the original location, the location of the first 6 scattering
+events and the location of the last scattering event. To read the file, you
+can use the \sphinxcode{\sphinxupquote{read\_paths()}} function in the \sphinxcode{\sphinxupquote{read\_paths.py}} file in the
+\sphinxcode{\sphinxupquote{python/radmc3d\_tools/}} directory. This will return a Pandas table with
+the locations of the scattering events and directions the photon has after
+the scattering event.
+
+\sphinxAtStartPar
+You can do the same for thermal Monte Carlo, also by adding
+\sphinxcode{\sphinxupquote{write\_photonpath}} and optionally \sphinxcode{\sphinxupquote{max\_photonpath\_length 8}} on the
+command line.
+
+\sphinxAtStartPar
+\sphinxstyleemphasis{NOTE:} This can lead to huge files \sphinxcode{\sphinxupquote{photon\_paths.out}} if you keep the
+number of photon packages high. So you might want to set \sphinxcode{\sphinxupquote{nphot}} or
+\sphinxcode{\sphinxupquote{nphot\_scat}} to relatively low values to avoid producing too large
+files. And you might want to remove these files after you are done with
+your analysis.
 
 
 \section{Polarized emission and absorption by aligned grains}
