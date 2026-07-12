@@ -6297,7 +6297,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
   doubleprecision :: tau,dtau,albedo,absorb,dum,scatsrc0,costheta
   doubleprecision :: dexp,dener,ds,dummy,alpha_tot,g,rn,dss,src4(1:4)
   logical :: ok,arrived,therm
-  doubleprecision :: prev_x,prev_y,prev_z
+  doubleprecision :: prev_x,prev_y,prev_z,prev_dirz
   !$ logical::continue
   !
   ! Reset
@@ -6351,6 +6351,7 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
      prev_x     = ray_cart_x
      prev_y     = ray_cart_y
      prev_z     = ray_cart_z
+     prev_dirz  = ray_cart_dirz  ! In case of mirror boundary
      !
      ! Find new position
      !
@@ -6486,6 +6487,12 @@ subroutine walk_cells_thermal(params,taupath,iqactive,arrived, &
         ray_cart_x = prev_x + fr * ( ray_cart_x - prev_x )
         ray_cart_y = prev_y + fr * ( ray_cart_y - prev_y )
         ray_cart_z = prev_z + fr * ( ray_cart_z - prev_z )
+        !
+        ! Just in case the ray_cart_dirz was flipped due to the mirror
+        ! boundary, unflip it. BUGFIX 12.07.2026. Thanks to Takahiro Ueda
+        ! for reporting the bug.
+        !
+        ray_cart_dirz = prev_dirz
         !
         ! Here we determine if it was an absorption or a scattering
         ! event. 
@@ -6644,7 +6651,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
   doubleprecision :: tau,dtau,dum,dtauabs,dtauscat,xptauabs,xxtauabs
   doubleprecision :: ds,rn,scatsrc0,mnint,dss
   logical :: ok,arrived
-  doubleprecision :: prev_x,prev_y,prev_z
+  doubleprecision :: prev_x,prev_y,prev_z,prev_dirz
   doubleprecision :: costheta,g,phasefunc,dummy,src4(1:4)
   doubleprecision :: axi(1:2,1:3),Ebk,Qbk,Ubk,Vbk
   doubleprecision :: nvec_orig(1:3),svec_orig(1:3),levent
@@ -6807,6 +6814,7 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
      prev_x     = ray_cart_x
      prev_y     = ray_cart_y
      prev_z     = ray_cart_z
+     prev_dirz  = ray_cart_dirz  ! In case of mirror boundary
      !
      ! Find new position
      !
@@ -6999,7 +7007,8 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
                  mcscat_dirs(3,1) = mcscat_dirs(3,1) * dummy
                  costheta = ray_cart_dirx*mcscat_dirs(1,1) +          &
                             ray_cart_diry*mcscat_dirs(2,1) +          &
-                            ray_cart_dirz*mcscat_dirs(3,1)
+                            prev_dirz*mcscat_dirs(3,1)
+                 ! NOTE: Using prev_dirz here on purpose, in case we are in a cell with mirror boundary
                  do ispec=1,dust_nr_species
                     g                         = kappa_g(ray_inu,ispec)
                     mcscat_phasefunc(1,ispec) = henyeygreenstein_phasefunc(g,costheta)
@@ -7241,6 +7250,12 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
         ray_cart_y = prev_y + fr * ( ray_cart_y - prev_y )
         ray_cart_z = prev_z + fr * ( ray_cart_z - prev_z )
         !
+        ! Just in case the ray_cart_dirz was flipped due to the mirror
+        ! boundary, unflip it. BUGFIX 12.07.2026. Thanks to Takahiro Ueda
+        ! for reporting the bug.
+        !
+        ray_cart_dirz = prev_dirz
+        !
         ! For anisotropic scattering we need to know off which dust species
         ! the photon has scattered. Determine this here, and call it ispecc.
         !
@@ -7396,7 +7411,8 @@ subroutine walk_cells_scat(params,taupath,ener,inu,arrived,ispecc,ierror)
                  mcscat_dirs(3,1) = mcscat_dirs(3,1) * dummy
                  costheta = ray_cart_dirx*mcscat_dirs(1,1) +          &
                             ray_cart_diry*mcscat_dirs(2,1) +          &
-                            ray_cart_dirz*mcscat_dirs(3,1)
+                            prev_dirz*mcscat_dirs(3,1)
+                 ! NOTE: Using prev_dirz here on purpose, in case we are in a cell with mirror boundary
                  do ispec=1,dust_nr_species
                     g                         = kappa_g(ray_inu,ispec)
                     mcscat_phasefunc(1,ispec) = henyeygreenstein_phasefunc(g,costheta)
