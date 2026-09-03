@@ -55,9 +55,11 @@ module rtglobal_module
      integer :: ivstrt                      ! Which dust species represents the
   !                                         !    gas temperature for the 
   !                                         !    vertical structure iteration?
-     integer :: nphotdiff                   ! >0 = Use diffusion equation
+     double precision :: nphotdiff                   ! >0 = Use diffusion equation
   !                                         !    where photon statistics is bad.
-  !                                         !    (For now: not yet ready)
+  !                                         !    vertical structure iteration?
+     integer :: nphotdiff_type              ! 1 -- diffusion area is defined by number of photons
+  !                                         ! 2 -- diffusion area is defined by photon stdev
      double precision :: errtoldiff         ! Error tolerance for the diffusion
   !                                         !    mode.
   !!!   integer :: save_scat                   ! =0 No file scatsource_3d.dat is

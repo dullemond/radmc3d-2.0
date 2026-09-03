@@ -1010,22 +1010,24 @@ subroutine read_dustkappa_file(ispec,filename)
                min(max(2,scattering_mode_def),scattering_mode_max)
      endif
   enddo
-!  !
-!  ! Write a ".used" output file
-!  !
-!  filenamecheck = filename(1:filename_len)//".used"
-!  open(unit=1,file=filenamecheck)
-!  write(1,*) '# This is the opacity from ',filename(1:filename_len),&
-!             ' remapped onto the model wavelength grid.'
-!  write(1,*) '# This is not an input file. It is only meant for the user to',&
-!             ' check if the remapping went OK. '
-!  write(1,*) 3
-!  write(1,*) freq_nr
-!  do ilam=1,freq_nr
-!     write(1,*) 2.9979d14/freq_nu(ilam),dust_kappa_abs(ilam,ispec),&
-!                dust_kappa_scat(ilam,ispec),dust_gfactor(ilam,ispec)
-!  enddo
-!  close(1)
+ !
+ ! Write a ".used" output file, needed for multidust diffusion
+ !
+ if ((rt_mcparams%nphotdiff.gt.0)) then
+   filenamecheck = filename(1:filename_len)//".used"
+   open(unit=1,file=filenamecheck)
+   write(1,*) '# This is the opacity from ',filename(1:filename_len),&
+               ' remapped onto the model wavelength grid.'
+   write(1,*) '# This is not an input file. It is only meant for the user to',&
+               ' check if the remapping went OK. '
+   write(1,*) 3
+   write(1,*) freq_nr
+   do ilam=1,freq_nr
+      write(1,*) 2.9979d14/freq_nu(ilam),dust_kappa_abs(ilam,ispec),&
+                  dust_kappa_scat(ilam,ispec),dust_gfactor(ilam,ispec)
+   enddo
+   close(1)
+ endif
   !
   ! Also store these original opacities
   !
@@ -2056,24 +2058,26 @@ subroutine make_dust_opacity(ispec,agrain,algstring)
   if(flag) then
      write(stdo,*) 'WARNING: Found zero absorption opacity or negative scattering opacity. Fixed it.'
   endif
-!  !
-!  ! Write a ".used" output file
-!  !
-!  base='dustkappa_'
-!  ext ='.used'
-!  call make_indexed_filename(base,ispec,ext,filename)
-!  open(unit=1,file=filename)
-!  write(1,*) '# This is the opacity from ',trim(filename),&
-!             ' computed from optical constants.'
-!  write(1,*) '# This is not an input file. It is only meant for the user to',&
-!             ' check if the Mie/CDE computation of the opacities went OK. '
-!  write(1,*) 3
-!  write(1,*) nlam
-!  do ilam=1,nlam
-!     write(1,*) 2.9979d14/dust_kappa_arrays(ispec)%freq(ilam),dust_kappa_arrays(ispec)%kappa_a(ilam),&
-!                dust_kappa_arrays(ispec)%kappa_s(ilam),dust_kappa_arrays(ispec)%gfactor(ilam)
-!  enddo
-!  close(1)
+ !
+ ! Write a ".used" output file, needed for multidust diffusion
+ !
+ if ((rt_mcparams%nphotdiff.gt.0)) then
+   base='dustkappa_'
+   ext ='.used'
+   call make_indexed_filename(base,ispec,ext,filename)
+   open(unit=1,file=filename)
+   write(1,*) '# This is the opacity from ',trim(filename),&
+               ' computed from optical constants.'
+   write(1,*) '# This is not an input file. It is only meant for the user to',&
+               ' check if the Mie/CDE computation of the opacities went OK. '
+   write(1,*) 3
+   write(1,*) nlam
+   do ilam=1,nlam
+      write(1,*) 2.9979d14/dust_kappa_arrays(ispec)%freq(ilam),dust_kappa_arrays(ispec)%kappa_a(ilam),&
+                  dust_kappa_arrays(ispec)%kappa_s(ilam),dust_kappa_arrays(ispec)%gfactor(ilam)
+   enddo
+   close(1)
+ endif
   !
   ! Set the scattering_mode_def to 2
   !
