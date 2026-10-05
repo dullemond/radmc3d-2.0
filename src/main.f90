@@ -9,6 +9,7 @@ program radmc3d
   use mathroutines_module
   use montecarlo_module
   use userdef_module
+  use diffusion_module
   implicit none
   !
   ! Local variables for main program
@@ -219,6 +220,7 @@ program radmc3d
   rt_mcparams%niter_vstruct    = 0
   rt_mcparams%errtoldiff       = 1d-10
   rt_mcparams%nphotdiff        = 0
+  rt_mcparams%nphotdiff_type   = 1
   !rt_mcparams%incl_scatsrc_mctherm= 0    ! The default is not to compute the 
   !!                                      ! scat source in Bjork&Wood
   rt_mcparams%optimized_motion = .false. ! By default switch optimized photon
@@ -399,11 +401,11 @@ program radmc3d
   !
   ! Do some checks
   !
-  if(rt_mcparams%nphotdiff.ne.0) then
-     write(stdo,*) 'ERROR: For now, the diffusion mode is not yet ready'
-     write(stdo,*) '       in this 3-D version of RADMC. Use RADMC instead.'
-     stop
-  endif
+!   if(rt_mcparams%nphotdiff.ne.0) then
+!      write(stdo,*) 'ERROR: For now, the diffusion mode is not yet ready'
+!      write(stdo,*) '       in this 3-D version of RADMC. Use RADMC instead.'
+!      stop
+!   endif
   if(incl_quantum.eq.-1) then
      write(stdo,*) 'WARNING: PAH emission not included as '
      write(stdo,*) '         heating source for thermal grains.'
@@ -859,9 +861,6 @@ program radmc3d
               endif
            endif
            !
-           ! Do diffusion
-           !
-           ! ############ FOR NOW THIS IS NOT YET IMPLEMENTED IN RADMC-3D #########
            !
            ifile = 0
            write(stdo,*) 'Saving results of thermal Monte Carlo'
@@ -874,6 +873,10 @@ program radmc3d
               call write_photon_statistics_to_file()
            endif
            !
+           ! Do diffusion
+            if (rt_mcparams%nphotdiff.gt.0) then
+               call smooth_by_diffusion
+            endif
            ! Now check if we want to do a vertical structure computation
            !
            ! ############# FOR NOW THIS IS NOT YET IMPLEMENTED ###############
@@ -2305,7 +2308,9 @@ subroutine read_radmcinp_file()
      call parse_input_integer('iquantum@                     ',incl_quantum)
      call parse_input_integer('incl_quantum@                 ',incl_quantum)
      call parse_input_integer('istar_sphere@                 ',inc_star_size)
-     call parse_input_integer('nphotdiff@                    ',rt_mcparams%nphotdiff)
+     call parse_input_double ('nphotdiff@                    ',rt_mcparams%nphotdiff)
+     if (rt_mcparams%nphotdiff.gt.0) rt_mcparams%debug_write_stats=1
+     call parse_input_integer('nphotdiff_type@               ',rt_mcparams%nphotdiff_type)
      call parse_input_double ('errtol@                       ',rt_mcparams%errtoldiff)
      call parse_input_double ('errtoldiff@                   ',rt_mcparams%errtoldiff)
      call parse_input_integer('nvstr@                        ',rt_mcparams%niter_vstruct)

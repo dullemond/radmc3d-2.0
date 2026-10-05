@@ -42,6 +42,7 @@ SRCLINES       = $(SRC)/lines_module.f90
 SRCGASCONT     = $(SRC)/gascontinuum_module.f90
 SRCNAMELIST    = $(SRC)/namelist_module.f90
 SRCSOURCES     = $(SRC)/sources_module.f90
+SRCDIFFUSION   = $(SRC)/diffusion_module.f90
 SRCUSERDEF     = ./userdef_module.f90
 
 
@@ -50,15 +51,15 @@ OBJ            = main.o rtglobal_module.o montecarlo_module.o dust_module.o \
                  stars_module.o amr_module.o amrray_module.o                \
 	         constants_module.o camera_module.o lines_module.o          \
 	         namelist_module.o userdef_module.o gascontinuum_module.o   \
-	         polarization_module.o sources_module.o
+	         polarization_module.o sources_module.o diffusion_module.o
 GMODULES       = rtglobal_module.o mathroutines_module.o amr_module.o       \
-	         namelist_module.o constants_module.o
+	         namelist_module.o constants_module.o diffusion_module.o
 HMODULES       = $(GMODULES) polarization_module.o
 HIMODULES      = $(HMODULES) amrray_module.o dust_module.o 
 IMODULES       = $(HIMODULES) stars_module.o
 DMODULES       = $(IMODULES) quantum_module.o lines_module.o ioput_module.o \
 	                     gascontinuum_module.o
-UMODULES       = $(DMODULES) montecarlo_module.o 
+UMODULES       = $(DMODULES) montecarlo_module.o
 SMODULES       = $(UMODULES) userdef_module.o
 TMODULES       = $(SMODULES) sources_module.o
 MODULES        = $(TMODULES) camera_module.o
@@ -93,6 +94,9 @@ quantum_module.o:   $(SRCQUANTUM) $(GMODULES) Makefile
 
 mathroutines_module.o: $(SRCMATH) Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCMATH) -o $@
+
+diffusion_module.o: $(SRCDIFFUSION) Makefile
+		    $(FF) -c $(FFLAGS)  $(SRCDIFFUSION) -o $@
 
 constants_module.o: $(SRCCONSTANTS) Makefile
 	            $(FF) -c $(FFLAGS)  $(SRCCONSTANTS) -o $@
